@@ -1,0 +1,102 @@
+name: fiin
+description: "A finance app wich improves your user experience in next the level"
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+# IOS app
+version: 1.0.0+0
+
+# Android app
+# version: 1.0.0+0
+
+environment:
+  sdk: ^3.10.4
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  # Localization
+  intl: ^0.20.2
+
+  # State management
+  flutter_hooks: ^0.21.3+1
+  hooks_riverpod: ^3.1.0
+
+  # UI
+  flutter_svg: ^2.2.3
+  google_fonts: ^6.3.3
+  shimmer: ^3.0.0
+  dismissible_page: ^1.0.2
+  #percent_indicator: ^4.2.5
+  cupertino_icons: ^1.0.8
+  #flutter_confetti: ^0.5.1
+  animated_flip_counter: ^0.3.4
+  syncfusion_flutter_datepicker: ^32.1.21
+  fl_chart: ^1.1.1
+
+  # Database
+  sqflite_sqlcipher: ^3.4.0
+  flutter_secure_storage: ^10.0.0
+
+  # Navigation
+  auto_route: ^11.1.0
+
+  # In app purchase - TODO: need configuration https://pub.dev/packages/in_app_purchase
+  #in_app_purchase: ^3.2.3
+  
+  # Utils
+  flutter_inappwebview: ^6.1.5
+  url_launcher: ^6.3.2
+  webview_flutter: ^4.13.0
+  flutter_animate: ^4.5.2
+  multiple_result: ^5.2.0
+  freezed_annotation: ^3.1.0
+  collection: ^1.19.1
+  equatable: ^2.0.7
+  path_provider: ^2.1.5
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  build_runner: 
+  auto_route_generator: ^10.4.0
+  flutter_gen_runner: ^5.12.0
+  freezed: ^3.2.3
+  icons_launcher: ^3.0.3
+  package_rename: ^1.10.1
+
+flutter:
+  uses-material-design: true
+
+  # Enable generation of localized Strings from arb files.
+  generate: true
+
+  assets:
+    - assets/images/
+    - assets/icons/
+    - assets/icons/alerts_feedback/
+    - assets/icons/arrows/
+    - assets/icons/charts/
+    - assets/icons/communication/
+    - assets/icons/development/
+    - assets/icons/editor/
+    - assets/icons/education/
+    - assets/icons/file_types/defaultt/
+    - assets/icons/file_types/gray/
+    - assets/icons/file_types/solid/
+    - assets/icons/files/
+    - assets/icons/finance_ecommerce/
+    - assets/icons/general/
+    - assets/icons/images/
+    - assets/icons/loyout/
+    - assets/icons/maps_travel/
+    - assets/icons/media_devices/
+    - assets/icons/security/
+    - assets/icons/shapes/
+    - assets/icons/time/
+    - assets/icons/users/
+    - assets/icons/weather/
