@@ -38,6 +38,9 @@ class $AssetsIconsGen {
   /// Directory path: assets/icons/education
   $AssetsIconsEducationGen get education => const $AssetsIconsEducationGen();
 
+  /// File path: assets/icons/expense.svg
+  String get expense => 'assets/icons/expense.svg';
+
   /// Directory path: assets/icons/file_types
   $AssetsIconsFileTypesGen get fileTypes => const $AssetsIconsFileTypesGen();
 
@@ -53,6 +56,9 @@ class $AssetsIconsGen {
 
   /// Directory path: assets/icons/images
   $AssetsIconsImagesGen get images => const $AssetsIconsImagesGen();
+
+  /// File path: assets/icons/income.svg
+  String get income => 'assets/icons/income.svg';
 
   /// Directory path: assets/icons/loyout
   $AssetsIconsLoyoutGen get loyout => const $AssetsIconsLoyoutGen();
@@ -73,11 +79,17 @@ class $AssetsIconsGen {
   /// Directory path: assets/icons/time
   $AssetsIconsTimeGen get time => const $AssetsIconsTimeGen();
 
+  /// File path: assets/icons/transfer.svg
+  String get transfer => 'assets/icons/transfer.svg';
+
   /// Directory path: assets/icons/users
   $AssetsIconsUsersGen get users => const $AssetsIconsUsersGen();
 
   /// Directory path: assets/icons/weather
   $AssetsIconsWeatherGen get weather => const $AssetsIconsWeatherGen();
+
+  /// List of all assets
+  List<String> get values => [expense, income, transfer];
 }
 
 class $AssetsImagesGen {

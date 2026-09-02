@@ -1,30 +1,27 @@
 import 'dart:async';
 
-import 'package:fiin/src/src/core/utils/constants/constants.dart';
-import 'package:fiin/src/src/core/utils/screen_rotation.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'src/config/app_config.dart';
 import 'src/config/app_runner.dart';
+import 'src/core/utils/constants/constants.dart';
+import 'src/core/utils/screen_rotation.dart';
 
 void main() {
-	runZonedGuarded<Future<void>>(
-		() async {
-			WidgetsFlutterBinding.ensureInitialized();
+  runZonedGuarded<Future<void>>(
+    () async {
+      WidgetsFlutterBinding.ensureInitialized();
 
-			// App configuration
-			AppConfig.create(
-				appName: kAppName,
-        showDebugBanner: false
-			);
+      AppConfig.create(appName: kAppName, showDebugBanner: false);
 
-			// Lock screen rotation
-			ScreenRotation.toPortrait();
+      // Lock screen rotation
+      ScreenRotation.toPortrait();
 
-  		AppRunner.runApplication();
-
-		}, (error, stack) {
-
-		}
-	);
+      AppRunner.runApplication();
+    },
+    (error, stack) {
+      if (kDebugMode) debugPrint('Uncaught: $error\n$stack');
+    },
+  );
 }

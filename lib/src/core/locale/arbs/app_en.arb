@@ -1,0 +1,250 @@
+{
+  "@@locale": "en",
+  "appLanguage": "English",
+
+  "l10nCommon": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ COMMON ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "common_continue": "Continue",
+  "common_cancel": "Cancel",
+  "common_save": "Save",
+  "common_delete": "Delete",
+  "common_confirm": "Confirm",
+  "common_undo": "Undo",
+  "common_ok": "OK",
+  "common_retry": "Retry",
+  "common_today": "Today",
+  "common_yesterday": "Yesterday",
+  "common_income": "Income",
+  "common_expense": "Expense",
+  "common_transfer": "Transfer",
+
+  "l10nOnboarding": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ ONBOARDING ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "onboarding_welcome_title": "Meet Fiin",
+  "onboarding_welcome_subtitle": "Track money in seconds. No categories, just tags.",
+  "onboarding_currency_title": "Your main currency",
+  "onboarding_currency_subtitle": "Totals are shown in this currency. You can change it later in Settings.",
+  "onboarding_wallet_title": "Your first wallet",
+  "onboarding_wallet_subtitle": "Every wallet has one currency. You can add more wallets later.",
+  "onboarding_create_wallet": "Create wallet",
+
+  "l10nDashboard": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ DASHBOARD ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "dashboard_title": "Dashboard",
+  "dashboard_across_wallets": "{count, plural, =0{No wallets yet} =1{Across 1 wallet} other{Across {count} wallets}}",
+  "@dashboard_across_wallets": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "dashboard_not_included": "{codes} not included",
+  "@dashboard_not_included": {
+    "placeholders": {
+      "codes": {"type": "String"}
+    }
+  },
+  "dashboard_wallets": "Wallets",
+  "dashboard_new_wallet": "New Wallet",
+  "dashboard_empty_title": "Create your first wallet",
+  "dashboard_empty_subtitle": "Fiin needs a wallet to keep your money in.",
+
+  "l10nWallet": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ WALLET ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "wallet_name_placeholder": "Wallet Name",
+  "wallet_currency": "Currency",
+  "wallet_primary": "Primary Wallet",
+  "wallet_has_transactions": "Has transactions",
+  "wallet_pick_another_primary": "Pick another wallet as primary",
+  "wallet_delete_title": "Delete {name}?",
+  "@wallet_delete_title": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "wallet_delete_message": "Its transactions will be removed. Transfers with other wallets stay visible.",
+  "wallet_deleted": "Wallet deleted",
+  "wallet_deleted_paused_rules": "{count, plural, =1{Wallet deleted · 1 repeat paused} other{Wallet deleted · {count} repeats paused}}",
+  "@wallet_deleted_paused_rules": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "wallet_empty_title": "No transactions yet",
+  "wallet_empty_subtitle": "Tap + to add your first one",
+  "wallet_switch_title": "Switch wallet",
+  "wallet_transfer_to": "Transfer to {name}",
+  "@wallet_transfer_to": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "wallet_transfer_from": "Transfer from {name}",
+  "@wallet_transfer_from": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "wallet_deleted_suffix": "(deleted)",
+  "wallet_repeating_summary": "{count, plural, =1{1 repeating} other{{count} repeating}}",
+  "@wallet_repeating_summary": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "wallet_not_found": "This wallet no longer exists",
+
+  "l10nTransaction": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ TRANSACTION ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "transaction_edit_title": "Edit",
+  "transaction_description_placeholder": "description",
+  "transaction_tags_placeholder": "#tags",
+  "transaction_repeat": "Repeat",
+  "transaction_repeat_part_of": "{frequency} · part of a repeat",
+  "@transaction_repeat_part_of": {
+    "placeholders": {
+      "frequency": {"type": "String"}
+    }
+  },
+  "transaction_hint_added": "≈ {amount} will be added to {wallet}",
+  "@transaction_hint_added": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "wallet": {"type": "String"}
+    }
+  },
+  "transaction_hint_stale": "rate from {date}",
+  "@transaction_hint_stale": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "transaction_rate_unavailable": "Rate unavailable — connect to update",
+  "transaction_saved": "Saved {amount} to {wallet}",
+  "@transaction_saved": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "wallet": {"type": "String"}
+    }
+  },
+  "transaction_moved": "Moved {amount} to {wallet}",
+  "@transaction_moved": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "wallet": {"type": "String"}
+    }
+  },
+  "transaction_deleted": "Transaction deleted",
+  "transaction_delete_title": "Delete this transaction?",
+  "transaction_delete_this_one": "Delete this one",
+  "transaction_delete_and_stop": "Delete and stop repeating",
+  "transaction_need_second_wallet_title": "Create a second wallet to transfer",
+  "transaction_need_second_wallet_message": "Transfers move money between two of your wallets.",
+  "transaction_different_currency": "Different currency",
+  "transaction_counterpart_to": "→ {wallet} +{amount}",
+  "@transaction_counterpart_to": {
+    "placeholders": {
+      "wallet": {"type": "String"},
+      "amount": {"type": "String"}
+    }
+  },
+  "transaction_counterpart_from": "← {wallet} -{amount}",
+  "@transaction_counterpart_from": {
+    "placeholders": {
+      "wallet": {"type": "String"},
+      "amount": {"type": "String"}
+    }
+  },
+
+  "l10nTransfer": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ TRANSFER ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "transfer_title": "Transfer {amount} from {wallet}",
+  "@transfer_title": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "wallet": {"type": "String"}
+    }
+  },
+  "transfer_amount_received": "Amount received",
+  "transfer_confirm": "Confirm transfer",
+
+  "l10nRepeat": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ REPEAT ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "repeat_never": "Never",
+  "repeat_every_day": "Every day",
+  "repeat_every_week": "Every week",
+  "repeat_every_month": "Every month",
+  "repeat_every_year": "Every year",
+  "repeat_daily": "Daily",
+  "repeat_weekly": "Weekly",
+  "repeat_monthly": "Monthly",
+  "repeat_yearly": "Yearly",
+  "repeat_rules_title": "Repeating transactions",
+  "repeat_rules_hint": "To change an amount or description, delete the rule and create it again.",
+  "repeat_next": "Next: {date}",
+  "@repeat_next": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "repeat_paused": "Paused",
+  "repeat_delete_title": "Stop this repeat?",
+  "repeat_delete_message": "Existing transactions stay. No new ones will be created.",
+  "repeat_stop": "Stop",
+
+  "l10nDate": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ DATE ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "date_pick_title": "Pick a date",
+
+  "l10nCurrency": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ CURRENCY ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "currency_pick_title": "Currency",
+  "currency_base_title": "Base currency",
+  "currency_base_hint": "Your dashboard total is converted into this currency.",
+
+  "l10nSettings": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ SETTINGS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "settings_title": "Settings",
+  "settings_preferences": "Preferences",
+  "settings_notifications": "Notifications",
+  "settings_currency": "Currency",
+  "settings_dark_mode": "Dark Mode",
+  "settings_data_privacy": "Data & Privacy",
+  "settings_export_transactions": "Export Transactions",
+  "settings_reset_all_data": "Reset All Data",
+  "settings_reset_title": "Reset all data?",
+  "settings_reset_message": "Every wallet, transaction and setting on this device will be erased. This cannot be undone.",
+  "settings_reset_action": "Reset",
+  "settings_reset_done": "All data removed",
+  "settings_version": "Version: {version} ({build})",
+  "@settings_version": {
+    "placeholders": {
+      "version": {"type": "String"},
+      "build": {"type": "String"}
+    }
+  },
+  "settings_language": "Language",
+  "settings_language_info": "Select your preferred language for the application interface.",
+  "settings_theme": "Theme",
+  "settings_theme_system": "System",
+  "settings_theme_light": "Light",
+  "settings_theme_dark": "Dark",
+
+  "l10nAbout": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ ABOUT ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "about": "About Fiin",
+  "about_project": "About the Project",
+  "about_text": "Fiin is a minimalist, local-first budgeting app. Your data is encrypted and never leaves your device.",
+  "about_support": "Contact Support",
+
+  "l10nValidation": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ VALIDATION ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "validation_enter_amount": "Enter an amount",
+  "validation_up_to_tags": "Up to {count} tags",
+  "@validation_up_to_tags": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "validation_rate_unavailable": "Rate unavailable",
+
+  "l10nErrors": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ ERRORS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "error_db_failure": "Database error, try again.",
+  "error_unknown": "Something went wrong. Please try again.",
+  "error_rate_unavailable": "No exchange rate available. Connect to the internet and try again.",
+  "error_validation": "Please check the entered values.",
+  "error_wallet_has_transactions": "The currency can't change once a wallet has transactions.",
+  "error_not_found": "This item no longer exists.",
+  "error_open_db_title": "Couldn't open your data",
+  "error_open_db_message": "Fiin couldn't unlock the database on this device.",
+  "error_reset_app": "Reset app",
+
+  "l10nStopLineDontTouch": "☠☠☠☠☠☠☠☠☠☠☠☠☠ Don't touch this line ☠☠☠☠☠☠☠☠☠☠☠☠☠"
+}
