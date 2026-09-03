@@ -126,7 +126,6 @@ class _TransferBodyState extends ConsumerState<_TransferBody> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final colors = context.colors;
     final target = _target;
     final received = _received;
     final canConfirm = target != null && received != null && received.minor > 0 && !_loadingRate;
@@ -155,13 +154,13 @@ class _TransferBodyState extends ConsumerState<_TransferBody> {
           const UIDivider(),
           const UISpace.vert(12),
           if (_crossCurrency) ...[
-            Text(l10n.transfer_amount_received, style: UITextStyleToken.caption(colors)),
+            Text(l10n.transfer_amount_received, style: context.typo.inter.caption),
             const UISpace.vert(4),
             FittedBox(
               fit: BoxFit.scaleDown,
               child: Text(
                 '${target.currency.symbol} ${AmountInput.display(_receivedInput)}',
-                style: UITextStyleToken.montserratBold.copyWith(fontSize: 32, color: colors.contentColor),
+                style: context.typo.montserrat.sheetAmount,
               ),
             ),
             const UISpace.vert(4),
@@ -194,7 +193,7 @@ class _TransferBodyState extends ConsumerState<_TransferBody> {
             '${widget.source.name} −${widget.sent.format()}   →   ${target.name} +${(received ?? Money.zero(target.currency)).format()}',
             textAlign: TextAlign.center,
             maxLines: 2,
-            style: UITextStyleToken.interMedium.copyWith(fontSize: 13, color: colors.secondContentColor),
+            style: context.typo.inter.hint,
           ),
           const UISpace.vert(12),
           UiPrimaryButton(

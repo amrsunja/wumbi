@@ -16,7 +16,6 @@ class OnboardingWelcomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final colors = context.colors;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: kPageHorzPadding),
@@ -32,7 +31,7 @@ class OnboardingWelcomePage extends StatelessWidget {
                 Text(
                   l10n.onboarding_welcome_title,
                   textAlign: TextAlign.center,
-                  style: OnboardingTypography.title(colors),
+                  style: OnboardingTypography.title(context.typo),
                 ).uiFadeSlideIn(delay: UIAnim.stagger * 2),
                 const UISpace.vert(14),
                 Padding(
@@ -40,7 +39,7 @@ class OnboardingWelcomePage extends StatelessWidget {
                   child: Text(
                     l10n.onboarding_welcome_subtitle,
                     textAlign: TextAlign.center,
-                    style: OnboardingTypography.body(colors),
+                    style: OnboardingTypography.body(context.typo),
                   ),
                 ).uiFadeSlideIn(delay: UIAnim.stagger * 3),
               ],

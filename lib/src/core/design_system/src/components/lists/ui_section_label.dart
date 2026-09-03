@@ -11,10 +11,10 @@ class UiSectionLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppTheme.of(context).colors;
+    final typo = AppTheme.of(context).typo.inter;
     return Padding(
       padding: padding,
-      child: Text(text.toUpperCase(), style: UITextStyleToken.sectionLabel(colors)),
+      child: Text(text.toUpperCase(), style: typo.sectionLabel),
     );
   }
 }

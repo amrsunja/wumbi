@@ -36,7 +36,7 @@ class UiWalletCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppTheme.of(context).colors;
+    final typo = AppTheme.of(context).typo.inter;
 
     Widget hero(Object? tag, Widget child) =>
         tag == null ? child : UiHero(tag: tag, alignment: Alignment.centerLeft, child: child);
@@ -55,15 +55,11 @@ class UiWalletCard extends StatelessWidget {
                 title,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: UITextStyleToken.interSemiBold.copyWith(fontSize: 16, color: colors.contentColor),
+                style: typo.rowTitle,
               ),
               Text(
                 balance.currency.code,
-                style: UITextStyleToken.interBold.copyWith(
-                  fontSize: 12,
-                  letterSpacing: 1.2,
-                  color: colors.secondContentColor,
-                ),
+                style: typo.currencyCode,
               ),
             ],
           ),
@@ -73,11 +69,7 @@ class UiWalletCard extends StatelessWidget {
 
     final balanceText = Text(
       balance.format(signed: true),
-      style: UITextStyleToken.interSemiBold.copyWith(
-        fontSize: 16,
-        letterSpacing: -0.43,
-        color: colors.contentColor,
-      ),
+      style: typo.rowTitle.copyWith(letterSpacing: -0.43),
     );
 
     return UITap(

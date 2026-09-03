@@ -18,4 +18,5 @@ extension L10nContext on BuildContext {
 extension ThemeContext on BuildContext {
   AppThemeData get appTheme => AppTheme.of(this);
   UIColorToken get colors => AppTheme.of(this).colors;
+  UITypographyToken get typo => AppTheme.of(this).typo;
 }

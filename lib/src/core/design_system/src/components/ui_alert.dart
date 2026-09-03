@@ -37,7 +37,7 @@ class UIAlert extends StatelessWidget {
               label,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: UITextStyleToken.interMedium.copyWith(color: contentColor, fontSize: 14),
+              style: AppTheme.of(context).typo.inter.labelMedium.copyWith(color: contentColor),
             ),
           ),
           if (actionLabel != null && onAction != null) ...[
@@ -48,7 +48,7 @@ class UIAlert extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
                 child: Text(
                   actionLabel!.toUpperCase(),
-                  style: UITextStyleToken.interBold.copyWith(
+                  style: AppTheme.of(context).typo.inter.bold.copyWith(
                     color: contentColor,
                     fontSize: 13,
                     letterSpacing: 0.8,
@@ -162,7 +162,9 @@ class _UIDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppTheme.of(context).colors;
+    final theme = AppTheme.of(context);
+    final colors = theme.colors;
+    final typo = theme.typo.inter;
     return Dialog(
       backgroundColor: colors.fgColor,
       surfaceTintColor: Colors.transparent,
@@ -177,14 +179,14 @@ class _UIDialog extends StatelessWidget {
             Text(
               title,
               textAlign: TextAlign.center,
-              style: UITextStyleToken.interSemiBold.copyWith(fontSize: 17, color: colors.contentColor),
+              style: typo.title,
             ),
             if (message != null) ...[
               const UISpace.vert(10),
               Text(
                 message!,
                 textAlign: TextAlign.center,
-                style: UITextStyleToken.interRegular.copyWith(fontSize: 14, color: colors.secondContentColor, height: 1.4),
+                style: typo.paragraph.copyWith(height: 1.4),
               ),
             ],
             const UISpace.vert(20),
@@ -199,8 +201,7 @@ class _UIDialog extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       child: Text(
                         a.label,
-                        style: UITextStyleToken.interSemiBold.copyWith(
-                          fontSize: 16,
+                        style: typo.rowTitle.copyWith(
                           color: a.destructive
                               ? UIColorToken.neg500
                               : a.primary

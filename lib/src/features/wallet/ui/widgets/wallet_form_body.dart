@@ -33,6 +33,7 @@ class WalletFormBody extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
     final colors = context.colors;
+    final typo = context.typo;
     final state = ref.watch(walletFormProvider(args));
     final notifier = ref.read(walletFormProvider(args).notifier);
     final base = ref.watch(baseCurrencyProvider);
@@ -89,8 +90,8 @@ class WalletFormBody extends HookConsumerWidget {
           maxLength: kMaxWalletNameLength,
           textCapitalization: TextCapitalization.words,
           textInputAction: TextInputAction.done,
-          textStyle: UITextStyleToken.interLight.copyWith(fontSize: 32, color: colors.contentColor),
-          hintStyle: UITextStyleToken.interLight.copyWith(fontSize: 32, color: colors.secondContentColor),
+          textStyle: typo.inter.display,
+          hintStyle: typo.inter.display.copyWith(color: colors.secondContentColor),
           onChanged: notifier.setName,
         ),
         const UISpace.vert(12),
@@ -106,16 +107,15 @@ class WalletFormBody extends HookConsumerWidget {
               children: [
                 Text(
                   state.currency.symbol,
-                  style: UITextStyleToken.interLight.copyWith(fontSize: 32, color: colors.secondContentColor),
+                  style: typo.inter.display.copyWith(color: colors.secondContentColor),
                 ),
                 Flexible(
                   child: FittedBox(
                     fit: BoxFit.scaleDown,
                     child: Text(
                       balanceText,
-                      style: UITextStyleToken.montserratLight.copyWith(
-                        fontSize: 40,
-                        color: balanceIsZero ? colors.secondContentColor : colors.contentColor,
+                      style: typo.montserrat.formAmount.copyWith(
+                        color: balanceIsZero ? colors.secondContentColor : null,
                       ),
                     ),
                   ),
@@ -132,15 +132,15 @@ class WalletFormBody extends HookConsumerWidget {
             spacing: 6,
             children: [
               if (state.currencyLocked) ...[
-                UIIcon(UIIconToken.icons.security.lock01, size: 14, color: colors.secondContentColor),
-                Text(l10n.wallet_has_transactions, style: UITextStyleToken.caption(colors)),
+                UIIcon(UIIconToken.icons.security.lock01, size: 14),
+                Text(l10n.wallet_has_transactions, style: typo.inter.caption),
               ] else
                 Text(
                   '${state.currency.code} (${state.currency.symbol})',
-                  style: UITextStyleToken.interMedium.copyWith(fontSize: 14, color: colors.secondContentColor),
+                  style: typo.inter.subtitle,
                 ),
               if (!state.currencyLocked)
-                UIIcon(UIIconToken.icons.arrows.chevronRight, size: 18, color: colors.secondContentColor),
+                UIIcon(UIIconToken.icons.arrows.chevronRight, size: 18),
             ],
           ),
           onTap: state.currencyLocked ? null : pickCurrency,
@@ -190,7 +190,7 @@ class _FormRow extends StatelessWidget {
             Expanded(
               child: Text(
                 label,
-                style: UITextStyleToken.interMedium.copyWith(fontSize: 16, color: colors.contentColor),
+                style: context.typo.inter.body,
               ),
             ),
             trailing,

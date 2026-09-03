@@ -19,7 +19,6 @@ class UiSelectWalletButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppTheme.of(context).colors;
     final interactive = enabled && onTap != null;
     return UITap(
       onTap: interactive ? onTap : null,
@@ -36,15 +35,13 @@ class UiSelectWalletButton extends StatelessWidget {
                 name,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: UITextStyleToken.interSemiBold.copyWith(
+                style: AppTheme.of(context).typo.inter.label.copyWith(
                   letterSpacing: 0.3,
-                  fontSize: 14,
-                  color: colors.contentColor,
                 ),
               ),
             ),
             if (interactive)
-              UIIcon(UIIconToken.icons.arrows.chevronDown, size: 18, color: colors.secondContentColor),
+              UIIcon(UIIconToken.icons.arrows.chevronDown, size: 18),
           ],
         ),
       ),

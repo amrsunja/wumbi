@@ -40,7 +40,7 @@ class UiPrimaryButton extends StatelessWidget {
                 )
               : Text(
                   label,
-                  style: UITextStyleToken.interSemiBold.copyWith(fontSize: 16, color: UIColorToken.white),
+                  style: AppTheme.of(context).typo.inter.rowTitle.copyWith(color: UIColorToken.white),
                 ),
         ),
       ),

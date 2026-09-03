@@ -35,7 +35,7 @@ class UiRadioRow extends StatelessWidget {
             Expanded(
               child: Text(
                 label,
-                style: UITextStyleToken.interMedium.copyWith(fontSize: 16, color: colors.contentColor),
+                style: AppTheme.of(context).typo.inter.body,
               ),
             ),
           ],

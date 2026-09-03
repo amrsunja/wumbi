@@ -20,7 +20,7 @@ class UiEmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppTheme.of(context).colors;
+    final typo = AppTheme.of(context).typo.inter;
     return Center(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
@@ -32,14 +32,14 @@ class UiEmptyState extends StatelessWidget {
             Text(
               title,
               textAlign: TextAlign.center,
-              style: UITextStyleToken.interSemiBold.copyWith(fontSize: 16, color: colors.contentColor),
+              style: typo.rowTitle,
             ),
             if (subtitle != null) ...[
               const UISpace.vert(6),
               Text(
                 subtitle!,
                 textAlign: TextAlign.center,
-                style: UITextStyleToken.interMedium.copyWith(fontSize: 13, color: colors.secondContentColor),
+                style: typo.hint,
               ),
             ],
             if (action != null) ...[const UISpace.vert(16), action!],

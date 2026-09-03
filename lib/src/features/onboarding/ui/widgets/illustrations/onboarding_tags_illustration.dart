@@ -23,14 +23,15 @@ class _State extends IllustrationState<OnboardingTagsIllustration> {
   Duration get idleDuration => const Duration(milliseconds: 5000);
 
   @override
-  CustomPainter painter(UIColorToken colors, double intro, double idle) =>
-      _TagsPainter(colors: colors, intro: intro, idle: idle);
+  CustomPainter painter(AppThemeData theme, double intro, double idle) =>
+      _TagsPainter(colors: theme.colors, typo: theme.typo, intro: intro, idle: idle);
 }
 
 class _TagsPainter extends CustomPainter {
-  _TagsPainter({required this.colors, required this.intro, required this.idle});
+  _TagsPainter({required this.colors, required this.typo, required this.intro, required this.idle});
 
   final UIColorToken colors;
+  final UITypographyToken typo;
   final double intro;
   final double idle;
 
@@ -102,7 +103,7 @@ class _TagsPainter extends CustomPainter {
       IllustrationCanvas.text(
         canvas,
         'Coffee with Anna',
-        style: UITextStyleToken.interSemiBold.copyWith(fontSize: 13 * k, color: colors.contentColor),
+        style: typo.inter.semiBold.copyWith(fontSize: 13 * k, color: colors.contentColor),
         left: Offset(rect.left + w * 0.09, rect.top + h * 0.28),
         opacity: fade,
         maxWidth: w * 0.85,
@@ -110,14 +111,14 @@ class _TagsPainter extends CustomPainter {
       IllustrationCanvas.text(
         canvas,
         'Today, 09:12',
-        style: UITextStyleToken.interMedium.copyWith(fontSize: 9.5 * k, color: colors.secondContentColor),
+        style: typo.inter.medium.copyWith(fontSize: 9.5 * k, color: colors.secondContentColor),
         left: Offset(rect.left + w * 0.09, rect.top + h * 0.50),
         opacity: fade,
       );
       IllustrationCanvas.text(
         canvas,
         '-\$4.50',
-        style: UITextStyleToken.montserratBold.copyWith(fontSize: 20 * k, color: colors.expenseColor),
+        style: typo.montserrat.bold.copyWith(fontSize: 20 * k, color: colors.expenseColor),
         left: Offset(rect.left + w * 0.09, rect.top + h * 0.78),
         opacity: fade,
       );
@@ -128,7 +129,7 @@ class _TagsPainter extends CustomPainter {
       IllustrationCanvas.text(
         canvas,
         '#',
-        style: UITextStyleToken.interBold.copyWith(fontSize: 13 * k, color: UIColorToken.blue),
+        style: typo.inter.bold.copyWith(fontSize: 13 * k, color: UIColorToken.blue),
         center: tagDot,
         opacity: fade,
       );
@@ -146,7 +147,7 @@ class _TagsPainter extends CustomPainter {
       final active = intro == 1 && i == _activeTag;
       final glow = active ? math.sin(math.pi * _pingT) : 0.0;
 
-      final style = UITextStyleToken.interSemiBold.copyWith(fontSize: 12 * k, color: UIColorToken.blue);
+      final style = typo.inter.semiBold.copyWith(fontSize: 12 * k, color: UIColorToken.blue);
       final tp = TextPainter(text: TextSpan(text: t.label, style: style), textDirection: TextDirection.ltr)..layout();
       final w = tp.width + side * 0.075;
       final h = side * 0.085;

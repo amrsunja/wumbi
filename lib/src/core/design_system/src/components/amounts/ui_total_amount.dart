@@ -28,11 +28,9 @@ class UiTotalAmount extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppTheme.of(context).colors;
-    final base = weight == UiTotalAmountWeight.bold
-        ? UITextStyleToken.montserratBold
-        : UITextStyleToken.montserratLight;
-    final style = base.copyWith(fontSize: fontSize, color: color ?? colors.contentColor);
+    final montserrat = AppTheme.of(context).typo.montserrat;
+    final base = weight == UiTotalAmountWeight.bold ? montserrat.input : montserrat.total;
+    final style = base.copyWith(fontSize: fontSize, color: color);
 
     if (animated) {
       final scale = money.currency.scale;

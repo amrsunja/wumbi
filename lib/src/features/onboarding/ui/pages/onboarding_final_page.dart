@@ -19,7 +19,6 @@ class OnboardingFinalPage extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final colors = context.colors;
     final confettiKey = useMemoized(() => GlobalKey<OnboardingConfettiState>());
     final leaving = useState(false);
 
@@ -53,7 +52,7 @@ class OnboardingFinalPage extends HookWidget {
                     Text(
                       l10n.onboarding_final_title,
                       textAlign: TextAlign.center,
-                      style: OnboardingTypography.title(colors),
+                      style: OnboardingTypography.title(context.typo),
                     ).uiFadeSlideIn(delay: UIAnim.stagger * 2),
                     const UISpace.vert(14),
                     Padding(
@@ -61,7 +60,7 @@ class OnboardingFinalPage extends HookWidget {
                       child: Text(
                         l10n.onboarding_final_body,
                         textAlign: TextAlign.center,
-                        style: OnboardingTypography.body(colors),
+                        style: OnboardingTypography.body(context.typo),
                       ),
                     ).uiFadeSlideIn(delay: UIAnim.stagger * 3),
                   ],

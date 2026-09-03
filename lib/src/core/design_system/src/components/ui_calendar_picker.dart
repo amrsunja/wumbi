@@ -24,6 +24,7 @@ class UICalendarPicker extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context);
     final colors = theme.colors;
+    final typo = theme.typo.inter;
     final bgColor = colors.fgColor;
 
     return SfDateRangePicker(
@@ -44,30 +45,30 @@ class UICalendarPicker extends StatelessWidget {
       headerStyle: DateRangePickerHeaderStyle(
         backgroundColor: bgColor,
         textAlign: TextAlign.center,
-        textStyle: UITextStyleToken.interSemiBold.copyWith(color: colors.contentColor, fontSize: 16),
+        textStyle: typo.rowTitle,
       ),
       yearCellStyle: DateRangePickerYearCellStyle(
-        todayTextStyle: UITextStyleToken.interBold.copyWith(color: UIColorToken.blue),
-        textStyle: UITextStyleToken.interMedium.copyWith(color: colors.contentColor),
-        disabledDatesTextStyle: UITextStyleToken.interMedium.copyWith(color: colors.disabledContentColor),
+        todayTextStyle: typo.bold.copyWith(color: UIColorToken.blue),
+        textStyle: typo.medium,
+        disabledDatesTextStyle: typo.medium.copyWith(color: colors.disabledContentColor),
       ),
       monthViewSettings: DateRangePickerMonthViewSettings(
         specialDates: specialDates,
         viewHeaderStyle: DateRangePickerViewHeaderStyle(
-          textStyle: UITextStyleToken.interSemiBold.copyWith(color: colors.secondContentColor, fontSize: 12),
+          textStyle: typo.captionBold,
         ),
       ),
       monthCellStyle: DateRangePickerMonthCellStyle(
-        disabledDatesTextStyle: UITextStyleToken.interMedium.copyWith(color: colors.disabledContentColor),
-        todayTextStyle: UITextStyleToken.interBold.copyWith(color: UIColorToken.blue, fontSize: 14),
+        disabledDatesTextStyle: typo.medium.copyWith(color: colors.disabledContentColor),
+        todayTextStyle: typo.bold.copyWith(color: UIColorToken.blue, fontSize: 14),
         todayCellDecoration: BoxDecoration(
           border: Border.all(color: UIColorToken.blue),
           shape: BoxShape.circle,
         ),
-        textStyle: UITextStyleToken.interMedium.copyWith(color: colors.contentColor, fontSize: 14),
+        textStyle: typo.labelMedium,
       ),
       selectionColor: UIColorToken.blue,
-      selectionTextStyle: UITextStyleToken.interBold.copyWith(color: UIColorToken.white, fontSize: 14),
+      selectionTextStyle: typo.bold.copyWith(color: UIColorToken.white, fontSize: 14),
     );
   }
 }

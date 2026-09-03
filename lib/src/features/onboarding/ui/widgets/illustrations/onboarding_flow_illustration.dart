@@ -31,14 +31,15 @@ class _State extends IllustrationState<OnboardingFlowIllustration> {
   Duration get idleDuration => const Duration(milliseconds: 4500);
 
   @override
-  CustomPainter painter(UIColorToken colors, double intro, double idle) =>
-      _FlowPainter(colors: colors, intro: intro, idle: idle, labels: widget.labels);
+  CustomPainter painter(AppThemeData theme, double intro, double idle) =>
+      _FlowPainter(colors: theme.colors, typo: theme.typo, intro: intro, idle: idle, labels: widget.labels);
 }
 
 class _FlowPainter extends CustomPainter {
-  _FlowPainter({required this.colors, required this.intro, required this.idle, required this.labels});
+  _FlowPainter({required this.colors, required this.typo, required this.intro, required this.idle, required this.labels});
 
   final UIColorToken colors;
+  final UITypographyToken typo;
   final double intro;
   final double idle;
   final List<String> labels;
@@ -175,7 +176,7 @@ class _FlowPainter extends CustomPainter {
       IllustrationCanvas.text(
         canvas,
         labels.length > i ? labels[i] : '',
-        style: UITextStyleToken.interSemiBold.copyWith(fontSize: 12 * k, color: colors.contentColor),
+        style: typo.inter.semiBold.copyWith(fontSize: 12 * k, color: colors.contentColor),
         center: Offset(c.dx, ly),
         opacity: labelFade,
         maxWidth: side * 0.34,
@@ -183,7 +184,7 @@ class _FlowPainter extends CustomPainter {
       IllustrationCanvas.text(
         canvas,
         'STEP ${i + 1}',
-        style: UITextStyleToken.interBold.copyWith(fontSize: 7.5 * k, letterSpacing: 1.3, color: color),
+        style: typo.inter.bold.copyWith(fontSize: 7.5 * k, letterSpacing: 1.3, color: color),
         center: Offset(c.dx, ly + (below ? side * 0.055 : -side * 0.055)),
         opacity: labelFade,
       );

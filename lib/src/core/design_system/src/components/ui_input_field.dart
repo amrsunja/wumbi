@@ -57,7 +57,7 @@ class UIInputField extends StatelessWidget {
     final borderless = style == UIInputFieldStyle.borderless;
 
     final effectiveTextStyle = textStyle ??
-        UITextStyleToken.interMedium.copyWith(color: colors.contentColor, fontSize: 16);
+        AppTheme.of(context).typo.inter.body;
     final effectiveHintStyle = hintStyle ??
         effectiveTextStyle.copyWith(color: colors.secondContentColor);
 

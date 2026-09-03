@@ -60,11 +60,7 @@ class UIAppbar extends StatelessWidget implements PreferredSizeWidget {
                     title.toUpperCase(),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: UITextStyleToken.interBold.copyWith(
-                      letterSpacing: 1.6,
-                      color: colors.secondContentColor,
-                      fontSize: 12,
-                    ),
+                    style: AppTheme.of(context).typo.inter.overline,
                   ),
                 ),
               ),

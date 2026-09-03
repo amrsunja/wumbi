@@ -32,7 +32,7 @@ class UIIcon extends StatelessWidget {
         flipX: locale.languageCode == L10n.ar.languageCode,
 			  child: UIIconToken.toIcon(
 			  	assetIcon,
-			  	color: defaultColor ? null : color ?? theme.colors.contentColor,
+			  	color: defaultColor ? null : color ?? theme.colors.iconColor,
 			  	size: size,
 			  	alignment: alignment
 			  ),

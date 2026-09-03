@@ -28,7 +28,6 @@ class WalletDetailsPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
-    final colors = context.colors;
 
     // The wallet switcher replaces the page's wallet in place (same route).
     final currentId = useState(walletId);
@@ -136,17 +135,17 @@ class WalletDetailsPage extends HookConsumerWidget {
                               mainAxisSize: MainAxisSize.min,
                               spacing: 4,
                               children: [
-                                UIIcon(UIIconToken.icons.mediaDevices.repeat01, size: 14, color: colors.secondContentColor),
+                                UIIcon(UIIconToken.icons.mediaDevices.repeat01, size: 14),
                                 Flexible(
                                   child: Text(
                                     '${l10n.wallet_repeating_summary(activeRules.length)} · '
                                     '${activeRules.map((r) => r.description.isEmpty ? _typeName(context, r.type) : r.description).join(', ')}',
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
-                                    style: UITextStyleToken.caption(colors),
+                                    style: context.typo.inter.caption,
                                   ),
                                 ),
-                                UIIcon(UIIconToken.icons.arrows.chevronRight, size: 14, color: colors.secondContentColor),
+                                UIIcon(UIIconToken.icons.arrows.chevronRight, size: 14),
                               ],
                             ),
                           ),
@@ -217,7 +216,7 @@ class _TransactionList extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: kListHorzPadding),
       sliver: SliverList.separated(
         itemCount: rows.length,
-        separatorBuilder: (_, _) => const UIDivider(color: UIColorToken.athensGray),
+        separatorBuilder: (_, _) => const UIDivider(),
         itemBuilder: (context, index) {
           final row = rows[index];
           return _SwipeToDelete(

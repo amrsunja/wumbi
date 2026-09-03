@@ -52,7 +52,7 @@ export 'src/components/animations/ui_animations.dart';
 //--------------------- TOKENS ---------------------
 part 'src/app_theme.dart';
 part 'src/tokens/app_theme_data.dart';
-part 'src/tokens/src/ui_text_style_token.dart';
+part 'src/tokens/src/ui_typography_token.dart';
 part 'src/tokens/src/ui_icon_token.dart';
 part 'src/tokens/src/ui_color_token.dart';
 part 'src/tokens/src/ui_shadow_token.dart';

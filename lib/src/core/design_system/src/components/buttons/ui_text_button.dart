@@ -4,7 +4,7 @@ import '../../../app_ui.dart';
 
 enum UiTextButtonStyle { primary, secondary, destructive }
 
-/// Text-only button used in bottom bars: Delete (secondary/destructive), Save (primary blue).
+/// Text-only button used in bottom bars: Delete / Cancel (secondary, casper), Save (primary blue).
 class UiTextButton extends StatelessWidget {
   const UiTextButton({
     super.key,
@@ -23,10 +23,10 @@ class UiTextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppTheme.of(context).colors;
+    // secondary = casper in both themes (Delete / Cancel in bottom bars).
     final color = switch (style) {
       UiTextButtonStyle.primary => UIColorToken.blue,
-      UiTextButtonStyle.secondary => colors.secondContentColor,
+      UiTextButtonStyle.secondary => UIColorToken.casper,
       UiTextButtonStyle.destructive => UIColorToken.neg500,
     };
     return Opacity(
@@ -37,7 +37,7 @@ class UiTextButton extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Text(
             label,
-            style: UITextStyleToken.interSemiBold.copyWith(fontSize: fontSize, color: color),
+            style: AppTheme.of(context).typo.inter.button.copyWith(fontSize: fontSize, color: color),
           ),
         ),
       ),

@@ -39,6 +39,7 @@ class TransactionPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
     final colors = context.colors;
+    final typo = context.typo;
     final args = TransactionArgs(walletId: walletId, transactionId: transactionId);
     final state = ref.watch(transactionNotifierProvider(args));
     final notifier = ref.read(transactionNotifierProvider(args).notifier);
@@ -224,9 +225,8 @@ class TransactionPage extends HookConsumerWidget {
                 fit: BoxFit.scaleDown,
                 child: UiAmountText(
                   text: AmountInput.display(state.amountInput),
-                  style: UITextStyleToken.montserratBold.copyWith(
-                    fontSize: 44,
-                    color: state.amountInput.isEmpty ? colors.secondContentColor : colors.contentColor,
+                  style: typo.montserrat.input.copyWith(
+                    color: state.amountInput.isEmpty ? colors.secondContentColor : null,
                   ),
                 ),
               )
@@ -246,7 +246,7 @@ class TransactionPage extends HookConsumerWidget {
                 maxLength: kMaxDescriptionLength,
                 keyboardType: TextInputType.text,
                 textInputAction: TextInputAction.next,
-                textStyle: UITextStyleToken.interMedium.copyWith(fontSize: 15, color: colors.contentColor),
+                textStyle: typo.inter.bodyMedium,
                 onChanged: notifier.setDescription,
                 onSubmitted: (_) => tagsFocus.requestFocus(),
               ),
@@ -277,7 +277,7 @@ class TransactionPage extends HookConsumerWidget {
                         child: Text(
                           state.validationError!,
                           key: ValueKey(state.validationError),
-                          style: UITextStyleToken.interMedium.copyWith(fontSize: 12, color: UIColorToken.neg500),
+                          style: typo.inter.caption.copyWith(color: UIColorToken.neg500),
                         ),
                       ),
               ),
@@ -338,18 +338,12 @@ class TransactionPage extends HookConsumerWidget {
               ),
               const UISpace.vert(12),
 
-              // Bottom bar.
+              // Bottom bar (edit): Delete (casper) on the left until the form is
+              // touched, then it becomes Cancel (discard + pop). Save on the right.
               if (state.isEdit)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    UiTextButton(
-                      label: l10n.common_delete,
-                      style: UiTextButtonStyle.destructive,
-                      enabled: !state.isSaving && !state.isLoading,
-                      onTap: onDelete,
-                    ),
-                    // Cancel (grey) sits in the middle until something changes.
                     AnimatedSwitcher(
                       duration: 200.ms,
                       switchInCurve: Curves.easeOut,
@@ -359,13 +353,19 @@ class TransactionPage extends HookConsumerWidget {
                         child: ScaleTransition(scale: Tween(begin: 0.9, end: 1.0).animate(anim), child: child),
                       ),
                       child: state.isDirty
-                          ? const SizedBox(key: ValueKey('no-cancel'), height: 48)
-                          : UiTextButton(
+                          ? UiTextButton(
                               key: const ValueKey('cancel'),
                               label: l10n.common_cancel,
                               style: UiTextButtonStyle.secondary,
                               enabled: !state.isSaving,
                               onTap: () => context.router.maybePop(),
+                            )
+                          : UiTextButton(
+                              key: const ValueKey('delete'),
+                              label: l10n.common_delete,
+                              style: UiTextButtonStyle.secondary,
+                              enabled: !state.isSaving && !state.isLoading,
+                              onTap: onDelete,
                             ),
                     ),
                     UiTextButton(label: l10n.common_save, enabled: !state.isSaving && !state.isLoading, onTap: onSave),

@@ -41,7 +41,7 @@ class UiTypeActionButton extends StatelessWidget {
         labelColor = colors.contentColor;
       case UiTypeActionStyle.expense:
         asset = UIIconToken.icons.expense;
-        tint = colors.contentColor;
+        tint = colors.iconColor;
         labelColor = colors.contentColor;
     }
 
@@ -68,11 +68,7 @@ class UiTypeActionButton extends StatelessWidget {
               icon,
               Text(
                 label.toUpperCase(),
-                style: UITextStyleToken.interBold.copyWith(
-                  fontSize: 10,
-                  letterSpacing: 1.0,
-                  color: labelColor,
-                ),
+                style: AppTheme.of(context).typo.inter.micro.copyWith(color: labelColor),
               ),
             ],
           ),

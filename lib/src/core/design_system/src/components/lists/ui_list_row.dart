@@ -28,7 +28,7 @@ class UiListRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppTheme.of(context).colors;
+    final typo = AppTheme.of(context).typo.inter;
     final disabled = disabledReason != null;
 
     return Opacity(
@@ -49,14 +49,14 @@ class UiListRow extends StatelessWidget {
                       title,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: UITextStyleToken.interSemiBold.copyWith(fontSize: 15, color: colors.contentColor),
+                      style: typo.listTitle,
                     ),
                     if (subtitle != null || disabled)
                       Text(
                         disabled ? disabledReason! : subtitle!,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: UITextStyleToken.interMedium.copyWith(fontSize: 12, color: colors.secondContentColor),
+                        style: typo.caption,
                       ),
                   ],
                 ),
@@ -67,7 +67,7 @@ class UiListRow extends StatelessWidget {
               else if (trailingText != null)
                 Text(
                   trailingText!,
-                  style: UITextStyleToken.interSemiBold.copyWith(fontSize: 15, color: colors.contentColor),
+                  style: typo.listTitle,
                 ),
               if (selected) ...[
                 const UISpace.horz(10),

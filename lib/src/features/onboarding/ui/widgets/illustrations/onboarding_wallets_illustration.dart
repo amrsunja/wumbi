@@ -22,14 +22,15 @@ class _State extends IllustrationState<OnboardingWalletsIllustration> {
   Duration get idleDuration => const Duration(milliseconds: 5000);
 
   @override
-  CustomPainter painter(UIColorToken colors, double intro, double idle) =>
-      _WalletsPainter(colors: colors, intro: intro, idle: idle);
+  CustomPainter painter(AppThemeData theme, double intro, double idle) =>
+      _WalletsPainter(colors: theme.colors, typo: theme.typo, intro: intro, idle: idle);
 }
 
 class _WalletsPainter extends CustomPainter {
-  _WalletsPainter({required this.colors, required this.intro, required this.idle});
+  _WalletsPainter({required this.colors, required this.typo, required this.intro, required this.idle});
 
   final UIColorToken colors;
+  final UITypographyToken typo;
   final double intro;
   final double idle;
 
@@ -89,14 +90,14 @@ class _WalletsPainter extends CustomPainter {
         IllustrationCanvas.text(
           canvas,
           wlt.name,
-          style: UITextStyleToken.interSemiBold.copyWith(fontSize: 14 * k, color: colors.contentColor),
+          style: typo.inter.semiBold.copyWith(fontSize: 14 * k, color: colors.contentColor),
           left: Offset(textLeft, rect.center.dy - h * 0.16),
           opacity: fade,
         );
         IllustrationCanvas.text(
           canvas,
           wlt.code,
-          style: UITextStyleToken.interBold.copyWith(fontSize: 9.5 * k, letterSpacing: 1.2, color: colors.secondContentColor),
+          style: typo.inter.bold.copyWith(fontSize: 9.5 * k, letterSpacing: 1.2, color: colors.secondContentColor),
           left: Offset(textLeft, rect.center.dy + h * 0.20),
           opacity: fade,
         );
@@ -105,7 +106,7 @@ class _WalletsPainter extends CustomPainter {
         IllustrationCanvas.text(
           canvas,
           wlt.amount,
-          style: UITextStyleToken.montserratLight.copyWith(fontSize: 16 * k, color: colors.contentColor),
+          style: typo.montserrat.light.copyWith(fontSize: 16 * k, color: colors.contentColor),
           center: Offset(rect.right - h * 1.05, rect.center.dy),
           opacity: fade,
           maxWidth: w * 0.42,
@@ -134,7 +135,7 @@ class _WalletsPainter extends CustomPainter {
       IllustrationCanvas.text(
         canvas,
         b.symbol,
-        style: UITextStyleToken.interBold.copyWith(fontSize: 16 * k * pop, color: UIColorToken.white),
+        style: typo.inter.bold.copyWith(fontSize: 16 * k * pop, color: UIColorToken.white),
         center: c,
       );
     }

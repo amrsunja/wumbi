@@ -16,7 +16,6 @@ class BaseCurrencyPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
-    final colors = context.colors;
     final current = ref.watch(baseCurrencyProvider);
 
     return Scaffold(
@@ -29,7 +28,7 @@ class BaseCurrencyPage extends ConsumerWidget {
           if (index == 0) {
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: 8),
-              child: Text(l10n.currency_base_hint, style: UITextStyleToken.caption(colors)),
+              child: Text(l10n.currency_base_hint, style: context.typo.inter.caption),
             );
           }
           final c = CurrencyType.values[index - 1];

@@ -8,6 +8,15 @@ class UIColorToken {
   final Color secondContentColor;
   final Color disabledContentColor;
   final Color expenseColor;
+
+  /// Hairlines / outlines (rows, chips, header separator).
+  final Color dividerColor;
+
+  /// Numpad key tiles.
+  final Color numpadKeyColor;
+
+  /// Default tint for `UIIcon` — bismark in both themes.
+  final Color iconColor;
   final Brightness brightness;
 
   const UIColorToken({
@@ -17,6 +26,9 @@ class UIColorToken {
     required this.secondContentColor,
     required this.disabledContentColor,
     required this.expenseColor,
+    required this.dividerColor,
+    required this.numpadKeyColor,
+    required this.iconColor,
     required this.brightness,
   });
 
@@ -27,6 +39,9 @@ class UIColorToken {
         secondContentColor: casper,
         disabledContentColor: Color(0xffE5E7EB),
         expenseColor: neu700,
+        dividerColor: Color(0x4DAEC2D4), // casper 30 %
+        numpadKeyColor: Color(0x80FFFFFF), // white 50 %
+        iconColor: bismark,
         brightness: Brightness.light,
       );
 
@@ -34,16 +49,16 @@ class UIColorToken {
         bgColor: Color(0xff120F1B),
         fgColor: Color(0xff15121F),
         contentColor: bismarkLight,
-        secondContentColor: casperDark,
+        secondContentColor: casper,
         disabledContentColor: Color(0xff2A2637),
         expenseColor: neu100,
+        dividerColor: darkLine,
+        numpadKeyColor: Color(0x80191524), // darkLine 50 %
+        iconColor: bismark,
         brightness: Brightness.dark,
       );
 
   bool get isDark => brightness == Brightness.dark;
-
-  /// Divider colour: casper at 30 %.
-  Color get dividerColor => secondContentColor.withValues(alpha: 0.3);
 
   // GENERAL
   static const Color white = Color(0xffFFFFFF);
@@ -54,6 +69,9 @@ class UIColorToken {
   static const Color cararra = Color(0xffFAFAF8);
   static const Color casper = Color(0xffAEC2D4);
   static const Color casperDark = Color(0xff6F7F92);
+
+  /// Dark-theme hairline / numpad key base.
+  static const Color darkLine = Color(0xff191524);
   static const Color chelseaCucumber = Color(0xff97AF50);
   static const Color violet = Color(0xff8B5CF6);
   static const Color blue = Color(0xff3B82F6);
@@ -62,7 +80,7 @@ class UIColorToken {
   static const Color mountainMeadow = Color(0xff65AF83);
   static const Color grey = Color(0xffA1A1A1);
   static const Color black = Color(0xff000000);
-  static Color overlay = bismark.withValues(alpha: 0.5);
+  static Color overlay = neu700.withValues(alpha: 0.5);
 
   // NEUTRAL
   static const Color neu700 = Color(0xff101010);

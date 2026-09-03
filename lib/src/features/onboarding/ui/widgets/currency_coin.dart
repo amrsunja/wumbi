@@ -162,7 +162,7 @@ class _CoinFace extends StatelessWidget {
               children: [
                 Text(
                   symbol,
-                  style: UITextStyleToken.montserratBold.copyWith(
+                  style: AppTheme.of(context).typo.montserrat.bold.copyWith(
                     fontSize: size * 0.40,
                     height: 1,
                     color: UIColorToken.white,
@@ -172,7 +172,7 @@ class _CoinFace extends StatelessWidget {
                 SizedBox(height: size * 0.03),
                 Text(
                   code,
-                  style: UITextStyleToken.interBold.copyWith(
+                  style: AppTheme.of(context).typo.inter.bold.copyWith(
                     fontSize: size * 0.085,
                     letterSpacing: 2,
                     color: UIColorToken.white.withValues(alpha: 0.85),

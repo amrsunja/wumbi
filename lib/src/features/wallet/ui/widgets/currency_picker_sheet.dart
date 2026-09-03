@@ -58,7 +58,7 @@ class _SymbolBadge extends StatelessWidget {
       child: FittedBox(
         child: Text(
           symbol,
-          style: UITextStyleToken.interSemiBold.copyWith(fontSize: 14, color: colors.contentColor),
+          style: AppTheme.of(context).typo.inter.label,
         ),
       ),
     );

@@ -30,7 +30,6 @@ class OnboardingCurrencyPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final colors = context.colors;
 
     Future<void> pick() async {
       final picked = await CurrencyPickerSheet.show(
@@ -67,7 +66,7 @@ class OnboardingCurrencyPage extends StatelessWidget {
                     Text(
                       l10n.onboarding_currency_title,
                       textAlign: TextAlign.center,
-                      style: OnboardingTypography.title(colors),
+                      style: OnboardingTypography.title(context.typo),
                     ).uiFadeSlideIn(delay: UIAnim.stagger * 2),
                     const UISpace.vert(14),
                     Padding(
@@ -75,7 +74,7 @@ class OnboardingCurrencyPage extends StatelessWidget {
                       child: Text(
                         l10n.onboarding_currency_subtitle,
                         textAlign: TextAlign.center,
-                        style: OnboardingTypography.body(colors),
+                        style: OnboardingTypography.body(context.typo),
                       ),
                     ).uiFadeSlideIn(delay: UIAnim.stagger * 3),
                     const UISpace.vert(28),
@@ -126,11 +125,11 @@ class _PickerRow extends StatelessWidget {
           children: [
             Text(
               selected.code,
-              style: UITextStyleToken.interBold.copyWith(fontSize: 16, color: UIColorToken.blue),
+              style: context.typo.inter.bold.copyWith(fontSize: 16, color: UIColorToken.blue),
             ),
             Text(
               '·',
-              style: UITextStyleToken.interBold.copyWith(fontSize: 16, color: colors.secondContentColor),
+              style: context.typo.inter.bold.copyWith(fontSize: 16, color: colors.secondContentColor),
             ),
             Flexible(
               child: AnimatedSwitcher(
@@ -140,11 +139,11 @@ class _PickerRow extends StatelessWidget {
                   key: ValueKey(selected.code),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: UITextStyleToken.interSemiBold.copyWith(fontSize: 16, color: colors.contentColor),
+                  style: context.typo.inter.rowTitle,
                 ),
               ),
             ),
-            UIIcon(UIIconToken.icons.arrows.chevronDown, size: 18, color: colors.secondContentColor),
+            UIIcon(UIIconToken.icons.arrows.chevronDown, size: 18),
           ],
         ),
       ),

@@ -122,17 +122,17 @@ abstract class IllustrationState<T extends StatefulWidget> extends State<T> with
     super.dispose();
   }
 
-  CustomPainter painter(UIColorToken colors, double intro, double idle);
+  CustomPainter painter(AppThemeData theme, double intro, double idle);
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppTheme.of(context).colors;
+    final theme = AppTheme.of(context);
     return RepaintBoundary(
       child: AnimatedBuilder(
         animation: Listenable.merge([intro, idle]),
         builder: (_, _) => CustomPaint(
           size: Size.infinite,
-          painter: painter(colors, intro.value, idle.value),
+          painter: painter(theme, intro.value, idle.value),
         ),
       ),
     );

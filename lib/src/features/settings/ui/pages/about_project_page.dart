@@ -15,7 +15,6 @@ class AboutProjectPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
-    final colors = context.colors;
 
     return Scaffold(
       appBar: UIAppbar(title: l10n.about, backTap: () => context.router.maybePop()),
@@ -28,13 +27,13 @@ class AboutProjectPage extends ConsumerWidget {
             const UISpace.vert(24),
             Text(
               kAppName,
-              style: UITextStyleToken.interSemiBold.copyWith(fontSize: 22, color: colors.contentColor),
+              style: context.typo.inter.headline.copyWith(fontSize: 22),
             ),
             const UISpace.vert(12),
             Text(
               l10n.about_text,
               textAlign: TextAlign.center,
-              style: UITextStyleToken.interRegular.copyWith(fontSize: 14, color: colors.secondContentColor, height: 1.5),
+              style: context.typo.inter.paragraph,
             ),
             const UISpace.vert(24),
             UiIconTextButton(

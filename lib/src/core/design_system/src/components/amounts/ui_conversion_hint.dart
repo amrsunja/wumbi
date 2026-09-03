@@ -46,7 +46,7 @@ class UiConversionHint extends StatelessWidget {
         textAlign: TextAlign.center,
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
-        style: UITextStyleToken.interMedium.copyWith(fontSize: 12, color: color),
+        style: AppTheme.of(context).typo.inter.caption.copyWith(color: color),
       ),
     );
   }

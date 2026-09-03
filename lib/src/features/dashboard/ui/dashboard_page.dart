@@ -76,7 +76,7 @@ class DashboardPage extends ConsumerWidget {
                         children: [
                           Text(
                             l10n.dashboard_wallets,
-                            style: UITextStyleToken.interSemiBold.copyWith(fontSize: 20, color: colors.contentColor),
+                            style: context.typo.inter.headline,
                           ),
                           UiIconTextButton(
                             icon: UIIconToken.icons.general.plusCircle,
@@ -129,7 +129,7 @@ class _Header extends ConsumerWidget {
           child: Text(
             caption,
             textAlign: TextAlign.center,
-            style: UITextStyleToken.interMedium.copyWith(fontSize: 14, color: colors.secondContentColor),
+            style: context.typo.inter.subtitle,
           ),
         ),
       ],

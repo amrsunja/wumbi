@@ -37,7 +37,7 @@ class UiChip extends StatelessWidget {
             if (icon != null) UIIcon(icon!, size: 12, color: color),
             Text(
               label,
-              style: UITextStyleToken.interMedium.copyWith(fontSize: 10, letterSpacing: 0.2, color: color),
+              style: AppTheme.of(context).typo.inter.chip.copyWith(color: color),
             ),
             if (!readOnly) UIIcon(UIIconToken.icons.arrows.chevronDown, size: 12, color: color),
           ],
@@ -74,7 +74,7 @@ class UiTypePill extends StatelessWidget {
         ),
         child: Text(
           label.toUpperCase(),
-          style: UITextStyleToken.interBold.copyWith(fontSize: 10, letterSpacing: 1.0, color: fg),
+          style: AppTheme.of(context).typo.inter.micro.copyWith(color: fg),
         ),
       ),
     );

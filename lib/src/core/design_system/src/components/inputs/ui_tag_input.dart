@@ -200,12 +200,12 @@ class _UiTagInputState extends State<UiTagInput> {
             _focusNode.requestFocus();
           }
         },
-        style: UITextStyleToken.interMedium.copyWith(fontSize: 14, color: colors.contentColor),
+        style: AppTheme.of(context).typo.inter.labelMedium,
         decoration: InputDecoration(
           isDense: true,
           border: InputBorder.none,
           hintText: hasTags ? '' : widget.hintText,
-          hintStyle: UITextStyleToken.interMedium.copyWith(fontSize: 14, color: colors.secondContentColor),
+          hintStyle: AppTheme.of(context).typo.inter.subtitle,
           contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
         ),
       ),
@@ -247,7 +247,7 @@ class _UiTagInputState extends State<UiTagInput> {
                       ),
                       child: Text(
                         '#$s',
-                        style: UITextStyleToken.interMedium.copyWith(fontSize: 12, color: colors.secondContentColor),
+                        style: AppTheme.of(context).typo.inter.caption,
                       ),
                     ),
                   ),
@@ -279,7 +279,7 @@ class _TagChip extends StatelessWidget {
         children: [
           Text(
             '#$label',
-            style: UITextStyleToken.interSemiBold.copyWith(fontSize: 12, color: UIColorToken.blue),
+            style: AppTheme.of(context).typo.inter.semiBold.copyWith(fontSize: 12, color: UIColorToken.blue),
           ),
           UIIcon(UIIconToken.icons.general.xClose, size: 14, color: UIColorToken.blue, onTap: onRemove),
         ],

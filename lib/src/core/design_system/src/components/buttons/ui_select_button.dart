@@ -23,7 +23,6 @@ class UiSelectButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppTheme.of(context).colors;
     final interactive = enabled && onTap != null;
     return UITap(
       onTap: interactive ? onTap : null,
@@ -35,18 +34,12 @@ class UiSelectButton extends StatelessWidget {
           children: [
             Text(
               title,
-              style: style ??
-                  UITextStyleToken.interBold.copyWith(
-                    letterSpacing: 0.3,
-                    fontSize: 12,
-                    color: colors.secondContentColor,
-                  ),
+              style: style ?? AppTheme.of(context).typo.inter.select,
             ),
             if (interactive)
               UIIcon(
                 trailingIcon ?? UIIconToken.icons.arrows.chevronDown,
                 size: style?.fontSize != null ? style!.fontSize! + 4 : 16,
-                color: colors.secondContentColor,
               ),
           ],
         ),

@@ -27,7 +27,6 @@ class OnboardingBenefitPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final colors = context.colors;
     final height = MediaQuery.sizeOf(context).height;
 
     return Padding(
@@ -49,7 +48,7 @@ class OnboardingBenefitPage extends StatelessWidget {
                   Text(
                     title,
                     textAlign: TextAlign.center,
-                    style: OnboardingTypography.title(colors),
+                    style: OnboardingTypography.title(context.typo),
                   ).uiFadeSlideIn(delay: UIAnim.stagger),
                   const UISpace.vert(14),
                   Padding(
@@ -57,7 +56,7 @@ class OnboardingBenefitPage extends StatelessWidget {
                     child: Text(
                       body,
                       textAlign: TextAlign.center,
-                      style: OnboardingTypography.body(colors),
+                      style: OnboardingTypography.body(context.typo),
                     ),
                   ).uiFadeSlideIn(delay: UIAnim.stagger * 2),
                   const UISpace.vert(24),

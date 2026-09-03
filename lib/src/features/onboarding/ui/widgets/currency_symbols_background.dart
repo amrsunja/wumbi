@@ -33,14 +33,15 @@ class _CurrencySymbolsBackgroundState extends State<CurrencySymbolsBackground> w
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppTheme.of(context).colors;
+    final theme = AppTheme.of(context);
+    final colors = theme.colors;
     return IgnorePointer(
       child: RepaintBoundary(
         child: AnimatedBuilder(
           animation: _controller,
           builder: (_, _) => CustomPaint(
             size: Size.infinite,
-            painter: _SymbolsPainter(t: _controller.value, colors: colors, opacity: widget.opacity),
+            painter: _SymbolsPainter(t: _controller.value, colors: colors, typo: theme.typo, opacity: widget.opacity),
           ),
         ),
       ),
@@ -49,10 +50,11 @@ class _CurrencySymbolsBackgroundState extends State<CurrencySymbolsBackground> w
 }
 
 class _SymbolsPainter extends CustomPainter {
-  _SymbolsPainter({required this.t, required this.colors, required this.opacity});
+  _SymbolsPainter({required this.t, required this.colors, required this.typo, required this.opacity});
 
   final double t;
   final UIColorToken colors;
+  final UITypographyToken typo;
   final double opacity;
 
   /// symbol, anchor x/y (× size), font size (× width), drift freq x/y, phase, alpha weight.
@@ -84,7 +86,7 @@ class _SymbolsPainter extends CustomPainter {
       final tp = TextPainter(
         text: TextSpan(
           text: sym,
-          style: UITextStyleToken.montserratBold.copyWith(fontSize: size.width * fs, color: base.withValues(alpha: alpha)),
+          style: typo.montserrat.bold.copyWith(fontSize: size.width * fs, color: base.withValues(alpha: alpha)),
         ),
         textDirection: TextDirection.ltr,
       )..layout();

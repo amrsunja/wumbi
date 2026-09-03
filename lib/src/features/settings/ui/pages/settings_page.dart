@@ -21,7 +21,6 @@ class SettingsPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
-    final colors = context.colors;
     final settings = ref.watch(settingsProvider).data;
     final notifier = ref.read(settingsProvider.notifier);
     final packageInfo = ref.watch(packageInfoProvider).value;
@@ -94,7 +93,7 @@ class SettingsPage extends ConsumerWidget {
               padding: const EdgeInsets.only(bottom: 24, top: 8),
               child: Text(
                 packageInfo == null ? '' : l10n.settings_version(packageInfo.version, packageInfo.buildNumber),
-                style: UITextStyleToken.interMedium.copyWith(fontSize: 11, color: colors.secondContentColor),
+                style: context.typo.inter.caption.copyWith(fontSize: 11),
               ),
             ),
           ],

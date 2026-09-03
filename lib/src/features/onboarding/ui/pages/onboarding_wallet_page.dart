@@ -55,7 +55,7 @@ class OnboardingWalletPage extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: RichText(
                   text: TextSpan(
-                    style: OnboardingTypography.hero(colors),
+                    style: OnboardingTypography.hero(context.typo),
                     children: [
                       TextSpan(text: '${l10n.onboarding_wallet_hero_prefix}\n'),
                       TextSpan(
@@ -81,7 +81,7 @@ class OnboardingWalletPage extends StatelessWidget {
                         UIIcon(UIIconToken.icons.general.plusCircle, color: UIColorToken.blue, size: 26),
                         Text(
                           l10n.dashboard_new_wallet,
-                          style: UITextStyleToken.interBold.copyWith(
+                          style: context.typo.inter.bold.copyWith(
                             fontSize: 20,
                             letterSpacing: -0.4,
                             color: UIColorToken.blue,
@@ -104,7 +104,7 @@ class OnboardingWalletPage extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
                       child: Text(
                         l10n.common_skip,
-                        style: UITextStyleToken.interMedium.copyWith(
+                        style: context.typo.inter.medium.copyWith(
                           fontSize: 16,
                           color: colors.secondContentColor,
                         ),

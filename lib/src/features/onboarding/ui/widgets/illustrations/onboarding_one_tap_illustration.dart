@@ -26,14 +26,15 @@ class _State extends IllustrationState<OnboardingOneTapIllustration> {
   Duration get idleDuration => const Duration(milliseconds: 3600);
 
   @override
-  CustomPainter painter(UIColorToken colors, double intro, double idle) =>
-      _OneTapPainter(colors: colors, intro: intro, idle: idle);
+  CustomPainter painter(AppThemeData theme, double intro, double idle) =>
+      _OneTapPainter(colors: theme.colors, typo: theme.typo, intro: intro, idle: idle);
 }
 
 class _OneTapPainter extends CustomPainter {
-  _OneTapPainter({required this.colors, required this.intro, required this.idle});
+  _OneTapPainter({required this.colors, required this.typo, required this.intro, required this.idle});
 
   final UIColorToken colors;
+  final UITypographyToken typo;
   final double intro;
   final double idle;
 
@@ -115,7 +116,7 @@ class _OneTapPainter extends CustomPainter {
       IllustrationCanvas.text(
         canvas,
         done > 0 ? '+$text' : text,
-        style: UITextStyleToken.montserratBold.copyWith(fontSize: 28 * k, color: color),
+        style: typo.montserrat.bold.copyWith(fontSize: 28 * k, color: color),
         center: c,
         opacity: fade,
       );
@@ -124,7 +125,7 @@ class _OneTapPainter extends CustomPainter {
     // Caret blinking while typing.
     if (intro < _tapAt && typed < _sequence.length) {
       final tp = TextPainter(
-        text: TextSpan(text: text, style: UITextStyleToken.montserratBold.copyWith(fontSize: 28 * k)),
+        text: TextSpan(text: text, style: typo.montserrat.bold.copyWith(fontSize: 28 * k)),
         textDirection: TextDirection.ltr,
       )..layout();
       final blink = (math.sin(2 * math.pi * idle * 6) > 0) ? 1.0 : 0.2;
@@ -141,7 +142,7 @@ class _OneTapPainter extends CustomPainter {
     IllustrationCanvas.text(
       canvas,
       'USD  ·  Checking',
-      style: UITextStyleToken.interMedium.copyWith(fontSize: 9.5 * k, color: colors.secondContentColor),
+      style: typo.inter.medium.copyWith(fontSize: 9.5 * k, color: colors.secondContentColor),
       center: Offset(side * 0.5, side * _subtitleY),
       opacity: fade,
     );
@@ -172,7 +173,7 @@ class _OneTapPainter extends CustomPainter {
         IllustrationCanvas.text(
           canvas,
           _keys[i],
-          style: UITextStyleToken.interMedium.copyWith(
+          style: typo.inter.medium.copyWith(
             fontSize: 13 * k,
             color: Color.lerp(colors.contentColor, UIColorToken.white, isLit ? press : 0),
           ),
@@ -220,7 +221,7 @@ class _OneTapPainter extends CustomPainter {
     IllustrationCanvas.text(
       canvas,
       'INCOME',
-      style: UITextStyleToken.interBold.copyWith(fontSize: 7.5 * k, letterSpacing: 1.4, color: colors.secondContentColor),
+      style: typo.inter.bold.copyWith(fontSize: 7.5 * k, letterSpacing: 1.4, color: colors.secondContentColor),
       left: c.translate(r * 1.6, 0),
       opacity: pop,
     );

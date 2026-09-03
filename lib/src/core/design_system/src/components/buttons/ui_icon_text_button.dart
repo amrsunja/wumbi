@@ -26,10 +26,10 @@ class UiIconTextButton extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           spacing: 6,
           children: [
-            if (icon != null) UIIcon(icon!, color: color, size: 20),
+            if (icon != null) UIIcon(icon!, color: color, size: 14),
             Text(
               title,
-              style: UITextStyleToken.interBold.copyWith(
+              style: AppTheme.of(context).typo.inter.bold.copyWith(
                 color: color,
                 letterSpacing: -0.35,
                 fontSize: 14,

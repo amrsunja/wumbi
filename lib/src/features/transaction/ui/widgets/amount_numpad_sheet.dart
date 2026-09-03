@@ -49,7 +49,6 @@ class _AmountNumpadState extends State<_AmountNumpad> {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.colors;
     final l10n = context.l10n;
     final display = '${_negative ? '-' : ''}${widget.currency.symbol} ${AmountInput.display(_value)}';
 
@@ -63,7 +62,7 @@ class _AmountNumpadState extends State<_AmountNumpad> {
             fit: BoxFit.scaleDown,
             child: Text(
               display,
-              style: UITextStyleToken.montserratLight.copyWith(fontSize: 40, color: colors.contentColor),
+              style: context.typo.montserrat.formAmount,
             ),
           ),
           if (widget.allowNegative)
@@ -71,7 +70,7 @@ class _AmountNumpadState extends State<_AmountNumpad> {
               onTap: () => setState(() => _negative = !_negative),
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 6),
-                child: Text('+ / −', style: UITextStyleToken.caption(colors)),
+                child: Text('+ / −', style: context.typo.inter.caption),
               ),
             ),
           const UISpace.vert(16),

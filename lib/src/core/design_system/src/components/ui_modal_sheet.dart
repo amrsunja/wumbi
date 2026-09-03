@@ -59,7 +59,7 @@ abstract class UIModalSheet {
                   child: Text(
                     title,
                     textAlign: TextAlign.center,
-                    style: UITextStyleToken.interSemiBold.copyWith(fontSize: 16, color: colors.contentColor),
+                    style: AppTheme.of(context).typo.inter.rowTitle,
                   ),
                 ),
               if (fitContent) child else Expanded(child: child),

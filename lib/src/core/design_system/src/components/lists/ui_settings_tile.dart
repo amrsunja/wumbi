@@ -32,7 +32,6 @@ class UiSettingsTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppTheme.of(context).colors;
     final tint = destructive ? UIColorToken.neg500 : null;
     final isSwitch = switchValue != null;
 
@@ -46,14 +45,14 @@ class UiSettingsTile extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Row(
             children: [
-              UIIcon(icon, size: 20, color: tint ?? colors.secondContentColor),
+              UIIcon(icon, size: 20, color: tint),
               const UISpace.horz(16),
               Expanded(
                 child: Text(
                   title,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: UITextStyleToken.rowTitle(colors).copyWith(color: tint ?? colors.contentColor),
+                  style: AppTheme.of(context).typo.inter.body.copyWith(color: tint),
                 ),
               ),
               if (isSwitch)
@@ -62,11 +61,11 @@ class UiSettingsTile extends StatelessWidget {
                 if (value != null)
                   Text(
                     value!,
-                    style: UITextStyleToken.interMedium.copyWith(fontSize: 14, color: colors.secondContentColor),
+                    style: AppTheme.of(context).typo.inter.subtitle,
                   ),
                 if (showChevron && !destructive) ...[
                   const UISpace.horz(6),
-                  UIIcon(UIIconToken.icons.arrows.chevronRight, size: 18, color: colors.secondContentColor),
+                  UIIcon(UIIconToken.icons.arrows.chevronRight, size: 18),
                 ],
               ],
             ],

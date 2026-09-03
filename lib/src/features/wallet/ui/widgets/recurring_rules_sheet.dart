@@ -70,7 +70,6 @@ class _RulesListState extends State<_RulesList> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final colors = context.colors;
 
     return Column(
       children: [
@@ -79,13 +78,13 @@ class _RulesListState extends State<_RulesList> {
           child: Text(
             l10n.repeat_rules_hint,
             textAlign: TextAlign.center,
-            style: UITextStyleToken.caption(colors),
+            style: context.typo.inter.caption,
           ),
         ),
         Expanded(
           child: _rules.isEmpty
               ? Center(
-                  child: Text(l10n.repeat_never, style: UITextStyleToken.caption(colors)),
+                  child: Text(l10n.repeat_never, style: context.typo.inter.caption),
                 )
               : ListView.separated(
                   padding: const EdgeInsets.only(bottom: 16),
@@ -106,7 +105,7 @@ class _RulesListState extends State<_RulesList> {
                         children: [
                           Text(
                             amount.format(signed: true, positiveSign: true),
-                            style: UITextStyleToken.interSemiBold.copyWith(fontSize: 14, color: colors.contentColor),
+                            style: context.typo.inter.label,
                           ),
                           UISwitch(
                             value: r.isActive,

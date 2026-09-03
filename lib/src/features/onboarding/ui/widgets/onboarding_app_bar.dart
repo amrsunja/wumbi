@@ -71,7 +71,7 @@ class OnboardingAppBar extends StatelessWidget {
                                       child: Center(
                                         child: Text(
                                           l10n.common_skip,
-                                          style: UITextStyleToken.interMedium.copyWith(
+                                          style: context.typo.inter.medium.copyWith(
                                             fontSize: 14,
                                             color: colors.secondContentColor,
                                           ),

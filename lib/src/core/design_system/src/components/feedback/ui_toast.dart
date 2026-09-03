@@ -48,7 +48,7 @@ class UiToast extends StatelessWidget {
                 message,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: UITextStyleToken.interMedium.copyWith(color: UIColorToken.white, fontSize: 14),
+                style: AppTheme.of(context).typo.inter.labelMedium.copyWith(color: UIColorToken.white),
               ),
             ),
             if (actionLabel != null && onAction != null) ...[
@@ -59,7 +59,7 @@ class UiToast extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
                   child: Text(
                     actionLabel!.toUpperCase(),
-                    style: UITextStyleToken.interBold.copyWith(
+                    style: AppTheme.of(context).typo.inter.bold.copyWith(
                       color: UIColorToken.white,
                       fontSize: 13,
                       letterSpacing: 0.8,

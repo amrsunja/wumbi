@@ -36,7 +36,9 @@ class UiTransactionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppTheme.of(context).colors;
+    final theme = AppTheme.of(context);
+    final colors = theme.colors;
+    final typo = theme.typo.inter;
 
     final Color amountColor;
     final String sign;
@@ -72,13 +74,13 @@ class UiTransactionCard extends StatelessWidget {
                     title,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: UITextStyleToken.interSemiBold.copyWith(fontSize: 16, color: colors.contentColor),
+                    style: typo.rowTitle,
                   ),
                   Text(
                     caption,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: UITextStyleToken.interMedium.copyWith(color: colors.secondContentColor, fontSize: 12),
+                    style: typo.caption,
                   ),
                   if (tags.isNotEmpty)
                     Padding(
@@ -96,7 +98,7 @@ class UiTransactionCard extends StatelessWidget {
                               ),
                               child: Text(
                                 '#$t',
-                                style: UITextStyleToken.interSemiBold.copyWith(fontSize: 10, color: UIColorToken.blue),
+                                style: typo.semiBold.copyWith(fontSize: 10, color: UIColorToken.blue),
                               ),
                             ),
                         ],
@@ -108,7 +110,7 @@ class UiTransactionCard extends StatelessWidget {
             const UISpace.horz(12),
             Text(
               '$sign${amount.abs().format()}',
-              style: UITextStyleToken.interSemiBold.copyWith(fontSize: 16, color: amountColor),
+              style: typo.rowTitle.copyWith(color: amountColor),
             ),
           ],
         ),

@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import '../../../../utils/app_vibrations.dart';
 import '../../../app_ui.dart';
 
-/// 3×4 grid: 1 2 3 / 4 5 6 / 7 8 9 / . 0 ⌫ — white 50 % tiles (fgColor in
-/// dark mode), 8 px gaps, light haptic on touch-down, long-press ⌫ clears.
+/// 3×4 grid: 1 2 3 / 4 5 6 / 7 8 9 / . 0 ⌫ — `colors.numpadKeyColor` tiles
+/// (white 50 % light / #191524 50 % dark), 8 px gaps, light haptic on
+/// touch-down, long-press ⌫ clears.
 class UiNumpad extends StatelessWidget {
   const UiNumpad({
     super.key,
@@ -13,7 +14,7 @@ class UiNumpad extends StatelessWidget {
     required this.onBackspace,
     required this.onClear,
     this.dotEnabled = true,
-    this.keyHeight = 44,
+    this.keyHeight = 54,
   });
 
   final ValueChanged<String> onDigit;
@@ -27,7 +28,8 @@ class UiNumpad extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context);
     final colors = theme.colors;
-    final tileColor = colors.isDark ? colors.fgColor : UIColorToken.white.withValues(alpha: 0.5);
+    final tileColor = colors.numpadKeyColor;
+    final keyStyle = theme.typo.inter.numpadKey;
 
     Widget key({
       required Widget child,
@@ -62,10 +64,7 @@ class UiNumpad extends StatelessWidget {
     }
 
     Widget digit(String d) => key(
-          child: Text(
-            d,
-            style: UITextStyleToken.interMedium.copyWith(fontSize: 24, color: colors.contentColor),
-          ),
+          child: Text(d, style: keyStyle),
           onTap: () => onDigit(d),
         );
 
@@ -81,15 +80,12 @@ class UiNumpad extends StatelessWidget {
         row([
           key(
             enabled: dotEnabled,
-            child: Text(
-              '.',
-              style: UITextStyleToken.interMedium.copyWith(fontSize: 24, color: colors.contentColor),
-            ),
+            child: Text('.', style: keyStyle),
             onTap: onDot,
           ),
           digit('0'),
           key(
-            child: UIIcon(UIIconToken.icons.editor.delete, size: 22, color: colors.contentColor),
+            child: UIIcon(UIIconToken.icons.editor.delete, size: 22),
             onTap: onBackspace,
             onLongPress: onClear,
           ),
