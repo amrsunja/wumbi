@@ -45,7 +45,7 @@ class UiSettingsTile extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Row(
             children: [
-              UIIcon(icon, size: 20, color: tint),
+              UIIcon(icon, size: 14, color: tint),
               const UISpace.horz(16),
               Expanded(
                 child: Text(
