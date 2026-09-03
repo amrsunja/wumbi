@@ -83,6 +83,65 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onboarding_create_wallet => 'Create wallet';
 
   @override
+  String get common_skip => 'Skip';
+
+  @override
+  String get onboarding_welcome_start => 'Get started';
+
+  @override
+  String get onboarding_benefit_wallets_title => 'Wallets in any currency';
+
+  @override
+  String get onboarding_benefit_wallets_body =>
+      'Dollars, euros, bitcoin — every wallet keeps its own currency. Your total shows up in the one you choose.';
+
+  @override
+  String get onboarding_benefit_tags_title => 'Tags, not categories';
+
+  @override
+  String get onboarding_benefit_tags_body =>
+      'Forget rigid categories. Add any tags you like — #coffee, #trip, #work — and find anything later.';
+
+  @override
+  String get onboarding_benefit_one_tap_title => 'Log it in one tap';
+
+  @override
+  String get onboarding_benefit_one_tap_body =>
+      'Type the amount, tap Income or Expense. Done. The screen stays open for the next one.';
+
+  @override
+  String get onboarding_how_title => 'How it works';
+
+  @override
+  String get onboarding_how_body =>
+      'Create a wallet, log money as it moves, and watch your totals update instantly.';
+
+  @override
+  String get onboarding_how_step_wallet => 'Add a wallet';
+
+  @override
+  String get onboarding_how_step_tap => 'Tap to log';
+
+  @override
+  String get onboarding_how_step_totals => 'See totals';
+
+  @override
+  String get onboarding_wallet_hero_prefix => 'Create your first';
+
+  @override
+  String get onboarding_wallet_hero_accent => 'Wallet';
+
+  @override
+  String get onboarding_final_title => 'You\'re all set!';
+
+  @override
+  String get onboarding_final_body =>
+      'Your first wallet is ready. Fiin will keep the rest simple.';
+
+  @override
+  String get onboarding_final_button => 'Go to dashboard';
+
+  @override
   String get l10nDashboard =>
       '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ DASHBOARD ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
 

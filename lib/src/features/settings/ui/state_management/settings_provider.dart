@@ -67,7 +67,7 @@ class SettingsNotifier extends Notifier<SettingsState> {
     // 5. Route.
     state = state.copyWith(isLoading: false);
     _events.send(ReplaceAllRoutesEvent([
-      if (data!.showOnboarding) const OnboardingRoute() else const DashboardRoute(),
+      if (!data!.showOnboarding) const OnboardingRoute() else const DashboardRoute(),
     ]));
   }
 

@@ -232,6 +232,114 @@ abstract class AppLocalizations {
   /// **'Create wallet'**
   String get onboarding_create_wallet;
 
+  /// No description provided for @common_skip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get common_skip;
+
+  /// No description provided for @onboarding_welcome_start.
+  ///
+  /// In en, this message translates to:
+  /// **'Get started'**
+  String get onboarding_welcome_start;
+
+  /// No description provided for @onboarding_benefit_wallets_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Wallets in any currency'**
+  String get onboarding_benefit_wallets_title;
+
+  /// No description provided for @onboarding_benefit_wallets_body.
+  ///
+  /// In en, this message translates to:
+  /// **'Dollars, euros, bitcoin — every wallet keeps its own currency. Your total shows up in the one you choose.'**
+  String get onboarding_benefit_wallets_body;
+
+  /// No description provided for @onboarding_benefit_tags_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Tags, not categories'**
+  String get onboarding_benefit_tags_title;
+
+  /// No description provided for @onboarding_benefit_tags_body.
+  ///
+  /// In en, this message translates to:
+  /// **'Forget rigid categories. Add any tags you like — #coffee, #trip, #work — and find anything later.'**
+  String get onboarding_benefit_tags_body;
+
+  /// No description provided for @onboarding_benefit_one_tap_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Log it in one tap'**
+  String get onboarding_benefit_one_tap_title;
+
+  /// No description provided for @onboarding_benefit_one_tap_body.
+  ///
+  /// In en, this message translates to:
+  /// **'Type the amount, tap Income or Expense. Done. The screen stays open for the next one.'**
+  String get onboarding_benefit_one_tap_body;
+
+  /// No description provided for @onboarding_how_title.
+  ///
+  /// In en, this message translates to:
+  /// **'How it works'**
+  String get onboarding_how_title;
+
+  /// No description provided for @onboarding_how_body.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a wallet, log money as it moves, and watch your totals update instantly.'**
+  String get onboarding_how_body;
+
+  /// No description provided for @onboarding_how_step_wallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a wallet'**
+  String get onboarding_how_step_wallet;
+
+  /// No description provided for @onboarding_how_step_tap.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to log'**
+  String get onboarding_how_step_tap;
+
+  /// No description provided for @onboarding_how_step_totals.
+  ///
+  /// In en, this message translates to:
+  /// **'See totals'**
+  String get onboarding_how_step_totals;
+
+  /// No description provided for @onboarding_wallet_hero_prefix.
+  ///
+  /// In en, this message translates to:
+  /// **'Create your first'**
+  String get onboarding_wallet_hero_prefix;
+
+  /// No description provided for @onboarding_wallet_hero_accent.
+  ///
+  /// In en, this message translates to:
+  /// **'Wallet'**
+  String get onboarding_wallet_hero_accent;
+
+  /// No description provided for @onboarding_final_title.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re all set!'**
+  String get onboarding_final_title;
+
+  /// No description provided for @onboarding_final_body.
+  ///
+  /// In en, this message translates to:
+  /// **'Your first wallet is ready. Fiin will keep the rest simple.'**
+  String get onboarding_final_body;
+
+  /// No description provided for @onboarding_final_button.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to dashboard'**
+  String get onboarding_final_button;
+
   /// No description provided for @l10nDashboard.
   ///
   /// In en, this message translates to:

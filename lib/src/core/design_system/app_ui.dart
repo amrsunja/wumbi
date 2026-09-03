@@ -46,6 +46,8 @@ export 'src/components/lists/ui_radio_row.dart';
 export 'src/components/states/ui_empty_state.dart';
 export 'src/components/states/ui_skeleton_list.dart';
 export 'src/components/ui_progress_dots.dart';
+export 'src/components/ui_progress_line.dart';
+export 'src/components/animations/ui_animations.dart';
 
 //--------------------- TOKENS ---------------------
 part 'src/app_theme.dart';
