@@ -12,7 +12,7 @@ class UiEmptyState extends StatelessWidget {
     this.action,
   });
 
-  /// Asset path (e.g. `Assets.images.fiinOo.path`).
+  /// Asset path (e.g. `Assets.images.wumbiOo.path`).
   final String image;
   final String title;
   final String? subtitle;

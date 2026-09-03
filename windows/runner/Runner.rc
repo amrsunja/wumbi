@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "fiin" "\0"
+            VALUE "CompanyName", "Wumbi Finance" "\0"
+            VALUE "FileDescription", "Wumbi" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "fiin" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2026 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "fiin.exe" "\0"
-            VALUE "ProductName", "fiin" "\0"
+            VALUE "InternalName", "wumbi" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2026 Wumbi Finance. All rights reserved." "\0"
+            VALUE "OriginalFilename", "wumbi.exe" "\0"
+            VALUE "ProductName", "Wumbi" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

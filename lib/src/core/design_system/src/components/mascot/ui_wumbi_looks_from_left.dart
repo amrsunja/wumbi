@@ -1,17 +1,17 @@
-import 'package:fiin/gen/assets.gen.dart';
+import 'package:wumbi/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 /// Mascot peeking in from the left edge; slides in 400 ms (easeOutBack) once.
-class UIFiinLooksFromLeft extends StatelessWidget {
-  const UIFiinLooksFromLeft({super.key, this.height = 64, this.animate = true});
+class UIWumbiLooksFromLeft extends StatelessWidget {
+  const UIWumbiLooksFromLeft({super.key, this.height = 64, this.animate = true});
 
   final double height;
   final bool animate;
 
   @override
   Widget build(BuildContext context) {
-    final image = Image.asset(Assets.images.fiinLookLeft.path, height: height);
+    final image = Image.asset(Assets.images.wumbiLookLeft.path, height: height);
     if (!animate) return image;
     return image
         .animate()

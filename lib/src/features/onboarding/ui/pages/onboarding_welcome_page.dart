@@ -25,7 +25,7 @@ class OnboardingWelcomePage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset(AppAssets.images.fiinHello.path, height: 200)
+                Image.asset(AppAssets.images.wumbiHello.path, height: 200)
                     .uiElasticScaleIn(begin: 0.7, duration: const Duration(milliseconds: 1100)),
                 const UISpace.vert(40),
                 Text(

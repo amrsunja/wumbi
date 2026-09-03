@@ -1,4 +1,4 @@
-package com.fiinanceapp.finn
+package com.wumbifinance.wumbi
 
 import io.flutter.embedding.android.FlutterActivity
 

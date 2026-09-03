@@ -1,5 +1,5 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:fiin/src/core/utils/constants/constants.dart';
+import 'package:wumbi/src/core/utils/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';

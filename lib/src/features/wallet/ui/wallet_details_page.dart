@@ -90,9 +90,9 @@ class WalletDetailsPage extends HookConsumerWidget {
             ),
       body: Stack(
         children: [
-          Positioned(right: 0, top: 4, child: UIFiinLooksFromRight(key: ValueKey('fiin-$id'))),
+          Positioned(right: 0, top: 4, child: UIWumbiLooksFromRight(key: ValueKey('wumbi-$id'))),
           if (state.wallet.hasError)
-            UiEmptyState(image: AppAssets.images.fiinOo.path, title: l10n.wallet_not_found)
+            UiEmptyState(image: AppAssets.images.wumbiOo.path, title: l10n.wallet_not_found)
           else
             CustomScrollView(
               controller: scrollController,
@@ -205,7 +205,7 @@ class _TransactionList extends StatelessWidget {
     if (rows.isEmpty) {
       return SliverToBoxAdapter(
         child: UiEmptyState(
-          image: AppAssets.images.fiinTakeMoney.path,
+          image: AppAssets.images.wumbiTakeMoney.path,
           title: l10n.wallet_empty_title,
           subtitle: l10n.wallet_empty_subtitle,
         ),

@@ -1,14 +1,14 @@
 package_rename_config:
   android:
-    app_name: "Fiin" # Display name
-    package_name: "com.fiinanceapp.finn" # Package name
+    app_name: "Wumbi" # Display name
+    package_name: "com.wumbifinance.wumbi" # Package name
     #override_old_package: "com.example.worshipbarometer" # Optional: Cleans up old folder structure
     lang: "kotlin" # Optional: "kotlin" (default) or "java"
 
   ios:
-    app_name: "Fiin"
-    bundle_name: "fiinanceapp" # Bundle name
-    package_name: "com.fiinanceapp.finn" # Product Bundle Identifier
+    app_name: "Wumbi"
+    bundle_name: "wumbi" # Bundle name
+    package_name: "com.wumbifinance.wumbi" # Product Bundle Identifier
 
   #linux:
     #app_name: "My App" # Window title

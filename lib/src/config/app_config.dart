@@ -10,7 +10,7 @@ class AppConfig {
 	});
 
   factory AppConfig.create({
-    String appName = 'Fiin',
+    String appName = 'Wumbi',
     bool showDebugBanner = false,
   }) => shared = AppConfig(
 		appName,

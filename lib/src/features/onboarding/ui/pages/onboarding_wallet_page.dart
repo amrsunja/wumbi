@@ -35,7 +35,7 @@ class OnboardingWalletPage extends StatelessWidget {
         Positioned(
           right: 0,
           top: screen.height * 0.40,
-          child: Image.asset(AppAssets.images.fiinLookRight.path, height: mascotHeight)
+          child: Image.asset(AppAssets.images.wumbiLookRight.path, height: mascotHeight)
               // Idle: a slow, subtle bob so the character feels alive.
               .animate(onPlay: (c) => c.repeat(reverse: true))
               .moveY(begin: 0, end: -6, duration: 1800.ms, curve: Curves.easeInOut)

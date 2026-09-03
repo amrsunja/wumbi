@@ -23,7 +23,7 @@ class AboutProjectPage extends ConsumerWidget {
         child: Column(
           children: [
             const UISpace.vert(32),
-            Image.asset(AppAssets.images.fiinHello.path, height: 140),
+            Image.asset(AppAssets.images.wumbiHello.path, height: 140),
             const UISpace.vert(24),
             Text(
               kAppName,

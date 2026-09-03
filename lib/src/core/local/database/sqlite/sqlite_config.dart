@@ -1,6 +1,6 @@
 /// Table and column names. Keep every raw SQL string keyed off these constants.
 abstract class SQLiteConfig {
-  static const String dbFileName = 'fiin.db';
+  static const String dbFileName = 'wumbi.db';
   static const int dbVersion = 1;
 
   // ---------------------------------------------------------------- tables

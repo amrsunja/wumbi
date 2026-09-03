@@ -58,7 +58,9 @@ class DashboardPage extends ConsumerWidget {
               : null,
           body: Stack(
             children: [
-              const Positioned(left: 0, top: 12, child: UIFiinLooksFromLeft()),
+              // Peeking mascot only once the user has a wallet; the empty state
+              // already shows the big centred mascot.
+              if (hasWallets) const Positioned(left: 0, top: 12, child: UIWumbiLooksFromLeft()),
               CustomScrollView(
                 slivers: [
                   SliverToBoxAdapter(
@@ -169,7 +171,7 @@ class _WalletList extends HookConsumerWidget {
     if (data.isEmpty) {
       return SliverToBoxAdapter(
         child: UiEmptyState(
-          image: AppAssets.images.fiinOo.path,
+          image: AppAssets.images.wumbiOo.path,
           title: l10n.dashboard_empty_title,
           subtitle: l10n.dashboard_empty_subtitle,
           action: UiIconTextButton(

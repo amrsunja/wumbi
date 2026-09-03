@@ -1,4 +1,4 @@
-import 'package:fiin/gen/assets.gen.dart';
+import 'package:wumbi/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -16,9 +16,9 @@ export 'src/components/ui_input_field.dart';
 export 'src/components/ui_modal_sheet.dart';
 export 'src/components/ui_switch.dart';
 export 'src/components/app_bars/ui_appbar.dart';
-export 'src/components/fiins/ui_fiin_looks_from_left.dart';
-export 'src/components/fiins/ui_fiin_looks_from_right.dart';
-export 'src/components/fiins/ui_fiin_look.dart';
+export 'src/components/mascot/ui_wumbi_looks_from_left.dart';
+export 'src/components/mascot/ui_wumbi_looks_from_right.dart';
+export 'src/components/mascot/ui_wumbi_look.dart';
 export 'src/components/amounts/ui_total_amount.dart';
 export 'src/components/amounts/ui_conversion_hint.dart';
 export 'src/components/buttons/ui_icon_text_button.dart';

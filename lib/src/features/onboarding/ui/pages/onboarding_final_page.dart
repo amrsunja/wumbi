@@ -46,7 +46,7 @@ class OnboardingFinalPage extends HookWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset(AppAssets.images.fiinTakeMoney.path, height: 210)
+                    Image.asset(AppAssets.images.wumbiTakeMoney.path, height: 210)
                         .uiElasticScaleIn(begin: 0.4, duration: const Duration(milliseconds: 1100)),
                     const UISpace.vert(40),
                     Text(

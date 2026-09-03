@@ -1,5 +1,5 @@
-import 'package:fiin/src/core/recurring/recurring_schedule.dart';
-import 'package:fiin/src/core/utils/enums/repeat_frequency.dart';
+import 'package:wumbi/src/core/recurring/recurring_schedule.dart';
+import 'package:wumbi/src/core/utils/enums/repeat_frequency.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

@@ -1,4 +1,4 @@
-import 'package:fiin/src/features/tag/data/tag_normalizer.dart';
+import 'package:wumbi/src/features/tag/data/tag_normalizer.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

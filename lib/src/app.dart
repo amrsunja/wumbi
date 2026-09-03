@@ -6,6 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'core/design_system/app_ui.dart';
 import 'core/locale/l10n.dart';
+import 'core/providers/data/app_state_keep_alive.dart';
 import 'core/providers/routing/navigation_services_provider.dart';
 import 'core/providers/widgets/scaffold_messenger_provider.dart';
 import 'core/providers/widgets/snackbar_provider.dart';
@@ -96,6 +97,7 @@ class _AppState extends ConsumerState<App> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    keepAppStateAlive(ref);
     final appSettings = ref.watch(settingsProvider).data;
     final appRouter = ref.read(navigationServicesProvider);
 

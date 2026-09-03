@@ -1,4 +1,4 @@
-import 'package:fiin/gen/assets.gen.dart';
+import 'package:wumbi/gen/assets.gen.dart';
 import 'package:multiple_result/multiple_result.dart';
 
 import '../errors/failures/failures.dart';

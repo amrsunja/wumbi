@@ -1,6 +1,6 @@
-import 'package:fiin/src/core/money/amount_input.dart';
-import 'package:fiin/src/core/money/currency_type.dart';
-import 'package:fiin/src/core/money/money.dart';
+import 'package:wumbi/src/core/money/amount_input.dart';
+import 'package:wumbi/src/core/money/currency_type.dart';
+import 'package:wumbi/src/core/money/money.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

@@ -1,6 +1,6 @@
-# fiin
+# Wumbi
 
-The best finnace budgeting App.
+Minimalist, local-first budgeting app — wallets + tags.
 
 ## Getting Started
 

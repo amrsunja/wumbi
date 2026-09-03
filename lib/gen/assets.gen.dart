@@ -99,42 +99,43 @@ class $AssetsImagesGen {
   AssetGenImage get appLogo =>
       const AssetGenImage('assets/images/app_logo.png');
 
-  /// File path: assets/images/fiin_hello.png
-  AssetGenImage get fiinHello =>
-      const AssetGenImage('assets/images/fiin_hello.png');
-
-  /// File path: assets/images/fiin_look.png
-  AssetGenImage get fiinLook =>
-      const AssetGenImage('assets/images/fiin_look.png');
-
-  /// File path: assets/images/fiin_look_left.png
-  AssetGenImage get fiinLookLeft =>
-      const AssetGenImage('assets/images/fiin_look_left.png');
-
-  /// File path: assets/images/fiin_look_right.png
-  AssetGenImage get fiinLookRight =>
-      const AssetGenImage('assets/images/fiin_look_right.png');
-
-  /// File path: assets/images/fiin_oo.png
-  AssetGenImage get fiinOo => const AssetGenImage('assets/images/fiin_oo.png');
-
-  /// File path: assets/images/fiin_take_money.png
-  AssetGenImage get fiinTakeMoney =>
-      const AssetGenImage('assets/images/fiin_take_money.png');
-
   /// File path: assets/images/splash.gif
   AssetGenImage get splash => const AssetGenImage('assets/images/splash.gif');
+
+  /// File path: assets/images/wumbi_hello.png
+  AssetGenImage get wumbiHello =>
+      const AssetGenImage('assets/images/wumbi_hello.png');
+
+  /// File path: assets/images/wumbi_look.png
+  AssetGenImage get wumbiLook =>
+      const AssetGenImage('assets/images/wumbi_look.png');
+
+  /// File path: assets/images/wumbi_look_left.png
+  AssetGenImage get wumbiLookLeft =>
+      const AssetGenImage('assets/images/wumbi_look_left.png');
+
+  /// File path: assets/images/wumbi_look_right.png
+  AssetGenImage get wumbiLookRight =>
+      const AssetGenImage('assets/images/wumbi_look_right.png');
+
+  /// File path: assets/images/wumbi_oo.png
+  AssetGenImage get wumbiOo =>
+      const AssetGenImage('assets/images/wumbi_oo.png');
+
+  /// File path: assets/images/wumbi_take_money.png
+  AssetGenImage get wumbiTakeMoney =>
+      const AssetGenImage('assets/images/wumbi_take_money.png');
 
   /// List of all assets
   List<AssetGenImage> get values => [
     appLogo,
-    fiinHello,
-    fiinLook,
-    fiinLookLeft,
-    fiinLookRight,
-    fiinOo,
-    fiinTakeMoney,
     splash,
+    wumbiHello,
+    wumbiLook,
+    wumbiLookLeft,
+    wumbiLookRight,
+    wumbiOo,
+    wumbiTakeMoney,
   ];
 }
 

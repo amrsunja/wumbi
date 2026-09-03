@@ -18,7 +18,7 @@
   "common_transfer": "Transfer",
 
   "l10nOnboarding": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ ONBOARDING ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
-  "onboarding_welcome_title": "Meet Fiin",
+  "onboarding_welcome_title": "Meet Wumbi",
   "onboarding_welcome_subtitle": "Track money in seconds. No categories, just tags.",
   "onboarding_currency_title": "Your main currency",
   "onboarding_currency_subtitle": "Totals are shown in this currency. You can change it later in Settings.",
@@ -41,7 +41,7 @@
   "onboarding_wallet_hero_prefix": "Create your first",
   "onboarding_wallet_hero_accent": "Wallet",
   "onboarding_final_title": "You're all set!",
-  "onboarding_final_body": "Your first wallet is ready. Fiin will keep the rest simple.",
+  "onboarding_final_body": "Your first wallet is ready. Wumbi will keep the rest simple.",
   "onboarding_final_button": "Go to dashboard",
 
   "l10nDashboard": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ DASHBOARD ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
@@ -61,7 +61,7 @@
   "dashboard_wallets": "Wallets",
   "dashboard_new_wallet": "New Wallet",
   "dashboard_empty_title": "Create your first wallet",
-  "dashboard_empty_subtitle": "Fiin needs a wallet to keep your money in.",
+  "dashboard_empty_subtitle": "Wumbi needs a wallet to keep your money in.",
 
   "l10nWallet": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ WALLET ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
   "wallet_name_placeholder": "Wallet Name",
@@ -238,9 +238,9 @@
   "settings_theme_dark": "Dark",
 
   "l10nAbout": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ ABOUT ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
-  "about": "About Fiin",
+  "about": "About Wumbi",
   "about_project": "About the Project",
-  "about_text": "Fiin is a minimalist, local-first budgeting app. Your data is encrypted and never leaves your device.",
+  "about_text": "Wumbi is a minimalist, local-first budgeting app. Your data is encrypted and never leaves your device.",
   "about_support": "Contact Support",
 
   "l10nValidation": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ VALIDATION ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
@@ -261,7 +261,7 @@
   "error_wallet_has_transactions": "The currency can't change once a wallet has transactions.",
   "error_not_found": "This item no longer exists.",
   "error_open_db_title": "Couldn't open your data",
-  "error_open_db_message": "Fiin couldn't unlock the database on this device.",
+  "error_open_db_message": "Wumbi couldn't unlock the database on this device.",
   "error_reset_app": "Reset app",
 
   "l10nStopLineDontTouch": "☠☠☠☠☠☠☠☠☠☠☠☠☠ Don't touch this line ☠☠☠☠☠☠☠☠☠☠☠☠☠"

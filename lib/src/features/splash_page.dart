@@ -23,7 +23,6 @@ class SplashPage extends HookConsumerWidget {
 
     Future<void> start() async {
       await Future.wait([
-        Future<void>.delayed(const Duration(seconds: 3)),
         ref.read(settingsProvider.notifier).startUp(),
       ]);
     }

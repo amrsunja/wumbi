@@ -106,11 +106,11 @@ class SQLiteServicesImpl implements SQLiteServices {
             batch.execute(statement);
           }
           await batch.commit(noResult: true);
-          debugPrint('Created Fiin database schema v$version');
+          debugPrint('Created Wumbi database schema v$version');
         },
         onUpgrade: SQLiteMigrations.upgrade,
       );
-      debugPrint('Opened Fiin database');
+      debugPrint('Opened Wumbi database');
     } catch (e) {
       debugPrint('Failed to open database: $e');
       throw ex.DatabaseException(

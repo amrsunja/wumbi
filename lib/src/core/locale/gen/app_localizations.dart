@@ -193,7 +193,7 @@ abstract class AppLocalizations {
   /// No description provided for @onboarding_welcome_title.
   ///
   /// In en, this message translates to:
-  /// **'Meet Fiin'**
+  /// **'Meet Wumbi'**
   String get onboarding_welcome_title;
 
   /// No description provided for @onboarding_welcome_subtitle.
@@ -331,7 +331,7 @@ abstract class AppLocalizations {
   /// No description provided for @onboarding_final_body.
   ///
   /// In en, this message translates to:
-  /// **'Your first wallet is ready. Fiin will keep the rest simple.'**
+  /// **'Your first wallet is ready. Wumbi will keep the rest simple.'**
   String get onboarding_final_body;
 
   /// No description provided for @onboarding_final_button.
@@ -385,7 +385,7 @@ abstract class AppLocalizations {
   /// No description provided for @dashboard_empty_subtitle.
   ///
   /// In en, this message translates to:
-  /// **'Fiin needs a wallet to keep your money in.'**
+  /// **'Wumbi needs a wallet to keep your money in.'**
   String get dashboard_empty_subtitle;
 
   /// No description provided for @l10nWallet.
@@ -907,7 +907,7 @@ abstract class AppLocalizations {
   /// No description provided for @about.
   ///
   /// In en, this message translates to:
-  /// **'About Fiin'**
+  /// **'About Wumbi'**
   String get about;
 
   /// No description provided for @about_project.
@@ -919,7 +919,7 @@ abstract class AppLocalizations {
   /// No description provided for @about_text.
   ///
   /// In en, this message translates to:
-  /// **'Fiin is a minimalist, local-first budgeting app. Your data is encrypted and never leaves your device.'**
+  /// **'Wumbi is a minimalist, local-first budgeting app. Your data is encrypted and never leaves your device.'**
   String get about_text;
 
   /// No description provided for @about_support.
@@ -1003,7 +1003,7 @@ abstract class AppLocalizations {
   /// No description provided for @error_open_db_message.
   ///
   /// In en, this message translates to:
-  /// **'Fiin couldn\'t unlock the database on this device.'**
+  /// **'Wumbi couldn\'t unlock the database on this device.'**
   String get error_open_db_message;
 
   /// No description provided for @error_reset_app.

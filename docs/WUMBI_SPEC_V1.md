@@ -1,4 +1,4 @@
-# Fiin — v1 Product & Technical Specification
+# Wumbi — v1 Product & Technical Specification
 
 **Status:** Approved design for v1 (5 mockup screens + onboarding + recurring transactions)
 **Date:** 2026-09-01
@@ -39,7 +39,7 @@
 
 ## 1. Product overview
 
-Fiin is a minimalist, local-first personal budgeting app. The user owns a set of **wallets** (each in one currency) and records **transactions** (income, expense, transfer) against them. There are no categories; instead free-form **tags** are typed inline (`#food #work`) and are created on the fly. The whole experience is optimised for one thing: **logging a transaction in under three seconds** — open, type amount, tap INCOME/EXPENSE, done, screen stays open for the next one.
+Wumbi is a minimalist, local-first personal budgeting app. The user owns a set of **wallets** (each in one currency) and records **transactions** (income, expense, transfer) against them. There are no categories; instead free-form **tags** are typed inline (`#food #work`) and are created on the fly. The whole experience is optimised for one thing: **logging a transaction in under three seconds** — open, type amount, tap INCOME/EXPENSE, done, screen stays open for the next one.
 
 Core principles:
 
@@ -50,7 +50,7 @@ Core principles:
 | Speed of entry | Custom numpad, one-tap commit, screen stays open after save, fields reset. |
 | Multi-currency without ceremony | Wallets have a currency. Dashboard total is converted to one *base currency*. A transaction can be typed in any currency and is stored both as typed and as converted. |
 | Tags, not categories | Type words, get tags. No taxonomy management. Analytics by tag is a v2 feature; the data model already supports it. |
-| Brand | Mascot "Fiin" (cream blob holding a banknote) peeks in from screen edges. Calm palette: `bismark` text on `cararra` background, `blue` as the single accent. |
+| Brand | Mascot "Wumbi" (cream blob holding a banknote) peeks in from screen edges. Calm palette: `bismark` text on `cararra` background, `blue` as the single accent. |
 
 ---
 
@@ -203,7 +203,7 @@ Behaviour:
 | Money | `*_minor INTEGER` (section 4). |
 | Currency codes | ISO-4217 uppercase `TEXT`, `BTC` for bitcoin. |
 | Foreign keys | `PRAGMA foreign_keys = ON` in `onConfigure`. |
-| Engine | `sqflite_sqlcipher`, `openDatabase(path, password:, version:, onConfigure:, onCreate:, onUpgrade:)`. Path from `getDatabasesPath()`, file `fiin.db`. |
+| Engine | `sqflite_sqlcipher`, `openDatabase(path, password:, version:, onConfigure:, onCreate:, onUpgrade:)`. Path from `getDatabasesPath()`, file `wumbi.db`. |
 
 ### 5.2 Entity relationship
 
@@ -546,7 +546,7 @@ Common chrome (all screens): background `UIColorToken.bgColor` (`cararra` light)
 
 | Step | Content | Primary button | Persisted |
 |---|---|---|---|
-| 1 Welcome | `fiin_hello.png` centred, title "Meet Fiin", subtitle "Track money in seconds. No categories, just tags." | Continue | — |
+| 1 Welcome | `wumbi_hello.png` centred, title "Meet Wumbi", subtitle "Track money in seconds. No categories, just tags." | Continue | — |
 | 2 Base currency | Title "Your main currency", subtitle "Totals are shown in this currency. You can change it later in Settings." `UiSelectButton` opening `CurrencyPickerSheet`; default = device locale currency via `CurrencyConverter.getMyCurrency()` mapped to `CurrencyType`, fallback USD | Continue | `settings.base_currency` |
 | 3 First wallet | Embedded `WalletForm` body (same widget as 8.6, without Delete, Primary toggle hidden and forced on), name placeholder "Wallet Name", initial balance, currency defaults to base currency, colour defaults to blue | Create wallet | `wallets` row, then `settings.show_onboarding = 0` |
 
@@ -558,7 +558,7 @@ After step 3: `ReplaceRouteEvent('/dashboard')`. The existing 4 onboarding page 
 
 ```
 UIAppbar           title "DASHBOARD" (centre), action: settings icon (general/settings01) → /settings, no back
-UIFiinLooksFromLeft   mascot peeking from the left edge, top ≈ 110 px, slides in 400 ms on first build (flutter_animate)
+UIWumbiLooksFromLeft   mascot peeking from the left edge, top ≈ 110 px, slides in 400 ms on first build (flutter_animate)
 UiTotalAmount      "$12,345.67" — Montserrat 44 w300, bismark; base-currency symbol; AnimatedFlipCounter on change
 Caption            "Across 4 wallets" — inter medium 14, casper
 Spacer 64
@@ -601,7 +601,7 @@ ORDER BY w.sort_order, w.created_at;
 
 **Edge cases**
 
-- 0 wallets (only reachable after Reset or deleting all): total shows `$0.00`, caption "No wallets yet", list replaced by `UiEmptyState(fiin_oo.png, "Create your first wallet")` with the New Wallet button; FAB hidden (nothing to add to).
+- 0 wallets (only reachable after Reset or deleting all): total shows `$0.00`, caption "No wallets yet", list replaced by `UiEmptyState(wumbi_oo.png, "Create your first wallet")` with the New Wallet button; FAB hidden (nothing to add to).
 - 1 wallet: caption "Across 1 wallet" (pluralisation via ARB plural).
 - Very long wallet name: single line, ellipsis; balance never truncates.
 - Amount width: at 44 px Montserrat, `$123,456,789.00` fits on 375 pt; above that `FittedBox(scaleDown)`.
@@ -615,7 +615,7 @@ UIAppbar           back (← → pop), action: edit icon (editor/edit05) → /wa
 Header row         centred UiWalletInfoMenu:  "USD"  |  "• Savings Vault ⌄"
                    - left = wallet currency, static (no chevron, casper 12 bold)
                    - right = UiSelectWalletButton with chevron → WalletPickerSheet(current excluded) → replaces route args
-UIFiinLooksFromRight  mascot peeking from the right edge, aligned with header
+UIWumbiLooksFromRight  mascot peeking from the right edge, aligned with header
 UiTotalAmount      balance in wallet currency, Montserrat 44 w300
 Optional row       UiRepeatingSummary  "2 repeating · Monthly Rent, Netflix"  (only if the wallet has active rules) → RecurringRulesSheet
 List               transactions, newest first, grouped nothing (flat), UiTransactionCard rows separated by UIDivider (casper 30 %)
@@ -666,7 +666,7 @@ Per-row display amount for this wallet: income/expense → `amount_minor`; trans
 
 **Edge cases**
 
-- Empty list: `UiEmptyState(fiin_take_money.png, "No transactions yet", "Tap + to add your first one")`.
+- Empty list: `UiEmptyState(wumbi_take_money.png, "No transactions yet", "Tap + to add your first one")`.
 - Transfer whose counterpart wallet is deleted: title "Transfer from Crypto (deleted)".
 - Wallet deleted while open (cannot happen from this screen; after edit-delete the form pops **two** routes back to Dashboard).
 
@@ -857,11 +857,11 @@ DATA & PRIVACY
 Footer              "Version: 1.0.0 (1)" from package_info_plus, casper 11, centred, bottom inset 24
 ```
 
-Removed rows vs mockup: Personal Information, Security (D6), Export Transactions (D9, hidden — keep the ARB string). Optional rows kept from existing code, at the bottom of PREFERENCES: "Language" (hidden while only `en` exists), "About Fiin" → `AboutProjectPage`.
+Removed rows vs mockup: Personal Information, Security (D6), Export Transactions (D9, hidden — keep the ARB string). Optional rows kept from existing code, at the bottom of PREFERENCES: "Language" (hidden while only `en` exists), "About Wumbi" → `AboutProjectPage`.
 
 **Reset All Data**
 
-1. Close DB, delete `fiin.db` (`deleteDatabase`), delete the SQLCipher key from secure storage, clear `exchange_rates` implicitly.
+1. Close DB, delete `wumbi.db` (`deleteDatabase`), delete the SQLCipher key from secure storage, clear `exchange_rates` implicitly.
 2. Re-init DB (new key, fresh schema, default settings with `show_onboarding = 1`) **[A6]**.
 3. `ReplaceRouteEvent('/onboarding')`. Snackbar "All data removed".
 
@@ -958,7 +958,7 @@ Radii: tiles 12, sheets 24 top, FAB circle, colour swatches 6. Elevation: none e
 | `UICalendarPicker` | DatePickerSheet | none |
 | `UIInputField` | description, wallet name | `centered`, `borderless` style variant |
 | `UIAlert` | confirms, errors | destructive action style |
-| `UIFiinLook*` | Dashboard (left), Wallet Details (right) | none |
+| `UIWumbiLook*` | Dashboard (left), Wallet Details (right) | none |
 | `UICircularProgressBar`, `TimerWidget`, `WebViewPage`, `ScrollColumnExpandableWidget` | not used in v1 | keep |
 
 ### 10.3 New components
@@ -1039,7 +1039,7 @@ Do these before feature work; each is small.
 |---|---|---|---|
 | 1 | `lib/src/src/**` | Double `src` directory | Move to `lib/src/`, fix imports, `l10n.yaml` paths. |
 | 2 | `sqlite_services.dart` | `print(psw)` leaks the DB key to logs; copy-pasted strings ("barometerDB", "worship_barometer") | Remove; rename log messages. |
-| 3 | `sqlite_services.dart` | `openDatabase('fiinapp.db')` relative path; no `onConfigure` | Use `join(await getDatabasesPath(), 'fiin.db')`; add `onConfigure: (db) => db.execute('PRAGMA foreign_keys = ON')`; add `onUpgrade`. |
+| 3 | `sqlite_services.dart` | `openDatabase('wumbiapp.db')` relative path; no `onConfigure` | Use `join(await getDatabasesPath(), 'wumbi.db')`; add `onConfigure: (db) => db.execute('PRAGMA foreign_keys = ON')`; add `onUpgrade`. |
 | 4 | `sqlite_config.dart` | `static String` keys | `static const`. |
 | 5 | `transaction_type.dart` | `fromString` compares `toUpperCase()` against lowercase literals → always `undefined` | Compare `toLowerCase()`; drop `undefined` (use nullable). |
 | 6 | `currency_type.dart` | no BTC; `formatCurrency` hardcodes JPY | Enhanced enum with `scale` (4.1); `Money.format`. |

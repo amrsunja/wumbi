@@ -1,5 +1,5 @@
-name: fiin
-description: "A finance app wich improves your user experience in next the level"
+name: wumbi
+description: "Wumbi — a minimalist, local-first budgeting app with wallets and tags."
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 # IOS app
@@ -56,6 +56,10 @@ dependencies:
   collection: ^1.19.1
   equatable: ^2.0.7
   path_provider: ^2.1.5
+  package_info_plus: ^10.2.1
+  currency_converter: ^3.0.0
+  uuid: ^4.6.0
+  sqflite_common_ffi: ^2.4.2+1
 
 
 dev_dependencies:

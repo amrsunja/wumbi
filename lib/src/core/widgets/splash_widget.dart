@@ -1,5 +1,5 @@
-import 'package:fiin/src/core/design_system/app_ui.dart';
-import 'package:fiin/src/core/utils/typedefs.dart';
+import 'package:wumbi/src/core/design_system/app_ui.dart';
+import 'package:wumbi/src/core/utils/typedefs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 

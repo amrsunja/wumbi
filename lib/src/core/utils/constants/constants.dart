@@ -1,5 +1,5 @@
-const String kAppName = 'Fiin';
-const String kSupportUrl = 'mailto:support@fiin.app';
+const String kAppName = 'Wumbi';
+const String kSupportUrl = 'mailto:support@wumbi.app';
 
 const double kPageHorzPadding = 16;
 

@@ -1,4 +1,4 @@
-import 'package:fiin/src/core/utils/extensions/date_time_extensions.dart';
+import 'package:wumbi/src/core/utils/extensions/date_time_extensions.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

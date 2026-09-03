@@ -68,8 +68,8 @@ app.*.map.json
 /private_keys
 
 # Session transfer archives
-_fiin_src.tgz
-_fiin_out.tgz
+_wumbi_src.tgz
+_wumbi_out.tgz
 
 # Local verification logs
 .verify/

@@ -59,7 +59,7 @@ class AppLocalizationsEn extends AppLocalizations {
       '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ ONBOARDING ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
 
   @override
-  String get onboarding_welcome_title => 'Meet Fiin';
+  String get onboarding_welcome_title => 'Meet Wumbi';
 
   @override
   String get onboarding_welcome_subtitle =>
@@ -136,7 +136,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get onboarding_final_body =>
-      'Your first wallet is ready. Fiin will keep the rest simple.';
+      'Your first wallet is ready. Wumbi will keep the rest simple.';
 
   @override
   String get onboarding_final_button => 'Go to dashboard';
@@ -176,7 +176,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dashboard_empty_subtitle =>
-      'Fiin needs a wallet to keep your money in.';
+      'Wumbi needs a wallet to keep your money in.';
 
   @override
   String get l10nWallet =>
@@ -496,14 +496,14 @@ class AppLocalizationsEn extends AppLocalizations {
       '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ ABOUT ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
 
   @override
-  String get about => 'About Fiin';
+  String get about => 'About Wumbi';
 
   @override
   String get about_project => 'About the Project';
 
   @override
   String get about_text =>
-      'Fiin is a minimalist, local-first budgeting app. Your data is encrypted and never leaves your device.';
+      'Wumbi is a minimalist, local-first budgeting app. Your data is encrypted and never leaves your device.';
 
   @override
   String get about_support => 'Contact Support';
@@ -552,7 +552,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get error_open_db_message =>
-      'Fiin couldn\'t unlock the database on this device.';
+      'Wumbi couldn\'t unlock the database on this device.';
 
   @override
   String get error_reset_app => 'Reset app';

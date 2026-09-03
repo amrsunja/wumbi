@@ -1,4 +1,4 @@
-import 'package:fiin/src/core/locale/l10n.dart';
+import 'package:wumbi/src/core/locale/l10n.dart';
 import 'package:flutter/material.dart';
 
 import '../../app_ui.dart';
