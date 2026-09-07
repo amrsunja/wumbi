@@ -43,12 +43,12 @@ class AppRouter extends RootStackRouter {
           page: DashboardRoute.page,
           transitionsBuilder: TransitionsBuilders.fadeIn,
         ),
-        customRoute(path: RoutePaths.walletForm, page: WalletFormRoute.page, transitionsBuilder: TransitionsBuilders.slideBottom, fullscreenDialog: true),
-        customRoute(path: RoutePaths.walletDetails, page: WalletDetailsRoute.page),
+        AutoRoute(path: RoutePaths.walletForm, page: WalletFormRoute.page, fullscreenDialog: true),
+        AutoRoute(path: RoutePaths.walletDetails, page: WalletDetailsRoute.page),
         customRoute(path: RoutePaths.transaction, page: TransactionRoute.page, transitionsBuilder: TransitionsBuilders.slideBottom, fullscreenDialog: true),
-        customRoute(path: RoutePaths.settings, page: SettingsRoute.page),
-        customRoute(path: RoutePaths.baseCurrencySettings, page: BaseCurrencyRoute.page),
-        customRoute(path: RoutePaths.aboutProject, page: AboutProjectRoute.page),
-        customRoute(path: RoutePaths.appLangSettings, page: AppLanguageSettingsRoute.page),
+        AutoRoute(path: RoutePaths.settings, page: SettingsRoute.page),
+        AutoRoute(path: RoutePaths.baseCurrencySettings, page: BaseCurrencyRoute.page),
+        AutoRoute(path: RoutePaths.aboutProject, page: AboutProjectRoute.page),
+        AutoRoute(path: RoutePaths.appLangSettings, page: AppLanguageSettingsRoute.page),
       ];
 }
