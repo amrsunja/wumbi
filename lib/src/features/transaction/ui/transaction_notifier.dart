@@ -394,11 +394,16 @@ class TransactionNotifier extends Notifier<TransactionState> {
     if (!ref.mounted) return false;
     var ok = false;
     result.when(
-      (_) {
+      (saved) {
         ok = true;
         AppVibrations.medium();
         final signed = type == TransactionType.income ? '+${amount.format()}' : '-${amount.format()}';
-        _events.send(ShowSuccessMessageEvent(_l10n.transaction_saved(signed, wallet.name)));
+        if (saved.isUpcoming) {
+          // Future-dated → stored as upcoming; not counted until its day.
+          _events.send(ShowInfoMessageEvent(_l10n.transaction_scheduled(signed, state.date.formatMediumDate())));
+        } else {
+          _events.send(ShowSuccessMessageEvent(_l10n.transaction_saved(signed, wallet.name)));
+        }
         _resetAfterCommit();
       },
       (error) => _onSaveError(error),
@@ -434,10 +439,14 @@ class TransactionNotifier extends Notifier<TransactionState> {
     if (!ref.mounted) return false;
     var ok = false;
     result.when(
-      (_) {
+      (saved) {
         ok = true;
         AppVibrations.medium();
-        _events.send(ShowSuccessMessageEvent(_l10n.transaction_moved(sent.format(), target.name)));
+        if (saved.isUpcoming) {
+          _events.send(ShowInfoMessageEvent(_l10n.transaction_scheduled(sent.format(), state.date.formatMediumDate())));
+        } else {
+          _events.send(ShowSuccessMessageEvent(_l10n.transaction_moved(sent.format(), target.name)));
+        }
         _resetAfterCommit();
       },
       (error) => _onSaveError(error),

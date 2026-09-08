@@ -1,0 +1,424 @@
+{
+  "@@locale": "nl",
+  "appLanguage": "Nederlands",
+
+  "l10nCommon": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ COMMON ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "common_continue": "Doorgaan",
+  "common_cancel": "Annuleren",
+  "common_save": "Opslaan",
+  "common_delete": "Verwijderen",
+  "common_confirm": "Bevestigen",
+  "common_undo": "Ongedaan maken",
+  "common_ok": "OK",
+  "common_retry": "Opnieuw",
+  "common_today": "Vandaag",
+  "common_yesterday": "Gisteren",
+  "common_income": "Inkomsten",
+  "common_expense": "Uitgave",
+  "common_transfer": "Overboeking",
+  "common_edit": "Bewerken",
+  "common_all": "Alle",
+  "common_clear": "Wissen",
+  "common_apply": "Toepassen",
+  "common_done": "Klaar",
+  "common_close": "Sluiten",
+  "common_search": "Zoeken",
+
+  "l10nOnboarding": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ ONBOARDING ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "onboarding_welcome_title": "Dit is Wumbi",
+  "onboarding_welcome_subtitle": "Geld bijhouden in seconden. Geen categorieën, alleen tags.",
+  "onboarding_currency_title": "Je hoofdvaluta",
+  "onboarding_currency_subtitle": "Totalen zie je in deze valuta. Je kunt dit later wijzigen in Instellingen.",
+  "onboarding_wallet_title": "Je eerste portemonnee",
+  "onboarding_wallet_subtitle": "Elke portemonnee heeft één valuta. Je kunt er later meer toevoegen.",
+  "onboarding_create_wallet": "Portemonnee maken",
+  "common_skip": "Overslaan",
+  "onboarding_welcome_start": "Beginnen",
+  "onboarding_benefit_wallets_title": "Portemonnees in elke valuta",
+  "onboarding_benefit_wallets_body": "Dollars, euro's, bitcoin — elke portemonnee houdt zijn eigen valuta. Je totaal zie je in de valuta die jij kiest.",
+  "onboarding_benefit_tags_title": "Tags, geen categorieën",
+  "onboarding_benefit_tags_body": "Vergeet starre categorieën. Voeg elke tag toe die je wilt — #coffee, #trip, #work — en vind later alles terug.",
+  "onboarding_benefit_one_tap_title": "Vastleggen met één tik",
+  "onboarding_benefit_one_tap_body": "Typ het bedrag, tik op Inkomsten of Uitgave. Klaar. Het scherm blijft open voor de volgende.",
+  "onboarding_how_title": "Hoe het werkt",
+  "onboarding_how_body": "Maak een portemonnee, leg geld vast zodra het beweegt, en zie je totalen direct bijwerken.",
+  "onboarding_how_step_wallet": "Portemonnee toevoegen",
+  "onboarding_how_step_tap": "Tik om vast te leggen",
+  "onboarding_how_step_totals": "Zie je totalen",
+  "onboarding_wallet_hero_prefix": "Maak je eerste",
+  "onboarding_wallet_hero_accent": "Portemonnee",
+  "onboarding_final_title": "Je bent er klaar voor!",
+  "onboarding_final_body": "Je eerste portemonnee staat klaar. Wumbi houdt de rest simpel.",
+  "onboarding_final_button": "Aan de slag",
+
+  "l10nDashboard": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ DASHBOARD ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "dashboard_title": "Mijn geld",
+  "dashboard_across_wallets": "{count, plural, =0{Nog geen portemonnees} one{In 1 portemonnee} other{In {count} portemonnees}}",
+  "@dashboard_across_wallets": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "dashboard_not_included": "{codes} niet meegerekend",
+  "@dashboard_not_included": {
+    "placeholders": {
+      "codes": {"type": "String"}
+    }
+  },
+  "dashboard_wallets": "Portemonnees",
+  "dashboard_new_wallet": "Nieuwe portemonnee",
+  "dashboard_empty_title": "Maak je eerste portemonnee",
+  "dashboard_empty_subtitle": "Wumbi heeft een portemonnee nodig om je geld in te bewaren.",
+  "dashboard_tags": "Tags",
+  "dashboard_subscriptions": "Abonnementen",
+
+  "l10nWallet": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ WALLET ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "wallet_name_placeholder": "Naam portemonnee",
+  "wallet_currency": "Valuta",
+  "wallet_primary": "Hoofdportemonnee",
+  "wallet_has_transactions": "Heeft transacties",
+  "wallet_pick_another_primary": "Kies een andere hoofdportemonnee",
+  "wallet_delete_title": "{name} verwijderen?",
+  "@wallet_delete_title": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "wallet_delete_message": "De transacties worden verwijderd. Overboekingen met andere portemonnees blijven zichtbaar.",
+  "wallet_deleted": "Portemonnee verwijderd",
+  "wallet_deleted_paused_rules": "{count, plural, one{Portemonnee verwijderd · 1 herhaling gepauzeerd} other{Portemonnee verwijderd · {count} herhalingen gepauzeerd}}",
+  "@wallet_deleted_paused_rules": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "wallet_empty_title": "Nog geen transacties",
+  "wallet_empty_subtitle": "Tik op + om je eerste toe te voegen",
+  "wallet_switch_title": "Portemonnee wisselen",
+  "wallet_transfer_to": "Overboeken naar {name}",
+  "@wallet_transfer_to": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "wallet_transfer_from": "Overboeken van {name}",
+  "@wallet_transfer_from": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "wallet_deleted_suffix": "(verwijderd)",
+  "wallet_repeating_summary": "{count, plural, one{1 herhalend} other{{count} herhalend}}",
+  "@wallet_repeating_summary": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "wallet_not_found": "Deze portemonnee bestaat niet meer",
+  "wallet_filter": "Filter",
+  "wallet_sort": "Sorteren",
+  "wallet_filter_title": "Transacties filteren",
+  "wallet_filter_type": "Type",
+  "wallet_filter_date": "Datum",
+  "wallet_filter_tags": "Tags",
+  "wallet_filter_from": "Van",
+  "wallet_filter_to": "Tot",
+  "wallet_filter_any_date": "Elke datum",
+  "wallet_filter_this_month": "Deze maand",
+  "wallet_filter_last_month": "Vorige maand",
+  "wallet_filter_last_30_days": "Laatste 30 dagen",
+  "wallet_filter_this_year": "Dit jaar",
+  "wallet_filter_custom_range": "Eigen periode",
+  "wallet_filter_upcoming_only": "Alleen gepland",
+  "wallet_filter_clear": "Filters wissen",
+  "wallet_filter_no_tags": "Nog geen tags in deze portemonnee",
+  "wallet_filter_no_results_title": "Niets gevonden",
+  "wallet_filter_no_results_subtitle": "Probeer een filter te verwijderen.",
+  "wallet_filter_active": "{count, plural, one{1 filter} other{{count} filters}}",
+  "@wallet_filter_active": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "wallet_sort_title": "Sorteren op",
+  "sort_date_newest": "Nieuwste eerst",
+  "sort_date_oldest": "Oudste eerst",
+  "sort_amount_high": "Hoogste bedrag",
+  "sort_amount_low": "Laagste bedrag",
+  "wallet_upcoming_section": "Gepland",
+  "wallet_upcoming_hint": "{count, plural, one{1 geplande transactie telt nog niet mee} other{{count} geplande transacties tellen nog niet mee}}",
+  "@wallet_upcoming_hint": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+
+  "l10nTransaction": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ TRANSACTION ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "transaction_edit_title": "Bewerken",
+  "transaction_description_placeholder": "omschrijving",
+  "transaction_tags_placeholder": "#tags",
+  "transaction_repeat": "Herhalen",
+  "transaction_repeat_part_of": "{frequency} · deel van een herhaling",
+  "@transaction_repeat_part_of": {
+    "placeholders": {
+      "frequency": {"type": "String"}
+    }
+  },
+  "transaction_hint_added": "≈ {amount} wordt toegevoegd aan {wallet}",
+  "@transaction_hint_added": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "wallet": {"type": "String"}
+    }
+  },
+  "transaction_hint_stale": "koers van {date}",
+  "@transaction_hint_stale": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "transaction_rate_unavailable": "Koers niet beschikbaar — maak verbinding",
+  "transaction_saved": "{amount} opgeslagen in {wallet}",
+  "@transaction_saved": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "wallet": {"type": "String"}
+    }
+  },
+  "transaction_moved": "{amount} verplaatst naar {wallet}",
+  "@transaction_moved": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "wallet": {"type": "String"}
+    }
+  },
+  "transaction_deleted": "Transactie verwijderd",
+  "transaction_upcoming_badge": "Gepland",
+  "transaction_upcoming_hint": "Telt mee op {date}",
+  "@transaction_upcoming_hint": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "transaction_scheduled": "{amount} gepland voor {date}",
+  "@transaction_scheduled": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "date": {"type": "String"}
+    }
+  },
+  "transaction_delete_title": "Deze transactie verwijderen?",
+  "transaction_delete_this_one": "Alleen deze verwijderen",
+  "transaction_delete_and_stop": "Verwijderen en herhaling stoppen",
+  "transaction_need_second_wallet_title": "Maak een tweede portemonnee om over te boeken",
+  "transaction_need_second_wallet_message": "Overboekingen verplaatsen geld tussen twee van je portemonnees.",
+  "transaction_different_currency": "Andere valuta",
+  "transaction_counterpart_to": "→ {wallet} +{amount}",
+  "@transaction_counterpart_to": {
+    "placeholders": {
+      "wallet": {"type": "String"},
+      "amount": {"type": "String"}
+    }
+  },
+  "transaction_counterpart_from": "← {wallet} -{amount}",
+  "@transaction_counterpart_from": {
+    "placeholders": {
+      "wallet": {"type": "String"},
+      "amount": {"type": "String"}
+    }
+  },
+
+  "l10nTransfer": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ TRANSFER ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "transfer_title": "{amount} overboeken van {wallet}",
+  "@transfer_title": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "wallet": {"type": "String"}
+    }
+  },
+  "transfer_amount_received": "Ontvangen bedrag",
+  "transfer_confirm": "Overboeking bevestigen",
+
+  "l10nRepeat": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ REPEAT ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "repeat_never": "Nooit",
+  "repeat_every_day": "Elke dag",
+  "repeat_every_week": "Elke week",
+  "repeat_every_month": "Elke maand",
+  "repeat_every_year": "Elk jaar",
+  "repeat_daily": "Dagelijks",
+  "repeat_weekly": "Wekelijks",
+  "repeat_monthly": "Maandelijks",
+  "repeat_yearly": "Jaarlijks",
+  "repeat_rules_title": "Abonnementen",
+  "repeat_rules_hint": "Tik op een abonnement om het te bewerken. Bestaande transacties veranderen nooit.",
+  "repeat_next": "Volgende: {date}",
+  "@repeat_next": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "repeat_paused": "Gepauzeerd",
+  "repeat_delete_title": "Deze herhaling stoppen?",
+  "repeat_delete_message": "Bestaande transacties blijven. Er worden geen nieuwe aangemaakt.",
+  "repeat_stop": "Stoppen",
+
+  "l10nDate": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ DATE ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "date_pick_title": "Kies een datum",
+  "date_pick_from": "Van",
+  "date_pick_to": "Tot",
+
+  "l10nTags": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ TAGS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "tags_title": "Tags",
+  "tags_view_list": "Lijst",
+  "tags_view_graph": "Kaart",
+  "tags_search_placeholder": "Tags zoeken",
+  "tags_empty_title": "Nog geen tags",
+  "tags_empty_subtitle": "Voeg #tags toe aan een transactie en ze verschijnen hier.",
+  "tags_search_no_results": "Geen tags gevonden",
+  "tags_count": "{count, plural, one{1 tag} other{{count} tags}}",
+  "@tags_count": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "tags_usage": "{count, plural, =0{Nog niet gebruikt} one{1 transactie} other{{count} transacties}}",
+  "@tags_usage": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "tags_spent": "Uitgegeven",
+  "tags_earned": "Verdiend",
+  "tags_net": "Netto",
+  "tags_not_included": "{codes} niet meegerekend",
+  "@tags_not_included": {
+    "placeholders": {
+      "codes": {"type": "String"}
+    }
+  },
+  "tags_graph_hint": "Grotere cirkels verplaatsten meer geld. Lijnen verbinden tags die samen gebruikt zijn.",
+  "tags_graph_empty": "Voeg tags toe aan een paar transacties om de kaart te zien.",
+  "tag_wallets": "Portemonnees",
+  "tag_transactions": "Transacties",
+  "tag_no_transactions": "Geen transacties met deze tag",
+  "tag_rename": "Tag hernoemen",
+  "tag_name_placeholder": "Tagnaam",
+  "tag_delete": "Tag verwijderen",
+  "tag_delete_title": "#{name} verwijderen?",
+  "@tag_delete_title": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "tag_delete_message": "De tag wordt uit elke transactie verwijderd. De transacties zelf blijven.",
+  "tag_deleted": "Tag verwijderd",
+  "tag_renamed": "Tag hernoemd",
+  "tag_merged": "Samengevoegd met #{name}",
+  "@tag_merged": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "tag_not_found": "Deze tag bestaat niet meer",
+  "tag_wallet_deleted": "(verwijderd)",
+
+  "l10nSubscriptions": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ SUBSCRIPTIONS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "subscriptions_title": "Abonnementen",
+  "subscriptions_count": "{count, plural, =0{Geen abonnementen} one{1 abonnement} other{{count} abonnementen}}",
+  "@subscriptions_count": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "subscriptions_empty_title": "Nog geen abonnementen",
+  "subscriptions_empty_subtitle": "Zet Herhalen aan bij een transactie en die verschijnt hier.",
+  "subscriptions_all_wallets": "Alle portemonnees",
+  "subscriptions_active": "Actief",
+  "subscriptions_paused": "Gepauzeerd",
+  "subscriptions_monthly_total": "≈ {amount} / maand",
+  "@subscriptions_monthly_total": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "subscriptions_edit_title": "Abonnement bewerken",
+  "subscriptions_amount": "Bedrag",
+  "subscriptions_wallet": "Portemonnee",
+  "subscriptions_from_wallet": "Van portemonnee",
+  "subscriptions_to_wallet": "Naar portemonnee",
+  "subscriptions_frequency": "Frequentie",
+  "subscriptions_description": "Omschrijving",
+  "subscriptions_tags": "Tags",
+  "subscriptions_pause": "Pauzeren",
+  "subscriptions_resume": "Hervatten",
+  "subscriptions_stop": "Abonnement stoppen",
+  "subscriptions_saved": "Abonnement bijgewerkt",
+  "subscriptions_stopped": "Abonnement gestopt",
+  "subscriptions_type_hint": "Het type van een abonnement kan niet veranderen.",
+
+  "l10nCurrency": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ CURRENCY ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "currency_pick_title": "Valuta",
+  "currency_no_results": "Geen valuta gevonden",
+  "currency_base_title": "Hoofdvaluta",
+  "currency_base_hint": "Je totale saldo wordt omgerekend naar deze valuta.",
+
+  "l10nSettings": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ SETTINGS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "settings_title": "Instellingen",
+  "settings_preferences": "Voorkeuren",
+  "settings_notifications": "Meldingen",
+  "settings_currency": "Valuta",
+  "settings_dark_mode": "Donkere modus",
+  "settings_data_privacy": "Gegevens en privacy",
+  "settings_export_transactions": "Transacties exporteren",
+  "settings_reset_all_data": "Alle gegevens wissen",
+  "settings_reset_title": "Alle gegevens wissen?",
+  "settings_reset_message": "Elke portemonnee, transactie en instelling op dit apparaat wordt gewist. Dit kan niet ongedaan worden gemaakt.",
+  "settings_reset_action": "Wissen",
+  "settings_reset_done": "Alle gegevens verwijderd",
+  "settings_version": "Versie: {version} ({build})",
+  "@settings_version": {
+    "placeholders": {
+      "version": {"type": "String"},
+      "build": {"type": "String"}
+    }
+  },
+  "settings_language": "Taal",
+  "settings_manage": "Beheren",
+  "settings_tags": "Tags",
+  "settings_subscriptions": "Abonnementen",
+  "settings_language_info": "Kies je voorkeurstaal voor de app.",
+  "settings_theme": "Thema",
+  "settings_theme_system": "Systeem",
+  "settings_theme_light": "Licht",
+  "settings_theme_dark": "Donker",
+
+  "l10nAbout": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ ABOUT ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "about": "Over Wumbi",
+  "about_project": "Over het project",
+  "about_text": "Wumbi is een minimalistische budget-app die lokaal werkt. Je gegevens zijn versleuteld en verlaten je apparaat nooit.",
+  "about_support": "Contact opnemen",
+
+  "l10nValidation": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ VALIDATION ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "validation_enter_amount": "Voer een bedrag in",
+  "validation_up_to_tags": "Maximaal {count} tags",
+  "@validation_up_to_tags": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "validation_rate_unavailable": "Koers niet beschikbaar",
+
+  "l10nErrors": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ ERRORS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "error_db_failure": "Databasefout, probeer het opnieuw.",
+  "error_unknown": "Er ging iets mis. Probeer het opnieuw.",
+  "error_rate_unavailable": "Geen wisselkoers beschikbaar. Maak verbinding met internet en probeer het opnieuw.",
+  "error_validation": "Controleer de ingevoerde waarden.",
+  "error_wallet_has_transactions": "De valuta kan niet meer wijzigen zodra een portemonnee transacties heeft.",
+  "error_not_found": "Dit item bestaat niet meer.",
+  "error_tag_name": "Voer een tagnaam in (maximaal 30 tekens).",
+  "error_open_db_title": "Kan je gegevens niet openen",
+  "error_open_db_message": "Wumbi kon de database op dit apparaat niet ontgrendelen.",
+  "error_reset_app": "App resetten",
+
+  "l10nStopLineDontTouch": "☠☠☠☠☠☠☠☠☠☠☠☠☠ Don't touch this line ☠☠☠☠☠☠☠☠☠☠☠☠☠"
+}

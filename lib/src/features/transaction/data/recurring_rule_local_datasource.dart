@@ -48,6 +48,33 @@ class RecurringRuleLocalDatasource {
     return rows.map(RecurringRuleModel.fromRow).toList();
   }
 
+  /// Every non-deleted rule, active first then soonest due.
+  Future<List<RecurringRuleModel>> all(DatabaseExecutor db) async {
+    final rows = await db.query(
+      _t,
+      where: '${SQLiteConfig.deletedAt} IS NULL',
+      orderBy: '${SQLiteConfig.ruleIsActive} DESC, ${SQLiteConfig.ruleNextOccurrence}',
+    );
+    return rows.map(RecurringRuleModel.fromRow).toList();
+  }
+
+  /// Active rules per wallet id (dashboard "N subscriptions" captions).
+  Future<Map<String, int>> activeCountByWallet(DatabaseExecutor db) async {
+    final rows = await db.rawQuery('''
+      SELECT w AS wallet_id, COUNT(*) AS c FROM (
+        SELECT ${SQLiteConfig.txWalletId} AS w FROM $_t
+          WHERE ${SQLiteConfig.deletedAt} IS NULL AND ${SQLiteConfig.ruleIsActive} = 1 AND ${SQLiteConfig.txWalletId} IS NOT NULL
+        UNION ALL
+        SELECT ${SQLiteConfig.txFromWalletId} FROM $_t
+          WHERE ${SQLiteConfig.deletedAt} IS NULL AND ${SQLiteConfig.ruleIsActive} = 1 AND ${SQLiteConfig.txFromWalletId} IS NOT NULL
+        UNION ALL
+        SELECT ${SQLiteConfig.txToWalletId} FROM $_t
+          WHERE ${SQLiteConfig.deletedAt} IS NULL AND ${SQLiteConfig.ruleIsActive} = 1 AND ${SQLiteConfig.txToWalletId} IS NOT NULL
+      ) GROUP BY w
+    ''');
+    return {for (final r in rows) r['wallet_id'] as String: (r['c'] as int?) ?? 0};
+  }
+
   Future<void> setActive(DatabaseExecutor db, String id, bool active, int now) => db.update(
         _t,
         {SQLiteConfig.ruleIsActive: active ? 1 : 0, SQLiteConfig.updatedAt: now},

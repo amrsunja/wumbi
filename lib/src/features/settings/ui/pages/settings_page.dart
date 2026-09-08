@@ -5,6 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../../../core/design_system/app_ui.dart';
+import '../../../../core/locale/l10n.dart';
 import '../../../../core/routing/app_router.dart';
 import '../../../../core/utils/app_vibrations.dart';
 import '../../../../core/utils/enums/app_theme_type.dart';
@@ -72,10 +73,27 @@ class SettingsPage extends ConsumerWidget {
                       onTap: () => context.router.push(const BaseCurrencyRoute()),
                     ),
                     UiSettingsTile(
+                      icon: UIIconToken.icons.general.translate01,
+                      title: l10n.settings_language,
+                      value: L10n.nativeName(settings?.locale ?? L10n.defaultLocale),
+                      onTap: () => context.router.push(const AppLanguageSettingsRoute()),
+                    ),
+                    UiSettingsTile(
                       icon: UIIconToken.icons.weather.moon01,
                       title: l10n.settings_dark_mode,
                       switchValue: isDark,
                       onSwitchChanged: notifier.setDarkMode,
+                    ),
+                    UiSectionLabel(text: l10n.settings_manage),
+                    UiSettingsTile(
+                      icon: UIIconToken.icons.general.hash01,
+                      title: l10n.settings_tags,
+                      onTap: () => context.router.push(const TagsRoute()),
+                    ),
+                    UiSettingsTile(
+                      icon: UIIconToken.icons.mediaDevices.repeat01,
+                      title: l10n.settings_subscriptions,
+                      onTap: () => context.router.push(SubscriptionsRoute()),
                     ),
                     UiSettingsTile(
                       icon: UIIconToken.icons.general.infoCircle,

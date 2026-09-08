@@ -15,6 +15,8 @@ class UiTransactionCard extends StatelessWidget {
     required this.direction,
     this.secondaryText,
     this.tags = const [],
+    this.upcoming = false,
+    this.badge,
     this.onTap,
   });
 
@@ -32,6 +34,12 @@ class UiTransactionCard extends StatelessWidget {
 
   /// `#food #work` line under the caption (hidden when empty).
   final List<String> tags;
+
+  /// Future-dated, not yet counted: whole row dimmed, dashed amount colour.
+  final bool upcoming;
+
+  /// Small pill after the title (e.g. "Upcoming"). Shown only when non-null.
+  final String? badge;
   final VoidCallback? onTap;
 
   @override
@@ -59,9 +67,13 @@ class UiTransactionCard extends StatelessWidget {
 
     final caption = secondaryText == null ? subtitle : '$subtitle · $secondaryText';
 
+    final badgeText = badge;
+
     return UITap(
       onTap: onTap,
-      child: Padding(
+      child: Opacity(
+        opacity: upcoming ? 0.55 : 1,
+        child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 14),
         child: Row(
           children: [
@@ -70,11 +82,31 @@ class UiTransactionCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 spacing: 3,
                 children: [
-                  Text(
-                    title,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: typo.rowTitle,
+                  Row(
+                    children: [
+                      Flexible(
+                        child: Text(
+                          title,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: typo.rowTitle,
+                        ),
+                      ),
+                      if (badgeText != null) ...[
+                        const UISpace.horz(6),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: colors.secondContentColor.withValues(alpha: 0.18),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text(
+                            badgeText.toUpperCase(),
+                            style: typo.micro.copyWith(fontSize: 9, color: colors.secondContentColor),
+                          ),
+                        ),
+                      ],
+                    ],
                   ),
                   Text(
                     caption,
@@ -114,6 +146,7 @@ class UiTransactionCard extends StatelessWidget {
             ),
           ],
         ),
+      ),
       ),
     );
   }

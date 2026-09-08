@@ -3,23 +3,32 @@ import 'package:flutter/material.dart';
 import '../../../../core/design_system/app_ui.dart';
 import '../../../../core/utils/extensions/build_context_extensions.dart';
 
-/// `UICalendarPicker` (Syncfusion) inside a sheet. Min 2000-01-01, max today + 1 year.
+/// `UICalendarPicker` (Syncfusion) inside a sheet. Min 2000-01-01 (or
+/// [minDate]), max today + 5 years (or [maxDate]) — future days are allowed so
+/// a transaction can be scheduled as *upcoming*.
 abstract class DatePickerSheet {
-  static Future<DateTime?> show(BuildContext context, {required DateTime initial}) {
+  static Future<DateTime?> show(
+    BuildContext context, {
+    required DateTime initial,
+    DateTime? minDate,
+    DateTime? maxDate,
+  }) {
     final l10n = context.l10n;
     return UIModalSheet.modalSheet<DateTime>(
       context: context,
       title: l10n.date_pick_title,
       height: 0.62,
-      child: _DatePickerBody(initial: initial),
+      child: _DatePickerBody(initial: initial, minDate: minDate, maxDate: maxDate),
     );
   }
 }
 
 class _DatePickerBody extends StatefulWidget {
-  const _DatePickerBody({required this.initial});
+  const _DatePickerBody({required this.initial, this.minDate, this.maxDate});
 
   final DateTime initial;
+  final DateTime? minDate;
+  final DateTime? maxDate;
 
   @override
   State<_DatePickerBody> createState() => _DatePickerBodyState();
@@ -37,8 +46,8 @@ class _DatePickerBodyState extends State<_DatePickerBody> {
         Expanded(
           child: UICalendarPicker(
             initialDate: widget.initial,
-            minDate: DateTime(2000, 1, 1),
-            maxDate: DateTime(now.year + 1, now.month, now.day),
+            minDate: widget.minDate ?? DateTime(2000, 1, 1),
+            maxDate: widget.maxDate ?? DateTime(now.year + 5, now.month, now.day),
             onChanged: (date) => setState(() => _selected = date),
           ),
         ),

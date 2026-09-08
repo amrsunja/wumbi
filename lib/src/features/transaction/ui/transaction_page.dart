@@ -288,6 +288,9 @@ class TransactionPage extends HookConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 spacing: 10,
                 children: [
+                  // Edit mode: the loaded row is still upcoming (not counted yet).
+                  if (state.isEdit && state.isExistingUpcoming)
+                    UiTypePill(label: l10n.transaction_upcoming_badge, color: colors.secondContentColor),
                   if (state.isEdit && state.editingType != null)
                     if (state.isTransferEdit)
                       UiTypePill(label: _typeLabel(context, state.editingType!), color: typeColor)
@@ -323,6 +326,9 @@ class TransactionPage extends HookConsumerWidget {
                     ),
                 ],
               ),
+
+              // Future date → "Counted on <date>" (row will be stored as upcoming).
+              _UpcomingHint(visible: state.willBeUpcoming, date: state.date),
               const UISpace.vert(12),
 
               // Numpad.
@@ -415,6 +421,53 @@ class TransactionPage extends HookConsumerWidget {
         TransactionType.expense => context.l10n.common_expense,
         TransactionType.transfer => context.l10n.common_transfer,
       };
+}
+
+/// One-line "Counted on <date>" hint under the chips row, shown while the
+/// chosen day is in the future (the row will be saved as *upcoming*).
+/// Animates in / out so the numpad does not jump abruptly.
+class _UpcomingHint extends StatelessWidget {
+  const _UpcomingHint({required this.visible, required this.date});
+
+  final bool visible;
+  final DateTime date;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final typo = context.typo;
+    return AnimatedSize(
+      duration: 200.ms,
+      curve: Curves.easeOut,
+      alignment: Alignment.topCenter,
+      child: AnimatedSwitcher(
+        duration: 200.ms,
+        child: !visible
+            ? const SizedBox(width: double.infinity, height: 0)
+            : Padding(
+                key: ValueKey('upcoming-${date.millisecondsSinceEpoch}'),
+                padding: const EdgeInsets.only(top: 2),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  spacing: 4,
+                  children: [
+                    UIIcon(UIIconToken.icons.time.clock, size: 12, color: UIColorToken.blue),
+                    Flexible(
+                      child: Text(
+                        l10n.transaction_upcoming_hint(date.formatMediumDate()),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.center,
+                        style: typo.inter.caption.copyWith(color: UIColorToken.blue),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+      ),
+    );
+  }
 }
 
 /// Conversion hint / transfer counterpart line under the amount.

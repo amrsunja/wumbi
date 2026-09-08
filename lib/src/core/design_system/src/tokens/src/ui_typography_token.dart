@@ -71,8 +71,8 @@ class InterStyle {
         // 10 / 700 tracking 1.0 — uppercase micro labels (type actions, pills).
         micro = _style(FontWeight.w700, primary, size: 10, letterSpacing: 1.0),
 
-        // 10 / 500 tracking 0.2 — chips.
-        chip = _style(FontWeight.w500, primary, size: 10, letterSpacing: 0.2),
+        // 12 / 500 tracking 0.2 — date / repeat chips (was 10 in v1).
+        chip = _style(FontWeight.w500, primary, size: 12, letterSpacing: 0.2),
 
         // ---- secondary content (casper) ----
         // 14 / 500 — subtitles ("Across 4 wallets", settings values).

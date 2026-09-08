@@ -1,0 +1,424 @@
+{
+  "@@locale": "ar",
+  "appLanguage": "العربية",
+
+  "l10nCommon": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ COMMON ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "common_continue": "متابعة",
+  "common_cancel": "إلغاء",
+  "common_save": "حفظ",
+  "common_delete": "حذف",
+  "common_confirm": "تأكيد",
+  "common_undo": "تراجع",
+  "common_ok": "حسنًا",
+  "common_retry": "إعادة المحاولة",
+  "common_today": "اليوم",
+  "common_yesterday": "أمس",
+  "common_income": "دخل",
+  "common_expense": "مصروف",
+  "common_transfer": "تحويل",
+  "common_edit": "تعديل",
+  "common_all": "الكل",
+  "common_clear": "مسح",
+  "common_apply": "تطبيق",
+  "common_done": "تم",
+  "common_close": "إغلاق",
+  "common_search": "بحث",
+
+  "l10nOnboarding": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ ONBOARDING ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "onboarding_welcome_title": "تعرّف على Wumbi",
+  "onboarding_welcome_subtitle": "تتبّع أموالك في ثوانٍ. بلا فئات، فقط وسوم.",
+  "onboarding_currency_title": "عملتك الأساسية",
+  "onboarding_currency_subtitle": "تظهر المجاميع بهذه العملة. يمكنك تغييرها لاحقًا من الإعدادات.",
+  "onboarding_wallet_title": "محفظتك الأولى",
+  "onboarding_wallet_subtitle": "لكل محفظة عملة واحدة. يمكنك إضافة محافظ أخرى لاحقًا.",
+  "onboarding_create_wallet": "إنشاء محفظة",
+  "common_skip": "تخطّي",
+  "onboarding_welcome_start": "لنبدأ",
+  "onboarding_benefit_wallets_title": "محافظ بأي عملة",
+  "onboarding_benefit_wallets_body": "دولار، يورو، بيتكوين — لكل محفظة عملتها الخاصة. ويظهر إجماليك بالعملة التي تختارها.",
+  "onboarding_benefit_tags_title": "وسوم، لا فئات",
+  "onboarding_benefit_tags_body": "انسَ الفئات الجامدة. أضف أي وسوم تحب — #coffee، #trip، #work — واعثر على أي شيء لاحقًا.",
+  "onboarding_benefit_one_tap_title": "سجّلها بنقرة واحدة",
+  "onboarding_benefit_one_tap_body": "اكتب المبلغ، ثم اضغط دخل أو مصروف. انتهى. وتبقى الشاشة مفتوحة للمعاملة التالية.",
+  "onboarding_how_title": "كيف يعمل",
+  "onboarding_how_body": "أنشئ محفظة، وسجّل أموالك أولًا بأول، وشاهد مجاميعك تتحدّث فورًا.",
+  "onboarding_how_step_wallet": "أضف محفظة",
+  "onboarding_how_step_tap": "انقر للتسجيل",
+  "onboarding_how_step_totals": "شاهد المجاميع",
+  "onboarding_wallet_hero_prefix": "أنشئ أول",
+  "onboarding_wallet_hero_accent": "محفظة",
+  "onboarding_final_title": "كل شيء جاهز!",
+  "onboarding_final_body": "محفظتك الأولى جاهزة. وسيتكفّل Wumbi بتبسيط الباقي.",
+  "onboarding_final_button": "هيا بنا",
+
+  "l10nDashboard": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ DASHBOARD ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "dashboard_title": "أموالي",
+  "dashboard_across_wallets": "{count, plural, zero{لا توجد محافظ بعد} one{في محفظة واحدة} two{في محفظتين} few{في {count} محافظ} many{في {count} محفظة} other{في {count} محفظة}}",
+  "@dashboard_across_wallets": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "dashboard_not_included": "{codes} غير مشمولة",
+  "@dashboard_not_included": {
+    "placeholders": {
+      "codes": {"type": "String"}
+    }
+  },
+  "dashboard_wallets": "المحافظ",
+  "dashboard_new_wallet": "محفظة جديدة",
+  "dashboard_empty_title": "أنشئ محفظتك الأولى",
+  "dashboard_empty_subtitle": "يحتاج Wumbi إلى محفظة يحفظ فيها أموالك.",
+  "dashboard_tags": "الوسوم",
+  "dashboard_subscriptions": "الاشتراكات",
+
+  "l10nWallet": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ WALLET ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "wallet_name_placeholder": "اسم المحفظة",
+  "wallet_currency": "العملة",
+  "wallet_primary": "المحفظة الرئيسية",
+  "wallet_has_transactions": "تحتوي على معاملات",
+  "wallet_pick_another_primary": "اختر محفظة أخرى كرئيسية",
+  "wallet_delete_title": "حذف {name}؟",
+  "@wallet_delete_title": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "wallet_delete_message": "ستُحذف معاملاتها. وتبقى التحويلات مع المحافظ الأخرى ظاهرة.",
+  "wallet_deleted": "تم حذف المحفظة",
+  "wallet_deleted_paused_rules": "{count, plural, zero{تم حذف المحفظة} one{تم حذف المحفظة · أُوقف تكرار واحد} two{تم حذف المحفظة · أُوقف تكراران} few{تم حذف المحفظة · أُوقفت {count} تكرارات} many{تم حذف المحفظة · أُوقف {count} تكرارًا} other{تم حذف المحفظة · أُوقف {count} تكرار}}",
+  "@wallet_deleted_paused_rules": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "wallet_empty_title": "لا توجد معاملات بعد",
+  "wallet_empty_subtitle": "اضغط + لإضافة أول معاملة",
+  "wallet_switch_title": "تبديل المحفظة",
+  "wallet_transfer_to": "تحويل إلى {name}",
+  "@wallet_transfer_to": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "wallet_transfer_from": "تحويل من {name}",
+  "@wallet_transfer_from": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "wallet_deleted_suffix": "(محذوفة)",
+  "wallet_repeating_summary": "{count, plural, zero{لا تكرارات} one{تكرار واحد} two{تكراران} few{{count} تكرارات} many{{count} تكرارًا} other{{count} تكرار}}",
+  "@wallet_repeating_summary": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "wallet_not_found": "لم تعد هذه المحفظة موجودة",
+  "wallet_filter": "فلترة",
+  "wallet_sort": "ترتيب",
+  "wallet_filter_title": "فلترة المعاملات",
+  "wallet_filter_type": "النوع",
+  "wallet_filter_date": "التاريخ",
+  "wallet_filter_tags": "الوسوم",
+  "wallet_filter_from": "من",
+  "wallet_filter_to": "إلى",
+  "wallet_filter_any_date": "أي تاريخ",
+  "wallet_filter_this_month": "هذا الشهر",
+  "wallet_filter_last_month": "الشهر الماضي",
+  "wallet_filter_last_30_days": "آخر 30 يومًا",
+  "wallet_filter_this_year": "هذه السنة",
+  "wallet_filter_custom_range": "مدة مخصصة",
+  "wallet_filter_upcoming_only": "القادمة فقط",
+  "wallet_filter_clear": "مسح الفلاتر",
+  "wallet_filter_no_tags": "لا وسوم في هذه المحفظة بعد",
+  "wallet_filter_no_results_title": "لا نتائج مطابقة",
+  "wallet_filter_no_results_subtitle": "جرّب إزالة أحد الفلاتر.",
+  "wallet_filter_active": "{count, plural, zero{لا فلاتر} one{فلتر واحد} two{فلتران} few{{count} فلاتر} many{{count} فلترًا} other{{count} فلتر}}",
+  "@wallet_filter_active": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "wallet_sort_title": "ترتيب حسب",
+  "sort_date_newest": "الأحدث أولًا",
+  "sort_date_oldest": "الأقدم أولًا",
+  "sort_amount_high": "الأكبر مبلغًا",
+  "sort_amount_low": "الأصغر مبلغًا",
+  "wallet_upcoming_section": "القادمة",
+  "wallet_upcoming_hint": "{count, plural, zero{لا معاملات قادمة} one{معاملة قادمة واحدة غير محتسبة بعد} two{معاملتان قادمتان غير محتسبتين بعد} few{{count} معاملات قادمة غير محتسبة بعد} many{{count} معاملة قادمة غير محتسبة بعد} other{{count} معاملة قادمة غير محتسبة بعد}}",
+  "@wallet_upcoming_hint": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+
+  "l10nTransaction": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ TRANSACTION ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "transaction_edit_title": "تعديل",
+  "transaction_description_placeholder": "الوصف",
+  "transaction_tags_placeholder": "#وسوم",
+  "transaction_repeat": "تكرار",
+  "transaction_repeat_part_of": "{frequency} · ضمن تكرار",
+  "@transaction_repeat_part_of": {
+    "placeholders": {
+      "frequency": {"type": "String"}
+    }
+  },
+  "transaction_hint_added": "≈ {amount} ستُضاف إلى {wallet}",
+  "@transaction_hint_added": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "wallet": {"type": "String"}
+    }
+  },
+  "transaction_hint_stale": "سعر بتاريخ {date}",
+  "@transaction_hint_stale": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "transaction_rate_unavailable": "السعر غير متاح — اتصل بالإنترنت للتحديث",
+  "transaction_saved": "تم حفظ {amount} في {wallet}",
+  "@transaction_saved": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "wallet": {"type": "String"}
+    }
+  },
+  "transaction_moved": "تم نقل {amount} إلى {wallet}",
+  "@transaction_moved": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "wallet": {"type": "String"}
+    }
+  },
+  "transaction_deleted": "تم حذف المعاملة",
+  "transaction_upcoming_badge": "قادمة",
+  "transaction_upcoming_hint": "تُحتسب في {date}",
+  "@transaction_upcoming_hint": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "transaction_scheduled": "تمت جدولة {amount} في {date}",
+  "@transaction_scheduled": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "date": {"type": "String"}
+    }
+  },
+  "transaction_delete_title": "حذف هذه المعاملة؟",
+  "transaction_delete_this_one": "حذف هذه فقط",
+  "transaction_delete_and_stop": "حذف وإيقاف التكرار",
+  "transaction_need_second_wallet_title": "أنشئ محفظة ثانية للتحويل",
+  "transaction_need_second_wallet_message": "التحويلات تنقل المال بين محفظتين من محافظك.",
+  "transaction_different_currency": "عملة مختلفة",
+  "transaction_counterpart_to": "← {wallet} +{amount}",
+  "@transaction_counterpart_to": {
+    "placeholders": {
+      "wallet": {"type": "String"},
+      "amount": {"type": "String"}
+    }
+  },
+  "transaction_counterpart_from": "→ {wallet} -{amount}",
+  "@transaction_counterpart_from": {
+    "placeholders": {
+      "wallet": {"type": "String"},
+      "amount": {"type": "String"}
+    }
+  },
+
+  "l10nTransfer": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ TRANSFER ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "transfer_title": "تحويل {amount} من {wallet}",
+  "@transfer_title": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "wallet": {"type": "String"}
+    }
+  },
+  "transfer_amount_received": "المبلغ المستلم",
+  "transfer_confirm": "تأكيد التحويل",
+
+  "l10nRepeat": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ REPEAT ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "repeat_never": "أبدًا",
+  "repeat_every_day": "كل يوم",
+  "repeat_every_week": "كل أسبوع",
+  "repeat_every_month": "كل شهر",
+  "repeat_every_year": "كل سنة",
+  "repeat_daily": "يوميًا",
+  "repeat_weekly": "أسبوعيًا",
+  "repeat_monthly": "شهريًا",
+  "repeat_yearly": "سنويًا",
+  "repeat_rules_title": "الاشتراكات",
+  "repeat_rules_hint": "اضغط على اشتراك لتعديله. المعاملات الحالية لا تتغيّر أبدًا.",
+  "repeat_next": "التالي: {date}",
+  "@repeat_next": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "repeat_paused": "متوقّف",
+  "repeat_delete_title": "إيقاف هذا التكرار؟",
+  "repeat_delete_message": "تبقى المعاملات الحالية. ولن تُنشأ معاملات جديدة.",
+  "repeat_stop": "إيقاف",
+
+  "l10nDate": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ DATE ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "date_pick_title": "اختر تاريخًا",
+  "date_pick_from": "من",
+  "date_pick_to": "إلى",
+
+  "l10nTags": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ TAGS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "tags_title": "الوسوم",
+  "tags_view_list": "قائمة",
+  "tags_view_graph": "خريطة",
+  "tags_search_placeholder": "ابحث في الوسوم",
+  "tags_empty_title": "لا وسوم بعد",
+  "tags_empty_subtitle": "أضف #وسوم إلى معاملة وستظهر هنا.",
+  "tags_search_no_results": "لا وسوم تطابق بحثك",
+  "tags_count": "{count, plural, zero{لا وسوم} one{وسم واحد} two{وسمان} few{{count} وسوم} many{{count} وسمًا} other{{count} وسم}}",
+  "@tags_count": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "tags_usage": "{count, plural, zero{غير مستخدم بعد} one{معاملة واحدة} two{معاملتان} few{{count} معاملات} many{{count} معاملة} other{{count} معاملة}}",
+  "@tags_usage": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "tags_spent": "المصروف",
+  "tags_earned": "الدخل",
+  "tags_net": "الصافي",
+  "tags_not_included": "{codes} غير مشمولة",
+  "@tags_not_included": {
+    "placeholders": {
+      "codes": {"type": "String"}
+    }
+  },
+  "tags_graph_hint": "الدوائر الأكبر حرّكت أموالًا أكثر. والخطوط تصل الوسوم المستخدمة معًا.",
+  "tags_graph_empty": "أضف وسومًا إلى بعض المعاملات لرؤية الخريطة.",
+  "tag_wallets": "المحافظ",
+  "tag_transactions": "المعاملات",
+  "tag_no_transactions": "لا معاملات بهذا الوسم",
+  "tag_rename": "إعادة تسمية الوسم",
+  "tag_name_placeholder": "اسم الوسم",
+  "tag_delete": "حذف الوسم",
+  "tag_delete_title": "حذف #{name}؟",
+  "@tag_delete_title": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "tag_delete_message": "سيُزال من كل معاملة. وتبقى المعاملات نفسها كما هي.",
+  "tag_deleted": "تم حذف الوسم",
+  "tag_renamed": "تمت إعادة تسمية الوسم",
+  "tag_merged": "تم الدمج في #{name}",
+  "@tag_merged": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "tag_not_found": "لم يعد هذا الوسم موجودًا",
+  "tag_wallet_deleted": "(محذوفة)",
+
+  "l10nSubscriptions": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ SUBSCRIPTIONS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "subscriptions_title": "الاشتراكات",
+  "subscriptions_count": "{count, plural, zero{لا اشتراكات} one{اشتراك واحد} two{اشتراكان} few{{count} اشتراكات} many{{count} اشتراكًا} other{{count} اشتراك}}",
+  "@subscriptions_count": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "subscriptions_empty_title": "لا اشتراكات بعد",
+  "subscriptions_empty_subtitle": "فعّل التكرار على معاملة وستظهر هنا.",
+  "subscriptions_all_wallets": "كل المحافظ",
+  "subscriptions_active": "نشط",
+  "subscriptions_paused": "متوقّف",
+  "subscriptions_monthly_total": "≈ {amount} / شهريًا",
+  "@subscriptions_monthly_total": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "subscriptions_edit_title": "تعديل الاشتراك",
+  "subscriptions_amount": "المبلغ",
+  "subscriptions_wallet": "المحفظة",
+  "subscriptions_from_wallet": "من محفظة",
+  "subscriptions_to_wallet": "إلى محفظة",
+  "subscriptions_frequency": "التكرار",
+  "subscriptions_description": "الوصف",
+  "subscriptions_tags": "الوسوم",
+  "subscriptions_pause": "إيقاف مؤقت",
+  "subscriptions_resume": "استئناف",
+  "subscriptions_stop": "إيقاف الاشتراك",
+  "subscriptions_saved": "تم تحديث الاشتراك",
+  "subscriptions_stopped": "تم إيقاف الاشتراك",
+  "subscriptions_type_hint": "لا يمكن تغيير نوع الاشتراك.",
+
+  "l10nCurrency": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ CURRENCY ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "currency_pick_title": "العملة",
+  "currency_no_results": "لا توجد عملة مطابقة",
+  "currency_base_title": "العملة الأساسية",
+  "currency_base_hint": "يُحوَّل رصيدك الإجمالي إلى هذه العملة.",
+
+  "l10nSettings": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ SETTINGS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "settings_title": "الإعدادات",
+  "settings_preferences": "التفضيلات",
+  "settings_notifications": "الإشعارات",
+  "settings_currency": "العملة",
+  "settings_dark_mode": "الوضع الداكن",
+  "settings_data_privacy": "البيانات والخصوصية",
+  "settings_export_transactions": "تصدير المعاملات",
+  "settings_reset_all_data": "إعادة تعيين كل البيانات",
+  "settings_reset_title": "إعادة تعيين كل البيانات؟",
+  "settings_reset_message": "ستُمحى كل محفظة ومعاملة وإعداد على هذا الجهاز. لا يمكن التراجع عن ذلك.",
+  "settings_reset_action": "إعادة تعيين",
+  "settings_reset_done": "تم حذف كل البيانات",
+  "settings_version": "الإصدار: {version} ({build})",
+  "@settings_version": {
+    "placeholders": {
+      "version": {"type": "String"},
+      "build": {"type": "String"}
+    }
+  },
+  "settings_language": "اللغة",
+  "settings_manage": "إدارة",
+  "settings_tags": "الوسوم",
+  "settings_subscriptions": "الاشتراكات",
+  "settings_language_info": "اختر لغتك المفضّلة لواجهة التطبيق.",
+  "settings_theme": "المظهر",
+  "settings_theme_system": "النظام",
+  "settings_theme_light": "فاتح",
+  "settings_theme_dark": "داكن",
+
+  "l10nAbout": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ ABOUT ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "about": "عن Wumbi",
+  "about_project": "عن المشروع",
+  "about_text": "Wumbi تطبيق ميزانية بسيط يعمل محليًا. بياناتك مشفّرة ولا تغادر جهازك أبدًا.",
+  "about_support": "تواصل مع الدعم",
+
+  "l10nValidation": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ VALIDATION ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "validation_enter_amount": "أدخل مبلغًا",
+  "validation_up_to_tags": "حتى {count} وسوم",
+  "@validation_up_to_tags": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "validation_rate_unavailable": "السعر غير متاح",
+
+  "l10nErrors": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ ERRORS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "error_db_failure": "خطأ في قاعدة البيانات، حاول مجددًا.",
+  "error_unknown": "حدث خطأ ما. حاول مجددًا من فضلك.",
+  "error_rate_unavailable": "لا يتوفر سعر صرف. اتصل بالإنترنت وحاول مجددًا.",
+  "error_validation": "تحقّق من القيم المُدخلة من فضلك.",
+  "error_wallet_has_transactions": "لا يمكن تغيير العملة بعد أن تصبح للمحفظة معاملات.",
+  "error_not_found": "لم يعد هذا العنصر موجودًا.",
+  "error_tag_name": "أدخل اسم وسم (حتى 30 حرفًا).",
+  "error_open_db_title": "تعذّر فتح بياناتك",
+  "error_open_db_message": "تعذّر على Wumbi فتح قاعدة البيانات على هذا الجهاز.",
+  "error_reset_app": "إعادة تعيين التطبيق",
+
+  "l10nStopLineDontTouch": "☠☠☠☠☠☠☠☠☠☠☠☠☠ Don't touch this line ☠☠☠☠☠☠☠☠☠☠☠☠☠"
+}

@@ -6,6 +6,7 @@ import '../../../core/utils/constants/constants.dart';
 import '../../../core/utils/state_management/app_events.dart';
 import '../../../core/utils/state_management/single_events.dart';
 import '../../transaction/data/models/recurring_rule_model.dart';
+import '../../transaction/data/models/transaction_filter.dart';
 import '../../transaction/data/models/transaction_model.dart';
 import '../../transaction/data/transaction_repository.dart';
 import '../data/models/wallet_model.dart';
@@ -22,6 +23,11 @@ abstract class WalletDetailsState with _$WalletDetailsState {
     @Default([]) List<RecurringRuleModel> rules,
     @Default(true) bool hasMore,
     @Default(false) bool isLoadingMore,
+
+    /// Current list constraints (toolbar). Both are passed straight to the
+    /// datasource; changing either resets paging.
+    @Default(TransactionFilter.none) TransactionFilter filter,
+    @Default(TransactionSort.dateDesc) TransactionSort sort,
   }) = _WalletDetailsState;
 }
 
@@ -32,6 +38,10 @@ class WalletDetailsNotifier extends Notifier<WalletDetailsState> {
   WalletDetailsNotifier(this.walletId);
 
   final String walletId;
+
+  /// Bumped on every transactions query so a slow, stale page (e.g. issued
+  /// before a filter change) can never overwrite a newer one.
+  int _requestId = 0;
 
   WalletRepository get _wallets => ref.read(walletRepositoryProvider);
   TransactionRepository get _transactions => ref.read(transactionRepositoryProvider);
@@ -63,15 +73,33 @@ class WalletDetailsNotifier extends Notifier<WalletDetailsState> {
     // undo / delete does not collapse the list.
     final shown = state.transactions.value?.length ?? 0;
     final limit = shown > kTransactionsPageSize ? shown : kTransactionsPageSize;
-    final txResult = await _transactions.pageForWallet(walletId, limit: limit, offset: 0);
-    if (!ref.mounted) return;
+    await _loadTransactions(limit: limit);
+  }
+
+  /// First page(s) for the current [WalletDetailsState.filter] / `sort`.
+  /// The previous rows stay on screen until the result arrives.
+  Future<void> _loadTransactions({required int limit}) async {
+    final requestId = ++_requestId;
+    final filter = state.filter;
+    final sort = state.sort;
+    final txResult = await _transactions.pageForWallet(
+      walletId,
+      limit: limit,
+      offset: 0,
+      filter: filter,
+      sort: sort,
+    );
+    if (!ref.mounted || requestId != _requestId) return;
     txResult.when(
       (rows) => state = state.copyWith(
         transactions: AsyncValue.data(rows),
         hasMore: rows.length >= limit,
         isLoadingMore: false,
       ),
-      (error) => state = state.copyWith(transactions: AsyncValue.error(error, StackTrace.current)),
+      (error) => state = state.copyWith(
+        transactions: AsyncValue.error(error, StackTrace.current),
+        isLoadingMore: false,
+      ),
     );
   }
 
@@ -79,9 +107,17 @@ class WalletDetailsNotifier extends Notifier<WalletDetailsState> {
   Future<void> loadMore() async {
     final current = state.transactions.value;
     if (current == null || !state.hasMore || state.isLoadingMore) return;
+    final requestId = _requestId;
     state = state.copyWith(isLoadingMore: true);
-    final result = await _transactions.pageForWallet(walletId, offset: current.length);
+    final result = await _transactions.pageForWallet(
+      walletId,
+      offset: current.length,
+      filter: state.filter,
+      sort: state.sort,
+    );
     if (!ref.mounted) return;
+    // A filter / sort change happened meanwhile: that reload owns the list.
+    if (requestId != _requestId) return;
     result.when(
       (rows) => state = state.copyWith(
         transactions: AsyncValue.data([...current, ...rows]),
@@ -94,6 +130,26 @@ class WalletDetailsNotifier extends Notifier<WalletDetailsState> {
       },
     );
   }
+
+  // ------------------------------------------------------------ filter/sort
+
+  /// Replace the filter and reload from the first page (rows already on
+  /// screen stay until the new page arrives).
+  Future<void> setFilter(TransactionFilter filter) async {
+    if (filter == state.filter) return;
+    state = state.copyWith(filter: filter, hasMore: true, isLoadingMore: false);
+    await _loadTransactions(limit: kTransactionsPageSize);
+  }
+
+  Future<void> clearFilter() => setFilter(TransactionFilter.none);
+
+  Future<void> setSort(TransactionSort sort) async {
+    if (sort == state.sort) return;
+    state = state.copyWith(sort: sort, hasMore: true, isLoadingMore: false);
+    await _loadTransactions(limit: kTransactionsPageSize);
+  }
+
+  // ----------------------------------------------------------------- writes
 
   /// Swipe-to-delete: soft delete immediately, offer undo for 4 s.
   Future<void> deleteTransaction(TransactionRow row, {required String message, required String undoLabel}) async {

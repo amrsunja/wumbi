@@ -1,0 +1,424 @@
+{
+  "@@locale": "de",
+  "appLanguage": "Deutsch",
+
+  "l10nCommon": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ COMMON ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "common_continue": "Weiter",
+  "common_cancel": "Abbrechen",
+  "common_save": "Speichern",
+  "common_delete": "Löschen",
+  "common_confirm": "Bestätigen",
+  "common_undo": "Rückgängig",
+  "common_ok": "OK",
+  "common_retry": "Erneut",
+  "common_today": "Heute",
+  "common_yesterday": "Gestern",
+  "common_income": "Einnahme",
+  "common_expense": "Ausgabe",
+  "common_transfer": "Umbuchung",
+  "common_edit": "Bearbeiten",
+  "common_all": "Alle",
+  "common_clear": "Leeren",
+  "common_apply": "Anwenden",
+  "common_done": "Fertig",
+  "common_close": "Schließen",
+  "common_search": "Suchen",
+
+  "l10nOnboarding": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ ONBOARDING ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "onboarding_welcome_title": "Das ist Wumbi",
+  "onboarding_welcome_subtitle": "Geld erfassen in Sekunden. Keine Kategorien, nur Tags.",
+  "onboarding_currency_title": "Deine Hauptwährung",
+  "onboarding_currency_subtitle": "Summen erscheinen in dieser Währung. Du kannst sie später in den Einstellungen ändern.",
+  "onboarding_wallet_title": "Dein erstes Konto",
+  "onboarding_wallet_subtitle": "Jedes Konto hat eine Währung. Weitere Konten kannst du später anlegen.",
+  "onboarding_create_wallet": "Konto anlegen",
+  "common_skip": "Überspringen",
+  "onboarding_welcome_start": "Leg los",
+  "onboarding_benefit_wallets_title": "Konten in jeder Währung",
+  "onboarding_benefit_wallets_body": "Dollar, Euro, Bitcoin — jedes Konto hat seine eigene Währung. Deine Summe siehst du in der, die du wählst.",
+  "onboarding_benefit_tags_title": "Tags statt Kategorien",
+  "onboarding_benefit_tags_body": "Vergiss starre Kategorien. Vergib beliebige Tags — #coffee, #trip, #work — und finde später alles wieder.",
+  "onboarding_benefit_one_tap_title": "Mit einem Tipp erfasst",
+  "onboarding_benefit_one_tap_body": "Betrag eintippen, auf Einnahme oder Ausgabe tippen. Fertig. Das Fenster bleibt für den nächsten offen.",
+  "onboarding_how_title": "So funktioniert's",
+  "onboarding_how_body": "Leg ein Konto an, erfasse dein Geld, wenn es sich bewegt, und sieh deine Summen sofort wachsen.",
+  "onboarding_how_step_wallet": "Konto anlegen",
+  "onboarding_how_step_tap": "Tippen zum Erfassen",
+  "onboarding_how_step_totals": "Summen sehen",
+  "onboarding_wallet_hero_prefix": "Erstelle dein erstes",
+  "onboarding_wallet_hero_accent": "Konto",
+  "onboarding_final_title": "Alles bereit!",
+  "onboarding_final_body": "Dein erstes Konto steht. Um den Rest kümmert sich Wumbi.",
+  "onboarding_final_button": "Los geht's",
+
+  "l10nDashboard": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ DASHBOARD ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "dashboard_title": "Mein Geld",
+  "dashboard_across_wallets": "{count, plural, =0{Noch keine Konten} one{Aus 1 Konto} other{Aus {count} Konten}}",
+  "@dashboard_across_wallets": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "dashboard_not_included": "{codes} nicht enthalten",
+  "@dashboard_not_included": {
+    "placeholders": {
+      "codes": {"type": "String"}
+    }
+  },
+  "dashboard_wallets": "Konten",
+  "dashboard_new_wallet": "Neues Konto",
+  "dashboard_empty_title": "Erstelle dein erstes Konto",
+  "dashboard_empty_subtitle": "Wumbi braucht ein Konto für dein Geld.",
+  "dashboard_tags": "Tags",
+  "dashboard_subscriptions": "Abos",
+
+  "l10nWallet": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ WALLET ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "wallet_name_placeholder": "Kontoname",
+  "wallet_currency": "Währung",
+  "wallet_primary": "Hauptkonto",
+  "wallet_has_transactions": "Hat Transaktionen",
+  "wallet_pick_another_primary": "Wähle ein anderes Hauptkonto",
+  "wallet_delete_title": "{name} löschen?",
+  "@wallet_delete_title": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "wallet_delete_message": "Seine Transaktionen werden entfernt. Umbuchungen mit anderen Konten bleiben sichtbar.",
+  "wallet_deleted": "Konto gelöscht",
+  "wallet_deleted_paused_rules": "{count, plural, one{Konto gelöscht · 1 Wiederholung pausiert} other{Konto gelöscht · {count} Wiederholungen pausiert}}",
+  "@wallet_deleted_paused_rules": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "wallet_empty_title": "Noch keine Transaktionen",
+  "wallet_empty_subtitle": "Tippe auf +, um die erste zu erfassen",
+  "wallet_switch_title": "Konto wechseln",
+  "wallet_transfer_to": "Umbuchung auf {name}",
+  "@wallet_transfer_to": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "wallet_transfer_from": "Umbuchung von {name}",
+  "@wallet_transfer_from": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "wallet_deleted_suffix": "(gelöscht)",
+  "wallet_repeating_summary": "{count, plural, one{1 Wiederholung} other{{count} Wiederholungen}}",
+  "@wallet_repeating_summary": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "wallet_not_found": "Dieses Konto existiert nicht mehr",
+  "wallet_filter": "Filter",
+  "wallet_sort": "Sortieren",
+  "wallet_filter_title": "Transaktionen filtern",
+  "wallet_filter_type": "Art",
+  "wallet_filter_date": "Datum",
+  "wallet_filter_tags": "Tags",
+  "wallet_filter_from": "Von",
+  "wallet_filter_to": "Bis",
+  "wallet_filter_any_date": "Jedes Datum",
+  "wallet_filter_this_month": "Dieser Monat",
+  "wallet_filter_last_month": "Letzter Monat",
+  "wallet_filter_last_30_days": "Letzte 30 Tage",
+  "wallet_filter_this_year": "Dieses Jahr",
+  "wallet_filter_custom_range": "Eigener Zeitraum",
+  "wallet_filter_upcoming_only": "Nur Geplante",
+  "wallet_filter_clear": "Filter löschen",
+  "wallet_filter_no_tags": "Noch keine Tags in diesem Konto",
+  "wallet_filter_no_results_title": "Keine Treffer",
+  "wallet_filter_no_results_subtitle": "Entferne einen Filter.",
+  "wallet_filter_active": "{count, plural, one{1 Filter} other{{count} Filter}}",
+  "@wallet_filter_active": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "wallet_sort_title": "Sortieren nach",
+  "sort_date_newest": "Neueste zuerst",
+  "sort_date_oldest": "Älteste zuerst",
+  "sort_amount_high": "Größter Betrag",
+  "sort_amount_low": "Kleinster Betrag",
+  "wallet_upcoming_section": "Geplant",
+  "wallet_upcoming_hint": "{count, plural, one{1 geplante Transaktion zählt noch nicht} other{{count} geplante Transaktionen zählen noch nicht}}",
+  "@wallet_upcoming_hint": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+
+  "l10nTransaction": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ TRANSACTION ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "transaction_edit_title": "Bearbeiten",
+  "transaction_description_placeholder": "Beschreibung",
+  "transaction_tags_placeholder": "#tags",
+  "transaction_repeat": "Wiederholen",
+  "transaction_repeat_part_of": "{frequency} · Teil einer Wiederholung",
+  "@transaction_repeat_part_of": {
+    "placeholders": {
+      "frequency": {"type": "String"}
+    }
+  },
+  "transaction_hint_added": "≈ {amount} gehen auf {wallet}",
+  "@transaction_hint_added": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "wallet": {"type": "String"}
+    }
+  },
+  "transaction_hint_stale": "Kurs vom {date}",
+  "@transaction_hint_stale": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "transaction_rate_unavailable": "Kein Kurs — geh online zum Aktualisieren",
+  "transaction_saved": "{amount} in {wallet} gespeichert",
+  "@transaction_saved": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "wallet": {"type": "String"}
+    }
+  },
+  "transaction_moved": "{amount} nach {wallet} verschoben",
+  "@transaction_moved": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "wallet": {"type": "String"}
+    }
+  },
+  "transaction_deleted": "Transaktion gelöscht",
+  "transaction_upcoming_badge": "Geplant",
+  "transaction_upcoming_hint": "Zählt ab {date}",
+  "@transaction_upcoming_hint": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "transaction_scheduled": "{amount} für {date} geplant",
+  "@transaction_scheduled": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "date": {"type": "String"}
+    }
+  },
+  "transaction_delete_title": "Diese Transaktion löschen?",
+  "transaction_delete_this_one": "Nur diese löschen",
+  "transaction_delete_and_stop": "Löschen und nicht wiederholen",
+  "transaction_need_second_wallet_title": "Für Umbuchungen brauchst du ein zweites Konto",
+  "transaction_need_second_wallet_message": "Umbuchungen verschieben Geld zwischen zwei deiner Konten.",
+  "transaction_different_currency": "Andere Währung",
+  "transaction_counterpart_to": "→ {wallet} +{amount}",
+  "@transaction_counterpart_to": {
+    "placeholders": {
+      "wallet": {"type": "String"},
+      "amount": {"type": "String"}
+    }
+  },
+  "transaction_counterpart_from": "← {wallet} -{amount}",
+  "@transaction_counterpart_from": {
+    "placeholders": {
+      "wallet": {"type": "String"},
+      "amount": {"type": "String"}
+    }
+  },
+
+  "l10nTransfer": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ TRANSFER ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "transfer_title": "{amount} von {wallet} umbuchen",
+  "@transfer_title": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "wallet": {"type": "String"}
+    }
+  },
+  "transfer_amount_received": "Erhaltener Betrag",
+  "transfer_confirm": "Umbuchung bestätigen",
+
+  "l10nRepeat": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ REPEAT ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "repeat_never": "Nie",
+  "repeat_every_day": "Jeden Tag",
+  "repeat_every_week": "Jede Woche",
+  "repeat_every_month": "Jeden Monat",
+  "repeat_every_year": "Jedes Jahr",
+  "repeat_daily": "Täglich",
+  "repeat_weekly": "Wöchentlich",
+  "repeat_monthly": "Monatlich",
+  "repeat_yearly": "Jährlich",
+  "repeat_rules_title": "Abos",
+  "repeat_rules_hint": "Tippe auf ein Abo, um es zu bearbeiten. Bestehende Transaktionen ändern sich nie.",
+  "repeat_next": "Nächste: {date}",
+  "@repeat_next": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "repeat_paused": "Pausiert",
+  "repeat_delete_title": "Wiederholung stoppen?",
+  "repeat_delete_message": "Bestehende Transaktionen bleiben. Es werden keine neuen erstellt.",
+  "repeat_stop": "Stoppen",
+
+  "l10nDate": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ DATE ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "date_pick_title": "Datum wählen",
+  "date_pick_from": "Von",
+  "date_pick_to": "Bis",
+
+  "l10nTags": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ TAGS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "tags_title": "Tags",
+  "tags_view_list": "Liste",
+  "tags_view_graph": "Karte",
+  "tags_search_placeholder": "Tags suchen",
+  "tags_empty_title": "Noch keine Tags",
+  "tags_empty_subtitle": "Vergib #tags bei einer Transaktion und sie erscheinen hier.",
+  "tags_search_no_results": "Keine Tags gefunden",
+  "tags_count": "{count, plural, one{1 Tag} other{{count} Tags}}",
+  "@tags_count": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "tags_usage": "{count, plural, =0{Noch nicht genutzt} one{1 Transaktion} other{{count} Transaktionen}}",
+  "@tags_usage": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "tags_spent": "Ausgegeben",
+  "tags_earned": "Eingenommen",
+  "tags_net": "Netto",
+  "tags_not_included": "{codes} nicht enthalten",
+  "@tags_not_included": {
+    "placeholders": {
+      "codes": {"type": "String"}
+    }
+  },
+  "tags_graph_hint": "Größere Kreise bewegten mehr Geld. Linien verbinden Tags, die zusammen genutzt werden.",
+  "tags_graph_empty": "Vergib Tags bei ein paar Transaktionen, um die Karte zu sehen.",
+  "tag_wallets": "Konten",
+  "tag_transactions": "Transaktionen",
+  "tag_no_transactions": "Keine Transaktionen mit diesem Tag",
+  "tag_rename": "Tag umbenennen",
+  "tag_name_placeholder": "Tag-Name",
+  "tag_delete": "Tag löschen",
+  "tag_delete_title": "#{name} löschen?",
+  "@tag_delete_title": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "tag_delete_message": "Er wird aus allen Transaktionen entfernt. Die Transaktionen selbst bleiben.",
+  "tag_deleted": "Tag gelöscht",
+  "tag_renamed": "Tag umbenannt",
+  "tag_merged": "Mit #{name} zusammengeführt",
+  "@tag_merged": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "tag_not_found": "Dieser Tag existiert nicht mehr",
+  "tag_wallet_deleted": "(gelöscht)",
+
+  "l10nSubscriptions": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ SUBSCRIPTIONS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "subscriptions_title": "Abos",
+  "subscriptions_count": "{count, plural, =0{Keine Abos} one{1 Abo} other{{count} Abos}}",
+  "@subscriptions_count": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "subscriptions_empty_title": "Noch keine Abos",
+  "subscriptions_empty_subtitle": "Stelle bei einer Transaktion Wiederholen ein und sie erscheint hier.",
+  "subscriptions_all_wallets": "Alle Konten",
+  "subscriptions_active": "Aktiv",
+  "subscriptions_paused": "Pausiert",
+  "subscriptions_monthly_total": "≈ {amount} / Monat",
+  "@subscriptions_monthly_total": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "subscriptions_edit_title": "Abo bearbeiten",
+  "subscriptions_amount": "Betrag",
+  "subscriptions_wallet": "Konto",
+  "subscriptions_from_wallet": "Von Konto",
+  "subscriptions_to_wallet": "Auf Konto",
+  "subscriptions_frequency": "Häufigkeit",
+  "subscriptions_description": "Beschreibung",
+  "subscriptions_tags": "Tags",
+  "subscriptions_pause": "Pausieren",
+  "subscriptions_resume": "Fortsetzen",
+  "subscriptions_stop": "Abo stoppen",
+  "subscriptions_saved": "Abo aktualisiert",
+  "subscriptions_stopped": "Abo gestoppt",
+  "subscriptions_type_hint": "Die Art eines Abos lässt sich nicht ändern.",
+
+  "l10nCurrency": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ CURRENCY ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "currency_pick_title": "Währung",
+  "currency_no_results": "Keine Währung gefunden",
+  "currency_base_title": "Hauptwährung",
+  "currency_base_hint": "Dein gesamter Kontostand wird in diese Währung umgerechnet.",
+
+  "l10nSettings": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ SETTINGS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "settings_title": "Einstellungen",
+  "settings_preferences": "Allgemein",
+  "settings_notifications": "Mitteilungen",
+  "settings_currency": "Währung",
+  "settings_dark_mode": "Dunkelmodus",
+  "settings_data_privacy": "Daten & Datenschutz",
+  "settings_export_transactions": "Transaktionen exportieren",
+  "settings_reset_all_data": "Daten zurücksetzen",
+  "settings_reset_title": "Alle Daten zurücksetzen?",
+  "settings_reset_message": "Alle Konten, Transaktionen und Einstellungen auf diesem Gerät werden gelöscht. Das lässt sich nicht rückgängig machen.",
+  "settings_reset_action": "Zurücksetzen",
+  "settings_reset_done": "Alle Daten gelöscht",
+  "settings_version": "Version: {version} ({build})",
+  "@settings_version": {
+    "placeholders": {
+      "version": {"type": "String"},
+      "build": {"type": "String"}
+    }
+  },
+  "settings_language": "Sprache",
+  "settings_manage": "Verwalten",
+  "settings_tags": "Tags",
+  "settings_subscriptions": "Abos",
+  "settings_language_info": "Wähle die Sprache für die App-Oberfläche.",
+  "settings_theme": "Design",
+  "settings_theme_system": "System",
+  "settings_theme_light": "Hell",
+  "settings_theme_dark": "Dunkel",
+
+  "l10nAbout": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ ABOUT ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "about": "Über Wumbi",
+  "about_project": "Über das Projekt",
+  "about_text": "Wumbi ist eine minimalistische Budget-App, die lokal arbeitet. Deine Daten sind verschlüsselt und verlassen dein Gerät nie.",
+  "about_support": "Support kontaktieren",
+
+  "l10nValidation": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ VALIDATION ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "validation_enter_amount": "Betrag eingeben",
+  "validation_up_to_tags": "Bis zu {count} Tags",
+  "@validation_up_to_tags": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "validation_rate_unavailable": "Kein Kurs verfügbar",
+
+  "l10nErrors": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ ERRORS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "error_db_failure": "Datenbankfehler, bitte erneut versuchen.",
+  "error_unknown": "Etwas ist schiefgelaufen. Bitte versuche es erneut.",
+  "error_rate_unavailable": "Kein Wechselkurs verfügbar. Geh online und versuche es erneut.",
+  "error_validation": "Bitte prüfe deine Eingaben.",
+  "error_wallet_has_transactions": "Die Währung lässt sich nicht mehr ändern, sobald ein Konto Transaktionen hat.",
+  "error_not_found": "Dieser Eintrag existiert nicht mehr.",
+  "error_tag_name": "Gib einen Tag-Namen ein (max. 30 Zeichen).",
+  "error_open_db_title": "Daten konnten nicht geöffnet werden",
+  "error_open_db_message": "Wumbi konnte die Datenbank auf diesem Gerät nicht entsperren.",
+  "error_reset_app": "App zurücksetzen",
+
+  "l10nStopLineDontTouch": "☠☠☠☠☠☠☠☠☠☠☠☠☠ Don't touch this line ☠☠☠☠☠☠☠☠☠☠☠☠☠"
+}

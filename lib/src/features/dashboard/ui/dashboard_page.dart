@@ -11,6 +11,7 @@ import '../../../core/utils/extensions/build_context_extensions.dart';
 import '../../../core/utils/state_management/app_events.dart';
 import '../../../core/utils/state_management/single_events.dart';
 import '../../../core/utils/typedefs.dart';
+import '../../subscription/ui/subscriptions_provider.dart';
 import '../../wallet/data/models/wallet_model.dart';
 import '../../wallet/data/wallet_repository.dart';
 import '../../wallet/ui/wallets_provider.dart';
@@ -134,7 +135,72 @@ class _Header extends ConsumerWidget {
             style: context.typo.inter.subtitle,
           ),
         ),
+        if (!d.isEmpty) ...[
+          const UISpace.vert(12),
+          _HeaderLinks(subscriptionCount: ref.watch(activeSubscriptionCountProvider)),
+        ],
       ],
+    );
+  }
+}
+
+/// Small outlined pills under the total: "# Tags" and "N Subscriptions"
+/// (the latter only when there is at least one active rule).
+class _HeaderLinks extends StatelessWidget {
+  const _HeaderLinks({required this.subscriptionCount});
+
+  final int subscriptionCount;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      spacing: 8,
+      children: [
+        _HeaderPill(
+          icon: UIIconToken.icons.general.hash01,
+          label: l10n.dashboard_tags,
+          onTap: () => context.router.push(const TagsRoute()),
+        ),
+        if (subscriptionCount > 0)
+          _HeaderPill(
+            icon: UIIconToken.icons.mediaDevices.repeat01,
+            label: l10n.subscriptions_count(subscriptionCount),
+            onTap: () => context.router.push(SubscriptionsRoute()),
+          ),
+      ],
+    );
+  }
+}
+
+class _HeaderPill extends StatelessWidget {
+  const _HeaderPill({required this.icon, required this.label, required this.onTap});
+
+  final String icon;
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+    return UITap(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        decoration: BoxDecoration(
+          border: Border.all(color: colors.dividerColor),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          spacing: 4,
+          children: [
+            UIIcon(icon, size: 14),
+            Text(label, style: context.typo.inter.captionBold),
+          ],
+        ),
+      ),
     );
   }
 }

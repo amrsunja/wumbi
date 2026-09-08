@@ -1,0 +1,424 @@
+{
+  "@@locale": "fr",
+  "appLanguage": "Français",
+
+  "l10nCommon": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ COMMON ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "common_continue": "Continuer",
+  "common_cancel": "Annuler",
+  "common_save": "Enregistrer",
+  "common_delete": "Supprimer",
+  "common_confirm": "Confirmer",
+  "common_undo": "Annuler",
+  "common_ok": "OK",
+  "common_retry": "Réessayer",
+  "common_today": "Aujourd'hui",
+  "common_yesterday": "Hier",
+  "common_income": "Revenu",
+  "common_expense": "Dépense",
+  "common_transfer": "Virement",
+  "common_edit": "Modifier",
+  "common_all": "Tout",
+  "common_clear": "Effacer",
+  "common_apply": "Appliquer",
+  "common_done": "Terminé",
+  "common_close": "Fermer",
+  "common_search": "Rechercher",
+
+  "l10nOnboarding": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ ONBOARDING ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "onboarding_welcome_title": "Voici Wumbi",
+  "onboarding_welcome_subtitle": "Suis ton argent en quelques secondes. Pas de catégories, juste des tags.",
+  "onboarding_currency_title": "Ta devise principale",
+  "onboarding_currency_subtitle": "Les totaux s'affichent dans cette devise. Tu pourras la changer dans les Réglages.",
+  "onboarding_wallet_title": "Ton premier portefeuille",
+  "onboarding_wallet_subtitle": "Chaque portefeuille a une seule devise. Tu pourras en ajouter d'autres plus tard.",
+  "onboarding_create_wallet": "Créer le portefeuille",
+  "common_skip": "Passer",
+  "onboarding_welcome_start": "Commencer",
+  "onboarding_benefit_wallets_title": "Des portefeuilles dans toutes les devises",
+  "onboarding_benefit_wallets_body": "Dollars, euros, bitcoin — chaque portefeuille garde sa propre devise. Ton total s'affiche dans celle que tu choisis.",
+  "onboarding_benefit_tags_title": "Des tags, pas des catégories",
+  "onboarding_benefit_tags_body": "Oublie les catégories rigides. Ajoute les tags que tu veux — #coffee, #trip, #work — et retrouve tout plus tard.",
+  "onboarding_benefit_one_tap_title": "Note-le en un tap",
+  "onboarding_benefit_one_tap_body": "Saisis le montant, touche Revenu ou Dépense. C'est fait. L'écran reste ouvert pour le suivant.",
+  "onboarding_how_title": "Comment ça marche",
+  "onboarding_how_body": "Crée un portefeuille, note l'argent qui bouge et vois tes totaux se mettre à jour aussitôt.",
+  "onboarding_how_step_wallet": "Ajoute un portefeuille",
+  "onboarding_how_step_tap": "Touche pour noter",
+  "onboarding_how_step_totals": "Vois tes totaux",
+  "onboarding_wallet_hero_prefix": "Crée ton premier",
+  "onboarding_wallet_hero_accent": "Portefeuille",
+  "onboarding_final_title": "Tout est prêt !",
+  "onboarding_final_body": "Ton premier portefeuille est prêt. Wumbi garde le reste tout simple.",
+  "onboarding_final_button": "C'est parti",
+
+  "l10nDashboard": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ DASHBOARD ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "dashboard_title": "Mon argent",
+  "dashboard_across_wallets": "{count, plural, =0{Aucun portefeuille} =1{Sur 1 portefeuille} other{Sur {count} portefeuilles}}",
+  "@dashboard_across_wallets": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "dashboard_not_included": "{codes} non inclus",
+  "@dashboard_not_included": {
+    "placeholders": {
+      "codes": {"type": "String"}
+    }
+  },
+  "dashboard_wallets": "Portefeuilles",
+  "dashboard_new_wallet": "Nouveau portefeuille",
+  "dashboard_empty_title": "Crée ton premier portefeuille",
+  "dashboard_empty_subtitle": "Wumbi a besoin d'un portefeuille pour ranger ton argent.",
+  "dashboard_tags": "Tags",
+  "dashboard_subscriptions": "Abonnements",
+
+  "l10nWallet": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ WALLET ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "wallet_name_placeholder": "Nom du portefeuille",
+  "wallet_currency": "Devise",
+  "wallet_primary": "Portefeuille principal",
+  "wallet_has_transactions": "Contient des transactions",
+  "wallet_pick_another_primary": "Choisis un autre portefeuille principal",
+  "wallet_delete_title": "Supprimer {name} ?",
+  "@wallet_delete_title": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "wallet_delete_message": "Ses transactions seront supprimées. Les virements avec d'autres portefeuilles restent visibles.",
+  "wallet_deleted": "Portefeuille supprimé",
+  "wallet_deleted_paused_rules": "{count, plural, =1{Portefeuille supprimé · 1 répétition en pause} other{Portefeuille supprimé · {count} répétitions en pause}}",
+  "@wallet_deleted_paused_rules": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "wallet_empty_title": "Aucune transaction",
+  "wallet_empty_subtitle": "Touche + pour en ajouter une",
+  "wallet_switch_title": "Changer de portefeuille",
+  "wallet_transfer_to": "Virement vers {name}",
+  "@wallet_transfer_to": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "wallet_transfer_from": "Virement depuis {name}",
+  "@wallet_transfer_from": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "wallet_deleted_suffix": "(supprimé)",
+  "wallet_repeating_summary": "{count, plural, =1{1 récurrente} other{{count} récurrentes}}",
+  "@wallet_repeating_summary": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "wallet_not_found": "Ce portefeuille n'existe plus",
+  "wallet_filter": "Filtrer",
+  "wallet_sort": "Trier",
+  "wallet_filter_title": "Filtrer les transactions",
+  "wallet_filter_type": "Type",
+  "wallet_filter_date": "Date",
+  "wallet_filter_tags": "Tags",
+  "wallet_filter_from": "Du",
+  "wallet_filter_to": "Au",
+  "wallet_filter_any_date": "Toutes dates",
+  "wallet_filter_this_month": "Ce mois-ci",
+  "wallet_filter_last_month": "Mois dernier",
+  "wallet_filter_last_30_days": "30 derniers jours",
+  "wallet_filter_this_year": "Cette année",
+  "wallet_filter_custom_range": "Période perso",
+  "wallet_filter_upcoming_only": "À venir seulement",
+  "wallet_filter_clear": "Effacer les filtres",
+  "wallet_filter_no_tags": "Aucun tag dans ce portefeuille",
+  "wallet_filter_no_results_title": "Aucun résultat",
+  "wallet_filter_no_results_subtitle": "Essaie de retirer un filtre.",
+  "wallet_filter_active": "{count, plural, =1{1 filtre} other{{count} filtres}}",
+  "@wallet_filter_active": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "wallet_sort_title": "Trier par",
+  "sort_date_newest": "Plus récentes",
+  "sort_date_oldest": "Plus anciennes",
+  "sort_amount_high": "Plus gros montant",
+  "sort_amount_low": "Plus petit montant",
+  "wallet_upcoming_section": "À venir",
+  "wallet_upcoming_hint": "{count, plural, =1{1 transaction à venir pas encore comptée} other{{count} transactions à venir pas encore comptées}}",
+  "@wallet_upcoming_hint": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+
+  "l10nTransaction": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ TRANSACTION ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "transaction_edit_title": "Modifier",
+  "transaction_description_placeholder": "description",
+  "transaction_tags_placeholder": "#tags",
+  "transaction_repeat": "Répéter",
+  "transaction_repeat_part_of": "{frequency} · fait partie d'une répétition",
+  "@transaction_repeat_part_of": {
+    "placeholders": {
+      "frequency": {"type": "String"}
+    }
+  },
+  "transaction_hint_added": "≈ {amount} seront ajoutés à {wallet}",
+  "@transaction_hint_added": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "wallet": {"type": "String"}
+    }
+  },
+  "transaction_hint_stale": "taux du {date}",
+  "@transaction_hint_stale": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "transaction_rate_unavailable": "Taux indisponible — connecte-toi pour l'actualiser",
+  "transaction_saved": "{amount} enregistré dans {wallet}",
+  "@transaction_saved": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "wallet": {"type": "String"}
+    }
+  },
+  "transaction_moved": "{amount} déplacé vers {wallet}",
+  "@transaction_moved": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "wallet": {"type": "String"}
+    }
+  },
+  "transaction_deleted": "Transaction supprimée",
+  "transaction_upcoming_badge": "À venir",
+  "transaction_upcoming_hint": "Comptée le {date}",
+  "@transaction_upcoming_hint": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "transaction_scheduled": "{amount} planifié pour le {date}",
+  "@transaction_scheduled": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "date": {"type": "String"}
+    }
+  },
+  "transaction_delete_title": "Supprimer cette transaction ?",
+  "transaction_delete_this_one": "Supprimer celle-ci",
+  "transaction_delete_and_stop": "Supprimer et arrêter la répétition",
+  "transaction_need_second_wallet_title": "Crée un deuxième portefeuille pour un virement",
+  "transaction_need_second_wallet_message": "Les virements déplacent de l'argent entre deux de tes portefeuilles.",
+  "transaction_different_currency": "Devise différente",
+  "transaction_counterpart_to": "→ {wallet} +{amount}",
+  "@transaction_counterpart_to": {
+    "placeholders": {
+      "wallet": {"type": "String"},
+      "amount": {"type": "String"}
+    }
+  },
+  "transaction_counterpart_from": "← {wallet} -{amount}",
+  "@transaction_counterpart_from": {
+    "placeholders": {
+      "wallet": {"type": "String"},
+      "amount": {"type": "String"}
+    }
+  },
+
+  "l10nTransfer": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ TRANSFER ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "transfer_title": "Virement de {amount} depuis {wallet}",
+  "@transfer_title": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "wallet": {"type": "String"}
+    }
+  },
+  "transfer_amount_received": "Montant reçu",
+  "transfer_confirm": "Confirmer le virement",
+
+  "l10nRepeat": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ REPEAT ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "repeat_never": "Jamais",
+  "repeat_every_day": "Chaque jour",
+  "repeat_every_week": "Chaque semaine",
+  "repeat_every_month": "Chaque mois",
+  "repeat_every_year": "Chaque année",
+  "repeat_daily": "Quotidien",
+  "repeat_weekly": "Hebdomadaire",
+  "repeat_monthly": "Mensuel",
+  "repeat_yearly": "Annuel",
+  "repeat_rules_title": "Abonnements",
+  "repeat_rules_hint": "Touche un abonnement pour le modifier. Les transactions existantes ne changent jamais.",
+  "repeat_next": "Prochain : {date}",
+  "@repeat_next": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "repeat_paused": "En pause",
+  "repeat_delete_title": "Arrêter cette répétition ?",
+  "repeat_delete_message": "Les transactions existantes restent. Aucune nouvelle ne sera créée.",
+  "repeat_stop": "Arrêter",
+
+  "l10nDate": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ DATE ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "date_pick_title": "Choisis une date",
+  "date_pick_from": "Du",
+  "date_pick_to": "Au",
+
+  "l10nTags": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ TAGS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "tags_title": "Tags",
+  "tags_view_list": "Liste",
+  "tags_view_graph": "Carte",
+  "tags_search_placeholder": "Rechercher un tag",
+  "tags_empty_title": "Aucun tag",
+  "tags_empty_subtitle": "Ajoute des #tags à une transaction et ils apparaîtront ici.",
+  "tags_search_no_results": "Aucun tag ne correspond",
+  "tags_count": "{count, plural, =1{1 tag} other{{count} tags}}",
+  "@tags_count": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "tags_usage": "{count, plural, =0{Jamais utilisé} =1{1 transaction} other{{count} transactions}}",
+  "@tags_usage": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "tags_spent": "Dépensé",
+  "tags_earned": "Gagné",
+  "tags_net": "Net",
+  "tags_not_included": "{codes} non inclus",
+  "@tags_not_included": {
+    "placeholders": {
+      "codes": {"type": "String"}
+    }
+  },
+  "tags_graph_hint": "Les plus grands cercles ont bougé le plus d'argent. Les lignes relient les tags utilisés ensemble.",
+  "tags_graph_empty": "Ajoute des tags à quelques transactions pour voir la carte.",
+  "tag_wallets": "Portefeuilles",
+  "tag_transactions": "Transactions",
+  "tag_no_transactions": "Aucune transaction avec ce tag",
+  "tag_rename": "Renommer le tag",
+  "tag_name_placeholder": "Nom du tag",
+  "tag_delete": "Supprimer le tag",
+  "tag_delete_title": "Supprimer #{name} ?",
+  "@tag_delete_title": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "tag_delete_message": "Il sera retiré de toutes les transactions. Les transactions, elles, restent.",
+  "tag_deleted": "Tag supprimé",
+  "tag_renamed": "Tag renommé",
+  "tag_merged": "Fusionné avec #{name}",
+  "@tag_merged": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "tag_not_found": "Ce tag n'existe plus",
+  "tag_wallet_deleted": "(supprimé)",
+
+  "l10nSubscriptions": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ SUBSCRIPTIONS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "subscriptions_title": "Abonnements",
+  "subscriptions_count": "{count, plural, =0{Aucun abonnement} =1{1 abonnement} other{{count} abonnements}}",
+  "@subscriptions_count": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "subscriptions_empty_title": "Aucun abonnement",
+  "subscriptions_empty_subtitle": "Active Répéter sur une transaction et elle apparaîtra ici.",
+  "subscriptions_all_wallets": "Tous les portefeuilles",
+  "subscriptions_active": "Actifs",
+  "subscriptions_paused": "En pause",
+  "subscriptions_monthly_total": "≈ {amount} / mois",
+  "@subscriptions_monthly_total": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "subscriptions_edit_title": "Modifier l'abonnement",
+  "subscriptions_amount": "Montant",
+  "subscriptions_wallet": "Portefeuille",
+  "subscriptions_from_wallet": "Depuis le portefeuille",
+  "subscriptions_to_wallet": "Vers le portefeuille",
+  "subscriptions_frequency": "Fréquence",
+  "subscriptions_description": "Description",
+  "subscriptions_tags": "Tags",
+  "subscriptions_pause": "Pause",
+  "subscriptions_resume": "Reprendre",
+  "subscriptions_stop": "Arrêter l'abonnement",
+  "subscriptions_saved": "Abonnement mis à jour",
+  "subscriptions_stopped": "Abonnement arrêté",
+  "subscriptions_type_hint": "Le type d'un abonnement ne peut pas changer.",
+
+  "l10nCurrency": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ CURRENCY ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "currency_pick_title": "Devise",
+  "currency_no_results": "Aucune devise trouvée",
+  "currency_base_title": "Devise principale",
+  "currency_base_hint": "Ton solde total est converti dans cette devise.",
+
+  "l10nSettings": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ SETTINGS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "settings_title": "Réglages",
+  "settings_preferences": "Préférences",
+  "settings_notifications": "Notifications",
+  "settings_currency": "Devise",
+  "settings_dark_mode": "Mode sombre",
+  "settings_data_privacy": "Données et vie privée",
+  "settings_export_transactions": "Exporter les transactions",
+  "settings_reset_all_data": "Tout réinitialiser",
+  "settings_reset_title": "Tout réinitialiser ?",
+  "settings_reset_message": "Tous les portefeuilles, transactions et réglages de cet appareil seront effacés. C'est irréversible.",
+  "settings_reset_action": "Réinitialiser",
+  "settings_reset_done": "Données effacées",
+  "settings_version": "Version : {version} ({build})",
+  "@settings_version": {
+    "placeholders": {
+      "version": {"type": "String"},
+      "build": {"type": "String"}
+    }
+  },
+  "settings_language": "Langue",
+  "settings_manage": "Gérer",
+  "settings_tags": "Tags",
+  "settings_subscriptions": "Abonnements",
+  "settings_language_info": "Choisis la langue de l'interface de l'application.",
+  "settings_theme": "Thème",
+  "settings_theme_system": "Système",
+  "settings_theme_light": "Clair",
+  "settings_theme_dark": "Sombre",
+
+  "l10nAbout": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ ABOUT ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "about": "À propos de Wumbi",
+  "about_project": "À propos du projet",
+  "about_text": "Wumbi est une app de budget minimaliste qui fonctionne d'abord en local. Tes données sont chiffrées et ne quittent jamais ton appareil.",
+  "about_support": "Contacter le support",
+
+  "l10nValidation": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ VALIDATION ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "validation_enter_amount": "Saisis un montant",
+  "validation_up_to_tags": "{count} tags maximum",
+  "@validation_up_to_tags": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "validation_rate_unavailable": "Taux indisponible",
+
+  "l10nErrors": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ ERRORS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "error_db_failure": "Erreur de base de données, réessaie.",
+  "error_unknown": "Une erreur est survenue. Réessaie.",
+  "error_rate_unavailable": "Aucun taux de change disponible. Connecte-toi à Internet et réessaie.",
+  "error_validation": "Vérifie les valeurs saisies.",
+  "error_wallet_has_transactions": "La devise ne peut plus changer une fois que le portefeuille a des transactions.",
+  "error_not_found": "Cet élément n'existe plus.",
+  "error_tag_name": "Saisis un nom de tag (30 caractères max).",
+  "error_open_db_title": "Impossible d'ouvrir tes données",
+  "error_open_db_message": "Wumbi n'a pas pu déverrouiller la base de données sur cet appareil.",
+  "error_reset_app": "Réinitialiser l'app",
+
+  "l10nStopLineDontTouch": "☠☠☠☠☠☠☠☠☠☠☠☠☠ Don't touch this line ☠☠☠☠☠☠☠☠☠☠☠☠☠"
+}

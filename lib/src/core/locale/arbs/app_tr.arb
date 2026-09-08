@@ -1,0 +1,424 @@
+{
+  "@@locale": "tr",
+  "appLanguage": "Türkçe",
+
+  "l10nCommon": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ COMMON ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "common_continue": "Devam",
+  "common_cancel": "Vazgeç",
+  "common_save": "Kaydet",
+  "common_delete": "Sil",
+  "common_confirm": "Onayla",
+  "common_undo": "Geri al",
+  "common_ok": "Tamam",
+  "common_retry": "Tekrar dene",
+  "common_today": "Bugün",
+  "common_yesterday": "Dün",
+  "common_income": "Gelir",
+  "common_expense": "Gider",
+  "common_transfer": "Transfer",
+  "common_edit": "Düzenle",
+  "common_all": "Tümü",
+  "common_clear": "Temizle",
+  "common_apply": "Uygula",
+  "common_done": "Bitti",
+  "common_close": "Kapat",
+  "common_search": "Ara",
+
+  "l10nOnboarding": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ ONBOARDING ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "onboarding_welcome_title": "Wumbi ile tanış",
+  "onboarding_welcome_subtitle": "Paranı saniyeler içinde takip et. Kategori yok, sadece etiket.",
+  "onboarding_currency_title": "Ana para birimin",
+  "onboarding_currency_subtitle": "Toplamlar bu para biriminde gösterilir. Sonra Ayarlar'dan değiştirebilirsin.",
+  "onboarding_wallet_title": "İlk cüzdanın",
+  "onboarding_wallet_subtitle": "Her cüzdanın tek bir para birimi olur. Sonra başka cüzdanlar ekleyebilirsin.",
+  "onboarding_create_wallet": "Cüzdan oluştur",
+  "common_skip": "Atla",
+  "onboarding_welcome_start": "Başla",
+  "onboarding_benefit_wallets_title": "Her para biriminde cüzdan",
+  "onboarding_benefit_wallets_body": "Dolar, euro, bitcoin — her cüzdan kendi para birimini korur. Toplamın ise senin seçtiğin birimde görünür.",
+  "onboarding_benefit_tags_title": "Kategori değil, etiket",
+  "onboarding_benefit_tags_body": "Katı kategorileri unut. İstediğin etiketi ekle — #coffee, #trip, #work — sonra da her şeyi kolayca bul.",
+  "onboarding_benefit_one_tap_title": "Tek dokunuşla kaydet",
+  "onboarding_benefit_one_tap_body": "Tutarı yaz, Gelir ya da Gider'e dokun. Bitti. Ekran bir sonraki için açık kalır.",
+  "onboarding_how_title": "Nasıl çalışır",
+  "onboarding_how_body": "Bir cüzdan oluştur, para hareket ettikçe kaydet ve toplamların anında güncellensin.",
+  "onboarding_how_step_wallet": "Cüzdan ekle",
+  "onboarding_how_step_tap": "Dokun, kaydet",
+  "onboarding_how_step_totals": "Toplamları gör",
+  "onboarding_wallet_hero_prefix": "İlk",
+  "onboarding_wallet_hero_accent": "Cüzdanın",
+  "onboarding_final_title": "Her şey hazır!",
+  "onboarding_final_body": "İlk cüzdanın hazır. Gerisini Wumbi basit tutacak.",
+  "onboarding_final_button": "Hadi başlayalım",
+
+  "l10nDashboard": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ DASHBOARD ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "dashboard_title": "Param",
+  "dashboard_across_wallets": "{count, plural, =0{Henüz cüzdan yok} other{{count} cüzdan genelinde}}",
+  "@dashboard_across_wallets": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "dashboard_not_included": "{codes} dahil değil",
+  "@dashboard_not_included": {
+    "placeholders": {
+      "codes": {"type": "String"}
+    }
+  },
+  "dashboard_wallets": "Cüzdanlar",
+  "dashboard_new_wallet": "Yeni Cüzdan",
+  "dashboard_empty_title": "İlk cüzdanını oluştur",
+  "dashboard_empty_subtitle": "Wumbi'nin paranı tutacak bir cüzdana ihtiyacı var.",
+  "dashboard_tags": "Etiketler",
+  "dashboard_subscriptions": "Abonelikler",
+
+  "l10nWallet": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ WALLET ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "wallet_name_placeholder": "Cüzdan Adı",
+  "wallet_currency": "Para Birimi",
+  "wallet_primary": "Ana Cüzdan",
+  "wallet_has_transactions": "İşlemleri var",
+  "wallet_pick_another_primary": "Ana cüzdan olarak başka bir cüzdan seç",
+  "wallet_delete_title": "{name} silinsin mi?",
+  "@wallet_delete_title": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "wallet_delete_message": "İşlemleri de silinecek. Diğer cüzdanlarla yapılan transferler görünür kalır.",
+  "wallet_deleted": "Cüzdan silindi",
+  "wallet_deleted_paused_rules": "{count, plural, other{Cüzdan silindi · {count} tekrar duraklatıldı}}",
+  "@wallet_deleted_paused_rules": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "wallet_empty_title": "Henüz işlem yok",
+  "wallet_empty_subtitle": "İlkini eklemek için + simgesine dokun",
+  "wallet_switch_title": "Cüzdan değiştir",
+  "wallet_transfer_to": "{name} cüzdanına transfer",
+  "@wallet_transfer_to": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "wallet_transfer_from": "{name} cüzdanından transfer",
+  "@wallet_transfer_from": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "wallet_deleted_suffix": "(silindi)",
+  "wallet_repeating_summary": "{count, plural, other{{count} tekrar}}",
+  "@wallet_repeating_summary": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "wallet_not_found": "Bu cüzdan artık yok",
+  "wallet_filter": "Filtre",
+  "wallet_sort": "Sırala",
+  "wallet_filter_title": "İşlemleri filtrele",
+  "wallet_filter_type": "Tür",
+  "wallet_filter_date": "Tarih",
+  "wallet_filter_tags": "Etiketler",
+  "wallet_filter_from": "Başlangıç",
+  "wallet_filter_to": "Bitiş",
+  "wallet_filter_any_date": "Her tarih",
+  "wallet_filter_this_month": "Bu ay",
+  "wallet_filter_last_month": "Geçen ay",
+  "wallet_filter_last_30_days": "Son 30 gün",
+  "wallet_filter_this_year": "Bu yıl",
+  "wallet_filter_custom_range": "Özel aralık",
+  "wallet_filter_upcoming_only": "Sadece yaklaşan",
+  "wallet_filter_clear": "Filtreleri temizle",
+  "wallet_filter_no_tags": "Bu cüzdanda henüz etiket yok",
+  "wallet_filter_no_results_title": "Eşleşme yok",
+  "wallet_filter_no_results_subtitle": "Bir filtreyi kaldırmayı dene.",
+  "wallet_filter_active": "{count, plural, other{{count} filtre}}",
+  "@wallet_filter_active": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "wallet_sort_title": "Sıralama",
+  "sort_date_newest": "Önce en yeni",
+  "sort_date_oldest": "Önce en eski",
+  "sort_amount_high": "En yüksek tutar",
+  "sort_amount_low": "En düşük tutar",
+  "wallet_upcoming_section": "Yaklaşan",
+  "wallet_upcoming_hint": "{count, plural, other{{count} yaklaşan işlem henüz sayılmıyor}}",
+  "@wallet_upcoming_hint": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+
+  "l10nTransaction": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ TRANSACTION ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "transaction_edit_title": "Düzenle",
+  "transaction_description_placeholder": "açıklama",
+  "transaction_tags_placeholder": "#tags",
+  "transaction_repeat": "Tekrar",
+  "transaction_repeat_part_of": "{frequency} · bir tekrarın parçası",
+  "@transaction_repeat_part_of": {
+    "placeholders": {
+      "frequency": {"type": "String"}
+    }
+  },
+  "transaction_hint_added": "≈ {amount} · {wallet} cüzdanına eklenecek",
+  "@transaction_hint_added": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "wallet": {"type": "String"}
+    }
+  },
+  "transaction_hint_stale": "{date} tarihli kur",
+  "@transaction_hint_stale": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "transaction_rate_unavailable": "Kur yok — güncellemek için bağlan",
+  "transaction_saved": "{amount} · {wallet} cüzdanına eklendi",
+  "@transaction_saved": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "wallet": {"type": "String"}
+    }
+  },
+  "transaction_moved": "{amount} · {wallet} cüzdanına taşındı",
+  "@transaction_moved": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "wallet": {"type": "String"}
+    }
+  },
+  "transaction_deleted": "İşlem silindi",
+  "transaction_upcoming_badge": "Yaklaşan",
+  "transaction_upcoming_hint": "{date} tarihinde sayılacak",
+  "@transaction_upcoming_hint": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "transaction_scheduled": "{amount} · {date} için planlandı",
+  "@transaction_scheduled": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "date": {"type": "String"}
+    }
+  },
+  "transaction_delete_title": "Bu işlem silinsin mi?",
+  "transaction_delete_this_one": "Sadece bunu sil",
+  "transaction_delete_and_stop": "Sil ve tekrarı durdur",
+  "transaction_need_second_wallet_title": "Transfer için ikinci bir cüzdan oluştur",
+  "transaction_need_second_wallet_message": "Transferler parayı iki cüzdanın arasında taşır.",
+  "transaction_different_currency": "Farklı para birimi",
+  "transaction_counterpart_to": "→ {wallet} +{amount}",
+  "@transaction_counterpart_to": {
+    "placeholders": {
+      "wallet": {"type": "String"},
+      "amount": {"type": "String"}
+    }
+  },
+  "transaction_counterpart_from": "← {wallet} -{amount}",
+  "@transaction_counterpart_from": {
+    "placeholders": {
+      "wallet": {"type": "String"},
+      "amount": {"type": "String"}
+    }
+  },
+
+  "l10nTransfer": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ TRANSFER ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "transfer_title": "{wallet} cüzdanından {amount} transfer",
+  "@transfer_title": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "wallet": {"type": "String"}
+    }
+  },
+  "transfer_amount_received": "Alınan tutar",
+  "transfer_confirm": "Transferi onayla",
+
+  "l10nRepeat": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ REPEAT ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "repeat_never": "Asla",
+  "repeat_every_day": "Her gün",
+  "repeat_every_week": "Her hafta",
+  "repeat_every_month": "Her ay",
+  "repeat_every_year": "Her yıl",
+  "repeat_daily": "Günlük",
+  "repeat_weekly": "Haftalık",
+  "repeat_monthly": "Aylık",
+  "repeat_yearly": "Yıllık",
+  "repeat_rules_title": "Abonelikler",
+  "repeat_rules_hint": "Düzenlemek için bir aboneliğe dokun. Mevcut işlemler hiç değişmez.",
+  "repeat_next": "Sonraki: {date}",
+  "@repeat_next": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "repeat_paused": "Duraklatıldı",
+  "repeat_delete_title": "Bu tekrar durdurulsun mu?",
+  "repeat_delete_message": "Mevcut işlemler kalır. Yeni işlem oluşturulmaz.",
+  "repeat_stop": "Durdur",
+
+  "l10nDate": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ DATE ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "date_pick_title": "Tarih seç",
+  "date_pick_from": "Başlangıç",
+  "date_pick_to": "Bitiş",
+
+  "l10nTags": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ TAGS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "tags_title": "Etiketler",
+  "tags_view_list": "Liste",
+  "tags_view_graph": "Harita",
+  "tags_search_placeholder": "Etiket ara",
+  "tags_empty_title": "Henüz etiket yok",
+  "tags_empty_subtitle": "Bir işleme #tags ekle, burada görünecekler.",
+  "tags_search_no_results": "Aramanla eşleşen etiket yok",
+  "tags_count": "{count, plural, other{{count} etiket}}",
+  "@tags_count": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "tags_usage": "{count, plural, =0{Henüz kullanılmadı} other{{count} işlem}}",
+  "@tags_usage": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "tags_spent": "Harcanan",
+  "tags_earned": "Kazanılan",
+  "tags_net": "Net",
+  "tags_not_included": "{codes} dahil değil",
+  "@tags_not_included": {
+    "placeholders": {
+      "codes": {"type": "String"}
+    }
+  },
+  "tags_graph_hint": "Büyük daireler daha çok para hareketi demek. Çizgiler birlikte kullanılan etiketleri bağlar.",
+  "tags_graph_empty": "Haritayı görmek için birkaç işleme etiket ekle.",
+  "tag_wallets": "Cüzdanlar",
+  "tag_transactions": "İşlemler",
+  "tag_no_transactions": "Bu etiketin olduğu işlem yok",
+  "tag_rename": "Etiketi yeniden adlandır",
+  "tag_name_placeholder": "Etiket adı",
+  "tag_delete": "Etiketi sil",
+  "tag_delete_title": "#{name} silinsin mi?",
+  "@tag_delete_title": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "tag_delete_message": "Her işlemden kaldırılacak. İşlemlerin kendisi kalır.",
+  "tag_deleted": "Etiket silindi",
+  "tag_renamed": "Etiket yeniden adlandırıldı",
+  "tag_merged": "#{name} etiketiyle birleştirildi",
+  "@tag_merged": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "tag_not_found": "Bu etiket artık yok",
+  "tag_wallet_deleted": "(silindi)",
+
+  "l10nSubscriptions": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ SUBSCRIPTIONS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "subscriptions_title": "Abonelikler",
+  "subscriptions_count": "{count, plural, =0{Abonelik yok} other{{count} Abonelik}}",
+  "@subscriptions_count": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "subscriptions_empty_title": "Henüz abonelik yok",
+  "subscriptions_empty_subtitle": "Bir işlemde Tekrar'ı ayarla, burada görünsün.",
+  "subscriptions_all_wallets": "Tüm cüzdanlar",
+  "subscriptions_active": "Aktif",
+  "subscriptions_paused": "Duraklatıldı",
+  "subscriptions_monthly_total": "≈ {amount} / ay",
+  "@subscriptions_monthly_total": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "subscriptions_edit_title": "Aboneliği düzenle",
+  "subscriptions_amount": "Tutar",
+  "subscriptions_wallet": "Cüzdan",
+  "subscriptions_from_wallet": "Kaynak cüzdan",
+  "subscriptions_to_wallet": "Hedef cüzdan",
+  "subscriptions_frequency": "Sıklık",
+  "subscriptions_description": "Açıklama",
+  "subscriptions_tags": "Etiketler",
+  "subscriptions_pause": "Duraklat",
+  "subscriptions_resume": "Devam et",
+  "subscriptions_stop": "Aboneliği durdur",
+  "subscriptions_saved": "Abonelik güncellendi",
+  "subscriptions_stopped": "Abonelik durduruldu",
+  "subscriptions_type_hint": "Bir aboneliğin türü değiştirilemez.",
+
+  "l10nCurrency": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ CURRENCY ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "currency_pick_title": "Para Birimi",
+  "currency_no_results": "Para birimi bulunamadı",
+  "currency_base_title": "Ana para birimi",
+  "currency_base_hint": "Toplam bakiyen bu para birimine çevrilir.",
+
+  "l10nSettings": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ SETTINGS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "settings_title": "Ayarlar",
+  "settings_preferences": "Tercihler",
+  "settings_notifications": "Bildirimler",
+  "settings_currency": "Para Birimi",
+  "settings_dark_mode": "Koyu Tema",
+  "settings_data_privacy": "Veri ve Gizlilik",
+  "settings_export_transactions": "İşlemleri Dışa Aktar",
+  "settings_reset_all_data": "Tüm Verileri Sıfırla",
+  "settings_reset_title": "Tüm veriler sıfırlansın mı?",
+  "settings_reset_message": "Bu cihazdaki her cüzdan, işlem ve ayar silinecek. Bu geri alınamaz.",
+  "settings_reset_action": "Sıfırla",
+  "settings_reset_done": "Tüm veriler silindi",
+  "settings_version": "Sürüm: {version} ({build})",
+  "@settings_version": {
+    "placeholders": {
+      "version": {"type": "String"},
+      "build": {"type": "String"}
+    }
+  },
+  "settings_language": "Dil",
+  "settings_manage": "Yönet",
+  "settings_tags": "Etiketler",
+  "settings_subscriptions": "Abonelikler",
+  "settings_language_info": "Uygulama arayüzü için tercih ettiğin dili seç.",
+  "settings_theme": "Tema",
+  "settings_theme_system": "Sistem",
+  "settings_theme_light": "Açık",
+  "settings_theme_dark": "Koyu",
+
+  "l10nAbout": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ ABOUT ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "about": "Wumbi Hakkında",
+  "about_project": "Proje Hakkında",
+  "about_text": "Wumbi minimalist, yerel öncelikli bir bütçe uygulamasıdır. Verilerin şifrelenir ve cihazından asla çıkmaz.",
+  "about_support": "Desteğe ulaş",
+
+  "l10nValidation": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ VALIDATION ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "validation_enter_amount": "Bir tutar gir",
+  "validation_up_to_tags": "En fazla {count} etiket",
+  "@validation_up_to_tags": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "validation_rate_unavailable": "Kur yok",
+
+  "l10nErrors": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ ERRORS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "error_db_failure": "Veritabanı hatası, tekrar dene.",
+  "error_unknown": "Bir şeyler ters gitti. Lütfen tekrar dene.",
+  "error_rate_unavailable": "Döviz kuru yok. İnternete bağlan ve tekrar dene.",
+  "error_validation": "Lütfen girdiğin değerleri kontrol et.",
+  "error_wallet_has_transactions": "Bir cüzdanda işlem varsa para birimi değiştirilemez.",
+  "error_not_found": "Bu öğe artık yok.",
+  "error_tag_name": "Bir etiket adı gir (en fazla 30 karakter).",
+  "error_open_db_title": "Verilerin açılamadı",
+  "error_open_db_message": "Wumbi bu cihazdaki veritabanının kilidini açamadı.",
+  "error_reset_app": "Uygulamayı sıfırla",
+
+  "l10nStopLineDontTouch": "☠☠☠☠☠☠☠☠☠☠☠☠☠ Don't touch this line ☠☠☠☠☠☠☠☠☠☠☠☠☠"
+}

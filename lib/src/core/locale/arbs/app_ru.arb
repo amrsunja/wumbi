@@ -1,0 +1,424 @@
+{
+  "@@locale": "ru",
+  "appLanguage": "Русский",
+
+  "l10nCommon": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ COMMON ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "common_continue": "Продолжить",
+  "common_cancel": "Отмена",
+  "common_save": "Сохранить",
+  "common_delete": "Удалить",
+  "common_confirm": "Подтвердить",
+  "common_undo": "Вернуть",
+  "common_ok": "ОК",
+  "common_retry": "Ещё раз",
+  "common_today": "Сегодня",
+  "common_yesterday": "Вчера",
+  "common_income": "Доход",
+  "common_expense": "Расход",
+  "common_transfer": "Перевод",
+  "common_edit": "Изменить",
+  "common_all": "Все",
+  "common_clear": "Очистить",
+  "common_apply": "Применить",
+  "common_done": "Готово",
+  "common_close": "Закрыть",
+  "common_search": "Поиск",
+
+  "l10nOnboarding": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ ONBOARDING ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "onboarding_welcome_title": "Знакомься, Wumbi",
+  "onboarding_welcome_subtitle": "Учёт денег за секунды. Без категорий — только теги.",
+  "onboarding_currency_title": "Твоя основная валюта",
+  "onboarding_currency_subtitle": "Итоги показываются в этой валюте. Её можно поменять позже в настройках.",
+  "onboarding_wallet_title": "Твой первый кошелёк",
+  "onboarding_wallet_subtitle": "У каждого кошелька одна валюта. Другие кошельки добавишь позже.",
+  "onboarding_create_wallet": "Создать кошелёк",
+  "common_skip": "Пропустить",
+  "onboarding_welcome_start": "Начать",
+  "onboarding_benefit_wallets_title": "Кошельки в любой валюте",
+  "onboarding_benefit_wallets_body": "Доллары, евро, биткоин — у каждого кошелька своя валюта. Общий итог покажем в той, которую выберешь.",
+  "onboarding_benefit_tags_title": "Теги вместо категорий",
+  "onboarding_benefit_tags_body": "Забудь про жёсткие категории. Ставь любые теги — #coffee, #trip, #work — и находи всё что угодно.",
+  "onboarding_benefit_one_tap_title": "Запись в одно касание",
+  "onboarding_benefit_one_tap_body": "Введи сумму, нажми «Доход» или «Расход». Готово. Экран останется открытым для следующей.",
+  "onboarding_how_title": "Как это работает",
+  "onboarding_how_body": "Создай кошелёк, записывай движение денег и смотри, как итоги обновляются мгновенно.",
+  "onboarding_how_step_wallet": "Добавь кошелёк",
+  "onboarding_how_step_tap": "Нажми и запиши",
+  "onboarding_how_step_totals": "Смотри итоги",
+  "onboarding_wallet_hero_prefix": "Создай свой первый",
+  "onboarding_wallet_hero_accent": "Кошелёк",
+  "onboarding_final_title": "Всё готово!",
+  "onboarding_final_body": "Первый кошелёк создан. Остальное Wumbi оставит простым.",
+  "onboarding_final_button": "Поехали",
+
+  "l10nDashboard": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ DASHBOARD ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "dashboard_title": "Мои деньги",
+  "dashboard_across_wallets": "{count, plural, =0{Пока нет кошельков} one{В {count} кошельке} few{В {count} кошельках} many{В {count} кошельках} other{В {count} кошельках}}",
+  "@dashboard_across_wallets": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "dashboard_not_included": "{codes} не учтены",
+  "@dashboard_not_included": {
+    "placeholders": {
+      "codes": {"type": "String"}
+    }
+  },
+  "dashboard_wallets": "Кошельки",
+  "dashboard_new_wallet": "Новый кошелёк",
+  "dashboard_empty_title": "Создай первый кошелёк",
+  "dashboard_empty_subtitle": "Wumbi нужен кошелёк, чтобы хранить твои деньги.",
+  "dashboard_tags": "Теги",
+  "dashboard_subscriptions": "Подписки",
+
+  "l10nWallet": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ WALLET ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "wallet_name_placeholder": "Название кошелька",
+  "wallet_currency": "Валюта",
+  "wallet_primary": "Основной кошелёк",
+  "wallet_has_transactions": "Есть транзакции",
+  "wallet_pick_another_primary": "Выбери другой основной кошелёк",
+  "wallet_delete_title": "Удалить {name}?",
+  "@wallet_delete_title": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "wallet_delete_message": "Его транзакции будут удалены. Переводы с другими кошельками останутся видны.",
+  "wallet_deleted": "Кошелёк удалён",
+  "wallet_deleted_paused_rules": "{count, plural, one{Кошелёк удалён · {count} повтор на паузе} few{Кошелёк удалён · {count} повтора на паузе} many{Кошелёк удалён · {count} повторов на паузе} other{Кошелёк удалён · {count} повторов на паузе}}",
+  "@wallet_deleted_paused_rules": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "wallet_empty_title": "Пока нет транзакций",
+  "wallet_empty_subtitle": "Нажми +, чтобы добавить первую",
+  "wallet_switch_title": "Сменить кошелёк",
+  "wallet_transfer_to": "Перевод в {name}",
+  "@wallet_transfer_to": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "wallet_transfer_from": "Перевод из {name}",
+  "@wallet_transfer_from": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "wallet_deleted_suffix": "(удалён)",
+  "wallet_repeating_summary": "{count, plural, one{{count} повтор} few{{count} повтора} many{{count} повторов} other{{count} повторов}}",
+  "@wallet_repeating_summary": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "wallet_not_found": "Этого кошелька больше нет",
+  "wallet_filter": "Фильтр",
+  "wallet_sort": "Сортировка",
+  "wallet_filter_title": "Фильтр транзакций",
+  "wallet_filter_type": "Тип",
+  "wallet_filter_date": "Дата",
+  "wallet_filter_tags": "Теги",
+  "wallet_filter_from": "С",
+  "wallet_filter_to": "По",
+  "wallet_filter_any_date": "Любая дата",
+  "wallet_filter_this_month": "Этот месяц",
+  "wallet_filter_last_month": "Прошлый месяц",
+  "wallet_filter_last_30_days": "Последние 30 дней",
+  "wallet_filter_this_year": "Этот год",
+  "wallet_filter_custom_range": "Свой период",
+  "wallet_filter_upcoming_only": "Только предстоящие",
+  "wallet_filter_clear": "Сбросить фильтры",
+  "wallet_filter_no_tags": "В этом кошельке пока нет тегов",
+  "wallet_filter_no_results_title": "Ничего не найдено",
+  "wallet_filter_no_results_subtitle": "Попробуй убрать фильтр.",
+  "wallet_filter_active": "{count, plural, one{{count} фильтр} few{{count} фильтра} many{{count} фильтров} other{{count} фильтров}}",
+  "@wallet_filter_active": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "wallet_sort_title": "Сортировать по",
+  "sort_date_newest": "Сначала новые",
+  "sort_date_oldest": "Сначала старые",
+  "sort_amount_high": "Сначала крупные",
+  "sort_amount_low": "Сначала мелкие",
+  "wallet_upcoming_section": "Предстоящие",
+  "wallet_upcoming_hint": "{count, plural, one{{count} предстоящая транзакция пока не учтена} few{{count} предстоящие транзакции пока не учтены} many{{count} предстоящих транзакций пока не учтены} other{{count} предстоящих транзакций пока не учтены}}",
+  "@wallet_upcoming_hint": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+
+  "l10nTransaction": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ TRANSACTION ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "transaction_edit_title": "Изменить",
+  "transaction_description_placeholder": "описание",
+  "transaction_tags_placeholder": "#tags",
+  "transaction_repeat": "Повтор",
+  "transaction_repeat_part_of": "{frequency} · часть повтора",
+  "@transaction_repeat_part_of": {
+    "placeholders": {
+      "frequency": {"type": "String"}
+    }
+  },
+  "transaction_hint_added": "≈ {amount} будет добавлено в {wallet}",
+  "@transaction_hint_added": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "wallet": {"type": "String"}
+    }
+  },
+  "transaction_hint_stale": "курс от {date}",
+  "@transaction_hint_stale": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "transaction_rate_unavailable": "Курс недоступен — подключись, чтобы обновить",
+  "transaction_saved": "{amount} сохранено в {wallet}",
+  "@transaction_saved": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "wallet": {"type": "String"}
+    }
+  },
+  "transaction_moved": "{amount} перемещено в {wallet}",
+  "@transaction_moved": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "wallet": {"type": "String"}
+    }
+  },
+  "transaction_deleted": "Транзакция удалена",
+  "transaction_upcoming_badge": "Запланировано",
+  "transaction_upcoming_hint": "Учтётся {date}",
+  "@transaction_upcoming_hint": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "transaction_scheduled": "{amount} запланировано на {date}",
+  "@transaction_scheduled": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "date": {"type": "String"}
+    }
+  },
+  "transaction_delete_title": "Удалить эту транзакцию?",
+  "transaction_delete_this_one": "Удалить только эту",
+  "transaction_delete_and_stop": "Удалить и остановить повтор",
+  "transaction_need_second_wallet_title": "Создай второй кошелёк для перевода",
+  "transaction_need_second_wallet_message": "Переводы перемещают деньги между двумя твоими кошельками.",
+  "transaction_different_currency": "Другая валюта",
+  "transaction_counterpart_to": "→ {wallet} +{amount}",
+  "@transaction_counterpart_to": {
+    "placeholders": {
+      "wallet": {"type": "String"},
+      "amount": {"type": "String"}
+    }
+  },
+  "transaction_counterpart_from": "← {wallet} -{amount}",
+  "@transaction_counterpart_from": {
+    "placeholders": {
+      "wallet": {"type": "String"},
+      "amount": {"type": "String"}
+    }
+  },
+
+  "l10nTransfer": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ TRANSFER ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "transfer_title": "Перевод {amount} из {wallet}",
+  "@transfer_title": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "wallet": {"type": "String"}
+    }
+  },
+  "transfer_amount_received": "Сумма зачисления",
+  "transfer_confirm": "Подтвердить перевод",
+
+  "l10nRepeat": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ REPEAT ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "repeat_never": "Никогда",
+  "repeat_every_day": "Каждый день",
+  "repeat_every_week": "Каждую неделю",
+  "repeat_every_month": "Каждый месяц",
+  "repeat_every_year": "Каждый год",
+  "repeat_daily": "Ежедневно",
+  "repeat_weekly": "Еженедельно",
+  "repeat_monthly": "Ежемесячно",
+  "repeat_yearly": "Ежегодно",
+  "repeat_rules_title": "Подписки",
+  "repeat_rules_hint": "Нажми на подписку, чтобы изменить её. Существующие транзакции не меняются.",
+  "repeat_next": "Следующая: {date}",
+  "@repeat_next": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "repeat_paused": "На паузе",
+  "repeat_delete_title": "Остановить этот повтор?",
+  "repeat_delete_message": "Существующие транзакции останутся. Новые создаваться не будут.",
+  "repeat_stop": "Остановить",
+
+  "l10nDate": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ DATE ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "date_pick_title": "Выбери дату",
+  "date_pick_from": "С",
+  "date_pick_to": "По",
+
+  "l10nTags": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ TAGS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "tags_title": "Теги",
+  "tags_view_list": "Список",
+  "tags_view_graph": "Карта",
+  "tags_search_placeholder": "Поиск тегов",
+  "tags_empty_title": "Пока нет тегов",
+  "tags_empty_subtitle": "Добавь #tags к транзакции, и они появятся здесь.",
+  "tags_search_no_results": "Нет тегов по запросу",
+  "tags_count": "{count, plural, one{{count} тег} few{{count} тега} many{{count} тегов} other{{count} тегов}}",
+  "@tags_count": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "tags_usage": "{count, plural, =0{Пока не используется} one{{count} транзакция} few{{count} транзакции} many{{count} транзакций} other{{count} транзакций}}",
+  "@tags_usage": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "tags_spent": "Потрачено",
+  "tags_earned": "Заработано",
+  "tags_net": "Итого",
+  "tags_not_included": "{codes} не учтены",
+  "@tags_not_included": {
+    "placeholders": {
+      "codes": {"type": "String"}
+    }
+  },
+  "tags_graph_hint": "Чем больше круг, тем больше денег. Линии соединяют теги, которые встречаются вместе.",
+  "tags_graph_empty": "Добавь теги к нескольким транзакциям, чтобы увидеть карту.",
+  "tag_wallets": "Кошельки",
+  "tag_transactions": "Транзакции",
+  "tag_no_transactions": "Нет транзакций с этим тегом",
+  "tag_rename": "Переименовать тег",
+  "tag_name_placeholder": "Название тега",
+  "tag_delete": "Удалить тег",
+  "tag_delete_title": "Удалить #{name}?",
+  "@tag_delete_title": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "tag_delete_message": "Он будет убран из всех транзакций. Сами транзакции останутся.",
+  "tag_deleted": "Тег удалён",
+  "tag_renamed": "Тег переименован",
+  "tag_merged": "Объединён с #{name}",
+  "@tag_merged": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "tag_not_found": "Этого тега больше нет",
+  "tag_wallet_deleted": "(удалён)",
+
+  "l10nSubscriptions": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ SUBSCRIPTIONS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "subscriptions_title": "Подписки",
+  "subscriptions_count": "{count, plural, =0{Нет подписок} one{{count} подписка} few{{count} подписки} many{{count} подписок} other{{count} подписок}}",
+  "@subscriptions_count": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "subscriptions_empty_title": "Пока нет подписок",
+  "subscriptions_empty_subtitle": "Включи «Повтор» у транзакции — она появится здесь.",
+  "subscriptions_all_wallets": "Все кошельки",
+  "subscriptions_active": "Активные",
+  "subscriptions_paused": "На паузе",
+  "subscriptions_monthly_total": "≈ {amount} / мес.",
+  "@subscriptions_monthly_total": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "subscriptions_edit_title": "Изменить подписку",
+  "subscriptions_amount": "Сумма",
+  "subscriptions_wallet": "Кошелёк",
+  "subscriptions_from_wallet": "Из кошелька",
+  "subscriptions_to_wallet": "В кошелёк",
+  "subscriptions_frequency": "Частота",
+  "subscriptions_description": "Описание",
+  "subscriptions_tags": "Теги",
+  "subscriptions_pause": "Пауза",
+  "subscriptions_resume": "Возобновить",
+  "subscriptions_stop": "Остановить подписку",
+  "subscriptions_saved": "Подписка обновлена",
+  "subscriptions_stopped": "Подписка остановлена",
+  "subscriptions_type_hint": "Тип подписки изменить нельзя.",
+
+  "l10nCurrency": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ CURRENCY ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "currency_pick_title": "Валюта",
+  "currency_no_results": "Валюта не найдена",
+  "currency_base_title": "Основная валюта",
+  "currency_base_hint": "Общий баланс пересчитывается в эту валюту.",
+
+  "l10nSettings": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ SETTINGS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "settings_title": "Настройки",
+  "settings_preferences": "Предпочтения",
+  "settings_notifications": "Уведомления",
+  "settings_currency": "Валюта",
+  "settings_dark_mode": "Тёмная тема",
+  "settings_data_privacy": "Данные и приватность",
+  "settings_export_transactions": "Экспорт транзакций",
+  "settings_reset_all_data": "Сбросить все данные",
+  "settings_reset_title": "Сбросить все данные?",
+  "settings_reset_message": "Все кошельки, транзакции и настройки на этом устройстве будут стёрты. Отменить это нельзя.",
+  "settings_reset_action": "Сбросить",
+  "settings_reset_done": "Все данные удалены",
+  "settings_version": "Версия: {version} ({build})",
+  "@settings_version": {
+    "placeholders": {
+      "version": {"type": "String"},
+      "build": {"type": "String"}
+    }
+  },
+  "settings_language": "Язык",
+  "settings_manage": "Управление",
+  "settings_tags": "Теги",
+  "settings_subscriptions": "Подписки",
+  "settings_language_info": "Выбери язык интерфейса приложения.",
+  "settings_theme": "Тема",
+  "settings_theme_system": "Системная",
+  "settings_theme_light": "Светлая",
+  "settings_theme_dark": "Тёмная",
+
+  "l10nAbout": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ ABOUT ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "about": "О Wumbi",
+  "about_project": "О проекте",
+  "about_text": "Wumbi — минималистичное приложение для бюджета, которое работает локально. Твои данные зашифрованы и не покидают устройство.",
+  "about_support": "Связаться с поддержкой",
+
+  "l10nValidation": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ VALIDATION ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "validation_enter_amount": "Введи сумму",
+  "validation_up_to_tags": "До {count} тегов",
+  "@validation_up_to_tags": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "validation_rate_unavailable": "Курс недоступен",
+
+  "l10nErrors": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ ERRORS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "error_db_failure": "Ошибка базы данных, попробуй ещё раз.",
+  "error_unknown": "Что-то пошло не так. Попробуй ещё раз.",
+  "error_rate_unavailable": "Курс обмена недоступен. Подключись к интернету и попробуй снова.",
+  "error_validation": "Проверь введённые значения.",
+  "error_wallet_has_transactions": "Валюту нельзя изменить, если в кошельке уже есть транзакции.",
+  "error_not_found": "Этого элемента больше нет.",
+  "error_tag_name": "Введи название тега (до 30 символов).",
+  "error_open_db_title": "Не удалось открыть данные",
+  "error_open_db_message": "Wumbi не смог разблокировать базу данных на этом устройстве.",
+  "error_reset_app": "Сбросить приложение",
+
+  "l10nStopLineDontTouch": "☠☠☠☠☠☠☠☠☠☠☠☠☠ Don't touch this line ☠☠☠☠☠☠☠☠☠☠☠☠☠"
+}

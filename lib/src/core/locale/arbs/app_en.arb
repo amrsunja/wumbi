@@ -16,6 +16,13 @@
   "common_income": "Income",
   "common_expense": "Expense",
   "common_transfer": "Transfer",
+  "common_edit": "Edit",
+  "common_all": "All",
+  "common_clear": "Clear",
+  "common_apply": "Apply",
+  "common_done": "Done",
+  "common_close": "Close",
+  "common_search": "Search",
 
   "l10nOnboarding": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ ONBOARDING ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
   "onboarding_welcome_title": "Meet Wumbi",
@@ -42,10 +49,10 @@
   "onboarding_wallet_hero_accent": "Wallet",
   "onboarding_final_title": "You're all set!",
   "onboarding_final_body": "Your first wallet is ready. Wumbi will keep the rest simple.",
-  "onboarding_final_button": "Go to dashboard",
+  "onboarding_final_button": "Let's go",
 
   "l10nDashboard": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ DASHBOARD ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
-  "dashboard_title": "Dashboard",
+  "dashboard_title": "My Money",
   "dashboard_across_wallets": "{count, plural, =0{No wallets yet} =1{Across 1 wallet} other{Across {count} wallets}}",
   "@dashboard_across_wallets": {
     "placeholders": {
@@ -62,6 +69,8 @@
   "dashboard_new_wallet": "New Wallet",
   "dashboard_empty_title": "Create your first wallet",
   "dashboard_empty_subtitle": "Wumbi needs a wallet to keep your money in.",
+  "dashboard_tags": "Tags",
+  "dashboard_subscriptions": "Subscriptions",
 
   "l10nWallet": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ WALLET ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
   "wallet_name_placeholder": "Wallet Name",
@@ -106,6 +115,43 @@
     }
   },
   "wallet_not_found": "This wallet no longer exists",
+  "wallet_filter": "Filter",
+  "wallet_sort": "Sort",
+  "wallet_filter_title": "Filter transactions",
+  "wallet_filter_type": "Type",
+  "wallet_filter_date": "Date",
+  "wallet_filter_tags": "Tags",
+  "wallet_filter_from": "From",
+  "wallet_filter_to": "To",
+  "wallet_filter_any_date": "Any date",
+  "wallet_filter_this_month": "This month",
+  "wallet_filter_last_month": "Last month",
+  "wallet_filter_last_30_days": "Last 30 days",
+  "wallet_filter_this_year": "This year",
+  "wallet_filter_custom_range": "Custom range",
+  "wallet_filter_upcoming_only": "Upcoming only",
+  "wallet_filter_clear": "Clear filters",
+  "wallet_filter_no_tags": "No tags in this wallet yet",
+  "wallet_filter_no_results_title": "Nothing matches",
+  "wallet_filter_no_results_subtitle": "Try removing a filter.",
+  "wallet_filter_active": "{count, plural, =1{1 filter} other{{count} filters}}",
+  "@wallet_filter_active": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "wallet_sort_title": "Sort by",
+  "sort_date_newest": "Newest first",
+  "sort_date_oldest": "Oldest first",
+  "sort_amount_high": "Largest amount",
+  "sort_amount_low": "Smallest amount",
+  "wallet_upcoming_section": "Upcoming",
+  "wallet_upcoming_hint": "{count, plural, =1{1 upcoming transaction is not counted yet} other{{count} upcoming transactions are not counted yet}}",
+  "@wallet_upcoming_hint": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
 
   "l10nTransaction": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ TRANSACTION ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
   "transaction_edit_title": "Edit",
@@ -147,6 +193,20 @@
     }
   },
   "transaction_deleted": "Transaction deleted",
+  "transaction_upcoming_badge": "Upcoming",
+  "transaction_upcoming_hint": "Counted on {date}",
+  "@transaction_upcoming_hint": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "transaction_scheduled": "Scheduled {amount} for {date}",
+  "@transaction_scheduled": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "date": {"type": "String"}
+    }
+  },
   "transaction_delete_title": "Delete this transaction?",
   "transaction_delete_this_one": "Delete this one",
   "transaction_delete_and_stop": "Delete and stop repeating",
@@ -189,8 +249,8 @@
   "repeat_weekly": "Weekly",
   "repeat_monthly": "Monthly",
   "repeat_yearly": "Yearly",
-  "repeat_rules_title": "Repeating transactions",
-  "repeat_rules_hint": "To change an amount or description, delete the rule and create it again.",
+  "repeat_rules_title": "Subscriptions",
+  "repeat_rules_hint": "Tap a subscription to edit it. Existing transactions never change.",
   "repeat_next": "Next: {date}",
   "@repeat_next": {
     "placeholders": {
@@ -204,11 +264,103 @@
 
   "l10nDate": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ DATE ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
   "date_pick_title": "Pick a date",
+  "date_pick_from": "From",
+  "date_pick_to": "To",
+
+  "l10nTags": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ TAGS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "tags_title": "Tags",
+  "tags_view_list": "List",
+  "tags_view_graph": "Map",
+  "tags_search_placeholder": "Search tags",
+  "tags_empty_title": "No tags yet",
+  "tags_empty_subtitle": "Add #tags to a transaction and they will show up here.",
+  "tags_search_no_results": "No tags match your search",
+  "tags_count": "{count, plural, =1{1 tag} other{{count} tags}}",
+  "@tags_count": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "tags_usage": "{count, plural, =0{Not used yet} =1{1 transaction} other{{count} transactions}}",
+  "@tags_usage": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "tags_spent": "Spent",
+  "tags_earned": "Earned",
+  "tags_net": "Net",
+  "tags_not_included": "{codes} not included",
+  "@tags_not_included": {
+    "placeholders": {
+      "codes": {"type": "String"}
+    }
+  },
+  "tags_graph_hint": "Bigger circles moved more money. Lines connect tags used together.",
+  "tags_graph_empty": "Add tags to a few transactions to see the map.",
+  "tag_wallets": "Wallets",
+  "tag_transactions": "Transactions",
+  "tag_no_transactions": "No transactions with this tag",
+  "tag_rename": "Rename tag",
+  "tag_name_placeholder": "Tag name",
+  "tag_delete": "Delete tag",
+  "tag_delete_title": "Delete #{name}?",
+  "@tag_delete_title": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "tag_delete_message": "It will be removed from every transaction. The transactions themselves stay.",
+  "tag_deleted": "Tag deleted",
+  "tag_renamed": "Tag renamed",
+  "tag_merged": "Merged into #{name}",
+  "@tag_merged": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "tag_not_found": "This tag no longer exists",
+  "tag_wallet_deleted": "(deleted)",
+
+  "l10nSubscriptions": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ SUBSCRIPTIONS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "subscriptions_title": "Subscriptions",
+  "subscriptions_count": "{count, plural, =0{No subscriptions} =1{1 Subscription} other{{count} Subscriptions}}",
+  "@subscriptions_count": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "subscriptions_empty_title": "No subscriptions yet",
+  "subscriptions_empty_subtitle": "Set Repeat on a transaction and it will appear here.",
+  "subscriptions_all_wallets": "All wallets",
+  "subscriptions_active": "Active",
+  "subscriptions_paused": "Paused",
+  "subscriptions_monthly_total": "≈ {amount} / month",
+  "@subscriptions_monthly_total": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "subscriptions_edit_title": "Edit subscription",
+  "subscriptions_amount": "Amount",
+  "subscriptions_wallet": "Wallet",
+  "subscriptions_from_wallet": "From wallet",
+  "subscriptions_to_wallet": "To wallet",
+  "subscriptions_frequency": "Frequency",
+  "subscriptions_description": "Description",
+  "subscriptions_tags": "Tags",
+  "subscriptions_pause": "Pause",
+  "subscriptions_resume": "Resume",
+  "subscriptions_stop": "Stop subscription",
+  "subscriptions_saved": "Subscription updated",
+  "subscriptions_stopped": "Subscription stopped",
+  "subscriptions_type_hint": "The type of a subscription can't change.",
 
   "l10nCurrency": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ CURRENCY ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
   "currency_pick_title": "Currency",
+  "currency_no_results": "No currency matches",
   "currency_base_title": "Base currency",
-  "currency_base_hint": "Your dashboard total is converted into this currency.",
+  "currency_base_hint": "Your total balance is converted into this currency.",
 
   "l10nSettings": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ SETTINGS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
   "settings_title": "Settings",
@@ -231,6 +383,9 @@
     }
   },
   "settings_language": "Language",
+  "settings_manage": "Manage",
+  "settings_tags": "Tags",
+  "settings_subscriptions": "Subscriptions",
   "settings_language_info": "Select your preferred language for the application interface.",
   "settings_theme": "Theme",
   "settings_theme_system": "System",
@@ -260,6 +415,7 @@
   "error_validation": "Please check the entered values.",
   "error_wallet_has_transactions": "The currency can't change once a wallet has transactions.",
   "error_not_found": "This item no longer exists.",
+  "error_tag_name": "Enter a tag name (up to 30 characters).",
   "error_open_db_title": "Couldn't open your data",
   "error_open_db_message": "Wumbi couldn't unlock the database on this device.",
   "error_reset_app": "Reset app",

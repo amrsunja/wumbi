@@ -20,15 +20,37 @@ final l10nProvider = Provider<AppLocale>((ref) {
 class L10n {
   static Locale get en => all[0];
 
-  /// Only `en` ships in v1; the language page stays hidden until a second
-  /// locale exists.
-  static final all = [const Locale('en')];
+  /// Shipped locales, in the order shown on the language page. Arabic is
+  /// laid out right-to-left by `MaterialApp` automatically.
+  static const List<Locale> all = [
+    Locale('en'),
+    Locale('fr'),
+    Locale('de'),
+    Locale('nl'),
+    Locale('tr'),
+    Locale('ru'),
+    Locale('ar'),
+  ];
 
-  /// Kept for the RTL flip in [UIIcon]; Arabic is not shipped yet.
   static const Locale ar = Locale('ar');
 
+  static bool isRtl(Locale locale) => locale.languageCode == ar.languageCode;
+
+  /// Device locale when supported, else English.
   static Locale get defaultLocale {
     final appNativeLocale = ui.PlatformDispatcher.instance.locale;
     return all.firstWhereOrNull((value) => appNativeLocale.languageCode == value.languageCode) ?? en;
   }
+
+  /// Native name of each language (shown on the language page next to the
+  /// `appLanguage` string of that locale).
+  static String nativeName(Locale locale) => switch (locale.languageCode) {
+        'fr' => 'Français',
+        'de' => 'Deutsch',
+        'nl' => 'Nederlands',
+        'tr' => 'Türkçe',
+        'ru' => 'Русский',
+        'ar' => 'العربية',
+        _ => 'English',
+      };
 }

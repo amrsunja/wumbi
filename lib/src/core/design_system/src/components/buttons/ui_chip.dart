@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../app_ui.dart';
 
-/// Date / Repeat chip: bare 10 px medium text + small chevron, no background.
+/// Date / Repeat chip: bare 12 px medium text + small chevron, no background.
 /// `readOnly` hides the chevron and ignores taps ("Monthly · part of a repeat").
 class UiChip extends StatelessWidget {
   const UiChip({
@@ -34,12 +34,12 @@ class UiChip extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           spacing: 3,
           children: [
-            if (icon != null) UIIcon(icon!, size: 12, color: color),
+            if (icon != null) UIIcon(icon!, size: 14, color: color),
             Text(
               label,
               style: AppTheme.of(context).typo.inter.chip.copyWith(color: color),
             ),
-            if (!readOnly) UIIcon(UIIconToken.icons.arrows.chevronDown, size: 12, color: color),
+            if (!readOnly) UIIcon(UIIconToken.icons.arrows.chevronDown, size: 14, color: color),
           ],
         ),
       ),

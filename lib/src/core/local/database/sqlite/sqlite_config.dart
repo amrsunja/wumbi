@@ -1,7 +1,7 @@
 /// Table and column names. Keep every raw SQL string keyed off these constants.
 abstract class SQLiteConfig {
   static const String dbFileName = 'wumbi.db';
-  static const int dbVersion = 1;
+  static const int dbVersion = 2;
 
   // ---------------------------------------------------------------- tables
   static const String settingsTable = 'settings';
@@ -59,6 +59,7 @@ abstract class SQLiteConfig {
   static const String txExchangeRate = 'exchange_rate';
   static const String txDescription = 'description';
   static const String txDate = 'transaction_date';
+  static const String txStatus = 'status';
   static const String txRecurringRuleId = 'recurring_rule_id';
 
   // ---------------------------------------------------------------- tags

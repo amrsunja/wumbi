@@ -6,6 +6,7 @@ import '../../../../core/money/currency_type.dart';
 import '../../../../core/providers/data/db_revision_provider.dart';
 import '../../../../core/providers/data/fx_provider.dart';
 import '../../../../core/recurring/recurring_engine.dart';
+import '../../../../core/upcoming/upcoming_poster.dart';
 import '../../../../core/routing/app_router.dart';
 import '../../../../core/utils/enums/app_theme_type.dart';
 import '../../../../core/utils/state_management/app_events.dart';
@@ -59,8 +60,10 @@ class SettingsNotifier extends Notifier<SettingsState> {
     }
     state = state.copyWith(data: data);
 
-    // 3. Recurring catch-up — awaited, bounded.
+    // 3. Recurring catch-up — awaited, bounded. Then post upcoming rows whose
+    //    date has arrived (also arms the in-app timer for the next one).
     await ref.read(recurringEngineProvider).catchUp(DateTime.now());
+    await ref.read(upcomingPosterProvider).postDue();
 
     // 4. FX warm-up — not awaited.
     _warmUpRates(data!.baseCurrency);

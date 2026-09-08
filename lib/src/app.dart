@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:intl/intl.dart';
 
 import 'core/design_system/app_ui.dart';
 import 'core/locale/l10n.dart';
@@ -11,6 +12,7 @@ import 'core/providers/routing/navigation_services_provider.dart';
 import 'core/providers/widgets/scaffold_messenger_provider.dart';
 import 'core/providers/widgets/snackbar_provider.dart';
 import 'core/recurring/recurring_engine.dart';
+import 'core/upcoming/upcoming_poster.dart';
 import 'core/utils/constants/constants.dart';
 import 'core/utils/enums/app_theme_type.dart';
 import 'core/utils/extensions/build_context_extensions.dart';
@@ -61,6 +63,8 @@ class _AppState extends ConsumerState<App> with WidgetsBindingObserver {
       if (pausedAt != null && DateTime.now().difference(pausedAt) >= const Duration(hours: 1)) {
         ref.read(recurringEngineProvider).catchUpIfPossible();
       }
+      // Upcoming transactions whose date arrived while in the background.
+      ref.read(upcomingPosterProvider).postDueIfPossible();
     }
   }
 
@@ -100,6 +104,10 @@ class _AppState extends ConsumerState<App> with WidgetsBindingObserver {
     keepAppStateAlive(ref);
     final appSettings = ref.watch(settingsProvider).data;
     final appRouter = ref.read(navigationServicesProvider);
+
+    // Date formatting (`DateTimeExtension`) follows the selected language.
+    final locale = appSettings?.locale ?? L10n.defaultLocale;
+    Intl.defaultLocale = locale.toLanguageTag();
 
     final AppThemeData theme;
     switch (appSettings?.themeMode) {

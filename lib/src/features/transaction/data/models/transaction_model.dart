@@ -4,6 +4,7 @@ import '../../../../core/local/database/sqlite/sqlite_config.dart';
 import '../../../../core/money/currency_type.dart';
 import '../../../../core/money/money.dart';
 import '../../../../core/utils/enums/repeat_frequency.dart';
+import '../../../../core/utils/enums/transaction_status.dart';
 import '../../../../core/utils/enums/transaction_type.dart';
 import '../../../../core/utils/extensions/date_time_extensions.dart';
 
@@ -28,6 +29,7 @@ abstract class TransactionModel with _$TransactionModel {
     double? exchangeRate,
     required String description,
     required DateTime transactionDate,
+    @Default(TransactionStatus.posted) TransactionStatus status,
     String? recurringRuleId,
     required DateTime createdAt,
     required DateTime updatedAt,
@@ -49,6 +51,7 @@ abstract class TransactionModel with _$TransactionModel {
         exchangeRate: (r[SQLiteConfig.txExchangeRate] as num?)?.toDouble(),
         description: (r[SQLiteConfig.txDescription] as String?) ?? '',
         transactionDate: DateTimeExtension.fromEpochMs(r[SQLiteConfig.txDate] as int),
+        status: TransactionStatus.fromString(r[SQLiteConfig.txStatus] as String?),
         recurringRuleId: r[SQLiteConfig.txRecurringRuleId] as String?,
         createdAt: DateTimeExtension.fromEpochMs(r[SQLiteConfig.createdAt] as int),
         updatedAt: DateTimeExtension.fromEpochMs(r[SQLiteConfig.updatedAt] as int),
@@ -72,6 +75,7 @@ abstract class TransactionModel with _$TransactionModel {
         SQLiteConfig.txExchangeRate: exchangeRate,
         SQLiteConfig.txDescription: description,
         SQLiteConfig.txDate: transactionDate.epochMs,
+        SQLiteConfig.txStatus: status.dbValue,
         SQLiteConfig.txRecurringRuleId: recurringRuleId,
         SQLiteConfig.createdAt: createdAt.epochMs,
         SQLiteConfig.updatedAt: updatedAt.epochMs,
@@ -79,6 +83,7 @@ abstract class TransactionModel with _$TransactionModel {
       };
 
   bool get isTransfer => type == TransactionType.transfer;
+  bool get isUpcoming => status.isUpcoming;
 
   /// Amount typed by the user in a foreign currency (D2), if any.
   Money? get original => originalAmountMinor == null || originalCurrency == null
@@ -107,6 +112,10 @@ abstract class TransactionRow with _$TransactionRow {
 
   const factory TransactionRow({
     required TransactionModel transaction,
+
+    /// Owning wallet's name for income / expense (only resolved by tag-scoped
+    /// queries; null on the wallet page where it is implied).
+    String? walletName,
     String? fromWalletName,
     @Default(false) bool fromWalletDeleted,
     String? toWalletName,

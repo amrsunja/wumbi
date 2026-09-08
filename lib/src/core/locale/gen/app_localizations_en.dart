@@ -55,6 +55,27 @@ class AppLocalizationsEn extends AppLocalizations {
   String get common_transfer => 'Transfer';
 
   @override
+  String get common_edit => 'Edit';
+
+  @override
+  String get common_all => 'All';
+
+  @override
+  String get common_clear => 'Clear';
+
+  @override
+  String get common_apply => 'Apply';
+
+  @override
+  String get common_done => 'Done';
+
+  @override
+  String get common_close => 'Close';
+
+  @override
+  String get common_search => 'Search';
+
+  @override
   String get l10nOnboarding =>
       '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ ONBOARDING ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
 
@@ -139,14 +160,14 @@ class AppLocalizationsEn extends AppLocalizations {
       'Your first wallet is ready. Wumbi will keep the rest simple.';
 
   @override
-  String get onboarding_final_button => 'Go to dashboard';
+  String get onboarding_final_button => 'Let\'s go';
 
   @override
   String get l10nDashboard =>
       '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ DASHBOARD ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
 
   @override
-  String get dashboard_title => 'Dashboard';
+  String get dashboard_title => 'My Money';
 
   @override
   String dashboard_across_wallets(int count) {
@@ -177,6 +198,12 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get dashboard_empty_subtitle =>
       'Wumbi needs a wallet to keep your money in.';
+
+  @override
+  String get dashboard_tags => 'Tags';
+
+  @override
+  String get dashboard_subscriptions => 'Subscriptions';
 
   @override
   String get l10nWallet =>
@@ -257,6 +284,103 @@ class AppLocalizationsEn extends AppLocalizations {
   String get wallet_not_found => 'This wallet no longer exists';
 
   @override
+  String get wallet_filter => 'Filter';
+
+  @override
+  String get wallet_sort => 'Sort';
+
+  @override
+  String get wallet_filter_title => 'Filter transactions';
+
+  @override
+  String get wallet_filter_type => 'Type';
+
+  @override
+  String get wallet_filter_date => 'Date';
+
+  @override
+  String get wallet_filter_tags => 'Tags';
+
+  @override
+  String get wallet_filter_from => 'From';
+
+  @override
+  String get wallet_filter_to => 'To';
+
+  @override
+  String get wallet_filter_any_date => 'Any date';
+
+  @override
+  String get wallet_filter_this_month => 'This month';
+
+  @override
+  String get wallet_filter_last_month => 'Last month';
+
+  @override
+  String get wallet_filter_last_30_days => 'Last 30 days';
+
+  @override
+  String get wallet_filter_this_year => 'This year';
+
+  @override
+  String get wallet_filter_custom_range => 'Custom range';
+
+  @override
+  String get wallet_filter_upcoming_only => 'Upcoming only';
+
+  @override
+  String get wallet_filter_clear => 'Clear filters';
+
+  @override
+  String get wallet_filter_no_tags => 'No tags in this wallet yet';
+
+  @override
+  String get wallet_filter_no_results_title => 'Nothing matches';
+
+  @override
+  String get wallet_filter_no_results_subtitle => 'Try removing a filter.';
+
+  @override
+  String wallet_filter_active(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count filters',
+      one: '1 filter',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get wallet_sort_title => 'Sort by';
+
+  @override
+  String get sort_date_newest => 'Newest first';
+
+  @override
+  String get sort_date_oldest => 'Oldest first';
+
+  @override
+  String get sort_amount_high => 'Largest amount';
+
+  @override
+  String get sort_amount_low => 'Smallest amount';
+
+  @override
+  String get wallet_upcoming_section => 'Upcoming';
+
+  @override
+  String wallet_upcoming_hint(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count upcoming transactions are not counted yet',
+      one: '1 upcoming transaction is not counted yet',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get l10nTransaction =>
       '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ TRANSACTION ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
 
@@ -303,6 +427,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get transaction_deleted => 'Transaction deleted';
+
+  @override
+  String get transaction_upcoming_badge => 'Upcoming';
+
+  @override
+  String transaction_upcoming_hint(String date) {
+    return 'Counted on $date';
+  }
+
+  @override
+  String transaction_scheduled(String amount, String date) {
+    return 'Scheduled $amount for $date';
+  }
 
   @override
   String get transaction_delete_title => 'Delete this transaction?';
@@ -381,11 +518,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get repeat_yearly => 'Yearly';
 
   @override
-  String get repeat_rules_title => 'Repeating transactions';
+  String get repeat_rules_title => 'Subscriptions';
 
   @override
   String get repeat_rules_hint =>
-      'To change an amount or description, delete the rule and create it again.';
+      'Tap a subscription to edit it. Existing transactions never change.';
 
   @override
   String repeat_next(String date) {
@@ -413,6 +550,210 @@ class AppLocalizationsEn extends AppLocalizations {
   String get date_pick_title => 'Pick a date';
 
   @override
+  String get date_pick_from => 'From';
+
+  @override
+  String get date_pick_to => 'To';
+
+  @override
+  String get l10nTags =>
+      '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ TAGS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
+
+  @override
+  String get tags_title => 'Tags';
+
+  @override
+  String get tags_view_list => 'List';
+
+  @override
+  String get tags_view_graph => 'Map';
+
+  @override
+  String get tags_search_placeholder => 'Search tags';
+
+  @override
+  String get tags_empty_title => 'No tags yet';
+
+  @override
+  String get tags_empty_subtitle =>
+      'Add #tags to a transaction and they will show up here.';
+
+  @override
+  String get tags_search_no_results => 'No tags match your search';
+
+  @override
+  String tags_count(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count tags',
+      one: '1 tag',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String tags_usage(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count transactions',
+      one: '1 transaction',
+      zero: 'Not used yet',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get tags_spent => 'Spent';
+
+  @override
+  String get tags_earned => 'Earned';
+
+  @override
+  String get tags_net => 'Net';
+
+  @override
+  String tags_not_included(String codes) {
+    return '$codes not included';
+  }
+
+  @override
+  String get tags_graph_hint =>
+      'Bigger circles moved more money. Lines connect tags used together.';
+
+  @override
+  String get tags_graph_empty =>
+      'Add tags to a few transactions to see the map.';
+
+  @override
+  String get tag_wallets => 'Wallets';
+
+  @override
+  String get tag_transactions => 'Transactions';
+
+  @override
+  String get tag_no_transactions => 'No transactions with this tag';
+
+  @override
+  String get tag_rename => 'Rename tag';
+
+  @override
+  String get tag_name_placeholder => 'Tag name';
+
+  @override
+  String get tag_delete => 'Delete tag';
+
+  @override
+  String tag_delete_title(String name) {
+    return 'Delete #$name?';
+  }
+
+  @override
+  String get tag_delete_message =>
+      'It will be removed from every transaction. The transactions themselves stay.';
+
+  @override
+  String get tag_deleted => 'Tag deleted';
+
+  @override
+  String get tag_renamed => 'Tag renamed';
+
+  @override
+  String tag_merged(String name) {
+    return 'Merged into #$name';
+  }
+
+  @override
+  String get tag_not_found => 'This tag no longer exists';
+
+  @override
+  String get tag_wallet_deleted => '(deleted)';
+
+  @override
+  String get l10nSubscriptions =>
+      '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ SUBSCRIPTIONS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
+
+  @override
+  String get subscriptions_title => 'Subscriptions';
+
+  @override
+  String subscriptions_count(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Subscriptions',
+      one: '1 Subscription',
+      zero: 'No subscriptions',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get subscriptions_empty_title => 'No subscriptions yet';
+
+  @override
+  String get subscriptions_empty_subtitle =>
+      'Set Repeat on a transaction and it will appear here.';
+
+  @override
+  String get subscriptions_all_wallets => 'All wallets';
+
+  @override
+  String get subscriptions_active => 'Active';
+
+  @override
+  String get subscriptions_paused => 'Paused';
+
+  @override
+  String subscriptions_monthly_total(String amount) {
+    return '≈ $amount / month';
+  }
+
+  @override
+  String get subscriptions_edit_title => 'Edit subscription';
+
+  @override
+  String get subscriptions_amount => 'Amount';
+
+  @override
+  String get subscriptions_wallet => 'Wallet';
+
+  @override
+  String get subscriptions_from_wallet => 'From wallet';
+
+  @override
+  String get subscriptions_to_wallet => 'To wallet';
+
+  @override
+  String get subscriptions_frequency => 'Frequency';
+
+  @override
+  String get subscriptions_description => 'Description';
+
+  @override
+  String get subscriptions_tags => 'Tags';
+
+  @override
+  String get subscriptions_pause => 'Pause';
+
+  @override
+  String get subscriptions_resume => 'Resume';
+
+  @override
+  String get subscriptions_stop => 'Stop subscription';
+
+  @override
+  String get subscriptions_saved => 'Subscription updated';
+
+  @override
+  String get subscriptions_stopped => 'Subscription stopped';
+
+  @override
+  String get subscriptions_type_hint =>
+      'The type of a subscription can\'t change.';
+
+  @override
   String get l10nCurrency =>
       '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ CURRENCY ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
 
@@ -420,11 +761,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get currency_pick_title => 'Currency';
 
   @override
+  String get currency_no_results => 'No currency matches';
+
+  @override
   String get currency_base_title => 'Base currency';
 
   @override
   String get currency_base_hint =>
-      'Your dashboard total is converted into this currency.';
+      'Your total balance is converted into this currency.';
 
   @override
   String get l10nSettings =>
@@ -474,6 +818,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settings_language => 'Language';
+
+  @override
+  String get settings_manage => 'Manage';
+
+  @override
+  String get settings_tags => 'Tags';
+
+  @override
+  String get settings_subscriptions => 'Subscriptions';
 
   @override
   String get settings_language_info =>
@@ -546,6 +899,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get error_not_found => 'This item no longer exists.';
+
+  @override
+  String get error_tag_name => 'Enter a tag name (up to 30 characters).';
 
   @override
   String get error_open_db_title => 'Couldn\'t open your data';

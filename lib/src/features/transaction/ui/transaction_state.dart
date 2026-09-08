@@ -6,6 +6,7 @@ import '../../../core/money/amount_input.dart';
 import '../../../core/money/currency_type.dart';
 import '../../../core/money/money.dart';
 import '../../../core/utils/enums/repeat_frequency.dart';
+import '../../../core/utils/enums/transaction_status.dart';
 import '../../../core/utils/enums/transaction_type.dart';
 import '../../../core/utils/extensions/date_time_extensions.dart';
 import '../../wallet/data/models/wallet_model.dart';
@@ -90,6 +91,14 @@ abstract class TransactionState with _$TransactionState {
   bool get isEdit => mode == TransactionMode.edit;
   bool get isTransferEdit => isEdit && editingType == TransactionType.transfer;
   bool get sameCurrency => wallet != null && entryCurrency == wallet!.currency;
+
+  /// The chosen day is after today → saving stores the row as *upcoming*
+  /// (not counted until `UpcomingPoster` promotes it). Mirrors the rule the
+  /// repository applies on `create` / `update`.
+  bool get willBeUpcoming => TransactionStatus.forDate(date).isUpcoming;
+
+  /// Edit mode: the loaded transaction is still upcoming (not counted yet).
+  bool get isExistingUpcoming => existing?.isUpcoming ?? false;
 
   /// Parsed `amountInput` in the entry currency (null when empty / zero).
   Money? get entryMoney => AmountInput.toMoney(amountInput, entryCurrency);

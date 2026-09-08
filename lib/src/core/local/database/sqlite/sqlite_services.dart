@@ -84,6 +84,16 @@ class SQLiteServicesImpl implements SQLiteServices {
     return database;
   }
 
+  static Future<bool> _needsUpgrade(Database db) async {
+    try {
+      final rows = await db.rawQuery('PRAGMA user_version');
+      final current = Sqflite.firstIntValue(rows) ?? 0;
+      return current > 0 && current < SQLiteConfig.dbVersion;
+    } catch (_) {
+      return false;
+    }
+  }
+
   Future<String> _dbPath() async =>
       _overridePath ?? p.join(await getDatabasesPath(), SQLiteConfig.dbFileName);
 
@@ -99,10 +109,16 @@ class SQLiteServicesImpl implements SQLiteServices {
         path: path,
         password: password,
         version: SQLiteConfig.dbVersion,
-        onConfigure: (db) => db.execute('PRAGMA foreign_keys = ON'),
+        // Foreign keys stay OFF while a migration that rebuilds a table runs
+        // (`onUpgrade` executes inside a transaction, where the pragma is a
+        // no-op) and are switched on right after opening.
+        onConfigure: (db) async {
+          final upgrading = await _needsUpgrade(db);
+          await db.execute('PRAGMA foreign_keys = ${upgrading ? 'OFF' : 'ON'}');
+        },
         onCreate: (db, version) async {
           final batch = db.batch();
-          for (final statement in SQLiteSchema.v1) {
+          for (final statement in SQLiteSchema.latest) {
             batch.execute(statement);
           }
           await batch.commit(noResult: true);
@@ -110,6 +126,7 @@ class SQLiteServicesImpl implements SQLiteServices {
         },
         onUpgrade: SQLiteMigrations.upgrade,
       );
+      await _database!.execute('PRAGMA foreign_keys = ON');
       debugPrint('Opened Wumbi database');
     } catch (e) {
       debugPrint('Failed to open database: $e');

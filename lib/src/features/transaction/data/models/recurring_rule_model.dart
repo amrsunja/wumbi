@@ -105,3 +105,40 @@ abstract class RecurringRuleModel with _$RecurringRuleModel {
     }
   }
 }
+
+/// Rule + tag display names (subscriptions page edit sheet).
+@freezed
+abstract class RecurringRuleWithTags with _$RecurringRuleWithTags {
+  const factory RecurringRuleWithTags({
+    required RecurringRuleModel rule,
+    required List<String> tags,
+  }) = _RecurringRuleWithTags;
+}
+
+/// Partial edit of a rule from the Subscriptions page: every field is
+/// optional — null keeps the stored value. `amountMinor` is the sent amount
+/// for transfers; `receivedAmountMinor` / `exchangeRate` only apply to
+/// cross-currency transfers.
+class RecurringRuleDraft {
+  const RecurringRuleDraft({
+    this.amountMinor,
+    this.receivedAmountMinor,
+    this.exchangeRate,
+    this.description = '',
+    this.frequency,
+    this.walletId,
+    this.fromWalletId,
+    this.toWalletId,
+    this.tags,
+  });
+
+  final int? amountMinor;
+  final int? receivedAmountMinor;
+  final double? exchangeRate;
+  final String description;
+  final RepeatFrequency? frequency;
+  final String? walletId;
+  final String? fromWalletId;
+  final String? toWalletId;
+  final List<String>? tags;
+}

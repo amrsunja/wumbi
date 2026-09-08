@@ -8,7 +8,9 @@ import '../../../../core/utils/constants/constants.dart';
 import '../../../../core/utils/extensions/build_context_extensions.dart';
 import '../state_management/settings_provider.dart';
 
-/// Hidden until a second locale exists (spec 2).
+/// Language picker. Each row shows the language in its own script; the
+/// subtitle is its English name so the list stays scannable whatever the
+/// current UI language is.
 @RoutePage()
 class AppLanguageSettingsPage extends ConsumerWidget {
   const AppLanguageSettingsPage({super.key});
@@ -28,7 +30,7 @@ class AppLanguageSettingsPage extends ConsumerWidget {
           final locale = L10n.all[index];
           return UiListRow(
             title: lookupAppLocalizations(locale).appLanguage,
-            subtitle: locale.languageCode.toUpperCase(),
+            subtitle: _englishNames[locale.languageCode] ?? locale.languageCode.toUpperCase(),
             selected: (current ?? L10n.defaultLocale).languageCode == locale.languageCode,
             onTap: () => ref.read(settingsProvider.notifier).changeAppLanguage(locale),
           );
@@ -37,3 +39,13 @@ class AppLanguageSettingsPage extends ConsumerWidget {
     );
   }
 }
+
+const Map<String, String> _englishNames = {
+  'en': 'English',
+  'fr': 'French',
+  'de': 'German',
+  'nl': 'Dutch',
+  'tr': 'Turkish',
+  'ru': 'Russian',
+  'ar': 'Arabic',
+};
