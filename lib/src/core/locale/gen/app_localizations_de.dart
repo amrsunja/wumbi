@@ -556,6 +556,38 @@ class AppLocalizationsDe extends AppLocalizations {
   String get date_pick_to => 'Bis';
 
   @override
+  String get l10nSearch =>
+      '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ SEARCH ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
+
+  @override
+  String get search_title => 'Suche';
+
+  @override
+  String get search_placeholder => 'Beschreibung, Betrag, Konto oder Tag';
+
+  @override
+  String get search_hint =>
+      'Durchsuche alle Konten nach Beschreibung, Betrag, Kontoname oder Tag.';
+
+  @override
+  String get search_no_results_title => 'Nichts gefunden';
+
+  @override
+  String get search_no_results_subtitle =>
+      'Versuche ein anderes Wort, einen Betrag oder Tag.';
+
+  @override
+  String search_results_count(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Ergebnisse',
+      one: '1 Ergebnis',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get l10nTags =>
       '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ TAGS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
 
@@ -788,6 +820,9 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get settings_dark_mode => 'Dunkelmodus';
+
+  @override
+  String get settings_show_mascot => 'Maskottchen anzeigen';
 
   @override
   String get settings_data_privacy => 'Daten & Datenschutz';

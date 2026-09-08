@@ -12,6 +12,7 @@ class AppSettingsModel {
     required this.showOnboarding,
     required this.baseCurrency,
     required this.notificationsEnabled,
+    required this.showMascot,
     required this.lastRecurringRunAt,
   });
 
@@ -24,6 +25,9 @@ class AppSettingsModel {
 
   /// Stub toggle (D10) — persisted only.
   final bool notificationsEnabled;
+
+  /// Settings → Preferences; hides the decorative mascot app-wide.
+  final bool showMascot;
 
   /// Watermark for the recurring engine.
   final DateTime? lastRecurringRunAt;
@@ -39,6 +43,8 @@ class AppSettingsModel {
         showOnboarding: json[SQLiteConfig.showOnboarding] == 1,
         baseCurrency: CurrencyType.fromCode(json[SQLiteConfig.baseCurrency] as String?),
         notificationsEnabled: json[SQLiteConfig.notificationsEnabled] == 1,
+        // Missing column on a not-yet-migrated row reads as "show".
+        showMascot: json[SQLiteConfig.showMascot] != 0,
         lastRecurringRunAt: json[SQLiteConfig.lastRecurringRunAt] == null
             ? null
             : DateTime.fromMillisecondsSinceEpoch(
@@ -54,6 +60,7 @@ class AppSettingsModel {
         SQLiteConfig.showOnboarding: showOnboarding ? 1 : 0,
         SQLiteConfig.baseCurrency: baseCurrency.code,
         SQLiteConfig.notificationsEnabled: notificationsEnabled ? 1 : 0,
+        SQLiteConfig.showMascot: showMascot ? 1 : 0,
         SQLiteConfig.lastRecurringRunAt: lastRecurringRunAt?.toUtc().millisecondsSinceEpoch,
       };
 
@@ -63,6 +70,7 @@ class AppSettingsModel {
     bool? showOnboarding,
     CurrencyType? baseCurrency,
     bool? notificationsEnabled,
+    bool? showMascot,
     DateTime? lastRecurringRunAt,
   }) =>
       AppSettingsModel(
@@ -71,6 +79,7 @@ class AppSettingsModel {
         showOnboarding: showOnboarding ?? this.showOnboarding,
         baseCurrency: baseCurrency ?? this.baseCurrency,
         notificationsEnabled: notificationsEnabled ?? this.notificationsEnabled,
+        showMascot: showMascot ?? this.showMascot,
         lastRecurringRunAt: lastRecurringRunAt ?? this.lastRecurringRunAt,
       );
 
@@ -80,6 +89,7 @@ class AppSettingsModel {
         showOnboarding: true,
         baseCurrency: CurrencyType.usd,
         notificationsEnabled: false,
+        showMascot: true,
         lastRecurringRunAt: null,
       );
 }

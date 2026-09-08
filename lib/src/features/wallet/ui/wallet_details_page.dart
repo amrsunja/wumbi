@@ -12,6 +12,7 @@ import '../../../core/utils/enums/transaction_type.dart';
 import '../../../core/utils/extensions/build_context_extensions.dart';
 import '../../../core/utils/extensions/date_time_extensions.dart';
 import '../../../core/utils/typedefs.dart';
+import '../../settings/ui/state_management/settings_provider.dart';
 import '../../transaction/data/models/transaction_filter.dart';
 import '../../transaction/data/models/transaction_model.dart';
 import '../data/models/wallet_model.dart';
@@ -39,6 +40,7 @@ class WalletDetailsPage extends HookConsumerWidget {
     final notifier = ref.read(walletDetailsProvider(id).notifier);
     final wallets = ref.watch(walletsProvider).value ?? const <WalletSummary>[];
     final scrollController = useScrollController();
+    final showMascot = ref.watch(showMascotProvider);
 
     useEffect(() {
       void onScroll() {
@@ -105,7 +107,12 @@ class WalletDetailsPage extends HookConsumerWidget {
             ),
       body: Stack(
         children: [
-          Positioned(right: 0, top: 4, child: UIWumbiLooksFromRight(key: ValueKey('wumbi-$id'))),
+          if (showMascot)
+            Positioned(
+              right: 8,
+              top: 4,
+              child: UIWumbiLook(key: ValueKey('wumbi-$id'), height: 64),
+            ),
           if (state.wallet.hasError)
             UiEmptyState(image: AppAssets.images.wumbiOo.path, title: l10n.wallet_not_found)
           else

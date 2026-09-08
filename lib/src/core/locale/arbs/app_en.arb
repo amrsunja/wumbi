@@ -267,6 +267,19 @@
   "date_pick_from": "From",
   "date_pick_to": "To",
 
+  "l10nSearch": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ SEARCH ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "search_title": "Search",
+  "search_placeholder": "Description, amount, wallet or tag",
+  "search_hint": "Search every wallet by description, amount, wallet name or tag.",
+  "search_no_results_title": "Nothing found",
+  "search_no_results_subtitle": "Try another word, amount or tag.",
+  "search_results_count": "{count, plural, =1{1 result} other{{count} results}}",
+  "@search_results_count": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+
   "l10nTags": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ TAGS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
   "tags_title": "Tags",
   "tags_view_list": "List",
@@ -368,6 +381,7 @@
   "settings_notifications": "Notifications",
   "settings_currency": "Currency",
   "settings_dark_mode": "Dark Mode",
+  "settings_show_mascot": "Show Mascot",
   "settings_data_privacy": "Data & Privacy",
   "settings_export_transactions": "Export Transactions",
   "settings_reset_all_data": "Reset All Data",

@@ -557,6 +557,38 @@ class AppLocalizationsNl extends AppLocalizations {
   String get date_pick_to => 'Tot';
 
   @override
+  String get l10nSearch =>
+      '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ SEARCH ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
+
+  @override
+  String get search_title => 'Zoeken';
+
+  @override
+  String get search_placeholder => 'Omschrijving, bedrag, portemonnee of tag';
+
+  @override
+  String get search_hint =>
+      'Doorzoek alle portemonnees op omschrijving, bedrag, naam of tag.';
+
+  @override
+  String get search_no_results_title => 'Niets gevonden';
+
+  @override
+  String get search_no_results_subtitle =>
+      'Probeer een ander woord, bedrag of tag.';
+
+  @override
+  String search_results_count(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count resultaten',
+      one: '1 resultaat',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get l10nTags =>
       '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ TAGS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
 
@@ -789,6 +821,9 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get settings_dark_mode => 'Donkere modus';
+
+  @override
+  String get settings_show_mascot => 'Mascotte tonen';
 
   @override
   String get settings_data_privacy => 'Gegevens en privacy';

@@ -267,6 +267,19 @@
   "date_pick_from": "Van",
   "date_pick_to": "Tot",
 
+  "l10nSearch": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ SEARCH ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "search_title": "Zoeken",
+  "search_placeholder": "Omschrijving, bedrag, portemonnee of tag",
+  "search_hint": "Doorzoek alle portemonnees op omschrijving, bedrag, naam of tag.",
+  "search_no_results_title": "Niets gevonden",
+  "search_no_results_subtitle": "Probeer een ander woord, bedrag of tag.",
+  "search_results_count": "{count, plural, one{1 resultaat} other{{count} resultaten}}",
+  "@search_results_count": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+
   "l10nTags": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ TAGS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
   "tags_title": "Tags",
   "tags_view_list": "Lijst",
@@ -368,6 +381,7 @@
   "settings_notifications": "Meldingen",
   "settings_currency": "Valuta",
   "settings_dark_mode": "Donkere modus",
+  "settings_show_mascot": "Mascotte tonen",
   "settings_data_privacy": "Gegevens en privacy",
   "settings_export_transactions": "Transacties exporteren",
   "settings_reset_all_data": "Alle gegevens wissen",

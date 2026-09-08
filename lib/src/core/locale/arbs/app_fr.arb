@@ -267,6 +267,19 @@
   "date_pick_from": "Du",
   "date_pick_to": "Au",
 
+  "l10nSearch": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ SEARCH ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "search_title": "Recherche",
+  "search_placeholder": "Description, montant, portefeuille ou tag",
+  "search_hint": "Cherche dans tous les portefeuilles par description, montant, nom ou tag.",
+  "search_no_results_title": "Aucun résultat",
+  "search_no_results_subtitle": "Essaie un autre mot, montant ou tag.",
+  "search_results_count": "{count, plural, =1{1 résultat} other{{count} résultats}}",
+  "@search_results_count": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+
   "l10nTags": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ TAGS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
   "tags_title": "Tags",
   "tags_view_list": "Liste",
@@ -368,6 +381,7 @@
   "settings_notifications": "Notifications",
   "settings_currency": "Devise",
   "settings_dark_mode": "Mode sombre",
+  "settings_show_mascot": "Afficher la mascotte",
   "settings_data_privacy": "Données et vie privée",
   "settings_export_transactions": "Exporter les transactions",
   "settings_reset_all_data": "Tout réinitialiser",

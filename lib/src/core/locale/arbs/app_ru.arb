@@ -267,6 +267,19 @@
   "date_pick_from": "С",
   "date_pick_to": "По",
 
+  "l10nSearch": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ SEARCH ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "search_title": "Поиск",
+  "search_placeholder": "Описание, сумма, кошелёк или тег",
+  "search_hint": "Ищи по всем кошелькам: описание, сумма, название кошелька или тег.",
+  "search_no_results_title": "Ничего не найдено",
+  "search_no_results_subtitle": "Попробуй другое слово, сумму или тег.",
+  "search_results_count": "{count, plural, one{{count} результат} few{{count} результата} many{{count} результатов} other{{count} результатов}}",
+  "@search_results_count": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+
   "l10nTags": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ TAGS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
   "tags_title": "Теги",
   "tags_view_list": "Список",
@@ -368,6 +381,7 @@
   "settings_notifications": "Уведомления",
   "settings_currency": "Валюта",
   "settings_dark_mode": "Тёмная тема",
+  "settings_show_mascot": "Показывать маскота",
   "settings_data_privacy": "Данные и приватность",
   "settings_export_transactions": "Экспорт транзакций",
   "settings_reset_all_data": "Сбросить все данные",

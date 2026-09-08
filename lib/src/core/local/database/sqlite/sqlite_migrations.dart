@@ -9,7 +9,7 @@ typedef Migration = Future<void> Function(DatabaseExecutor db);
 /// A fresh install runs `SQLiteSchema.latest` in `onCreate` and never touches
 /// this list.
 abstract class SQLiteMigrations {
-  static const List<Migration> migrations = [_v1ToV2];
+  static const List<Migration> migrations = [_v1ToV2, _v2ToV3];
 
   static Future<void> upgrade(Database db, int oldVersion, int newVersion) async {
     if (oldVersion >= newVersion) return;
@@ -84,5 +84,14 @@ abstract class SQLiteMigrations {
                    AS balance_minor
       FROM wallets w
       WHERE w.deleted_at IS NULL''');
+  }
+
+  /// v3 (2026-09): `settings.show_mascot` — mascot visibility toggle
+  /// (Settings → Preferences). Defaults to 1 so existing installs keep the
+  /// mascot they already have.
+  static Future<void> _v2ToV3(DatabaseExecutor db) async {
+    await db.execute(
+      'ALTER TABLE settings ADD COLUMN show_mascot INTEGER NOT NULL DEFAULT 1',
+    );
   }
 }

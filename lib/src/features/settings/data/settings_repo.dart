@@ -54,6 +54,12 @@ class SettingsRepo {
         return localDatasource.getLocalSettings();
       });
 
+  Future<SuccessOrError<AppSettingsModel>> changeMascotVisibility(bool visible) =>
+      Failure.exceptionsCatcher(() async {
+        await localDatasource.changeMascotVisibility(visible);
+        return localDatasource.getLocalSettings();
+      });
+
   Future<SuccessOrError<AppSettingsModel>> onboardingCompleted() =>
       Failure.exceptionsCatcher(() async {
         await localDatasource.onboardingCompleted();

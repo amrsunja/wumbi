@@ -280,6 +280,37 @@ void main() {
     });
   });
 
+  group('global search', () {
+    test('matches description, tag, wallet name and amount', () async {
+      final a = await _wallet('Groceries card', CurrencyType.usd);
+      final b = await _wallet('Savings', CurrencyType.usd);
+      await transactions.create(_described(a.id, 1250, 'Coffee at Blue Bottle', tags: ['Food']));
+      await transactions.create(_described(b.id, 99900, 'Rent', tags: ['Home']));
+
+      Future<List<String>> hits(String q) async =>
+          (await transactions.search(q)).getOrThrow().map((r) => r.transaction.description).toList();
+
+      expect(await hits('coffee'), ['Coffee at Blue Bottle'], reason: 'description, case-insensitive');
+      expect(await hits('home'), ['Rent'], reason: 'tag');
+      expect(await hits('Savings'), ['Rent'], reason: 'wallet name');
+      expect(await hits('12'), ['Coffee at Blue Bottle'], reason: '12 → 12.50 (1250 minor)');
+      expect(await hits('nothing here'), isEmpty);
+      expect(await hits('   '), isEmpty, reason: 'a blank query never returns the whole ledger');
+    });
+
+    test('% and _ are literals, and deleted rows stay out', () async {
+      final a = await _wallet('A', CurrencyType.usd);
+      await transactions.create(_described(a.id, 100, '50% off'));
+      final gone = (await transactions.create(_described(a.id, 200, 'Deleted row'))).getOrThrow();
+      await transactions.softDelete(gone.id);
+
+      final wildcard = (await transactions.search('%')).getOrThrow();
+      expect(wildcard.length, 1, reason: '% must not match every row');
+      expect(wildcard.single.transaction.description, '50% off');
+      expect((await transactions.search('deleted')).getOrThrow(), isEmpty);
+    });
+  });
+
   group('recurring', () {
     test('rule creation + catch-up is idempotent and anchored', () async {
       final a = await _wallet('A', CurrencyType.usd);
@@ -350,6 +381,21 @@ TransactionDraft _income(
       tags: tags,
       date: date ?? DateTime(2026, 1, 10, 12),
       repeat: repeat,
+    );
+
+TransactionDraft _described(
+  String walletId,
+  int minor,
+  String description, {
+  List<String> tags = const [],
+}) =>
+    TransactionDraft.expense(
+      walletId: walletId,
+      amount: Money(minor, CurrencyType.usd),
+      description: description,
+      tags: tags,
+      date: DateTime(2026, 1, 12, 12),
+      repeat: RepeatFrequency.never,
     );
 
 TransactionDraft _expense(String walletId, int minor, {List<String> tags = const []}) =>

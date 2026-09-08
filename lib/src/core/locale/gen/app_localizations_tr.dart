@@ -553,6 +553,37 @@ class AppLocalizationsTr extends AppLocalizations {
   String get date_pick_to => 'Bitiş';
 
   @override
+  String get l10nSearch =>
+      '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ SEARCH ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
+
+  @override
+  String get search_title => 'Arama';
+
+  @override
+  String get search_placeholder => 'Açıklama, tutar, cüzdan veya etiket';
+
+  @override
+  String get search_hint =>
+      'Tüm cüzdanlarda açıklama, tutar, cüzdan adı veya etikete göre ara.';
+
+  @override
+  String get search_no_results_title => 'Sonuç yok';
+
+  @override
+  String get search_no_results_subtitle =>
+      'Başka bir kelime, tutar veya etiket dene.';
+
+  @override
+  String search_results_count(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count sonuç',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get l10nTags =>
       '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ TAGS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
 
@@ -780,6 +811,9 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get settings_dark_mode => 'Koyu Tema';
+
+  @override
+  String get settings_show_mascot => 'Maskotu göster';
 
   @override
   String get settings_data_privacy => 'Veri ve Gizlilik';

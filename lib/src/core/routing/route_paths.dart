@@ -8,6 +8,9 @@ abstract class RoutePaths {
   static const walletForm = '/wallet/form';
   static const transaction = '/transaction';
 
+  /// Global search over every wallet's transactions.
+  static const search = '/search';
+
   /// Tags hub (list / graph) and a single tag's transactions + wallets.
   static const tags = '/tags';
   static const tagDetails = '/tags/:id';

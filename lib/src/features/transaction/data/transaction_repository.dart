@@ -81,6 +81,21 @@ class TransactionRepository {
         return _withTags(db, rows);
       });
 
+  /// Global search (`/search`) across every wallet. Blank queries return
+  /// nothing rather than the whole ledger.
+  Future<SuccessOrError<List<TransactionRow>>> search(
+    String query, {
+    int limit = kTransactionsPageSize,
+    int offset = 0,
+  }) =>
+      Failure.exceptionsCatcher(() async {
+        final trimmed = query.trim();
+        if (trimmed.isEmpty) return const <TransactionRow>[];
+        final db = sqlite.db;
+        final rows = await datasource.search(db, trimmed, limit: limit, offset: offset);
+        return _withTags(db, rows);
+      });
+
   Future<List<TransactionRow>> _withTags(DatabaseExecutor db, List<TransactionRow> rows) async {
     if (rows.isEmpty) return rows;
     final tagsByTx = await tags.datasource.tagsOfTransactions(db, rows.map((r) => r.id).toList());

@@ -267,6 +267,19 @@
   "date_pick_from": "Von",
   "date_pick_to": "Bis",
 
+  "l10nSearch": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ SEARCH ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "search_title": "Suche",
+  "search_placeholder": "Beschreibung, Betrag, Konto oder Tag",
+  "search_hint": "Durchsuche alle Konten nach Beschreibung, Betrag, Kontoname oder Tag.",
+  "search_no_results_title": "Nichts gefunden",
+  "search_no_results_subtitle": "Versuche ein anderes Wort, einen Betrag oder Tag.",
+  "search_results_count": "{count, plural, one{1 Ergebnis} other{{count} Ergebnisse}}",
+  "@search_results_count": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+
   "l10nTags": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ TAGS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
   "tags_title": "Tags",
   "tags_view_list": "Liste",
@@ -368,6 +381,7 @@
   "settings_notifications": "Mitteilungen",
   "settings_currency": "Währung",
   "settings_dark_mode": "Dunkelmodus",
+  "settings_show_mascot": "Maskottchen anzeigen",
   "settings_data_privacy": "Daten & Datenschutz",
   "settings_export_transactions": "Transaktionen exportieren",
   "settings_reset_all_data": "Daten zurücksetzen",

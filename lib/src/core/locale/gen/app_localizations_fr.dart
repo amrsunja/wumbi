@@ -560,6 +560,38 @@ class AppLocalizationsFr extends AppLocalizations {
   String get date_pick_to => 'Au';
 
   @override
+  String get l10nSearch =>
+      '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ SEARCH ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
+
+  @override
+  String get search_title => 'Recherche';
+
+  @override
+  String get search_placeholder => 'Description, montant, portefeuille ou tag';
+
+  @override
+  String get search_hint =>
+      'Cherche dans tous les portefeuilles par description, montant, nom ou tag.';
+
+  @override
+  String get search_no_results_title => 'Aucun résultat';
+
+  @override
+  String get search_no_results_subtitle =>
+      'Essaie un autre mot, montant ou tag.';
+
+  @override
+  String search_results_count(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count résultats',
+      one: '1 résultat',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get l10nTags =>
       '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ TAGS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
 
@@ -792,6 +824,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get settings_dark_mode => 'Mode sombre';
+
+  @override
+  String get settings_show_mascot => 'Afficher la mascotte';
 
   @override
   String get settings_data_privacy => 'Données et vie privée';

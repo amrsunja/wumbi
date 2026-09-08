@@ -566,6 +566,40 @@ class AppLocalizationsRu extends AppLocalizations {
   String get date_pick_to => 'По';
 
   @override
+  String get l10nSearch =>
+      '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ SEARCH ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
+
+  @override
+  String get search_title => 'Поиск';
+
+  @override
+  String get search_placeholder => 'Описание, сумма, кошелёк или тег';
+
+  @override
+  String get search_hint =>
+      'Ищи по всем кошелькам: описание, сумма, название кошелька или тег.';
+
+  @override
+  String get search_no_results_title => 'Ничего не найдено';
+
+  @override
+  String get search_no_results_subtitle =>
+      'Попробуй другое слово, сумму или тег.';
+
+  @override
+  String search_results_count(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count результатов',
+      many: '$count результатов',
+      few: '$count результата',
+      one: '$count результат',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get l10nTags =>
       '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ TAGS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
 
@@ -802,6 +836,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get settings_dark_mode => 'Тёмная тема';
+
+  @override
+  String get settings_show_mascot => 'Показывать маскота';
 
   @override
   String get settings_data_privacy => 'Данные и приватность';

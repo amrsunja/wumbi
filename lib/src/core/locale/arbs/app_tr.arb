@@ -267,6 +267,19 @@
   "date_pick_from": "Başlangıç",
   "date_pick_to": "Bitiş",
 
+  "l10nSearch": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ SEARCH ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "search_title": "Arama",
+  "search_placeholder": "Açıklama, tutar, cüzdan veya etiket",
+  "search_hint": "Tüm cüzdanlarda açıklama, tutar, cüzdan adı veya etikete göre ara.",
+  "search_no_results_title": "Sonuç yok",
+  "search_no_results_subtitle": "Başka bir kelime, tutar veya etiket dene.",
+  "search_results_count": "{count, plural, other{{count} sonuç}}",
+  "@search_results_count": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+
   "l10nTags": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ TAGS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
   "tags_title": "Etiketler",
   "tags_view_list": "Liste",
@@ -368,6 +381,7 @@
   "settings_notifications": "Bildirimler",
   "settings_currency": "Para Birimi",
   "settings_dark_mode": "Koyu Tema",
+  "settings_show_mascot": "Maskotu göster",
   "settings_data_privacy": "Veri ve Gizlilik",
   "settings_export_transactions": "İşlemleri Dışa Aktar",
   "settings_reset_all_data": "Tüm Verileri Sıfırla",

@@ -158,6 +158,68 @@ class TransactionLocalDatasource {
     return rows.map(_rowFromMap).toList();
   }
 
+  // ----------------------------------------------------------------- search
+
+  /// Global search across every wallet. Matches the description, the owning /
+  /// counterpart wallet names, any attached tag, and — when the query
+  /// contains digits — the amount (`12` finds 12.00 as well as 120.50).
+  /// Upcoming rows first, then newest first.
+  Future<List<TransactionRow>> search(
+    DatabaseExecutor db,
+    String query, {
+    required int limit,
+    required int offset,
+  }) async {
+    final args = <Object?>['%${_escapeLike(query)}%'];
+    final clauses = <String>[
+      "t.${SQLiteConfig.txDescription} LIKE ?1 ESCAPE '\\'",
+      "ow.${SQLiteConfig.walletName} LIKE ?1 ESCAPE '\\'",
+      "fw.${SQLiteConfig.walletName} LIKE ?1 ESCAPE '\\'",
+      "tw.${SQLiteConfig.walletName} LIKE ?1 ESCAPE '\\'",
+      'EXISTS (SELECT 1 FROM $_tt x JOIN ${SQLiteConfig.tagsTable} g '
+          'ON g.${SQLiteConfig.id} = x.${SQLiteConfig.ttTagId} '
+          "WHERE x.${SQLiteConfig.ttTransactionId} = t.${SQLiteConfig.id} "
+          "AND g.${SQLiteConfig.tagDisplayName} LIKE ?1 ESCAPE '\\')",
+    ];
+
+    final digits = query.replaceAll(RegExp(r'[^0-9]'), '');
+    if (digits.isNotEmpty) {
+      args.add('$digits%');
+      final i = args.length;
+      clauses.add(
+        'CAST(COALESCE(t.${SQLiteConfig.txAmountMinor}, t.${SQLiteConfig.txFromAmountMinor}) AS TEXT) LIKE ?$i',
+      );
+      clauses.add('CAST(t.${SQLiteConfig.txToAmountMinor} AS TEXT) LIKE ?$i');
+    }
+
+    args.addAll([limit, offset]);
+    final limitIdx = args.length - 1;
+    final offsetIdx = args.length;
+
+    final rows = await db.rawQuery('''
+      SELECT t.*,
+             ow.${SQLiteConfig.walletName} AS wallet_name,
+             fw.${SQLiteConfig.walletName} AS from_wallet_name, fw.${SQLiteConfig.deletedAt} AS from_wallet_deleted,
+             tw.${SQLiteConfig.walletName} AS to_wallet_name,   tw.${SQLiteConfig.deletedAt} AS to_wallet_deleted
+      FROM $_t t
+      LEFT JOIN $_w ow ON ow.${SQLiteConfig.id} = t.${SQLiteConfig.txWalletId}
+      LEFT JOIN $_w fw ON fw.${SQLiteConfig.id} = t.${SQLiteConfig.txFromWalletId}
+      LEFT JOIN $_w tw ON tw.${SQLiteConfig.id} = t.${SQLiteConfig.txToWalletId}
+      WHERE t.${SQLiteConfig.deletedAt} IS NULL AND (${clauses.join(' OR ')})
+      ORDER BY (t.${SQLiteConfig.txStatus} = '${TransactionStatus.upcoming.dbValue}') DESC,
+               t.${SQLiteConfig.txDate} DESC, t.${SQLiteConfig.createdAt} DESC
+      LIMIT ?$limitIdx OFFSET ?$offsetIdx
+    ''', args);
+
+    return rows.map(_rowFromMap).toList();
+  }
+
+  /// `%`, `_` and the escape character itself are literals in a search box.
+  static String _escapeLike(String raw) => raw
+      .replaceAll('\\', '\\\\')
+      .replaceAll('%', '\\%')
+      .replaceAll('_', '\\_');
+
   // ---------------------------------------------------------------- helpers
 
   void _applyFilter(StringBuffer where, List<Object?> args, TransactionFilter filter) {

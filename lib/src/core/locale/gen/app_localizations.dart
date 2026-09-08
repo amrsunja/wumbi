@@ -1014,6 +1014,48 @@ abstract class AppLocalizations {
   /// **'To'**
   String get date_pick_to;
 
+  /// No description provided for @l10nSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ SEARCH ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠'**
+  String get l10nSearch;
+
+  /// No description provided for @search_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get search_title;
+
+  /// No description provided for @search_placeholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Description, amount, wallet or tag'**
+  String get search_placeholder;
+
+  /// No description provided for @search_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search every wallet by description, amount, wallet name or tag.'**
+  String get search_hint;
+
+  /// No description provided for @search_no_results_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing found'**
+  String get search_no_results_title;
+
+  /// No description provided for @search_no_results_subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Try another word, amount or tag.'**
+  String get search_no_results_subtitle;
+
+  /// No description provided for @search_results_count.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 result} other{{count} results}}'**
+  String search_results_count(int count);
+
   /// No description provided for @l10nTags.
   ///
   /// In en, this message translates to:
@@ -1391,6 +1433,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Dark Mode'**
   String get settings_dark_mode;
+
+  /// No description provided for @settings_show_mascot.
+  ///
+  /// In en, this message translates to:
+  /// **'Show Mascot'**
+  String get settings_show_mascot;
 
   /// No description provided for @settings_data_privacy.
   ///

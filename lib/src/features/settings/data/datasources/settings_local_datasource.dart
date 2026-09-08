@@ -54,6 +54,9 @@ class SettingsLocalDatasource {
   Future<void> changeNotifications(bool enabled) =>
       _update({SQLiteConfig.notificationsEnabled: enabled ? 1 : 0});
 
+  Future<void> changeMascotVisibility(bool visible) =>
+      _update({SQLiteConfig.showMascot: visible ? 1 : 0});
+
   Future<void> onboardingCompleted() => _update({SQLiteConfig.showOnboarding: 0});
 
   Future<void> setLastRecurringRunAt(int epochMs) =>

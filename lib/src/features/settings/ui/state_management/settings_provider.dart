@@ -24,6 +24,12 @@ final baseCurrencyProvider = Provider<CurrencyType>(
   (ref) => ref.watch(settingsProvider.select((s) => s.data?.baseCurrency)) ?? CurrencyType.usd,
 );
 
+/// Mascot visibility (Settings → Preferences). Defaults to shown until the
+/// settings row is loaded.
+final showMascotProvider = Provider<bool>(
+  (ref) => ref.watch(settingsProvider.select((s) => s.data?.showMascot)) ?? true,
+);
+
 class SettingsNotifier extends Notifier<SettingsState> {
   static const _maxAutoRetries = 3;
 
@@ -108,6 +114,9 @@ class SettingsNotifier extends Notifier<SettingsState> {
   }
 
   Future<void> changeNotifications(bool enabled) => _apply(() => _repo.changeNotifications(enabled));
+
+  Future<void> changeMascotVisibility(bool visible) =>
+      _apply(() => _repo.changeMascotVisibility(visible));
 
   Future<void> onboardingCompleted() => _apply(_repo.onboardingCompleted);
 

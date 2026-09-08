@@ -11,6 +11,7 @@ import '../../../core/utils/extensions/build_context_extensions.dart';
 import '../../../core/utils/state_management/app_events.dart';
 import '../../../core/utils/state_management/single_events.dart';
 import '../../../core/utils/typedefs.dart';
+import '../../settings/ui/state_management/settings_provider.dart';
 import '../../subscription/ui/subscriptions_provider.dart';
 import '../../wallet/data/models/wallet_model.dart';
 import '../../wallet/data/wallet_repository.dart';
@@ -29,6 +30,7 @@ class DashboardPage extends ConsumerWidget {
     final dashboard = ref.watch(dashboardProvider);
     final data = dashboard.value;
     final hasWallets = data != null && !data.isEmpty;
+    final showMascot = ref.watch(showMascotProvider);
 
     return Stack(
       children: [
@@ -59,9 +61,11 @@ class DashboardPage extends ConsumerWidget {
               : null,
           body: Stack(
             children: [
-              // Peeking mascot only once the user has a wallet; the empty state
-              // already shows the big centred mascot.
-              if (hasWallets) const Positioned(left: 0, top: 12, child: UIWumbiLooksFromLeft()),
+              // Peeking mascot only once the user has a wallet, and only while
+              // Settings → Show mascot is on; the empty state already shows the
+              // big centred illustration.
+              if (hasWallets && showMascot)
+                const Positioned(left: 0, top: 12, child: UIWumbiLooksFromLeft()),
               CustomScrollView(
                 slivers: [
                   SliverToBoxAdapter(
@@ -111,7 +115,6 @@ class _Header extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
-    final colors = context.colors;
     final d = data;
 
     if (d == null) {
@@ -126,7 +129,7 @@ class _Header extends ConsumerWidget {
     return Column(
       children: [
         UiTotalAmount(money: d.total, animated: true),
-        const UISpace.vert(8),
+        const UISpace.vert(20),
         UITap(
           onTap: d.unconvertible.isEmpty ? null : () => ref.read(dashboardProvider.notifier).retryRates(),
           child: Text(
@@ -154,10 +157,17 @@ class _HeaderLinks extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+    // Three pills do not always fit one line on a narrow phone.
+    return Wrap(
+      alignment: WrapAlignment.center,
       spacing: 8,
+      runSpacing: 8,
       children: [
+        _HeaderPill(
+          icon: UIIconToken.icons.general.searchMd,
+          label: l10n.search_title,
+          onTap: () => context.router.push(const SearchRoute()),
+        ),
         _HeaderPill(
           icon: UIIconToken.icons.general.hash01,
           label: l10n.dashboard_tags,

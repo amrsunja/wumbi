@@ -4,7 +4,10 @@
 /// shape through `SQLiteMigrations`. [v1] is kept verbatim so the v1→v2
 /// migration can be tested against a real v1 database.
 abstract class SQLiteSchema {
-  static const List<String> latest = v2;
+  static final List<String> latest = v3;
+
+  /// v3 (2026-09): `settings.show_mascot` — the mascot can be hidden app-wide.
+  static final List<String> v3 = SQLiteSchemaV3.statements;
 
   /// v2 (2026-09): `wallets.color` is a free key (20 swatches, validated in
   /// Dart), `transactions.status` ('posted' | 'upcoming'), and the balance
@@ -364,5 +367,33 @@ abstract class SQLiteSchemaV2 {
                  AS balance_minor
     FROM wallets w
     WHERE w.deleted_at IS NULL''',
+  ];
+}
+
+/// v3 DDL, see [SQLiteSchema.v3]. Only `settings` differs from v2, so the
+/// rest of the tables are reused verbatim.
+abstract class SQLiteSchemaV3 {
+  static const String settingsTable = '''
+    CREATE TABLE settings (
+      id                    INTEGER PRIMARY KEY CHECK (id = 1),
+      language_code         TEXT,
+      country_code          TEXT,
+      theme_mode            TEXT    NOT NULL DEFAULT 'system' CHECK (theme_mode IN ('system','light','dark')),
+      show_onboarding       INTEGER NOT NULL DEFAULT 1,
+      base_currency         TEXT    NOT NULL DEFAULT 'USD',
+      notifications_enabled INTEGER NOT NULL DEFAULT 0,
+      show_mascot           INTEGER NOT NULL DEFAULT 1,
+      last_recurring_run_at INTEGER
+    )''';
+
+  static const String settingsSeed = 'INSERT INTO settings (id) VALUES (1)';
+
+  static final List<String> statements = [
+    settingsTable,
+    settingsSeed,
+    // v2's first two statements are its own settings table + seed row.
+    ...SQLiteSchemaV2.statements.where(
+      (s) => !s.contains('CREATE TABLE settings') && s != settingsSeed,
+    ),
   ];
 }

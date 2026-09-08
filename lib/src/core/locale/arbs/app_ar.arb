@@ -267,6 +267,19 @@
   "date_pick_from": "من",
   "date_pick_to": "إلى",
 
+  "l10nSearch": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ SEARCH ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "search_title": "بحث",
+  "search_placeholder": "الوصف أو المبلغ أو المحفظة أو الوسم",
+  "search_hint": "ابحث في كل المحافظ بالوصف أو المبلغ أو اسم المحفظة أو الوسم.",
+  "search_no_results_title": "لا توجد نتائج",
+  "search_no_results_subtitle": "جرّب كلمة أو مبلغًا أو وسمًا آخر.",
+  "search_results_count": "{count, plural, zero{لا نتائج} one{نتيجة واحدة} two{نتيجتان} few{{count} نتائج} many{{count} نتيجة} other{{count} نتيجة}}",
+  "@search_results_count": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+
   "l10nTags": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ TAGS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
   "tags_title": "الوسوم",
   "tags_view_list": "قائمة",
@@ -368,6 +381,7 @@
   "settings_notifications": "الإشعارات",
   "settings_currency": "العملة",
   "settings_dark_mode": "الوضع الداكن",
+  "settings_show_mascot": "إظهار التميمة",
   "settings_data_privacy": "البيانات والخصوصية",
   "settings_export_transactions": "تصدير المعاملات",
   "settings_reset_all_data": "إعادة تعيين كل البيانات",

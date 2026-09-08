@@ -37,6 +37,9 @@ extension DateTimeExtension on DateTime {
   /// `Nov 1`
   String formatShortDate() => _format('MMM d', toLocal());
 
+  /// Chart axis label: `Nov`.
+  String formatMonthShort() => _format('MMM', toLocal());
+
   /// `Nov 1, 2026`
   String formatMediumDate() => _format('MMM d, yyyy', toLocal());
 

@@ -181,6 +181,19 @@ void main() {
     expect(await balance(service), 12500);
   });
 
+  test('v3 adds show_mascot, visible by default', () async {
+    await seedV1();
+    final service = _service(path);
+    await service.initDatabase();
+    addTearDown(service.close);
+
+    final settings = (await service.db.query('settings')).single;
+    expect(settings['show_mascot'], 1);
+
+    await service.db.update('settings', {'show_mascot': 0}, where: 'id = ?', whereArgs: [1]);
+    expect((await service.db.query('settings')).single['show_mascot'], 0);
+  });
+
   test('a fresh v2 install has the same shape as a migrated one', () async {
     final fresh = _service('${dir.path}/fresh.db');
     await fresh.initDatabase();
@@ -207,7 +220,7 @@ void main() {
       return rows.map((r) => r['name'] as String).toList()..sort();
     }
 
-    for (final table in ['wallets', 'transactions', 'tags', 'recurring_rules']) {
+    for (final table in ['settings', 'wallets', 'transactions', 'tags', 'recurring_rules']) {
       expect(await columns(migrated, table), await columns(fresh, table), reason: table);
     }
   });

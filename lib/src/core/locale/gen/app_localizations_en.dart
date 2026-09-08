@@ -556,6 +556,37 @@ class AppLocalizationsEn extends AppLocalizations {
   String get date_pick_to => 'To';
 
   @override
+  String get l10nSearch =>
+      '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ SEARCH ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
+
+  @override
+  String get search_title => 'Search';
+
+  @override
+  String get search_placeholder => 'Description, amount, wallet or tag';
+
+  @override
+  String get search_hint =>
+      'Search every wallet by description, amount, wallet name or tag.';
+
+  @override
+  String get search_no_results_title => 'Nothing found';
+
+  @override
+  String get search_no_results_subtitle => 'Try another word, amount or tag.';
+
+  @override
+  String search_results_count(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count results',
+      one: '1 result',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get l10nTags =>
       '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ TAGS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
 
@@ -788,6 +819,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settings_dark_mode => 'Dark Mode';
+
+  @override
+  String get settings_show_mascot => 'Show Mascot';
 
   @override
   String get settings_data_privacy => 'Data & Privacy';

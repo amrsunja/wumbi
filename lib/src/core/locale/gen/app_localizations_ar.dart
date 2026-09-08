@@ -574,6 +574,41 @@ class AppLocalizationsAr extends AppLocalizations {
   String get date_pick_to => 'إلى';
 
   @override
+  String get l10nSearch =>
+      '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ SEARCH ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
+
+  @override
+  String get search_title => 'بحث';
+
+  @override
+  String get search_placeholder => 'الوصف أو المبلغ أو المحفظة أو الوسم';
+
+  @override
+  String get search_hint =>
+      'ابحث في كل المحافظ بالوصف أو المبلغ أو اسم المحفظة أو الوسم.';
+
+  @override
+  String get search_no_results_title => 'لا توجد نتائج';
+
+  @override
+  String get search_no_results_subtitle => 'جرّب كلمة أو مبلغًا أو وسمًا آخر.';
+
+  @override
+  String search_results_count(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count نتيجة',
+      many: '$count نتيجة',
+      few: '$count نتائج',
+      two: 'نتيجتان',
+      one: 'نتيجة واحدة',
+      zero: 'لا نتائج',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get l10nTags =>
       '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ TAGS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
 
@@ -812,6 +847,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get settings_dark_mode => 'الوضع الداكن';
+
+  @override
+  String get settings_show_mascot => 'إظهار التميمة';
 
   @override
   String get settings_data_privacy => 'البيانات والخصوصية';
