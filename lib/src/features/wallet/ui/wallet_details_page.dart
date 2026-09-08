@@ -105,86 +105,95 @@ class WalletDetailsPage extends HookConsumerWidget {
                 onTap: () => context.router.push(TransactionRoute(walletId: id)),
               ),
             ),
-      body: Stack(
-        children: [
-          if (showMascot)
-            Positioned(
-              right: 8,
-              top: 4,
-              child: UIWumbiLook(key: ValueKey('wumbi-$id'), height: 64),
-            ),
-          if (state.wallet.hasError)
-            UiEmptyState(image: AppAssets.images.wumbiOo.path, title: l10n.wallet_not_found)
-          else
-            CustomScrollView(
-              controller: scrollController,
-              slivers: [
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(kListHorzPadding, 8, kListHorzPadding, 0),
-                    child: Column(
-                      children: [
-                        if (wallet != null)
-                          UiWalletInfoMenu(
-                            name: wallet.name,
-                            color: wallet.color.color,
-                            currencyType: wallet.currency,
-                            walletHeroTag: heroWalletName(id),
-                            onSelectWallet: wallets.length > 1 ? switchWallet : null,
-                          )
-                        else
-                          const UISpace.vert(32),
-                        const UISpace.vert(28),
-                        if (wallet != null)
-                          UiHero(
-                            tag: heroWalletBalance(id),
-                            child: UiTotalAmount(money: wallet.balance, animated: true),
-                          )
-                        else
-                          const SizedBox(height: 54),
-                        if (activeRules.isNotEmpty) ...[
-                          const UISpace.vert(10),
-                          UITap(
-                            onTap: () => context.router.push(SubscriptionsRoute(walletId: id)),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              spacing: 4,
-                              children: [
-                                UIIcon(UIIconToken.icons.mediaDevices.repeat01, size: 14),
-                                Text(
-                                  l10n.subscriptions_count(activeRules.length),
-                                  style: context.typo.inter.caption,
-                                ),
-                                UIIcon(UIIconToken.icons.arrows.chevronRight, size: 14),
-                              ],
+      body: Builder(
+        builder: (context) {
+          if (state.wallet.hasError) {
+            return UiEmptyState(image: AppAssets.images.wumbiOo.path, title: l10n.wallet_not_found);
+          }
+          return CustomScrollView(
+            controller: scrollController,
+            slivers: [
+              // The mascot lives inside the header sliver, so it scrolls away
+              // with the header instead of floating over the list.
+              SliverToBoxAdapter(
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(kListHorzPadding, 8, kListHorzPadding, 0),
+                      child: Column(
+                        children: [
+                          if (wallet != null)
+                            UiWalletInfoMenu(
+                              name: wallet.name,
+                              color: wallet.color.color,
+                              currencyType: wallet.currency,
+                              walletHeroTag: heroWalletName(id),
+                              onSelectWallet: wallets.length > 1 ? switchWallet : null,
+                            )
+                          else
+                            const UISpace.vert(32),
+                          const UISpace.vert(28),
+                          if (wallet != null)
+                            UiHero(
+                              tag: heroWalletBalance(id),
+                              child: UiTotalAmount(money: wallet.balance, animated: true),
+                            )
+                          else
+                            const SizedBox(height: 54),
+                          if (activeRules.isNotEmpty) ...[
+                            const UISpace.vert(10),
+                            UITap(
+                              onTap: () => context.router.push(SubscriptionsRoute(walletId: id)),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                spacing: 4,
+                                children: [
+                                  UIIcon(UIIconToken.icons.mediaDevices.repeat01, size: 14),
+                                  Text(
+                                    l10n.subscriptions_count(activeRules.length),
+                                    style: context.typo.inter.caption,
+                                  ),
+                                  UIIcon(UIIconToken.icons.arrows.chevronRight, size: 14),
+                                ],
+                              ),
                             ),
+                          ],
+                          const UISpace.vert(24),
+                          _ListToolbar(
+                            filter: state.filter,
+                            sort: state.sort,
+                            onFilterTap: openFilter,
+                            onSortTap: openSort,
+                            onClear: notifier.clearFilter,
                           ),
+                          const UISpace.vert(4),
                         ],
-                        const UISpace.vert(24),
-                        _ListToolbar(
-                          filter: state.filter,
-                          sort: state.sort,
-                          onFilterTap: openFilter,
-                          onSortTap: openSort,
-                          onClear: notifier.clearFilter,
-                        ),
-                        const UISpace.vert(4),
-                      ],
+                      ),
+                    ),
+                    if (showMascot)
+                      Positioned(
+                        right: 8,
+                        top: 4,
+                        child: UIWumbiLook(key: ValueKey('wumbi-$id'), height: 64),
+                      ),
+                  ],
+                ),
+              ),
+              _TransactionList(walletId: id, wallet: wallet, state: state, notifier: notifier),
+              if (state.isLoadingMore)
+                const SliverToBoxAdapter(
+                  child: Padding(
+                    padding: EdgeInsets.all(16),
+                    child: Center(
+                      child: SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2)),
                     ),
                   ),
                 ),
-                _TransactionList(walletId: id, wallet: wallet, state: state, notifier: notifier),
-                if (state.isLoadingMore)
-                  const SliverToBoxAdapter(
-                    child: Padding(
-                      padding: EdgeInsets.all(16),
-                      child: Center(child: SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))),
-                    ),
-                  ),
-                const SliverToBoxAdapter(child: UISpace.vert(96)),
-              ],
-            ),
-        ],
+              const SliverToBoxAdapter(child: UISpace.vert(96)),
+            ],
+          );
+        },
       ),
     );
   }

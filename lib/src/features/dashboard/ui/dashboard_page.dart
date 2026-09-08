@@ -66,37 +66,41 @@ class DashboardPage extends ConsumerWidget {
               // big centred illustration.
               if (hasWallets && showMascot)
                 const Positioned(left: 0, top: 12, child: UIWumbiLooksFromLeft()),
-              CustomScrollView(
-                slivers: [
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(kPageHorzPadding, 72, kPageHorzPadding, 0),
-                      child: _Header(data: data),
+              // The header is pinned: only the wallet list scrolls.
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(kPageHorzPadding, 72, kPageHorzPadding, 0),
+                    child: _Header(data: data),
+                  ),
+                  const UISpace.vert(64),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: kListHorzPadding),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          l10n.dashboard_wallets,
+                          style: context.typo.inter.headline,
+                        ),
+                        UiIconTextButton(
+                          icon: UIIconToken.icons.general.plusCircle,
+                          title: l10n.dashboard_new_wallet,
+                          onTap: () => context.router.push(WalletFormRoute()),
+                        ),
+                      ],
                     ),
                   ),
-                  const SliverToBoxAdapter(child: UISpace.vert(64)),
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: kListHorzPadding),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            l10n.dashboard_wallets,
-                            style: context.typo.inter.headline,
-                          ),
-                          UiIconTextButton(
-                            icon: UIIconToken.icons.general.plusCircle,
-                            title: l10n.dashboard_new_wallet,
-                            onTap: () => context.router.push(WalletFormRoute()),
-                          ),
-                        ],
-                      ),
+                  const UISpace.vert(12),
+                  Expanded(
+                    child: CustomScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      slivers: [
+                        _WalletList(dashboard: dashboard),
+                        const SliverToBoxAdapter(child: UISpace.vert(96)),
+                      ],
                     ),
                   ),
-                  const SliverToBoxAdapter(child: UISpace.vert(12)),
-                  _WalletList(dashboard: dashboard),
-                  const SliverToBoxAdapter(child: UISpace.vert(96)),
                 ],
               ),
             ],

@@ -284,47 +284,57 @@ class TransactionPage extends HookConsumerWidget {
               const UISpace.vert(4),
 
               // Chips row.
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                spacing: 10,
-                children: [
-                  // Edit mode: the loaded row is still upcoming (not counted yet).
-                  if (state.isEdit && state.isExistingUpcoming)
-                    UiTypePill(label: l10n.transaction_upcoming_badge, color: colors.secondContentColor),
-                  if (state.isEdit && state.editingType != null)
-                    if (state.isTransferEdit)
-                      UiTypePill(label: _typeLabel(context, state.editingType!), color: typeColor)
-                    else ...[
-                      UiTypePill(
-                        label: l10n.common_income,
-                        color: UIColorToken.blue,
-                        selected: state.editingType == TransactionType.income,
-                        onTap: () => notifier.setEditingType(TransactionType.income),
-                      ),
-                      UiTypePill(
-                        label: l10n.common_expense,
-                        color: colors.expenseColor,
-                        selected: state.editingType == TransactionType.expense,
-                        onTap: () => notifier.setEditingType(TransactionType.expense),
-                      ),
-                    ],
-                  UiChip(
-                    label: state.date.formatChipDate(today: l10n.common_today, yesterday: l10n.common_yesterday),
-                    onTap: pickDate,
-                  ),
-                  if (state.repeatLocked)
-                    UiChip(
-                      label: l10n.transaction_repeat_part_of(repeatShortLabel(l10n, state.repeat)),
-                      readOnly: true,
-                      highlighted: true,
-                    )
-                  else if (!state.isEdit)
-                    UiChip(
-                      label: repeatShortLabel(l10n, state.repeat),
-                      highlighted: !state.repeat.isNever,
-                      onTap: pickRepeat,
+              LayoutBuilder(
+                builder: (context, constraints) => SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  physics: const ClampingScrollPhysics(),
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(minWidth: constraints.maxWidth),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      spacing: 10,
+                      children: [
+                        // Edit mode: the loaded row is still upcoming (not counted yet).
+                        if (state.isEdit && state.isExistingUpcoming)
+                          UiTypePill(label: l10n.transaction_upcoming_badge, color: colors.secondContentColor),
+                        if (state.isEdit && state.editingType != null)
+                          if (state.isTransferEdit)
+                            UiTypePill(label: _typeLabel(context, state.editingType!), color: typeColor)
+                          else ...[
+                            UiTypePill(
+                              label: l10n.common_income,
+                              color: UIColorToken.blue,
+                              selected: state.editingType == TransactionType.income,
+                              onTap: () => notifier.setEditingType(TransactionType.income),
+                            ),
+                            UiTypePill(
+                              label: l10n.common_expense,
+                              color: colors.expenseColor,
+                              selected: state.editingType == TransactionType.expense,
+                              onTap: () => notifier.setEditingType(TransactionType.expense),
+                            ),
+                          ],
+                        UiChip(
+                          label: state.date.formatChipDate(today: l10n.common_today, yesterday: l10n.common_yesterday),
+                          onTap: pickDate,
+                        ),
+                        if (state.repeatLocked)
+                          UiChip(
+                            label: l10n.transaction_repeat_part_of(repeatShortLabel(l10n, state.repeat)),
+                            readOnly: true,
+                            highlighted: true,
+                          )
+                        else if (!state.isEdit)
+                          UiChip(
+                            label: repeatShortLabel(l10n, state.repeat),
+                            highlighted: !state.repeat.isNever,
+                            onTap: pickRepeat,
+                          ),
+                      ],
                     ),
-                ],
+                  ),
+                ),
               ),
 
               // Future date → "Counted on <date>" (row will be stored as upcoming).
