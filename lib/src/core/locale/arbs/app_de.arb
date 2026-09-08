@@ -369,6 +369,31 @@
   "subscriptions_stopped": "Abo gestoppt",
   "subscriptions_type_hint": "Die Art eines Abos lässt sich nicht ändern.",
 
+  "l10nProgress": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ PROGRESS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "progress_title": "Fortschritt",
+  "progress_month": "Monat",
+  "progress_year": "Jahr",
+  "progress_income": "Einnahme",
+  "progress_expense": "Ausgabe",
+  "progress_net": "Netto",
+  "progress_vs_last_month": "ggü. letztem Monat",
+  "progress_vs_last_year": "ggü. letztem Jahr",
+  "progress_all_wallets": "Alle Konten",
+  "progress_scope_title": "Daten anzeigen für",
+  "progress_chart_title": "Einnahmen vs Ausgaben",
+  "progress_not_included": "{codes} nicht enthalten",
+  "@progress_not_included": {
+    "placeholders": {
+      "codes": {"type": "String"}
+    }
+  },
+  "progress_empty_title": "Noch nichts auszuwerten",
+  "progress_trend_title": "Verlauf",
+  "progress_tags_title": "Ausgaben nach Tag",
+  "progress_untagged": "Ohne Tag",
+  "progress_other_tags": "Sonstige",
+  "progress_no_expenses": "Keine Ausgaben in diesem Zeitraum",
+  "progress_empty_subtitle": "Füge ein paar Transaktionen hinzu und dein Fortschritt erscheint hier.",
   "l10nCurrency": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ CURRENCY ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
   "currency_pick_title": "Währung",
   "currency_no_results": "Keine Währung gefunden",

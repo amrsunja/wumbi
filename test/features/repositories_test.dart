@@ -7,6 +7,8 @@ import 'package:wumbi/src/core/recurring/recurring_engine.dart';
 import 'package:wumbi/src/core/utils/enums/repeat_frequency.dart';
 import 'package:wumbi/src/core/utils/enums/transaction_type.dart';
 import 'package:wumbi/src/core/utils/enums/wallet_color.dart';
+import 'package:wumbi/src/features/progress/data/models/progress_stats.dart';
+import 'package:wumbi/src/features/progress/data/progress_repository.dart';
 import 'package:wumbi/src/features/settings/data/datasources/settings_local_datasource.dart';
 import 'package:wumbi/src/features/tag/data/tag_repository.dart';
 import 'package:wumbi/src/features/transaction/data/models/transaction_model.dart';
@@ -311,6 +313,156 @@ void main() {
     });
   });
 
+  group('progress', () {
+    // `now` is injected, so these dates stay in the past whenever the suite runs.
+    Future<ProgressStats> load(
+      ProgressGranularity granularity,
+      DateTime now, {
+      String? walletId,
+    }) async =>
+        (await ProgressRepository(sqlite: sqlite).load(
+          granularity: granularity,
+          target: CurrencyType.usd,
+          walletId: walletId,
+          now: now,
+        ))
+            .getOrThrow();
+
+    test('buckets income and expense by month and compares against the previous one', () async {
+      final w = await _wallet('Main', CurrencyType.usd);
+      await transactions.create(_incomeOn(w.id, 30000, DateTime(2026, 2, 10, 12)));
+      await transactions.create(_expenseOn(w.id, 10000, DateTime(2026, 2, 11, 12)));
+      await transactions.create(_incomeOn(w.id, 60000, DateTime(2026, 3, 2, 12)));
+      await transactions.create(_expenseOn(w.id, 25000, DateTime(2026, 3, 3, 12)));
+
+      final stats = await load(ProgressGranularity.month, DateTime(2026, 3, 15));
+
+      expect(stats.periods.length, 6);
+      expect(stats.periods.last.start, DateTime(2026, 3), reason: 'last bucket = running month');
+      expect(stats.periods.first.start, DateTime(2025, 10), reason: 'the window rolls over the year');
+      expect(stats.current.income.minor, 60000);
+      expect(stats.current.expense.minor, 25000);
+      expect(stats.baseline!.income.minor, 30000);
+      expect(stats.baseline!.expense.minor, 10000);
+      expect(stats.incomeDelta, closeTo(1.0, 1e-9));
+      expect(stats.expenseDelta, closeTo(1.5, 1e-9));
+      expect(stats.netDelta, closeTo(0.75, 1e-9), reason: '(35000 - 20000) / 20000');
+      expect(stats.periods.first.isEmpty, isTrue);
+      expect(stats.peakMinor, 60000, reason: 'both charts scale off the tallest series');
+    });
+
+    test('a period that spent more than it earned reports a negative net', () async {
+      final w = await _wallet('Main', CurrencyType.usd);
+      await transactions.create(_expenseOn(w.id, 4000, DateTime(2026, 3, 2, 12)));
+
+      final stats = await load(ProgressGranularity.month, DateTime(2026, 3, 15));
+
+      expect(stats.current.net.minor, -4000);
+      expect(stats.current.income.isZero, isTrue);
+      expect(stats.netDelta, isNull, reason: 'nothing to compare an empty February against');
+    });
+
+    test('transfers never count, and rows outside the window are dropped', () async {
+      final a = await _wallet('A', CurrencyType.usd, initial: 100000);
+      final b = await _wallet('B', CurrencyType.usd);
+      await transactions.create(_transferOn(a.id, b.id, 50000, DateTime(2026, 3, 4, 12)));
+      await transactions.create(_expenseOn(a.id, 700, DateTime(2025, 1, 4, 12)));
+
+      final stats = await load(ProgressGranularity.month, DateTime(2026, 3, 15));
+
+      expect(stats.isEmpty, isTrue, reason: 'a transfer moves money inside the ledger');
+    });
+
+    test('the wallet filter narrows the aggregate', () async {
+      final a = await _wallet('A', CurrencyType.usd);
+      final b = await _wallet('B', CurrencyType.usd);
+      await transactions.create(_expenseOn(a.id, 1000, DateTime(2026, 3, 5, 12)));
+      await transactions.create(_expenseOn(b.id, 4000, DateTime(2026, 3, 5, 12)));
+
+      final all = await load(ProgressGranularity.month, DateTime(2026, 3, 15));
+      final onlyB = await load(ProgressGranularity.month, DateTime(2026, 3, 15), walletId: b.id);
+
+      expect(all.current.expense.minor, 5000);
+      expect(onlyB.current.expense.minor, 4000);
+      expect(onlyB.walletId, b.id);
+    });
+
+    test('year granularity buckets by calendar year', () async {
+      final w = await _wallet('Main', CurrencyType.usd);
+      await transactions.create(_incomeOn(w.id, 20000, DateTime(2025, 4, 1, 12)));
+      await transactions.create(_incomeOn(w.id, 50000, DateTime(2026, 4, 1, 12)));
+
+      final stats = await load(ProgressGranularity.year, DateTime(2026, 6, 1));
+
+      expect(stats.periods.length, 5);
+      expect(stats.periods.map((p) => p.start.year), [2022, 2023, 2024, 2025, 2026]);
+      expect(stats.current.income.minor, 50000);
+      expect(stats.baseline!.income.minor, 20000);
+      expect(stats.incomeDelta, closeTo(1.5, 1e-9));
+    });
+
+    test('the pie covers the running period only and counts a two-tag row twice', () async {
+      final w = await _wallet('Main', CurrencyType.usd);
+      await transactions.create(_expenseOn(w.id, 5000, DateTime(2026, 3, 2, 12), tags: ['Food']));
+      await transactions.create(_expenseOn(w.id, 3000, DateTime(2026, 3, 3, 12), tags: ['Food', 'Travel']));
+      await transactions.create(_expenseOn(w.id, 1000, DateTime(2026, 3, 4, 12)));
+      await transactions.create(_expenseOn(w.id, 90000, DateTime(2026, 2, 4, 12), tags: ['Rent']));
+
+      final stats = await load(ProgressGranularity.month, DateTime(2026, 3, 15));
+      final byKey = {
+        for (final slice in stats.expenseByTag)
+          slice.kind == TagSliceKind.tag ? slice.label : slice.kind.name: slice.amount.minor,
+      };
+
+      expect(byKey['Food'], 8000);
+      expect(byKey['Travel'], 3000);
+      expect(byKey['untagged'], 1000, reason: 'the LEFT JOIN produces the untagged bucket');
+      expect(byKey.containsKey('Rent'), isFalse, reason: 'last month is not in the pie');
+      expect(stats.expenseByTag.first.label, 'Food', reason: 'biggest slice first');
+      expect(stats.expenseByTag.first.normalizedName, 'food', reason: 'drives the palette lookup');
+      expect(stats.taggedExpenseMinor, 12000, reason: 'slices overlap by design');
+      expect(stats.current.expense.minor, 9000, reason: 'the period total never double-counts');
+    });
+
+    test('slices past the fifth fold into one "other" section', () async {
+      final w = await _wallet('Main', CurrencyType.usd);
+      for (var i = 0; i < 7; i++) {
+        await transactions.create(
+          _expenseOn(w.id, 1000 * (7 - i), DateTime(2026, 3, 2, 12), tags: ['t$i']),
+        );
+      }
+
+      final stats = await load(ProgressGranularity.month, DateTime(2026, 3, 15));
+
+      expect(stats.expenseByTag.length, 6, reason: '5 tags + other');
+      expect(stats.expenseByTag.last.kind, TagSliceKind.other);
+      expect(stats.expenseByTag.last.amount.minor, 3000, reason: '2000 + 1000');
+      expect(stats.expenseByTag.last.count, 2);
+      expect(stats.expenseByTag.last.tagId, isNull);
+    });
+
+    test('the wallet filter narrows the pie too', () async {
+      final a = await _wallet('A', CurrencyType.usd);
+      final b = await _wallet('B', CurrencyType.usd);
+      await transactions.create(_expenseOn(a.id, 1000, DateTime(2026, 3, 5, 12), tags: ['Food']));
+      await transactions.create(_expenseOn(b.id, 4000, DateTime(2026, 3, 5, 12), tags: ['Rent']));
+
+      final onlyB = await load(ProgressGranularity.month, DateTime(2026, 3, 15), walletId: b.id);
+
+      expect(onlyB.expenseByTag.map((s) => s.label), ['Rent']);
+    });
+
+    test('an untouched ledger reports empty with no deltas', () async {
+      await _wallet('Main', CurrencyType.usd, initial: 5000);
+
+      final stats = await load(ProgressGranularity.month, DateTime(2026, 3, 15));
+
+      expect(stats.isEmpty, isTrue, reason: 'the initial balance is not a transaction');
+      expect(stats.incomeDelta, isNull);
+      expect(stats.netDelta, isNull);
+    });
+  });
+
   group('recurring', () {
     test('rule creation + catch-up is idempotent and anchored', () async {
       final a = await _wallet('A', CurrencyType.usd);
@@ -405,5 +557,41 @@ TransactionDraft _expense(String walletId, int minor, {List<String> tags = const
       description: '',
       tags: tags,
       date: DateTime(2026, 1, 11, 12),
+      repeat: RepeatFrequency.never,
+    );
+
+TransactionDraft _incomeOn(String walletId, int minor, DateTime date) => TransactionDraft.income(
+      walletId: walletId,
+      amount: Money(minor, CurrencyType.usd),
+      description: '',
+      tags: const [],
+      date: date,
+      repeat: RepeatFrequency.never,
+    );
+
+TransactionDraft _expenseOn(
+  String walletId,
+  int minor,
+  DateTime date, {
+  List<String> tags = const [],
+}) =>
+    TransactionDraft.expense(
+      walletId: walletId,
+      amount: Money(minor, CurrencyType.usd),
+      description: '',
+      tags: tags,
+      date: date,
+      repeat: RepeatFrequency.never,
+    );
+
+TransactionDraft _transferOn(String fromId, String toId, int minor, DateTime date) =>
+    TransactionDraft.transfer(
+      fromWalletId: fromId,
+      toWalletId: toId,
+      sent: Money(minor, CurrencyType.usd),
+      received: Money(minor, CurrencyType.usd),
+      description: '',
+      tags: const [],
+      date: date,
       repeat: RepeatFrequency.never,
     );

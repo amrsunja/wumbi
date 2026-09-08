@@ -46,6 +46,7 @@ class AppRouter extends RootStackRouter {
         AutoRoute(path: RoutePaths.walletForm, page: WalletFormRoute.page, fullscreenDialog: true),
         AutoRoute(path: RoutePaths.walletDetails, page: WalletDetailsRoute.page),
         AutoRoute(path: RoutePaths.transaction, page: TransactionRoute.page, fullscreenDialog: true),
+        AutoRoute(path: RoutePaths.progress, page: ProgressRoute.page),
         AutoRoute(path: RoutePaths.search, page: SearchRoute.page),
         AutoRoute(path: RoutePaths.tags, page: TagsRoute.page),
         AutoRoute(path: RoutePaths.tagDetails, page: TagDetailsRoute.page),

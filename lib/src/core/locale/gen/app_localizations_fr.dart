@@ -790,6 +790,70 @@ class AppLocalizationsFr extends AppLocalizations {
       'Le type d\'un abonnement ne peut pas changer.';
 
   @override
+  String get l10nProgress =>
+      '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ PROGRESS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
+
+  @override
+  String get progress_title => 'Progression';
+
+  @override
+  String get progress_month => 'Mois';
+
+  @override
+  String get progress_year => 'Année';
+
+  @override
+  String get progress_income => 'Revenu';
+
+  @override
+  String get progress_expense => 'Dépense';
+
+  @override
+  String get progress_net => 'Net';
+
+  @override
+  String get progress_vs_last_month => 'vs le mois dernier';
+
+  @override
+  String get progress_vs_last_year => 'vs l\'année dernière';
+
+  @override
+  String get progress_all_wallets => 'Tous les portefeuilles';
+
+  @override
+  String get progress_scope_title => 'Afficher les données de';
+
+  @override
+  String get progress_chart_title => 'Revenus vs Dépenses';
+
+  @override
+  String progress_not_included(String codes) {
+    return '$codes non inclus';
+  }
+
+  @override
+  String get progress_empty_title => 'Rien à analyser pour l\'instant';
+
+  @override
+  String get progress_trend_title => 'Tendance';
+
+  @override
+  String get progress_tags_title => 'Dépenses par tag';
+
+  @override
+  String get progress_untagged => 'Sans tag';
+
+  @override
+  String get progress_other_tags => 'Autres';
+
+  @override
+  String get progress_no_expenses => 'Aucune dépense sur cette période';
+
+  @override
+  String get progress_empty_subtitle =>
+      'Ajoutez quelques transactions et votre progression apparaîtra ici.';
+
+  @override
   String get l10nCurrency =>
       '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ CURRENCY ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
 

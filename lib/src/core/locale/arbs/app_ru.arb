@@ -369,6 +369,31 @@
   "subscriptions_stopped": "Подписка остановлена",
   "subscriptions_type_hint": "Тип подписки изменить нельзя.",
 
+  "l10nProgress": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ PROGRESS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "progress_title": "Прогресс",
+  "progress_month": "Месяц",
+  "progress_year": "Год",
+  "progress_income": "Доход",
+  "progress_expense": "Расход",
+  "progress_net": "Итого",
+  "progress_vs_last_month": "к прошлому месяцу",
+  "progress_vs_last_year": "к прошлому году",
+  "progress_all_wallets": "Все кошельки",
+  "progress_scope_title": "Показать данные по",
+  "progress_chart_title": "Доходы и расходы",
+  "progress_not_included": "{codes} не учтены",
+  "@progress_not_included": {
+    "placeholders": {
+      "codes": {"type": "String"}
+    }
+  },
+  "progress_empty_title": "Пока нечего анализировать",
+  "progress_trend_title": "Динамика",
+  "progress_tags_title": "Расходы по тегам",
+  "progress_untagged": "Без тега",
+  "progress_other_tags": "Прочее",
+  "progress_no_expenses": "В этом периоде расходов нет",
+  "progress_empty_subtitle": "Добавьте несколько операций — и здесь появится ваш прогресс.",
   "l10nCurrency": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ CURRENCY ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
   "currency_pick_title": "Валюта",
   "currency_no_results": "Валюта не найдена",

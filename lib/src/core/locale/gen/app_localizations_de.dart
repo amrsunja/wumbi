@@ -786,6 +786,70 @@ class AppLocalizationsDe extends AppLocalizations {
       'Die Art eines Abos lässt sich nicht ändern.';
 
   @override
+  String get l10nProgress =>
+      '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ PROGRESS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
+
+  @override
+  String get progress_title => 'Fortschritt';
+
+  @override
+  String get progress_month => 'Monat';
+
+  @override
+  String get progress_year => 'Jahr';
+
+  @override
+  String get progress_income => 'Einnahme';
+
+  @override
+  String get progress_expense => 'Ausgabe';
+
+  @override
+  String get progress_net => 'Netto';
+
+  @override
+  String get progress_vs_last_month => 'ggü. letztem Monat';
+
+  @override
+  String get progress_vs_last_year => 'ggü. letztem Jahr';
+
+  @override
+  String get progress_all_wallets => 'Alle Konten';
+
+  @override
+  String get progress_scope_title => 'Daten anzeigen für';
+
+  @override
+  String get progress_chart_title => 'Einnahmen vs Ausgaben';
+
+  @override
+  String progress_not_included(String codes) {
+    return '$codes nicht enthalten';
+  }
+
+  @override
+  String get progress_empty_title => 'Noch nichts auszuwerten';
+
+  @override
+  String get progress_trend_title => 'Verlauf';
+
+  @override
+  String get progress_tags_title => 'Ausgaben nach Tag';
+
+  @override
+  String get progress_untagged => 'Ohne Tag';
+
+  @override
+  String get progress_other_tags => 'Sonstige';
+
+  @override
+  String get progress_no_expenses => 'Keine Ausgaben in diesem Zeitraum';
+
+  @override
+  String get progress_empty_subtitle =>
+      'Füge ein paar Transaktionen hinzu und dein Fortschritt erscheint hier.';
+
+  @override
   String get l10nCurrency =>
       '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ CURRENCY ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
 

@@ -147,8 +147,8 @@ class _Header extends ConsumerWidget {
   }
 }
 
-/// Small outlined pills under the total: "# Tags" and "N Subscriptions"
-/// (the latter only when there is at least one active rule).
+/// Small outlined pills under the total: Search, Progress, "# Tags" and
+/// "N Subscriptions" (the last only when there is at least one active rule).
 class _HeaderLinks extends StatelessWidget {
   const _HeaderLinks({required this.subscriptionCount});
 
@@ -157,7 +157,7 @@ class _HeaderLinks extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    // Three pills do not always fit one line on a narrow phone.
+    // Four pills never fit one line on a phone.
     return Wrap(
       alignment: WrapAlignment.center,
       spacing: 8,
@@ -167,6 +167,11 @@ class _HeaderLinks extends StatelessWidget {
           icon: UIIconToken.icons.general.searchMd,
           label: l10n.search_title,
           onTap: () => context.router.push(const SearchRoute()),
+        ),
+        _HeaderPill(
+          icon: UIIconToken.icons.charts.barChart10,
+          label: l10n.progress_title,
+          onTap: () => context.router.push(const ProgressRoute()),
         ),
         _HeaderPill(
           icon: UIIconToken.icons.general.hash01,

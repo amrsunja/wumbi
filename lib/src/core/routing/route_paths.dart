@@ -8,6 +8,9 @@ abstract class RoutePaths {
   static const walletForm = '/wallet/form';
   static const transaction = '/transaction';
 
+  /// Income vs expense over the last months / years.
+  static const progress = '/progress';
+
   /// Global search over every wallet's transactions.
   static const search = '/search';
 

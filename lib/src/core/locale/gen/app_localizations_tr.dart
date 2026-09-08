@@ -778,6 +778,70 @@ class AppLocalizationsTr extends AppLocalizations {
   String get subscriptions_type_hint => 'Bir aboneliğin türü değiştirilemez.';
 
   @override
+  String get l10nProgress =>
+      '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ PROGRESS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
+
+  @override
+  String get progress_title => 'İlerleme';
+
+  @override
+  String get progress_month => 'Ay';
+
+  @override
+  String get progress_year => 'Yıl';
+
+  @override
+  String get progress_income => 'Gelir';
+
+  @override
+  String get progress_expense => 'Gider';
+
+  @override
+  String get progress_net => 'Net';
+
+  @override
+  String get progress_vs_last_month => 'geçen aya göre';
+
+  @override
+  String get progress_vs_last_year => 'geçen yıla göre';
+
+  @override
+  String get progress_all_wallets => 'Tüm cüzdanlar';
+
+  @override
+  String get progress_scope_title => 'Verileri göster';
+
+  @override
+  String get progress_chart_title => 'Gelir vs Gider';
+
+  @override
+  String progress_not_included(String codes) {
+    return '$codes dahil değil';
+  }
+
+  @override
+  String get progress_empty_title => 'Henüz analiz edilecek bir şey yok';
+
+  @override
+  String get progress_trend_title => 'Seyir';
+
+  @override
+  String get progress_tags_title => 'Etikete göre gider';
+
+  @override
+  String get progress_untagged => 'Etiketsiz';
+
+  @override
+  String get progress_other_tags => 'Diğer';
+
+  @override
+  String get progress_no_expenses => 'Bu dönemde gider yok';
+
+  @override
+  String get progress_empty_subtitle =>
+      'Birkaç işlem ekleyin, ilerlemeniz burada görünsün.';
+
+  @override
   String get l10nCurrency =>
       '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ CURRENCY ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
 

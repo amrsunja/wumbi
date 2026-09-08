@@ -803,6 +803,70 @@ class AppLocalizationsRu extends AppLocalizations {
   String get subscriptions_type_hint => 'Тип подписки изменить нельзя.';
 
   @override
+  String get l10nProgress =>
+      '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ PROGRESS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
+
+  @override
+  String get progress_title => 'Прогресс';
+
+  @override
+  String get progress_month => 'Месяц';
+
+  @override
+  String get progress_year => 'Год';
+
+  @override
+  String get progress_income => 'Доход';
+
+  @override
+  String get progress_expense => 'Расход';
+
+  @override
+  String get progress_net => 'Итого';
+
+  @override
+  String get progress_vs_last_month => 'к прошлому месяцу';
+
+  @override
+  String get progress_vs_last_year => 'к прошлому году';
+
+  @override
+  String get progress_all_wallets => 'Все кошельки';
+
+  @override
+  String get progress_scope_title => 'Показать данные по';
+
+  @override
+  String get progress_chart_title => 'Доходы и расходы';
+
+  @override
+  String progress_not_included(String codes) {
+    return '$codes не учтены';
+  }
+
+  @override
+  String get progress_empty_title => 'Пока нечего анализировать';
+
+  @override
+  String get progress_trend_title => 'Динамика';
+
+  @override
+  String get progress_tags_title => 'Расходы по тегам';
+
+  @override
+  String get progress_untagged => 'Без тега';
+
+  @override
+  String get progress_other_tags => 'Прочее';
+
+  @override
+  String get progress_no_expenses => 'В этом периоде расходов нет';
+
+  @override
+  String get progress_empty_subtitle =>
+      'Добавьте несколько операций — и здесь появится ваш прогресс.';
+
+  @override
   String get l10nCurrency =>
       '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ CURRENCY ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
 

@@ -369,6 +369,31 @@
   "subscriptions_stopped": "Abonelik durduruldu",
   "subscriptions_type_hint": "Bir aboneliğin türü değiştirilemez.",
 
+  "l10nProgress": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ PROGRESS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "progress_title": "İlerleme",
+  "progress_month": "Ay",
+  "progress_year": "Yıl",
+  "progress_income": "Gelir",
+  "progress_expense": "Gider",
+  "progress_net": "Net",
+  "progress_vs_last_month": "geçen aya göre",
+  "progress_vs_last_year": "geçen yıla göre",
+  "progress_all_wallets": "Tüm cüzdanlar",
+  "progress_scope_title": "Verileri göster",
+  "progress_chart_title": "Gelir vs Gider",
+  "progress_not_included": "{codes} dahil değil",
+  "@progress_not_included": {
+    "placeholders": {
+      "codes": {"type": "String"}
+    }
+  },
+  "progress_empty_title": "Henüz analiz edilecek bir şey yok",
+  "progress_trend_title": "Seyir",
+  "progress_tags_title": "Etikete göre gider",
+  "progress_untagged": "Etiketsiz",
+  "progress_other_tags": "Diğer",
+  "progress_no_expenses": "Bu dönemde gider yok",
+  "progress_empty_subtitle": "Birkaç işlem ekleyin, ilerlemeniz burada görünsün.",
   "l10nCurrency": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ CURRENCY ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
   "currency_pick_title": "Para Birimi",
   "currency_no_results": "Para birimi bulunamadı",

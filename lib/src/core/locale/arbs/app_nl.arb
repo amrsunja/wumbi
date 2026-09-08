@@ -369,6 +369,31 @@
   "subscriptions_stopped": "Abonnement gestopt",
   "subscriptions_type_hint": "Het type van een abonnement kan niet veranderen.",
 
+  "l10nProgress": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ PROGRESS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "progress_title": "Voortgang",
+  "progress_month": "Maand",
+  "progress_year": "Jaar",
+  "progress_income": "Inkomsten",
+  "progress_expense": "Uitgave",
+  "progress_net": "Netto",
+  "progress_vs_last_month": "t.o.v. vorige maand",
+  "progress_vs_last_year": "t.o.v. vorig jaar",
+  "progress_all_wallets": "Alle portemonnees",
+  "progress_scope_title": "Gegevens tonen voor",
+  "progress_chart_title": "Inkomsten vs Uitgaven",
+  "progress_not_included": "{codes} niet meegerekend",
+  "@progress_not_included": {
+    "placeholders": {
+      "codes": {"type": "String"}
+    }
+  },
+  "progress_empty_title": "Nog niets te analyseren",
+  "progress_trend_title": "Verloop",
+  "progress_tags_title": "Uitgaven per tag",
+  "progress_untagged": "Zonder tag",
+  "progress_other_tags": "Overig",
+  "progress_no_expenses": "Geen uitgaven in deze periode",
+  "progress_empty_subtitle": "Voeg een paar transacties toe en je voortgang verschijnt hier.",
   "l10nCurrency": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ CURRENCY ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
   "currency_pick_title": "Valuta",
   "currency_no_results": "Geen valuta gevonden",

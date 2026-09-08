@@ -1368,6 +1368,126 @@ abstract class AppLocalizations {
   /// **'The type of a subscription can\'t change.'**
   String get subscriptions_type_hint;
 
+  /// No description provided for @l10nProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ PROGRESS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠'**
+  String get l10nProgress;
+
+  /// No description provided for @progress_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Progress'**
+  String get progress_title;
+
+  /// No description provided for @progress_month.
+  ///
+  /// In en, this message translates to:
+  /// **'Month'**
+  String get progress_month;
+
+  /// No description provided for @progress_year.
+  ///
+  /// In en, this message translates to:
+  /// **'Year'**
+  String get progress_year;
+
+  /// No description provided for @progress_income.
+  ///
+  /// In en, this message translates to:
+  /// **'Income'**
+  String get progress_income;
+
+  /// No description provided for @progress_expense.
+  ///
+  /// In en, this message translates to:
+  /// **'Expense'**
+  String get progress_expense;
+
+  /// No description provided for @progress_net.
+  ///
+  /// In en, this message translates to:
+  /// **'Net'**
+  String get progress_net;
+
+  /// No description provided for @progress_vs_last_month.
+  ///
+  /// In en, this message translates to:
+  /// **'vs last month'**
+  String get progress_vs_last_month;
+
+  /// No description provided for @progress_vs_last_year.
+  ///
+  /// In en, this message translates to:
+  /// **'vs last year'**
+  String get progress_vs_last_year;
+
+  /// No description provided for @progress_all_wallets.
+  ///
+  /// In en, this message translates to:
+  /// **'All wallets'**
+  String get progress_all_wallets;
+
+  /// No description provided for @progress_scope_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Show data for'**
+  String get progress_scope_title;
+
+  /// No description provided for @progress_chart_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Income vs Expense'**
+  String get progress_chart_title;
+
+  /// No description provided for @progress_not_included.
+  ///
+  /// In en, this message translates to:
+  /// **'{codes} not included'**
+  String progress_not_included(String codes);
+
+  /// No description provided for @progress_empty_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing to analyse yet'**
+  String get progress_empty_title;
+
+  /// No description provided for @progress_trend_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Trend'**
+  String get progress_trend_title;
+
+  /// No description provided for @progress_tags_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Spending by tag'**
+  String get progress_tags_title;
+
+  /// No description provided for @progress_untagged.
+  ///
+  /// In en, this message translates to:
+  /// **'Untagged'**
+  String get progress_untagged;
+
+  /// No description provided for @progress_other_tags.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get progress_other_tags;
+
+  /// No description provided for @progress_no_expenses.
+  ///
+  /// In en, this message translates to:
+  /// **'No spending in this period'**
+  String get progress_no_expenses;
+
+  /// No description provided for @progress_empty_subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a few transactions and your progress shows up here.'**
+  String get progress_empty_subtitle;
+
   /// No description provided for @l10nCurrency.
   ///
   /// In en, this message translates to:

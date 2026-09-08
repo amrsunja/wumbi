@@ -7,6 +7,7 @@ import '../../../../core/design_system/app_ui.dart';
 import '../../../../core/utils/app_vibrations.dart';
 import '../../../../core/utils/extensions/build_context_extensions.dart';
 import '../../data/models/tag_stats.dart';
+import '../tag_palette.dart';
 
 /// Obsidian-style tag map: a force-directed graph on a pannable / zoomable
 /// canvas. Bigger circles moved more money; lines connect tags that were
@@ -200,7 +201,7 @@ class TagGraphSimulation {
         TagGraphNode(
           stats: s,
           radius: radius,
-          color: colorFor(s.tag.normalizedName),
+          color: TagPalette.of(s.tag.normalizedName),
           position: start,
         ),
       );
@@ -216,38 +217,6 @@ class TagGraphSimulation {
       if (a == null || b == null || a == b) continue;
       edges.add(TagGraphEdge(a: a, b: b, weight: l.count / maxCount));
     }
-  }
-
-  /// Splash palette — vivid, flat swatches. Deliberately wider than
-  /// `UIColorToken` so neighbouring bubbles never read as the same colour.
-  static const List<Color> palette = [
-    Color(0xffFF5E5B), // coral
-    Color(0xffFF9F1C), // tangerine
-    Color(0xffFFD166), // saffron
-    Color(0xffB8E062), // sprout
-    Color(0xff3DD68C), // mint
-    Color(0xff00C2A8), // teal
-    Color(0xff21B4E8), // sky
-    Color(0xff4C6FFF), // cobalt
-    Color(0xff7B61FF), // indigo
-    Color(0xffB15CFF), // amethyst
-    Color(0xffE45CC4), // orchid
-    Color(0xffFF6FA5), // rose
-    Color(0xffF7735A), // salmon
-    Color(0xffD9A441), // ochre
-    Color(0xff5FB37A), // moss
-    Color(0xff2E8FA6), // lagoon
-    Color(0xff8C7CFF), // periwinkle
-    Color(0xffFF8A3D), // amber splash
-  ];
-
-  /// Stable, fully opaque splash colour from the tag name.
-  static Color colorFor(String name) {
-    var h = 5381;
-    for (final c in name.codeUnits) {
-      h = ((h << 5) + h + c) & 0x7fffffff;
-    }
-    return palette[h % palette.length];
   }
 
   /// Restart the ticker loop after a user interaction.

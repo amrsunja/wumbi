@@ -787,6 +787,70 @@ class AppLocalizationsNl extends AppLocalizations {
       'Het type van een abonnement kan niet veranderen.';
 
   @override
+  String get l10nProgress =>
+      '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ PROGRESS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
+
+  @override
+  String get progress_title => 'Voortgang';
+
+  @override
+  String get progress_month => 'Maand';
+
+  @override
+  String get progress_year => 'Jaar';
+
+  @override
+  String get progress_income => 'Inkomsten';
+
+  @override
+  String get progress_expense => 'Uitgave';
+
+  @override
+  String get progress_net => 'Netto';
+
+  @override
+  String get progress_vs_last_month => 't.o.v. vorige maand';
+
+  @override
+  String get progress_vs_last_year => 't.o.v. vorig jaar';
+
+  @override
+  String get progress_all_wallets => 'Alle portemonnees';
+
+  @override
+  String get progress_scope_title => 'Gegevens tonen voor';
+
+  @override
+  String get progress_chart_title => 'Inkomsten vs Uitgaven';
+
+  @override
+  String progress_not_included(String codes) {
+    return '$codes niet meegerekend';
+  }
+
+  @override
+  String get progress_empty_title => 'Nog niets te analyseren';
+
+  @override
+  String get progress_trend_title => 'Verloop';
+
+  @override
+  String get progress_tags_title => 'Uitgaven per tag';
+
+  @override
+  String get progress_untagged => 'Zonder tag';
+
+  @override
+  String get progress_other_tags => 'Overig';
+
+  @override
+  String get progress_no_expenses => 'Geen uitgaven in deze periode';
+
+  @override
+  String get progress_empty_subtitle =>
+      'Voeg een paar transacties toe en je voortgang verschijnt hier.';
+
+  @override
   String get l10nCurrency =>
       '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ CURRENCY ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
 

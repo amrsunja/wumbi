@@ -369,6 +369,31 @@
   "subscriptions_stopped": "تم إيقاف الاشتراك",
   "subscriptions_type_hint": "لا يمكن تغيير نوع الاشتراك.",
 
+  "l10nProgress": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ PROGRESS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
+  "progress_title": "التقدم",
+  "progress_month": "شهر",
+  "progress_year": "سنة",
+  "progress_income": "دخل",
+  "progress_expense": "مصروف",
+  "progress_net": "الصافي",
+  "progress_vs_last_month": "مقارنة بالشهر الماضي",
+  "progress_vs_last_year": "مقارنة بالسنة الماضية",
+  "progress_all_wallets": "كل المحافظ",
+  "progress_scope_title": "عرض البيانات لـ",
+  "progress_chart_title": "الدخل مقابل المصروف",
+  "progress_not_included": "{codes} غير مشمولة",
+  "@progress_not_included": {
+    "placeholders": {
+      "codes": {"type": "String"}
+    }
+  },
+  "progress_empty_title": "لا يوجد ما يمكن تحليله بعد",
+  "progress_trend_title": "الاتجاه",
+  "progress_tags_title": "المصروف حسب الوسم",
+  "progress_untagged": "بدون وسم",
+  "progress_other_tags": "أخرى",
+  "progress_no_expenses": "لا توجد مصروفات في هذه الفترة",
+  "progress_empty_subtitle": "أضف بعض المعاملات وسيظهر تقدمك هنا.",
   "l10nCurrency": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ CURRENCY ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
   "currency_pick_title": "العملة",
   "currency_no_results": "لا توجد عملة مطابقة",

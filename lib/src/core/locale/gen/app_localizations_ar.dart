@@ -814,6 +814,69 @@ class AppLocalizationsAr extends AppLocalizations {
   String get subscriptions_type_hint => 'لا يمكن تغيير نوع الاشتراك.';
 
   @override
+  String get l10nProgress =>
+      '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ PROGRESS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
+
+  @override
+  String get progress_title => 'التقدم';
+
+  @override
+  String get progress_month => 'شهر';
+
+  @override
+  String get progress_year => 'سنة';
+
+  @override
+  String get progress_income => 'دخل';
+
+  @override
+  String get progress_expense => 'مصروف';
+
+  @override
+  String get progress_net => 'الصافي';
+
+  @override
+  String get progress_vs_last_month => 'مقارنة بالشهر الماضي';
+
+  @override
+  String get progress_vs_last_year => 'مقارنة بالسنة الماضية';
+
+  @override
+  String get progress_all_wallets => 'كل المحافظ';
+
+  @override
+  String get progress_scope_title => 'عرض البيانات لـ';
+
+  @override
+  String get progress_chart_title => 'الدخل مقابل المصروف';
+
+  @override
+  String progress_not_included(String codes) {
+    return '$codes غير مشمولة';
+  }
+
+  @override
+  String get progress_empty_title => 'لا يوجد ما يمكن تحليله بعد';
+
+  @override
+  String get progress_trend_title => 'الاتجاه';
+
+  @override
+  String get progress_tags_title => 'المصروف حسب الوسم';
+
+  @override
+  String get progress_untagged => 'بدون وسم';
+
+  @override
+  String get progress_other_tags => 'أخرى';
+
+  @override
+  String get progress_no_expenses => 'لا توجد مصروفات في هذه الفترة';
+
+  @override
+  String get progress_empty_subtitle => 'أضف بعض المعاملات وسيظهر تقدمك هنا.';
+
+  @override
   String get l10nCurrency =>
       '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ CURRENCY ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
 
