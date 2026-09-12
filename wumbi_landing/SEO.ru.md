@@ -31,6 +31,11 @@ Playwright открывает собранную страницу, ждёт мо
 `seo/prerendered/<lang>.html` — по файлу на язык.
 
 `build.mjs` вставляет этот снимок в `<div id="dc-prerender">` **до** `<x-dc>`.
+Снимок удаляется в момент, когда в DOM появляется `#dc-root`, — то есть **до** того,
+как React отработает `componentDidMount`. Это принципиально: компонент ищет свои узлы
+через `getElementById` (`#tag-graph`, `#hero-total`, `#waitlist`), и если снимок ещё
+в документе, он находит его копию — ту, которую сейчас удалят. Именно так пропала
+анимация карты тегов: граф рисовался в canvas, которого через миг не стало.
 Итог:
 
 - **без JS** (краулер, превью в соцсетях) видно полностью свёрстанную страницу —
@@ -106,6 +111,7 @@ FAQ-блок реально **видимый** на странице (натив
 | Что | Было | Стало |
 |---|---|---|
 | Маскоты | 4.6 + 2.4 + 4.5 МБ PNG | 32 + 14 + 38 КБ WebP, с `width`/`height` и `loading="lazy"` |
+| | | Атрибуты `width`/`height` — это presentational hints: если в CSS задана только одна сторона, вторая берётся из атрибута и картинка плющится. `build.mjs` дописывает недостающую сторону как `auto`, поэтому атрибуты дают только соотношение сторон (ради CLS). |
 | Неиспользуемые PNG | 8.5 МБ уезжали в `dist` | не копируются вообще |
 | Шрифты | Google Fonts CDN, блокирует рендер | локальные woff2, `font-display:swap`, подмножества latin / latin-ext / **cyrillic** / arabic |
 | GSAP | jsdelivr CDN | локально в `/vendor` |
@@ -208,10 +214,22 @@ npm run prerender   # пересобрать снимки и OG (нужен Chro
 **После любой из трёх правок** — `npm run prerender`, иначе краулер увидит старое.
 
 Деплой на Hostinger не меняется: корневой `package.json` делегирует в
-`wumbi_landing`, выходная папка — `wumbi_landing/dist`. Все build-зависимости
-переехали из `devDependencies` в `dependencies` — Hostinger запускает
-`npm install` с `NODE_ENV=production`, при котором devDependencies просто не
-ставятся, и сборка падала бы на `sharp`.
+`wumbi_landing`, выходная папка — `wumbi_landing/dist`.
+
+**Важно про `sharp`.** На Hostinger Node 18, а `sharp` требует ≥ 20.9 — сборка падала
+с `Could not load the "sharp" module`. Поэтому production-сборка вообще не трогает
+нативные модули: все производные картинки (WebP-маскоты, иконки 32/180/192/512)
+лежат в **`assets/derived/`** и коммитятся вместе с `manifest.json`, где записаны
+их размеры. `build.mjs` подгружает `sharp` лениво и только если в `assets/derived/`
+чего-то не хватает — то есть локально, сразу после замены исходной картинки:
+
+```bash
+npm run images     # npm i --no-save sharp && node build.mjs
+git add assets/derived
+```
+
+В `dependencies` остались только чистые JS-пакеты: react, react-dom, gsap и три
+@fontsource. Ни `sharp`, ни `playwright` там нет — это локальные инструменты.
 
 ---
 
@@ -224,4 +242,5 @@ npm run prerender   # пересобрать снимки и OG (нужен Chro
 - [ ] `https://wumbi.app/sitemap.xml` открывается, в нём 7 URL
 - [ ] `https://www.wumbi.app` → один 301 на `https://wumbi.app` (без цепочки)
 - [ ] PageSpeed Insights: LCP < 2.5 с на мобильном
+- [ ] Маскоты не растянуты, карта тегов рисуется, графики Progress анимируются
 - [ ] Sitemap отправлен в Search Console, Bing и Яндекс

@@ -1,0 +1,28 @@
+{
+  "generatedWith": "sharp",
+  "images": {
+    "assets/wumbi_hello.png": {
+      "file": "wumbi_hello.webp",
+      "w": 600,
+      "h": 667,
+      "eager": true
+    },
+    "assets/wumbi_take_money.png": {
+      "file": "wumbi_take_money.webp",
+      "w": 600,
+      "h": 807,
+      "eager": false
+    },
+    "assets/wumbi_look.png": {
+      "file": "wumbi_look.webp",
+      "w": 260,
+      "h": 459,
+      "eager": false
+    },
+    "assets/app_logo.png": {
+      "file": "app_logo.webp",
+      "w": 96,
+      "h": 96
+    }
+  }
+}

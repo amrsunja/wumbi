@@ -13,7 +13,6 @@
 // Paths in dist are root-absolute (/assets/…) so a page at any depth resolves them.
 import { mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync, existsSync, statSync } from 'node:fs';
 import { join, dirname } from 'node:path';
-import sharp from 'sharp';
 import { SITE, APP, LOCALES, OG_LOCALE, langPath, langUrl } from './seo.config.mjs';
 
 const SRC = 'Wumbi Landing.dc.html';
@@ -54,34 +53,65 @@ mkdirSync(join(OUT, 'vendor'), { recursive: true });
 let html = readFileSync(SRC, 'utf8');
 
 // ---------------------------------------------------------------- assets: images
-// Only ship what the template actually references; the source folder carries ~20 MB of
-// unused mascot PNGs. Mascots are re-encoded to WebP at 2x their largest display size.
+// Derived images (WebP mascots + icon PNGs) live in assets/derived/ and are COMMITTED.
+// The deploy host runs Node 18 and sharp needs >= 20.9, so the production build must not
+// touch a native module at all. sharp is imported lazily and only when something in
+// assets/derived/ is missing or stale — i.e. locally, right after a source image changes.
 const referenced = new Set([...html.matchAll(/assets\/[A-Za-z0-9_/-]+\.(?:png|svg|jpe?g)/g)].map((m) => m[0]));
+const DERIVED = join('assets', 'derived');
+const MANIFEST = join(DERIVED, 'manifest.json');
+const LOGO = 'assets/app_logo.png';
 const MASCOTS = {
   'assets/wumbi_hello.png': { width: 600, eager: true },      // hero, display max 300px → LCP
   'assets/wumbi_take_money.png': { width: 600 },              // waitlist card, display max 300px
   'assets/wumbi_look.png': { width: 260 },                    // peeking, display height 64px
 };
-const imgMeta = {}; // src → { out, w, h }
+const ICON_PNGS = [['favicon-32.png', 32], ['favicon-192.png', 192], ['apple-touch-icon.png', 180], ['icon-512.png', 512]];
 
-for (const [src, opt] of Object.entries(MASCOTS)) {
-  if (!referenced.has(src)) continue;
-  const out = src.replace(/\.png$/, '.webp');
-  const buf = await sharp(src).resize({ width: opt.width, withoutEnlargement: true })
-    .webp({ quality: 82, effort: 6 }).toBuffer();
-  const meta = await sharp(buf).metadata();
-  write(out, buf);
-  imgMeta[src] = { out: '/' + out, w: meta.width, h: meta.height, eager: !!opt.eager };
+const readManifest = () => { try { return JSON.parse(readFileSync(MANIFEST, 'utf8')); } catch { return null; } };
+let manifest = readManifest();
+const fresh = manifest
+  && Object.keys(MASCOTS).every((src) => manifest.images[src] && existsSync(join(DERIVED, manifest.images[src].file)))
+  && manifest.images[LOGO] && existsSync(join(DERIVED, manifest.images[LOGO].file))
+  && ICON_PNGS.every(([n]) => existsSync(join(DERIVED, n)));
+
+if (!fresh) {
+  let sharp;
+  try { ({ default: sharp } = await import('sharp')); } catch {
+    throw new Error(
+      'build: assets/derived/ is incomplete and sharp is not installed.\n' +
+      '  Locally:  npm i -D sharp && npm run build && git add assets/derived\n' +
+      '  The generated files are committed so the deploy host never needs sharp.',
+    );
+  }
+  console.log('  regenerating assets/derived/ with sharp…');
+  mkdirSync(DERIVED, { recursive: true });
+  const images = {};
+  for (const [src, opt] of Object.entries(MASCOTS)) {
+    const file = src.replace(/^assets\//, '').replace(/\.png$/, '.webp');
+    const buf = await sharp(src).resize({ width: opt.width, withoutEnlargement: true }).webp({ quality: 82, effort: 6 }).toBuffer();
+    const meta = await sharp(buf).metadata();
+    writeFileSync(join(DERIVED, file), buf);
+    images[src] = { file, w: meta.width, h: meta.height, eager: !!opt.eager };
+  }
+  for (const [name, size] of ICON_PNGS) {
+    writeFileSync(join(DERIVED, name), await sharp(LOGO).resize(size, size).png({ compressionLevel: 9 }).toBuffer());
+  }
+  writeFileSync(join(DERIVED, 'app_logo.webp'), await sharp(LOGO).resize(96, 96).webp({ quality: 88 }).toBuffer());
+  images[LOGO] = { file: 'app_logo.webp', w: 96, h: 96 };
+  manifest = { generatedWith: 'sharp', images };
+  writeFileSync(MANIFEST, JSON.stringify(manifest, null, 2) + '\n');
 }
 
-// The logo doubles as favicon, manifest icon and OG fallback, so keep raster PNGs.
-const LOGO = 'assets/app_logo.png';
-for (const [name, size] of [['favicon-32.png', 32], ['favicon-192.png', 192], ['apple-touch-icon.png', 180], ['icon-512.png', 512]]) {
-  write(join('assets', name), await sharp(LOGO).resize(size, size).png({ compressionLevel: 9 }).toBuffer());
+// src → { out, w, h } for the <img> rewrite below.
+const imgMeta = {};
+for (const [src, m] of Object.entries(manifest.images)) {
+  if (src !== LOGO && !referenced.has(src)) continue;
+  copyFile(join(DERIVED, m.file), join(OUT, 'assets', m.file));
+  imgMeta[src] = { out: `/assets/${m.file}`, w: m.w, h: m.h, eager: !!m.eager };
 }
-write('assets/app_logo.webp', await sharp(LOGO).resize(96, 96).webp({ quality: 88 }).toBuffer());
-copyFile(LOGO, join(OUT, LOGO));
-imgMeta[LOGO] = { out: '/assets/app_logo.webp', w: 96, h: 96 };
+for (const [name] of ICON_PNGS) copyFile(join(DERIVED, name), join(OUT, 'assets', name));
+copyFile(LOGO, join(OUT, LOGO)); // untouched original: OG fallback + any external reference
 
 // SVGs: copy every referenced literal, plus the whole icon set — feature icons are
 // assembled at runtime (`assets/icons/${name}.svg`) so they never appear as literals.
@@ -147,10 +177,30 @@ copyFile('i18n.js', join(OUT, 'i18n.js'));
 
 // ---------------------------------------------------------------- template rewrites
 // Root-absolute asset paths, WebP mascots with intrinsic size, local fonts and GSAP.
+// width/height attributes are presentational hints: on an image whose CSS sets only ONE
+// dimension the other attribute wins and the mascot gets squashed. Pin the missing side
+// to auto so the attributes only supply the aspect ratio (which is what fixes CLS).
+const autoSide = (tag) => {
+  const style = /style="([^"]*)"/.exec(tag)?.[1] || '';
+  const has = (prop) => new RegExp(`(^|;)\\s*${prop}\\s*:`).test(style);
+  const w = has('width'), h = has('height');
+  if (w && !h) return 'height:auto';
+  if (h && !w) return 'width:auto';
+  return '';
+};
 for (const [src, m] of Object.entries(imgMeta)) {
-  html = html.replace(new RegExp(`<img([^>]*?)src="${src}"([^>]*?)>`, 'g'),
-    (tag, a, b) => `<img${a}src="${m.out}"${b} width="${m.w}" height="${m.h}"` +
-      (m.eager ? ' decoding="async">' : ' loading="lazy" decoding="async">'));
+  html = html.replace(new RegExp(`<img([^>]*?)src="${src}"([^>]*?)>`, 'g'), (tag, a, b) => {
+    const auto = autoSide(tag);
+    let rest = b;
+    if (auto) {
+      rest = /style="[^"]*"/.test(b)
+        ? b.replace(/style="([^"]*?);?"/, (_, v) => `style="${v};${auto}"`)
+        : `${b} style="${auto}"`;
+      if (!/style="/.test(b) && /style="/.test(a)) { rest = b; a = a.replace(/style="([^"]*?);?"/, (_, v) => `style="${v};${auto}"`); }
+    }
+    return `<img${a}src="${m.out}"${rest} width="${m.w}" height="${m.h}"` +
+      (m.eager ? ' decoding="async">' : ' loading="lazy" decoding="async">');
+  });
 }
 html = html.replace(/(src|href)="assets\//g, '$1="/assets/');
 html = html.replace(/`assets\//g, '`/assets/'); // template literals in the component script
@@ -291,14 +341,19 @@ const head = (lang) => {
 
 // Swap the prerendered snapshot out the instant React puts something in #dc-root.
 // With JS off (or broken) the snapshot simply stays — that is the crawler's copy.
-// Removing the snapshot changes the document height, so every ScrollTrigger position
-// GSAP measured during mount is stale — refresh, or nothing below the fold reveals.
+// The snapshot must be gone BEFORE componentDidMount runs: the component looks its
+// nodes up with getElementById (#tag-graph, #hero-total, #waitlist…) and would otherwise
+// grab the snapshot's copy — the one about to be deleted. So the observer fires on
+// #dc-root merely EXISTING (support.js inserts it immediately before render, and a
+// MutationObserver callback is a microtask, so it lands before React's commit task).
+// Removing it also changes the document height, which invalidates every ScrollTrigger
+// position GSAP measured — refresh, or nothing below the fold reveals.
 const SWAP = `<script>(function(){` +
   `function refresh(){if(window.ScrollTrigger)window.ScrollTrigger.refresh();}` +
-  `function d(){var p=document.getElementById('dc-prerender'),r=document.getElementById('dc-root');` +
-  `if(p&&r&&r.firstChild){p.parentNode.removeChild(p);` +
+  `function d(){var p=document.getElementById('dc-prerender');if(!p)return true;` +
+  `if(!document.getElementById('dc-root'))return false;p.parentNode.removeChild(p);` +
   `requestAnimationFrame(refresh);setTimeout(refresh,300);setTimeout(refresh,1200);` +
-  `addEventListener('load',function(){setTimeout(refresh,100)});return true}return false}` +
+  `addEventListener('load',function(){setTimeout(refresh,100)});return true}` +
   `if(d())return;var o=new MutationObserver(function(){if(d())o.disconnect()});` +
   `o.observe(document.body,{childList:true,subtree:true});setTimeout(function(){o.disconnect()},2e4)})();</script>`;
 

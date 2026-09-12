@@ -14,7 +14,6 @@
 import { createServer } from 'node:http';
 import { readFileSync, existsSync, mkdirSync, writeFileSync, statSync } from 'node:fs';
 import { join, extname, resolve } from 'node:path';
-import sharp from 'sharp';
 import { SITE, LOCALES, langPath } from './seo.config.mjs';
 
 const OUT = 'dist';
@@ -22,6 +21,8 @@ const SNAP_DIR = join('seo', 'prerendered');
 const OG_DIR = join('assets', 'og');
 const PORT = Number(process.env.PRERENDER_PORT || 4180);
 
+let sharp = null;
+try { ({ default: sharp } = await import('sharp')); } catch { /* OG images just stay uncompressed */ }
 let chromium;
 try { ({ chromium } = await import('playwright')); } catch {
   console.error('prerender: Playwright is not installed.\n  npm i -D playwright && npx playwright install chromium');
@@ -114,7 +115,7 @@ p{font-size:26px;line-height:1.45;color:#6F7F92;max-width:900px}
   await ogPage.evaluate(() => document.fonts.ready);
   const shot = await ogPage.screenshot({ type: 'png' });
   // Palette PNG: ~250 KB of flat brand colour compresses to ~45 KB with no visible loss.
-  const png = await sharp(shot).png({ palette: true, quality: 88, effort: 10 }).toBuffer();
+  const png = sharp ? await sharp(shot).png({ palette: true, quality: 88, effort: 10 }).toBuffer() : shot;
   writeFileSync(join(OG_DIR, `og-${lang}.png`), png);
   console.log(`  ${lang}: og-${lang}.png (${(png.length / 1024).toFixed(0)} KB)`);
 }
