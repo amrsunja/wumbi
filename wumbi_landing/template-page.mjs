@@ -8,8 +8,7 @@
 // the app is offered at the bottom to the people who have just admitted they want to
 // track a budget. The spreadsheet is our own work, not a copy of anyone else's.
 import { SITE, TEMPLATE_PAGE as TP, APP } from './seo.config.mjs';
-
-const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+import { shell, esc } from './page-shell.mjs';
 const XLSX = '/assets/templates/Wumbi-Budget-Planner-Template.xlsx';
 const URL = SITE.url + TP.path;
 
@@ -83,87 +82,7 @@ export function templatePage() {
     ],
   };
 
-  return `<!DOCTYPE html>
-<html lang="en" dir="ltr">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>${esc(TP.title)} - ${SITE.name}</title>
-<meta name="description" content="${esc(TP.description)}">
-<meta name="keywords" content="${esc(TP.keywords.join(', '))}">
-<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1">
-<meta name="theme-color" content="${SITE.themeColor}">
-<link rel="canonical" href="${URL}">
-<link rel="alternate" hreflang="x-default" href="${URL}">
-<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
-<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
-<link rel="manifest" href="/site.webmanifest">
-<meta property="og:type" content="article">
-<meta property="og:site_name" content="${SITE.name}">
-<meta property="og:locale" content="en_US">
-<meta property="og:url" content="${URL}">
-<meta property="og:title" content="${esc(TP.title)}">
-<meta property="og:description" content="${esc(TP.description)}">
-<meta property="og:image" content="${SITE.url}/assets/icon-512.png">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="${esc(TP.title)}">
-<meta name="twitter:description" content="${esc(TP.description)}">
-<link rel="stylesheet" href="/vendor/fonts.css">
-<style>
-*{box-sizing:border-box}
-body{margin:0;background:${SITE.bgColor};color:#101010;font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
-a{color:#3B82F6;text-decoration:none}
-a:hover{text-decoration:underline}
-.wrap{max-width:880px;margin:0 auto;padding-inline:24px}
-header.bar{border-bottom:1px solid rgba(174,194,212,.3);padding-block:16px;background:${SITE.bgColor}}
-.bar .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;max-width:1120px}
-.brand{display:flex;align-items:center;gap:10px;color:#456285;font-weight:700;font-size:17px}
-.brand img{width:32px;height:32px;border-radius:9px}
-.kicker{font-size:11px;font-weight:600;letter-spacing:1.2px;color:#AEC2D4;text-transform:uppercase;margin:0 0 14px}
-h1{font-family:Montserrat,Inter,sans-serif;font-weight:300;font-size:clamp(34px,5vw,54px);line-height:1.05;letter-spacing:-1.4px;margin:0 0 20px;text-wrap:balance}
-h1 strong{font-weight:700}
-h2{font-family:Montserrat,Inter,sans-serif;font-weight:300;font-size:clamp(26px,3.4vw,38px);line-height:1.1;letter-spacing:-.8px;margin:0 0 18px;text-wrap:balance}
-h2 strong{font-weight:700}
-h3{font-size:17px;font-weight:600;margin:0 0 6px;letter-spacing:-.2px}
-p{margin:0 0 16px;color:#42505F;text-wrap:pretty}
-.lead{font-size:19px;line-height:1.55;color:#42505F;max-width:62ch}
-section{padding-block:56px}
-section+section{border-top:1px solid rgba(174,194,212,.25)}
-.cta{display:inline-flex;align-items:center;gap:12px;background:#3B82F6;color:#fff;font-weight:700;font-size:17px;padding:18px 30px;border-radius:999px;box-shadow:0 18px 34px -18px rgba(59,130,246,.85)}
-.cta:hover{text-decoration:none;background:#2f74e0}
-.cta-note{margin-top:14px;font-size:14px;color:#6F7F92}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin:0;padding:0;list-style:none}
-.card{background:rgba(255,255,255,.75);border:1px solid rgba(174,194,212,.3);border-radius:20px;padding:22px 24px}
-.card p{margin:0;font-size:15px;line-height:1.55;color:#6F7F92}
-ol.steps{counter-reset:s;list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:16px}
-ol.steps li{counter-increment:s;display:flex;gap:16px;align-items:flex-start}
-ol.steps li::before{content:counter(s);flex-shrink:0;width:30px;height:30px;border-radius:50%;background:rgba(59,130,246,.12);color:#3B82F6;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;margin-top:2px}
-details{background:rgba(255,255,255,.75);border:1px solid rgba(174,194,212,.3);border-radius:18px;margin-bottom:12px;overflow:hidden}
-summary{cursor:pointer;list-style:none;padding:18px 22px;font-size:16px;font-weight:600;color:#456285}
-summary::-webkit-details-marker{display:none}
-summary:hover{color:#3B82F6}
-details[open] summary{color:#3B82F6}
-.faq-a{padding:0 22px 20px;font-size:15px;line-height:1.65;color:#6F7F92;max-width:70ch}
-.appbox{background:#456285;color:#fff;border-radius:28px;padding:clamp(32px,5vw,56px);position:relative;overflow:hidden}
-.appbox h2{color:#fff}
-.appbox p{color:#D6E2F0}
-.appbox .cta{background:#fff;color:#456285;box-shadow:none}
-.appbox .cta:hover{background:#EEF3F8}
-footer{border-top:1px solid rgba(174,194,212,.3);padding-block:28px;font-size:13px;color:#AEC2D4}
-footer .wrap{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;align-items:center;max-width:1120px}
-footer a{color:#456285;font-weight:600}
-@media (max-width:560px){section{padding-block:40px}.cta{width:100%;justify-content:center}}
-</style>
-</head>
-<body>
-<header class="bar">
-  <div class="wrap">
-    <a class="brand" href="/"><img src="/assets/app_logo.png" alt="" width="32" height="32">Wumbi</a>
-    <a href="/" style="font-weight:600;font-size:14px;color:#456285">The app</a>
-  </div>
-</header>
-
-<main class="wrap">
+  const body = `
 
 <section>
   <p class="kicker">Free download</p>
@@ -208,22 +127,14 @@ footer a{color:#456285;font-weight:600}
   ${FAQ.map(([q, a]) => `<details><summary>${esc(q)}</summary><div class="faq-a">${esc(a)}</div></details>`).join('\n  ')}
 </section>
 
-</main>
-
-<footer>
-  <div class="wrap">
-    <span>&copy; 2026 Wumbi</span>
-    <nav style="display:flex;gap:18px;flex-wrap:wrap">
-      <a href="/">Wumbi, the app</a>
-      <a href="/#pricing">Free and premium</a>
-      <a href="/#faq">FAQ</a>
-      <a href="mailto:${SITE.email}">${SITE.email}</a>
-    </nav>
-  </div>
-</footer>
-
-<script type="application/ld+json">${JSON.stringify(jsonLd).replace(/</g, '\\u003c')}</script>
-</body>
-</html>
 `;
+
+  return shell({
+    path: TP.path,
+    body,
+    title: TP.title,
+    description: TP.description,
+    keywords: TP.keywords,
+    jsonLd,
+  });
 }

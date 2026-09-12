@@ -13,8 +13,9 @@
 // Paths in dist are root-absolute (/assets/…) so a page at any depth resolves them.
 import { mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync, existsSync, statSync } from 'node:fs';
 import { join, dirname } from 'node:path';
-import { SITE, APP, LOCALES, OG_LOCALE, langPath, langUrl , TEMPLATE_PAGE } from './seo.config.mjs';
+import { SITE, APP, LOCALES, OG_LOCALE, langPath, langUrl, TEMPLATE_PAGE, LEGAL } from './seo.config.mjs';
 import { templatePage } from './template-page.mjs';
+import { STATIC_PAGES } from './site-pages.mjs';
 
 const SRC = 'Wumbi Landing.dc.html';
 const OUT = 'dist';
@@ -397,6 +398,12 @@ if (!existsSync(TEMPLATE_XLSX)) throw new Error(`build: ${TEMPLATE_XLSX} is miss
 copyFile(TEMPLATE_XLSX, join(OUT, TEMPLATE_XLSX));
 write(TEMPLATE_PAGE.path.replace(/^\/|\/$/g, '') + '/index.html', templatePage());
 
+// ---------------------------------------------------------------- about / privacy / terms / press
+// English only by design: one authoritative version of a legal text beats seven
+// translations of it. See the header of site-pages.mjs.
+for (const [path, render] of STATIC_PAGES) write(path.replace(/^\/|\/$/g, '') + '/index.html', render());
+const MISSING_LEGAL = ['operator', 'address', 'governingLaw'].filter((k) => !LEGAL[k]);
+
 write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
 ${LANGS.map((lang) => `  <url>
@@ -405,10 +412,10 @@ ${LANGS.map((lang) => `  <url>
 ${LANGS.map((l) => `    <xhtml:link rel="alternate" hreflang="${l}" href="${esc(langUrl(l))}"/>`).join('\n')}
     <xhtml:link rel="alternate" hreflang="x-default" href="${esc(langUrl(SITE.defaultLang))}"/>
   </url>`).join('\n')}
-  <url>
-    <loc>${esc(SITE.url + TEMPLATE_PAGE.path)}</loc>
-    <lastmod>${BUILD_DATE}</lastmod>
-  </url>
+${[TEMPLATE_PAGE.path, ...STATIC_PAGES.map(([sp]) => sp)].map((sp) => `  <url>
+    <loc>${esc(SITE.url + sp)}</loc>
+    <lastmod>${sp === '/privacy/' || sp === '/terms/' ? LEGAL.effectiveDate : BUILD_DATE}</lastmod>
+  </url>`).join('\n')}
 </urlset>
 `);
 
@@ -543,6 +550,8 @@ AddType application/vnd.openxmlformats-officedocument.spreadsheetml.sheet .xlsx
 if (!existsSync(join(OUT, 'assets', 'app_logo.png'))) throw new Error('build: assets missing');
 const pages = LANGS.map((l) => langPath(l)).join(' ');
 console.log(`built ${OUT}/  pages: ${pages}`);
+console.log(`  static: ${TEMPLATE_PAGE.path} ${STATIC_PAGES.map(([sp]) => sp).join(' ')}`);
+if (MISSING_LEGAL.length) console.warn(`  !! seo.config.mjs LEGAL is incomplete (${MISSING_LEGAL.join(', ')}). /privacy/ and /terms/ say so in plain text. Fill them in and have a lawyer read both pages before launch.`);
 console.log(`  index.html ${kb(join(OUT, 'index.html'))} · support.js ${kb(join(OUT, 'support.js'))} · i18n.js ${kb(join(OUT, 'i18n.js'))}`);
 console.log(`  prerendered ${prerendered}/${LANGS.length} locales${prerendered === 0 ? '  ← run `npm run prerender` (needs Playwright + Chromium)' : ''}`);
 console.log(`  sitemap.xml · robots.txt · site.webmanifest · 404.html · .htaccess`);

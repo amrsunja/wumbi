@@ -120,6 +120,7 @@ window.WUMBI_I18N = {
     wlLead: 'One email on launch day, then nothing. No newsletter, no spam, no "5 tips for saving money this winter".',
     footTag: 'Free budget tracker for iPhone and Android', footRights: '© 2026 Wumbi',
     footTemplate: 'Free budget planner template',
+    footAbout: 'About', footPrivacy: 'Privacy', footTerms: 'Terms', footPress: 'Press',
   },
 
   fr: {
@@ -217,6 +218,7 @@ window.WUMBI_I18N = {
     wlLead: "Un seul e-mail le jour du lancement, puis plus rien. Pas de newsletter, pas de spam, pas de « 5 astuces pour économiser cet hiver ».",
     footTag: 'Suivi de budget gratuit pour iPhone et Android', footRights: '© 2026 Wumbi',
     footTemplate: 'Modèle de budget gratuit',
+    footAbout: 'À propos', footPrivacy: 'Confidentialité', footTerms: 'Conditions', footPress: 'Presse',
   },
 
   de: {
@@ -314,6 +316,7 @@ window.WUMBI_I18N = {
     wlLead: 'Eine E-Mail am Launch-Tag, danach nichts. Kein Newsletter, kein Spam, kein „5 Spartipps für den Winter“.',
     footTag: 'Kostenloser Budget-Tracker für iPhone und Android', footRights: '© 2026 Wumbi',
     footTemplate: 'Kostenlose Haushaltsbuch-Vorlage',
+    footAbout: 'Über uns', footPrivacy: 'Datenschutz', footTerms: 'Nutzungsbedingungen', footPress: 'Presse',
   },
 
   nl: {
@@ -411,6 +414,7 @@ window.WUMBI_I18N = {
     wlLead: 'Eén e-mail op de lanceerdag, daarna niets. Geen nieuwsbrief, geen spam, geen “5 bespaartips voor de winter”.',
     footTag: 'Gratis budget-tracker voor iPhone en Android', footRights: '© 2026 Wumbi',
     footTemplate: 'Gratis budgetsjabloon',
+    footAbout: 'Over ons', footPrivacy: 'Privacy', footTerms: 'Voorwaarden', footPress: 'Pers',
   },
 
   tr: {
@@ -508,6 +512,7 @@ window.WUMBI_I18N = {
     wlLead: 'Çıkış günü tek bir e-posta, sonrası sessizlik. Bülten yok, spam yok, “kışın para biriktirmenin 5 yolu” yok.',
     footTag: 'iPhone ve Android için ücretsiz bütçe takibi', footRights: '© 2026 Wumbi',
     footTemplate: 'Ücretsiz bütçe şablonu',
+    footAbout: 'Hakkında', footPrivacy: 'Gizlilik', footTerms: 'Koşullar', footPress: 'Basın',
   },
 
   ru: {
@@ -605,6 +610,7 @@ window.WUMBI_I18N = {
     wlLead: 'Одно письмо в день запуска, дальше тишина. Без рассылки, без спама, без «5 способов сэкономить этой зимой».',
     footTag: 'Бесплатный трекер расходов для iPhone и Android', footRights: '© 2026 Wumbi',
     footTemplate: 'Бесплатный шаблон бюджета',
+    footAbout: 'О проекте', footPrivacy: 'Приватность', footTerms: 'Условия', footPress: 'Пресса',
   },
 
   ar: {
@@ -702,6 +708,7 @@ window.WUMBI_I18N = {
     wlLead: 'رسالة واحدة يوم الإطلاق، ثم لا شيء. لا نشرات، لا رسائل مزعجة، ولا «5 نصائح للتوفير هذا الشتاء».',
     footTag: 'متتبّع ميزانية مجاني لـ iPhone و Android', footRights: '© 2026 Wumbi',
     footTemplate: 'قالب ميزانية مجاني',
+    footAbout: 'عن Wumbi', footPrivacy: 'الخصوصية', footTerms: 'الشروط', footPress: 'الصحافة',
   },
 };
 

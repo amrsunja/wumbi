@@ -123,6 +123,24 @@ export const TEMPLATE_PAGE = {
   keywords: ['budget planner template', 'budget planner excel', 'excel finance tracker', 'budget tracker template', 'free budget planner', 'monthly budget planner', 'weekly budget planner', 'online budget planner', 'budget spreadsheet', 'google sheets budget template'],
 };
 
+// Facts only Amir can supply. The legal pages render honestly while these are empty,
+// and build.mjs prints a warning, but FILL THEM IN AND HAVE A LAWYER READ THE PAGES
+// BEFORE LAUNCH. An app that stores financial data and will later offer bank sync in
+// the EU is not a place to improvise.
+export const LEGAL = {
+  // Who operates Wumbi, exactly as it should appear on a legal page. A person's name
+  // is fine for a sole trader; a company needs its registered name and number.
+  operator: '',
+  // Registered address or, for a sole trader, the country of establishment.
+  address: '',
+  // e.g. 'France'. Decides the governing-law and jurisdiction sentences in the terms.
+  governingLaw: '',
+  // The EU/UK data-protection contact. Defaults to SITE.email when empty.
+  privacyContact: '',
+  // Bumped by hand whenever the substance of the privacy policy or terms changes.
+  effectiveDate: '2026-09-12',
+};
+
 // URL for a locale: default language sits at the root, the rest in /<lang>/.
 export const langPath = (lang) => (lang === SITE.defaultLang ? '/' : `/${lang}/`);
 export const langUrl = (lang) => SITE.url + langPath(lang);

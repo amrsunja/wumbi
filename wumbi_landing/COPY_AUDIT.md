@@ -597,3 +597,58 @@ Four of the five open questions from §15 needed an answer to finish the work. H
 ### Not done, on purpose
 
 `/offline-expense-tracker/`, `/budget-app-without-bank-account/` and `/multi-currency-expense-tracker/` (§4.6) are the obvious next three pages. `template-page.mjs` is now the pattern for them, so each one is an afternoon rather than a project.
+
+---
+
+## 18. About, Privacy, Terms and Press (2026-09-12)
+
+Four more static pages, written to the same rules as everything above. `page-shell.mjs` was extracted first so the template page and these four share one stylesheet and one footer instead of drifting apart.
+
+| Route | What it is |
+|---|---|
+| `/about/` | Why Wumbi exists. Opens with the failure the reader recognises (you log for nine days, miss one, never open it again), then the speed answer, then why the data stays on the phone, then how the money works. |
+| `/privacy/` | What is collected (nothing), what lives on the device, the single outbound request the app makes, the website, the waitlist, premium, GDPR rights. |
+| `/terms/` | Licence, your data and the loss that follows from holding no key, free and premium, fair use, not financial advice, availability, liability, governing law. |
+| `/press/` | The facts table, a one-line, one-paragraph and boilerplate description, four story angles, asset usage rules, early-access contact. |
+
+### English only, deliberately
+
+The marketing page ships in 7 locales. These do not, and that is a decision rather than an omission: every translation of a legal text is a new place for a mistranslated term to mean something you never agreed to. One authoritative English version is the normal, defensible choice at this size. About and Press can be localised later without that risk; Privacy and Terms should stay single-source unless a lawyer produces the translations.
+
+### The privacy policy is grounded in the actual code
+
+Nothing in it is boilerplate. Every claim was checked against `wumbi_app` on 2026-09-12, and the list of checks is in the header of `site-pages.mjs` so the next person can re-verify:
+
+- `sqflite_sqlcipher` + `flutter_secure_storage`, so AES-256 with the key in the Keychain or Keystore
+- **no analytics, crash, ad or attribution SDK** anywhere in `pubspec.yaml` or `lib/`
+- **no runtime permissions** in `Info.plist` or `AndroidManifest.xml`
+- exactly one outbound request: exchange rates from the open-source currency-api, served by cdn.jsdelivr.net with a currency-api.pages.dev fallback, no API key, carrying a currency pair and nothing else
+- `CurrencyConverter.getMyCurrency()` reads the **device locale**, not an IP lookup, which is worth stating because a reader will assume the opposite
+- 12-hour rate cache, 24-hour staleness
+- the website's `localStorage` keys and the Web3Forms waitlist, both disclosed by name
+
+The "what we collect: nothing" claim is followed immediately by the evidence, because in a privacy policy an unsupported claim is worth less than no claim.
+
+### Three facts I could not invent
+
+`seo.config.mjs` gained a `LEGAL` block with `operator`, `address`, `governingLaw`, `privacyContact` and `effectiveDate`. The first three are **empty**, and they must not stay that way:
+
+- the pages render an honest line where each one belongs, pointing the reader at support@wumbi.app, rather than a made-up company name
+- `npm run build` prints a warning naming the missing fields
+- `/terms/` falls back to the one sentence that is true regardless: EU and UK consumers keep the mandatory protection of their own country's law and can sue locally
+
+**This is the part that needs you.** A privacy policy and terms of use are legal documents, I am not a lawyer, and you are building something that stores financial data in the EU and will later offer bank sync, which brings obligations well beyond a standard app. Fill in the three fields and have a lawyer read both pages before launch. The drafts are honest, specific and far better than a generated template, which is exactly why a lawyer reviewing them is cheap.
+
+### The app now links to all four
+
+- `constants.dart`: `kWebsiteUrl`, `kAboutUrl`, `kPrivacyUrl`, `kTermsUrl`, `kPressUrl`, with a comment tying them to `STATIC_PAGES`.
+- `settings_page.dart`: the About tile moved out of "Manage" into its own **About** section, joined by Privacy Policy, Terms of Use and Press Kit. The three web links open with `LaunchMode.externalApplication`, not an in-app webview, which is what App Store review expects for privacy and terms.
+- `about_project_page.dart`: a "Read more on wumbi.app" button above Contact Support, pointing at `/about/`.
+- `about_text` was rewritten in all 7 locales. It used to say "minimalist, local-first budgeting app, your data is encrypted and never leaves your device", which carried both the jargon and the absolute promise premium will break.
+- New keys in all 7 ARBs and all 7 generated files: `about_read_more`, `settings_about_section`, `settings_privacy_policy`, `settings_terms`, `settings_press`.
+
+### Verified
+
+Headless Chromium over the built `dist/`: all four pages return 200 with one `<h1>`, a correct canonical, indexable robots, an og:image, valid JSON-LD (`AboutPage`+`Organization`, `WebPage`, `WebPage`, `WebPage`+`SoftwareApplication`), every in-page anchor resolving to a real id, every internal link resolving, no console errors, no em dashes, no middots, no space before a colon, no horizontal overflow. `/privacy/` at 320 px keeps its table of contents and collapses the contact list to one column. The Russian landing footer shows all five links and they all resolve. Sitemap is 12 URLs.
+
+**One thing I could not check:** there is no Flutter or Dart toolchain on this machine or in the cloud container, so the Dart edits are verified by key parity (285 ARB keys × 7, identical sets; 254 abstract getters, all implemented in all 7 locales) and a bracket-balance pass, not by a compiler. **Run `flutter analyze` before you commit.**
