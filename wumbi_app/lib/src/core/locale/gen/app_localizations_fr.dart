@@ -959,10 +959,25 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get about_text =>
-      'Wumbi est une app de budget minimaliste qui fonctionne d\'abord en local. Tes données sont chiffrées et ne quittent jamais ton appareil.';
+      'Wumbi garde ton argent sur ton téléphone. Tape le montant, appuie sur Revenu ou Dépense, c\'est fait. Pas de compte obligatoire, et rien ne part ailleurs tant que tu ne l\'actives pas.';
 
   @override
   String get about_support => 'Contacter le support';
+
+  @override
+  String get about_read_more => 'En savoir plus sur wumbi.app';
+
+  @override
+  String get settings_about_section => 'À propos';
+
+  @override
+  String get settings_privacy_policy => 'Politique de confidentialité';
+
+  @override
+  String get settings_terms => 'Conditions d\'utilisation';
+
+  @override
+  String get settings_press => 'Espace presse';
 
   @override
   String get l10nValidation =>

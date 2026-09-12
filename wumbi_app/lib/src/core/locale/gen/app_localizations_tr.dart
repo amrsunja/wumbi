@@ -946,10 +946,25 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get about_text =>
-      'Wumbi minimalist, yerel öncelikli bir bütçe uygulamasıdır. Verilerin şifrelenir ve cihazından asla çıkmaz.';
+      'Wumbi paranı telefonunda tutar. Tutarı yaz, Gelir ya da Gider\'e dokun, bitti. Hesap gerekmiyor ve sen açmadıkça hiçbir şey yüklenmiyor.';
 
   @override
   String get about_support => 'Desteğe ulaş';
+
+  @override
+  String get about_read_more => 'Devamını wumbi.app\'te oku';
+
+  @override
+  String get settings_about_section => 'Hakkında';
+
+  @override
+  String get settings_privacy_policy => 'Gizlilik Politikası';
+
+  @override
+  String get settings_terms => 'Kullanım Koşulları';
+
+  @override
+  String get settings_press => 'Basın Kiti';
 
   @override
   String get l10nValidation =>

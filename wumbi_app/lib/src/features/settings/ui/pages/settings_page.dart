@@ -3,6 +3,7 @@ import 'package:wumbi/src/core/utils/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/design_system/app_ui.dart';
 import '../../../../core/locale/l10n.dart';
@@ -32,6 +33,13 @@ class SettingsPage extends ConsumerWidget {
       AppThemeType.light => false,
       _ => context.isDarkMode,
     };
+
+    // The public pages live on wumbi.app rather than in the app so a legal text can be
+    // corrected without shipping a release. `externalApplication` keeps them out of an
+    // in-app webview, which is what App Store review expects for privacy and terms.
+    Future<void> openPage(String url) async {
+      await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+    }
 
     Future<void> resetAllData() async {
       final ok = await UIAlertDialog.confirm(
@@ -101,10 +109,26 @@ class SettingsPage extends ConsumerWidget {
                       title: l10n.settings_subscriptions,
                       onTap: () => context.router.push(SubscriptionsRoute()),
                     ),
+                    UiSectionLabel(text: l10n.settings_about_section),
                     UiSettingsTile(
                       icon: UIIconToken.icons.general.infoCircle,
                       title: l10n.about,
                       onTap: () => context.router.push(const AboutProjectRoute()),
+                    ),
+                    UiSettingsTile(
+                      icon: UIIconToken.icons.security.shieldTick,
+                      title: l10n.settings_privacy_policy,
+                      onTap: () => openPage(kPrivacyUrl),
+                    ),
+                    UiSettingsTile(
+                      icon: UIIconToken.icons.files.fileCheck02,
+                      title: l10n.settings_terms,
+                      onTap: () => openPage(kTermsUrl),
+                    ),
+                    UiSettingsTile(
+                      icon: UIIconToken.icons.alertsFeedback.announcement01,
+                      title: l10n.settings_press,
+                      onTap: () => openPage(kPressUrl),
                     ),
                     UiSectionLabel(text: l10n.settings_data_privacy),
                     UiSettingsTile(

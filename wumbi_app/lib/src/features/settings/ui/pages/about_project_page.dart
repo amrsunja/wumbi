@@ -37,6 +37,14 @@ class AboutProjectPage extends ConsumerWidget {
             ),
             const UISpace.vert(24),
             UiIconTextButton(
+              icon: UIIconToken.icons.general.linkExternal01,
+              title: l10n.about_read_more,
+              // The full story, the privacy policy and the terms all live on wumbi.app so
+              // they can be corrected without shipping an app release.
+              onTap: () => launchUrl(Uri.parse(kAboutUrl), mode: LaunchMode.externalApplication),
+            ),
+            const UISpace.vert(12),
+            UiIconTextButton(
               icon: UIIconToken.icons.communication.mail01,
               title: l10n.about_support,
               onTap: () => launchUrl(Uri.parse(kSupportUrl)),

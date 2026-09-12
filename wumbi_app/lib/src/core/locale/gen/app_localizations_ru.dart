@@ -970,10 +970,25 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get about_text =>
-      'Wumbi — минималистичное приложение для бюджета, которое работает локально. Твои данные зашифрованы и не покидают устройство.';
+      'Wumbi держит твои деньги в твоём телефоне. Вводишь сумму, жмёшь Доход или Расход, готово. Аккаунт не нужен, и ничего никуда не уходит, пока ты сам не включишь.';
 
   @override
   String get about_support => 'Связаться с поддержкой';
+
+  @override
+  String get about_read_more => 'Подробнее на wumbi.app';
+
+  @override
+  String get settings_about_section => 'О приложении';
+
+  @override
+  String get settings_privacy_policy => 'Политика конфиденциальности';
+
+  @override
+  String get settings_terms => 'Условия использования';
+
+  @override
+  String get settings_press => 'Для прессы';
 
   @override
   String get l10nValidation =>

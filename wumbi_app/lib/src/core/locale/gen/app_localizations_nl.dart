@@ -955,10 +955,25 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get about_text =>
-      'Wumbi is een minimalistische budget-app die lokaal werkt. Je gegevens zijn versleuteld en verlaten je apparaat nooit.';
+      'Wumbi houdt je geld op je telefoon. Typ het bedrag, tik op Inkomsten of Uitgave, klaar. Geen account nodig, en er wordt niets geüpload tenzij je het aanzet.';
 
   @override
   String get about_support => 'Contact opnemen';
+
+  @override
+  String get about_read_more => 'Lees meer op wumbi.app';
+
+  @override
+  String get settings_about_section => 'Over Wumbi';
+
+  @override
+  String get settings_privacy_policy => 'Privacybeleid';
+
+  @override
+  String get settings_terms => 'Gebruiksvoorwaarden';
+
+  @override
+  String get settings_press => 'Perskit';
 
   @override
   String get l10nValidation =>

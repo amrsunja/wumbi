@@ -980,10 +980,25 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get about_text =>
-      'Wumbi تطبيق ميزانية بسيط يعمل محليًا. بياناتك مشفّرة ولا تغادر جهازك أبدًا.';
+      'يُبقي Wumbi أموالك في هاتفك. اكتب المبلغ، اضغط دخل أو مصروف، وانتهى. لا حاجة لحساب، ولا يُرفَع شيء ما لم تشغّله بنفسك.';
 
   @override
   String get about_support => 'تواصل مع الدعم';
+
+  @override
+  String get about_read_more => 'اقرأ المزيد على wumbi.app';
+
+  @override
+  String get settings_about_section => 'عن التطبيق';
+
+  @override
+  String get settings_privacy_policy => 'سياسة الخصوصية';
+
+  @override
+  String get settings_terms => 'شروط الاستخدام';
+
+  @override
+  String get settings_press => 'للصحافة';
 
   @override
   String get l10nValidation =>

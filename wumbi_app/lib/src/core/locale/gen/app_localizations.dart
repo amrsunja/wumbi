@@ -1683,7 +1683,7 @@ abstract class AppLocalizations {
   /// No description provided for @about_text.
   ///
   /// In en, this message translates to:
-  /// **'Wumbi is a minimalist, local-first budgeting app. Your data is encrypted and never leaves your device.'**
+  /// **'Wumbi keeps your money on your phone. Type the amount, tap Income or Expense, done. No account needed, and nothing is uploaded unless you turn it on.'**
   String get about_text;
 
   /// No description provided for @about_support.
@@ -1691,6 +1691,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Contact Support'**
   String get about_support;
+
+  /// No description provided for @about_read_more.
+  ///
+  /// In en, this message translates to:
+  /// **'Read more on wumbi.app'**
+  String get about_read_more;
+
+  /// No description provided for @settings_about_section.
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get settings_about_section;
+
+  /// No description provided for @settings_privacy_policy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get settings_privacy_policy;
+
+  /// No description provided for @settings_terms.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms of Use'**
+  String get settings_terms;
+
+  /// No description provided for @settings_press.
+  ///
+  /// In en, this message translates to:
+  /// **'Press Kit'**
+  String get settings_press;
 
   /// No description provided for @l10nValidation.
   ///
