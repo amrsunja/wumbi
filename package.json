@@ -1,0 +1,11 @@
+{
+  "name": "wumbi-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Wumbi — Flutter app (wumbi_app) and static landing page (wumbi_landing). This root package.json only delegates to wumbi_landing so Git-based hosts can build the landing from the repo root.",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "build": "npm --prefix wumbi_landing install --no-audit --no-fund && npm --prefix wumbi_landing run build",
+    "preview": "npm --prefix wumbi_landing run preview"
+  }
+}
