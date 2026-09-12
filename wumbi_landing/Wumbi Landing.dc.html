@@ -72,8 +72,9 @@ input:focus{outline:none}
     <div data-hero style="display:flex;flex-direction:column;gap:10px;max-width:460px">
       <sc-if value="{{ notSubmitted }}" hint-placeholder-val="{{ true }}">
         <form onSubmit="{{ submit }}" style="display:flex;gap:8px;flex-wrap:wrap;background:rgba(255,255,255,.72);border:1px solid rgba(174,194,212,.4);border-radius:16px;padding:6px;backdrop-filter:blur(8px)">
+          <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none">
           <input id="hero-email" type="email" required placeholder="you@email.com" value="{{ email }}" onChange="{{ setEmail }}" style="flex:1;min-width:200px;height:46px;border:0;background:transparent;color:#456285;padding:0 14px;font:500 16px Inter">
-          <button type="submit" style="height:46px;border:0;cursor:pointer;background:#3B82F6;color:#fff;font:600 15px Inter;padding:0 20px;border-radius:11px;box-shadow:0 4px 12px rgba(59,130,246,.35);white-space:nowrap" style-hover="background:#2563EB">Join the waitlist</button>
+          <button type="submit" disabled="{{ sending }}" style="height:46px;border:0;cursor:pointer;background:#3B82F6;color:#fff;font:600 15px Inter;padding:0 20px;border-radius:11px;box-shadow:0 4px 12px rgba(59,130,246,.35);white-space:nowrap" style-hover="background:#2563EB">{{ submitLabel }}</button>
         </form>
         <sc-if value="{{ hasError }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;color:#C03649;font-weight:500">{{ error }}</span></sc-if>
         <p style="margin:0;font-size:13px;color:#AEC2D4;font-weight:500">One email on launch day. No newsletter, no spam.</p>
@@ -395,8 +396,9 @@ input:focus{outline:none}
       <p style="margin:0;font-size:16px;line-height:1.55;color:#D6E2F0;max-width:440px;text-wrap:pretty">One email on launch day. No newsletter, no spam — that would be very un-Wumbi.</p>
       <sc-if value="{{ notSubmitted }}" hint-placeholder-val="{{ true }}">
         <form onSubmit="{{ submit }}" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">
+          <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none">
           <input id="waitlist-email" type="email" required placeholder="you@email.com" value="{{ email }}" onChange="{{ setEmail }}" style="flex:1;min-width:220px;height:52px;border-radius:14px;border:1px solid rgba(214,226,240,.35);background:rgba(255,255,255,.1);color:#fff;padding:0 18px;font:500 16px Inter" style-focus="border-color:#fff;background:rgba(255,255,255,.16)">
-          <button type="submit" style="height:52px;border:0;cursor:pointer;background:#3B82F6;color:#fff;font:600 16px Inter;padding:0 24px;border-radius:14px;box-shadow:0 4px 12px rgba(59,130,246,.35);white-space:nowrap" style-hover="background:#2563EB">Join the waitlist</button>
+          <button type="submit" disabled="{{ sending }}" style="height:52px;border:0;cursor:pointer;background:#3B82F6;color:#fff;font:600 16px Inter;padding:0 24px;border-radius:14px;box-shadow:0 4px 12px rgba(59,130,246,.35);white-space:nowrap" style-hover="background:#2563EB">{{ submitLabel }}</button>
         </form>
         <sc-if value="{{ hasError }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;color:#FF697D;font-weight:500">{{ error }}</span></sc-if>
       </sc-if>
@@ -428,7 +430,8 @@ input:focus{outline:none}
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;motion&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;rich&quot;,&quot;calm&quot;],&quot;default&quot;:&quot;rich&quot;,&quot;tsType&quot;:&quot;'rich' | 'calm'&quot;,&quot;section&quot;:&quot;Motion&quot;},&quot;showCompare&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Sections&quot;}}">
 class Component extends DCLogic {
-  state = { email: '', submitted: false, error: '' };
+  state = { email: '', submitted: false, error: '', sending: false };
+  static WEB3FORMS_KEY = '7a2c1a6d-0edf-443d-8e7a-bd8685562a5e';
 
   componentDidMount() {
     this.startAmbient();
@@ -718,13 +721,35 @@ class Component extends DCLogic {
       showCompare: this.props.showCompare ?? true,
       email: this.state.email, submitted: this.state.submitted, notSubmitted: !this.state.submitted,
       hasError: !!this.state.error, error: this.state.error,
+      sending: this.state.sending, submitLabel: this.state.sending ? 'Joining…' : 'Join the waitlist',
       setEmail: (e) => this.setState({ email: e.target.value, error: '' }),
-      submit: (e) => {
+      submit: async (e) => {
         e.preventDefault();
+        if (this.state.sending) return;
         const v = this.state.email.trim();
         if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)) return this.setState({ error: 'Please enter a valid email address.' });
-        try { const list = JSON.parse(localStorage.getItem('wumbi.waitlist') || '[]'); list.push({ email: v, at: Date.now() }); localStorage.setItem('wumbi.waitlist', JSON.stringify(list)); } catch (_) {}
-        this.setState({ submitted: true, email: v });
+        const botcheck = e.currentTarget?.querySelector?.('[name="botcheck"]');
+        if (botcheck && botcheck.checked) return this.setState({ submitted: true, email: v }); // honeypot: pretend success
+        this.setState({ sending: true, error: '' });
+        try {
+          const res = await fetch('https://api.web3forms.com/submit', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+            body: JSON.stringify({
+              access_key: Component.WEB3FORMS_KEY,
+              subject: 'New Wumbi waitlist signup',
+              from_name: 'Wumbi Landing',
+              email: v,
+              message: `${v} joined the Wumbi waitlist.\nPage: ${location.href}\nLanguage: ${navigator.language}\nTime: ${new Date().toISOString()}`,
+            }),
+          });
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok || data.success === false) throw new Error(data.message || 'Request failed');
+          try { const list = JSON.parse(localStorage.getItem('wumbi.waitlist') || '[]'); list.push({ email: v, at: Date.now() }); localStorage.setItem('wumbi.waitlist', JSON.stringify(list)); } catch (_) {}
+          this.setState({ submitted: true, email: v, sending: false });
+        } catch (err) {
+          this.setState({ sending: false, error: 'Could not join right now. Please try again in a moment.' });
+        }
       },
       goWaitlist: this.scrollToWaitlist,
       focusHero: () => document.getElementById('hero-email')?.focus(),
