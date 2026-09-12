@@ -15,6 +15,7 @@ window.WUMBI_I18N = {
 
   en: {
     langLabel: 'Language',
+    navMenu: 'Menu',
     navFeatures: 'Features', navTagMap: 'Tag map', navScreens: 'Screens', navCompare: 'Compare', navJoin: 'Join waitlist',
 
     heroBadge: 'Coming soon · iOS & Android',
@@ -94,6 +95,7 @@ window.WUMBI_I18N = {
 
   fr: {
     langLabel: 'Langue',
+    navMenu: 'Menu',
     navFeatures: 'Fonctions', navTagMap: 'Carte des tags', navScreens: 'Écrans', navCompare: 'Comparer', navJoin: "Rejoindre la liste",
 
     heroBadge: 'Bientôt · iOS & Android',
@@ -171,6 +173,7 @@ window.WUMBI_I18N = {
 
   de: {
     langLabel: 'Sprache',
+    navMenu: 'Menü',
     navFeatures: 'Funktionen', navTagMap: 'Tag-Karte', navScreens: 'Screens', navCompare: 'Vergleich', navJoin: 'Auf die Warteliste',
 
     heroBadge: 'Bald verfügbar · iOS & Android',
@@ -248,6 +251,7 @@ window.WUMBI_I18N = {
 
   nl: {
     langLabel: 'Taal',
+    navMenu: 'Menu',
     navFeatures: 'Functies', navTagMap: 'Tagkaart', navScreens: 'Schermen', navCompare: 'Vergelijk', navJoin: 'Op de wachtlijst',
 
     heroBadge: 'Binnenkort · iOS & Android',
@@ -325,6 +329,7 @@ window.WUMBI_I18N = {
 
   tr: {
     langLabel: 'Dil',
+    navMenu: 'Menü',
     navFeatures: 'Özellikler', navTagMap: 'Etiket haritası', navScreens: 'Ekranlar', navCompare: 'Karşılaştır', navJoin: 'Bekleme listesine katıl',
 
     heroBadge: 'Çok yakında · iOS & Android',
@@ -402,6 +407,7 @@ window.WUMBI_I18N = {
 
   ru: {
     langLabel: 'Язык',
+    navMenu: 'Меню',
     navFeatures: 'Функции', navTagMap: 'Карта тегов', navScreens: 'Экраны', navCompare: 'Сравнение', navJoin: 'В лист ожидания',
 
     heroBadge: 'Скоро · iOS и Android',
@@ -479,6 +485,7 @@ window.WUMBI_I18N = {
 
   ar: {
     langLabel: 'اللغة',
+    navMenu: 'القائمة',
     navFeatures: 'المزايا', navTagMap: 'خريطة الوسوم', navScreens: 'الشاشات', navCompare: 'قارن', navJoin: 'انضم لقائمة الانتظار',
 
     heroBadge: 'قريبًا · iOS و Android',

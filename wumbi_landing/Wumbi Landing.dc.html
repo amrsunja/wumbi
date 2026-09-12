@@ -27,9 +27,47 @@ input:focus{outline:none}
 @keyframes marqueeRtl{from{transform:translate3d(0,0,0)}to{transform:translate3d(25%,0,0)}}
 [dir=rtl] #marquee-track{animation-name:marqueeRtl}
 [dir=rtl] .store-btn{text-align:right}
-#lang-select{appearance:none;-webkit-appearance:none;border:1px solid rgba(174,194,212,.5);border-radius:999px;background:rgba(255,255,255,.6) url(assets/icons/chevron-down.svg) no-repeat;background-size:14px;background-position:right 8px center;color:#456285;font:600 13px Inter,'Noto Sans Arabic',system-ui;padding:7px 26px 7px 12px;cursor:pointer}
-[dir=rtl] #lang-select{background-position:left 8px center;padding:7px 12px 7px 26px}
-#lang-select:focus{outline:none;border-color:#3B82F6}
+.lang-select{appearance:none;-webkit-appearance:none;border:1px solid rgba(174,194,212,.5);border-radius:999px;background:rgba(255,255,255,.6) url(assets/icons/chevron-down.svg) no-repeat;background-size:14px;background-position:right 8px center;color:#456285;font:600 13px Inter,'Noto Sans Arabic',system-ui;padding:7px 26px 7px 12px;cursor:pointer}
+[dir=rtl] .lang-select{background-position:left 8px center;padding:7px 12px 7px 26px}
+.lang-select:focus{outline:none;border-color:#3B82F6}
+/* ---- Nav: fixed bar + spacer (no sticky/backdrop repaint jumps on mobile) ---- */
+:root{--nav-h:64px}
+#site-nav{position:fixed;top:0;left:0;right:0;z-index:20;background:rgba(250,250,248,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 1px 0 rgba(174,194,212,.3)}
+#nav-spacer{height:var(--nav-h)}
+.nav-bar{max-width:1120px;margin:0 auto;padding:0 24px;height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;gap:16px}
+.nav-links{display:flex;align-items:center;gap:22px}
+.nav-links a,.nav-menu a{font-size:14px;font-weight:600;color:#456285}
+.nav-cta{border:0;cursor:pointer;background:#3B82F6;color:#fff;font:600 14px Inter,'Noto Sans Arabic',system-ui;padding:10px 18px;border-radius:999px;box-shadow:0 4px 12px rgba(59,130,246,.35);white-space:nowrap}
+.nav-cta:hover{background:#2563EB}
+.nav-burger{display:none;position:relative;width:44px;height:44px;margin-inline-end:-10px;border:0;background:transparent;cursor:pointer;border-radius:12px;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.nav-burger span{position:absolute;left:12px;width:20px;height:2px;border-radius:2px;background:#456285;transition:transform .25s ease,opacity .2s ease,top .25s ease}
+.nav-burger span:nth-child(1){top:15px}.nav-burger span:nth-child(2){top:21px}.nav-burger span:nth-child(3){top:27px}
+.menu-open .nav-burger span:nth-child(1){top:21px;transform:rotate(45deg)}
+.menu-open .nav-burger span:nth-child(2){opacity:0;transform:scaleX(.4)}
+.menu-open .nav-burger span:nth-child(3){top:21px;transform:rotate(-45deg)}
+.nav-menu{display:none;position:absolute;top:100%;left:0;right:0;flex-direction:column;gap:4px;padding:8px 16px 18px;background:rgba(250,250,248,.98);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 1px 0 rgba(174,194,212,.3),0 18px 40px -20px rgba(69,98,133,.25);opacity:0;transform:translateY(-8px);visibility:hidden;pointer-events:none;transition:opacity .2s ease,transform .22s ease,visibility .22s}
+.nav-menu a{display:block;padding:12px 8px;font-size:16px;border-radius:10px}
+.nav-menu a:active{background:rgba(59,130,246,.08)}
+.nav-menu-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 8px 0;border-top:1px solid rgba(174,194,212,.3);margin-top:6px}
+.nav-scrim{display:none;position:fixed;top:var(--nav-h);left:0;right:0;bottom:0;z-index:19;background:rgba(69,98,133,.18);opacity:0;transition:opacity .2s ease;pointer-events:none}
+@media (max-width:899px){
+  :root{--nav-h:56px}
+  .nav-links{display:none}
+  .nav-burger{display:inline-flex}
+  .nav-menu,.nav-scrim{display:flex}
+  .menu-open .nav-menu{opacity:1;transform:none;visibility:visible;pointer-events:auto}
+  .nav-scrim.menu-open{opacity:1;pointer-events:auto}
+  .nav-menu .lang-select{font-size:16px;padding:9px 30px 9px 14px}
+  [dir=rtl] .nav-menu .lang-select{padding:9px 14px 9px 30px}
+}
+@media (prefers-reduced-motion:reduce){.nav-menu,.nav-scrim,.nav-burger span{transition:none}}
+section[id],header[id]{scroll-margin-top:calc(var(--nav-h) + 8px)}
+/* ---- Compare table: horizontal scroll on narrow screens ---- */
+.cmp-card{overflow:hidden;-webkit-overflow-scrolling:touch}
+@media (max-width:767px){
+  .cmp-card{overflow-x:auto;overflow-y:hidden;scrollbar-width:thin}
+  .cmp-row{min-width:640px}
+}
 @media (prefers-reduced-motion:reduce){#marquee-track{animation-duration:calc(var(--marquee-dur,38s) * 2)}}
 @keyframes fabPulse{0%,100%{box-shadow:0 4px 12px rgba(59,130,246,.35)}50%{box-shadow:0 6px 22px rgba(59,130,246,.55)}}
 @keyframes keyTap{0%{background:rgba(255,255,255,.5)}40%{background:rgba(174,194,212,.35)}100%{background:rgba(255,255,255,.5)}}
@@ -38,27 +76,42 @@ input:focus{outline:none}
 
 <canvas id="ambient" style="position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none"></canvas>
 
-<div dir="{{ dir }}" lang="{{ lang }}" style="position:relative;z-index:1;min-height:100vh;overflow-x:clip">
+<div id="top" dir="{{ dir }}" lang="{{ lang }}" style="position:relative;z-index:1;min-height:100vh;overflow-x:clip">
 
 <!-- NAV -->
-<nav style="position:sticky;top:0;z-index:20;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);background:rgba(250,250,248,.72);border-bottom:1px solid rgba(174,194,212,.3)">
-  <div style="max-width:1120px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px">
-    <div style="display:flex;align-items:center;gap:10px">
+<nav id="site-nav" class="{{ navClass }}">
+  <div class="nav-bar">
+    <a href="#top" onClick="{{ closeMenu }}" style="display:flex;align-items:center;gap:10px;color:#456285">
       <img src="assets/app_logo.png" alt="Wumbi" style="width:32px;height:32px;border-radius:9px">
       <span style="font-size:17px;font-weight:700;letter-spacing:-0.2px">Wumbi</span>
+    </a>
+    <div class="nav-links">
+      <a href="#features">{{ L.navFeatures }}</a>
+      <a href="#insights">{{ L.navTagMap }}</a>
+      <a href="#screens">{{ L.navScreens }}</a>
+      <a href="#compare">{{ L.navCompare }}</a>
+      <button type="button" class="nav-cta" onClick="{{ goWaitlist }}">{{ L.navJoin }}</button>
+      <select id="lang-select" class="lang-select" aria-label="{{ L.langLabel }}" value="{{ lang }}" onChange="{{ setLang }}">
+        <sc-for list="{{ langs }}" as="lg" hint-placeholder-count="7"><option value="{{ lg.code }}">{{ lg.name }}</option></sc-for>
+      </select>
     </div>
-    <div style="display:flex;align-items:center;gap:22px">
-      <a href="#features" style="font-size:14px;font-weight:600;color:#456285">{{ L.navFeatures }}</a>
-      <a href="#insights" style="font-size:14px;font-weight:600;color:#456285">{{ L.navTagMap }}</a>
-      <a href="#screens" style="font-size:14px;font-weight:600;color:#456285">{{ L.navScreens }}</a>
-      <a href="#compare" style="font-size:14px;font-weight:600;color:#456285">{{ L.navCompare }}</a>
-      <button onClick="{{ goWaitlist }}" style="border:0;cursor:pointer;background:#3B82F6;color:#fff;font:600 14px Inter;padding:10px 18px;border-radius:999px;box-shadow:0 4px 12px rgba(59,130,246,.35)" style-hover="background:#2563EB">{{ L.navJoin }}</button>
-      <select id="lang-select" aria-label="{{ L.langLabel }}" value="{{ lang }}" onChange="{{ setLang }}">
+    <button type="button" class="nav-burger" aria-label="{{ L.navMenu }}" aria-expanded="{{ menuOpen }}" aria-controls="nav-menu" onClick="{{ toggleMenu }}"><span></span><span></span><span></span></button>
+  </div>
+  <div id="nav-menu" class="nav-menu" aria-hidden="{{ menuClosed }}">
+    <a href="#features" onClick="{{ closeMenu }}">{{ L.navFeatures }}</a>
+    <a href="#insights" onClick="{{ closeMenu }}">{{ L.navTagMap }}</a>
+    <a href="#screens" onClick="{{ closeMenu }}">{{ L.navScreens }}</a>
+    <a href="#compare" onClick="{{ closeMenu }}">{{ L.navCompare }}</a>
+    <div class="nav-menu-row">
+      <button type="button" class="nav-cta" onClick="{{ goWaitlistFromMenu }}">{{ L.navJoin }}</button>
+      <select id="lang-select-m" class="lang-select" aria-label="{{ L.langLabel }}" value="{{ lang }}" onChange="{{ setLang }}">
         <sc-for list="{{ langs }}" as="lg" hint-placeholder-count="7"><option value="{{ lg.code }}">{{ lg.name }}</option></sc-for>
       </select>
     </div>
   </div>
 </nav>
+<div class="nav-scrim {{ navClass }}" onClick="{{ closeMenu }}"></div>
+<div id="nav-spacer"></div>
 
 <!-- HERO -->
 <header style="max-width:1120px;margin:0 auto;padding:72px 24px 40px;display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:48px;align-items:center">
@@ -379,14 +432,14 @@ input:focus{outline:none}
     <span data-reveal style="font-size:11px;font-weight:600;letter-spacing:1.2px;color:#AEC2D4;text-transform:uppercase">{{ L.cmpKicker }}</span>
     <h2 data-reveal style="margin:0;font-size:clamp(34px,4vw,52px);line-height:1.05;font-weight:300;letter-spacing:-1px;text-wrap:balance">{{ L.cmpTitle1 }} <strong style="font-weight:700">{{ L.cmpTitle2 }}</strong></h2>
   </div>
-  <div data-reveal style="background:rgba(255,255,255,.75);border:1px solid rgba(174,194,212,.3);border-radius:24px;overflow:hidden;backdrop-filter:blur(8px)">
-    <div style="display:grid;grid-template-columns:minmax(120px,1.1fr) minmax(0,1.4fr) minmax(0,1.4fr);padding:18px 24px;border-bottom:1px solid rgba(174,194,212,.3);font-size:11px;font-weight:600;letter-spacing:1.2px;color:#AEC2D4;text-transform:uppercase;gap:16px">
+  <div data-reveal class="cmp-card" style="background:rgba(255,255,255,.75);border:1px solid rgba(174,194,212,.3);border-radius:24px;backdrop-filter:blur(8px)">
+    <div class="cmp-row" style="display:grid;grid-template-columns:minmax(120px,1.1fr) minmax(0,1.4fr) minmax(0,1.4fr);padding:18px 24px;border-bottom:1px solid rgba(174,194,212,.3);font-size:11px;font-weight:600;letter-spacing:1.2px;color:#AEC2D4;text-transform:uppercase;gap:16px">
       <span></span>
       <span style="display:flex;align-items:center;gap:8px;color:#3B82F6"><img src="assets/app_logo.png" alt="" style="width:20px;height:20px;border-radius:6px">Wumbi</span>
       <span>{{ L.cmpOther }}</span>
     </div>
     <sc-for list="{{ compare }}" as="r" hint-placeholder-count="7">
-      <div style="display:grid;grid-template-columns:minmax(120px,1.1fr) minmax(0,1.4fr) minmax(0,1.4fr);padding:18px 24px;border-bottom:1px solid rgba(174,194,212,.3);gap:16px;align-items:start">
+      <div class="cmp-row" style="display:grid;grid-template-columns:minmax(120px,1.1fr) minmax(0,1.4fr) minmax(0,1.4fr);padding:18px 24px;border-bottom:1px solid rgba(174,194,212,.3);gap:16px;align-items:start">
         <span style="font-size:15px;font-weight:600">{{ r.label }}</span>
         <span style="display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:1.5;color:#456285;font-weight:500"><span style="flex-shrink:0;width:20px;height:20px;border-radius:50%;background:rgba(59,130,246,.12);color:#3B82F6;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;margin-top:1px">✓</span>{{ r.wumbi }}</span>
         <span style="display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:1.5;color:#6F7F92"><span style="flex-shrink:0;width:20px;height:20px;border-radius:50%;background:rgba(174,194,212,.25);color:#AEC2D4;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;margin-top:1px">–</span>{{ r.other }}</span>
@@ -440,7 +493,7 @@ input:focus{outline:none}
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;motion&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;rich&quot;,&quot;calm&quot;],&quot;default&quot;:&quot;rich&quot;,&quot;tsType&quot;:&quot;'rich' | 'calm'&quot;,&quot;section&quot;:&quot;Motion&quot;},&quot;showCompare&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Sections&quot;}}">
 class Component extends DCLogic {
-  state = { email: '', submitted: false, error: '', sending: false, lang: Component.initialLang() };
+  state = { email: '', submitted: false, error: '', sending: false, menuOpen: false, lang: Component.initialLang() };
   static WEB3FORMS_KEY = '7a2c1a6d-0edf-443d-8e7a-bd8685562a5e';
   static I18N = window.WUMBI_I18N || { meta: { en: { name: 'English', dir: 'ltr' } }, en: {} };
   static LANGS = Object.keys(Component.I18N.meta);
@@ -469,8 +522,17 @@ class Component extends DCLogic {
     this.applyLangToDocument();
     this.startAmbient();
     this.waitFor(() => window.gsap && window.ScrollTrigger, () => this.startGsap());
+    // Mobile menu: Escape closes; leaving the mobile breakpoint closes.
+    this.onKey = (e) => { if (e.key === 'Escape' && this.state.menuOpen) this.closeMenu(); };
+    document.addEventListener('keydown', this.onKey);
+    this.mq = window.matchMedia('(min-width: 900px)');
+    this.onMq = (e) => { if (e.matches && this.state.menuOpen) this.closeMenu(); };
+    this.mq.addEventListener ? this.mq.addEventListener('change', this.onMq) : this.mq.addListener(this.onMq);
   }
+  toggleMenu = () => this.setState((st) => ({ menuOpen: !st.menuOpen }));
+  closeMenu = () => { if (this.state.menuOpen) this.setState({ menuOpen: false }); };
   setLang = (lang) => {
+    if (lang && typeof lang === 'object' && lang.target) lang = lang.target.value;
     if (!Component.LANGS.includes(lang) || lang === this.state.lang) return;
     this.setState({ lang, error: '' }, () => {
       this.applyLangToDocument();
@@ -479,14 +541,15 @@ class Component extends DCLogic {
     try { localStorage.setItem('wumbi.lang', lang); } catch (_) {}
     try { const u = new URL(location.href); u.searchParams.set('lang', lang); history.replaceState(null, '', u); } catch (_) {}
   };
-  componentWillUnmount() { cancelAnimationFrame(this.raf); cancelAnimationFrame(this.tagRaf); this.stopped = true; if (window.gsap && this.tl) this.tl.kill(); }
+  componentWillUnmount() { cancelAnimationFrame(this.raf); cancelAnimationFrame(this.tagRaf); this.stopped = true; if (window.gsap && this.tl) this.tl.kill(); document.removeEventListener('keydown', this.onKey); if (this.mq) { this.mq.removeEventListener ? this.mq.removeEventListener('change', this.onMq) : this.mq.removeListener(this.onMq); } }
 
   waitFor(test, cb, n = 0) { if (test()) return cb(); if (n > 100) return; setTimeout(() => this.waitFor(test, cb, n + 1), 100); }
 
   scrollToWaitlist = () => {
     const el = document.getElementById('waitlist');
     if (!el) return;
-    const y = el.getBoundingClientRect().top + window.scrollY - 40;
+    const navH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--nav-h')) || 64;
+    const y = el.getBoundingClientRect().top + window.scrollY - navH - 24;
     window.scrollTo({ top: y, behavior: 'smooth' });
     setTimeout(() => document.getElementById('waitlist-email')?.focus({ preventScroll: true }), 700);
   };
@@ -538,6 +601,7 @@ class Component extends DCLogic {
   startGsap() {
     const { gsap, ScrollTrigger } = window;
     gsap.registerPlugin(ScrollTrigger);
+    ScrollTrigger.config({ ignoreMobileResize: true }); // address-bar show/hide must not re-trigger layout/refresh
     const calm = this.props.motion === 'calm';
     const dist = calm ? 18 : 40;
 
@@ -791,6 +855,9 @@ class Component extends DCLogic {
         }
       },
       goWaitlist: this.scrollToWaitlist,
+      goWaitlistFromMenu: () => { this.closeMenu(); this.scrollToWaitlist(); },
+      menuOpen: this.state.menuOpen, menuClosed: !this.state.menuOpen, navClass: this.state.menuOpen ? 'menu-open' : '',
+      toggleMenu: this.toggleMenu, closeMenu: this.closeMenu,
       focusHero: () => document.getElementById('hero-email')?.focus(),
       focusEmail: () => document.getElementById('waitlist-email')?.focus(),
     };
