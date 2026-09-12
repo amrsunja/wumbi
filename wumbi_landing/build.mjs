@@ -379,15 +379,22 @@ for (const lang of LANGS) {
 }
 
 // ---------------------------------------------------------------- sitemap / robots / manifest / 404 / htaccess
+// Per Google's sitemap docs: <priority> and <changefreq> are ignored outright, and
+// <lastmod> is only used "if it's consistently and verifiably accurate" — so it comes
+// from seo/prerendered/lastmod.json, which prerender.mjs only bumps when the rendered
+// content of that locale actually changed. A build alone never moves the date.
+const LASTMOD = (() => {
+  try { return JSON.parse(readFileSync(join(PRERENDER_DIR, 'lastmod.json'), 'utf8')); } catch { return {}; }
+})();
+const lastmodFor = (lang) => LASTMOD[lang]?.date || BUILD_DATE;
+
 write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
 ${LANGS.map((lang) => `  <url>
-    <loc>${langUrl(lang)}</loc>
-    <lastmod>${BUILD_DATE}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>${lang === SITE.defaultLang ? '1.0' : '0.8'}</priority>
-${LANGS.map((l) => `    <xhtml:link rel="alternate" hreflang="${l}" href="${langUrl(l)}"/>`).join('\n')}
-    <xhtml:link rel="alternate" hreflang="x-default" href="${langUrl(SITE.defaultLang)}"/>
+    <loc>${esc(langUrl(lang))}</loc>
+    <lastmod>${lastmodFor(lang)}</lastmod>
+${LANGS.map((l) => `    <xhtml:link rel="alternate" hreflang="${l}" href="${esc(langUrl(l))}"/>`).join('\n')}
+    <xhtml:link rel="alternate" hreflang="x-default" href="${esc(langUrl(SITE.defaultLang))}"/>
   </url>`).join('\n')}
 </urlset>
 `);

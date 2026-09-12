@@ -124,7 +124,29 @@ FAQ-блок реально **видимый** на странице (натив
 
 ### 1.6 Служебные файлы
 
-- **`sitemap.xml`** — 7 URL, у каждого полный набор `xhtml:link hreflang`.
+- **`sitemap.xml`** — 7 URL, приведён к официальной спецификации Google
+  (`developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap`):
+  - `<priority>` и `<changefreq>` **убраны** — в документации прямо сказано:
+    «Google ignores `<priority>` and `<changefreq>` values». Это был мусор в выдаче.
+  - `<lastmod>` учитывается, только «if it's consistently and verifiably accurate».
+    Раньше туда шла дата сборки — она менялась при каждом деплое, даже если текст
+    не трогали, и Google такой `lastmod` перестаёт принимать всерьёз. Теперь дата
+    берётся из `seo/prerendered/lastmod.json`: `prerender.mjs` хеширует снимок каждого
+    языка и обновляет дату **только если содержимое реально изменилось**. Пересборка
+    сама по себе дату не двигает; правка только русского текста двигает только `/ru/`.
+  - У каждого `<url>` полный набор `xhtml:link hreflang` **включая ссылку на самого
+    себя** — это обязательное требование, без self-reference группа не склеивается.
+  - Все `<loc>` абсолютные, https, один хост, уникальные; значения экранируются.
+    Лимиты (50 000 URL / 50 МБ) проверяются автоматически при сборке.
+
+  Чтобы снимок был побайтово одинаковым между прогонами (иначе хеш плыл бы и дата
+  дёргалась), `prerender.mjs` ждёт, пока `#dc-root` перестанет меняться, — заодно это
+  чинит счётчик в шапке телефона, который раньше попадал в снимок недосчитанным
+  (`$12,343.56` вместо `$12,345.67`).
+
+  Google отмечает, что hreflang одновременно в sitemap и в HTML «no benefit… much
+  harder to manage». У нас оба генерируются из одного `seo.config.mjs`, поэтому
+  расхождение невозможно, а Bing и Яндекс надёжнее читают HTML-вариант — оставляем оба.
 - **`robots.txt`** — всё открыто, `/vendor/` закрыт, явно разрешены GPTBot,
   OAI-SearchBot, ClaudeBot, PerplexityBot, Google-Extended, Applebot-Extended.
   Это осознанное решение: Wumbi нужно, чтобы его **цитировали** ассистенты.
@@ -239,7 +261,8 @@ git add assets/derived
 - [ ] `curl -s https://wumbi.app/ru/ | grep -c "Учёт денег"` → не 0
 - [ ] Rich Results Test зелёный для `/` и `/ru/`
 - [ ] Превью ссылки в Telegram / WhatsApp показывает OG-картинку 1200×630
-- [ ] `https://wumbi.app/sitemap.xml` открывается, в нём 7 URL
+- [ ] `https://wumbi.app/sitemap.xml` открывается, в нём 7 URL, без `priority`/`changefreq`
+- [ ] Две сборки подряд не меняют `<lastmod>`
 - [ ] `https://www.wumbi.app` → один 301 на `https://wumbi.app` (без цепочки)
 - [ ] PageSpeed Insights: LCP < 2.5 с на мобильном
 - [ ] Маскоты не растянуты, карта тегов рисуется, графики Progress анимируются

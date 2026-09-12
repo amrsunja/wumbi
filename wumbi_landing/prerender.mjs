@@ -11,6 +11,7 @@
 // Re-run this whenever the page copy or layout changes.
 //
 // Requires a local Chromium:  npm i -D playwright && npx playwright install chromium
+import { createHash } from 'node:crypto';
 import { createServer } from 'node:http';
 import { readFileSync, existsSync, mkdirSync, writeFileSync, statSync } from 'node:fs';
 import { join, extname, resolve } from 'node:path';
@@ -56,17 +57,28 @@ mkdirSync(OG_DIR, { recursive: true });
 
 // GSAP reveals leave inline opacity/transform behind; a snapshot has to be the settled
 // state, otherwise the no-JS copy renders invisible.
+// Strip GSAP's leftovers so the snapshot is the settled state — and byte-identical
+// between runs. Whether a finished tween leaves `opacity: 1` behind or clears the
+// property is a race; either way the element is fully visible, so drop it outright.
+// Only elements GSAP actually touched: `translate: none` is its fingerprint, and
+// clearing opacity everywhere would flatten the design's own `opacity: .75` spans.
 const SETTLE = `(() => {
-  document.querySelectorAll('[data-reveal],[style*="opacity"]').forEach((el) => {
-    const s = el.style;
-    if (s.opacity !== '' && parseFloat(s.opacity) < 1) s.removeProperty('opacity');
-    if (s.transform && /translate|scale/.test(s.transform)) s.removeProperty('transform');
-    s.removeProperty('visibility');
+  const touched = '[data-reveal],[data-hero],[data-phone],[data-bar],[data-reveal-stagger] > *,#hero-phone,#hero-mascot,[style*="translate: none"]';
+  document.querySelectorAll(touched).forEach((el) => {
+    for (const prop of ['opacity', 'transform', 'translate', 'rotate', 'scale', 'visibility']) el.style.removeProperty(prop);
   });
   document.querySelectorAll('[id^="dc-prerender"]').forEach((el) => el.remove());
   const r = document.getElementById('dc-root');
   return r ? r.innerHTML : '';
 })()`;
+
+// <lastmod> must be the date the page's content actually changed, not the date of the
+// last build — Google only trusts it "if it's consistently and verifiably accurate".
+// The snapshot IS the content, so hash it: same hash → keep the old date.
+const LASTMOD_FILE = join(SNAP_DIR, 'lastmod.json');
+const prevLastmod = existsSync(LASTMOD_FILE) ? JSON.parse(readFileSync(LASTMOD_FILE, 'utf8')) : {};
+const lastmod = {};
+const today = new Date().toISOString().slice(0, 10);
 
 for (const lang of langs) {
   const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
@@ -77,13 +89,28 @@ for (const lang of langs) {
     for (let y = 0; y < document.body.scrollHeight; y += 600) { window.scrollTo(0, y); await new Promise((r) => setTimeout(r, 60)); }
     window.scrollTo(0, 0); await new Promise((r) => setTimeout(r, 400));
   });
+  // The hero total counts up over ~2.3s; capturing mid-tween would bake a wrong number
+  // into the crawler's copy AND make the snapshot non-deterministic (so lastmod would
+  // move on every run). Wait until #dc-root stops changing at all.
+  await page.waitForFunction(() => {
+    const r = document.getElementById('dc-root');
+    if (!r) return false;
+    const h = r.innerHTML, prev = window.__snapPrev;
+    window.__snapPrev = h;
+    return prev === h;
+  }, null, { timeout: 20000, polling: 500 });
   const snapshot = await page.evaluate(SETTLE);
   if (!snapshot || snapshot.length < 5000) throw new Error(`prerender: ${lang} snapshot looks empty (${snapshot.length} chars)`);
   if (snapshot.includes('{{')) throw new Error(`prerender: ${lang} snapshot still contains {{ }} placeholders`);
   writeFileSync(join(SNAP_DIR, `${lang}.html`), snapshot);
-  console.log(`  ${lang}: ${(snapshot.length / 1024).toFixed(0)} KB snapshot`);
+  const hash = createHash('sha1').update(snapshot).digest('hex').slice(0, 16);
+  const prev = prevLastmod[lang];
+  lastmod[lang] = prev && prev.hash === hash ? prev : { hash, date: today };
+  console.log(`  ${lang}: ${(snapshot.length / 1024).toFixed(0)} KB snapshot, lastmod ${lastmod[lang].date}${prev && prev.hash === hash ? ' (unchanged)' : ' (updated)'}`);
   await page.close();
 }
+
+writeFileSync(LASTMOD_FILE, JSON.stringify(lastmod, null, 2) + '\n');
 
 // ---------------------------------------------------------------- OG images
 const logo = 'data:image/png;base64,' + readFileSync(join(OUT, 'assets', 'favicon-192.png')).toString('base64');
