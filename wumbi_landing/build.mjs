@@ -13,7 +13,8 @@
 // Paths in dist are root-absolute (/assets/…) so a page at any depth resolves them.
 import { mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync, existsSync, statSync } from 'node:fs';
 import { join, dirname } from 'node:path';
-import { SITE, APP, LOCALES, OG_LOCALE, langPath, langUrl } from './seo.config.mjs';
+import { SITE, APP, LOCALES, OG_LOCALE, langPath, langUrl , TEMPLATE_PAGE } from './seo.config.mjs';
+import { templatePage } from './template-page.mjs';
 
 const SRC = 'Wumbi Landing.dc.html';
 const OUT = 'dist';
@@ -264,7 +265,7 @@ const jsonLd = (lang) => {
       '@type': 'FAQPage',
       '@id': langUrl(lang) + '#faq',
       inLanguage: lang,
-      mainEntity: Array.from({ length: 7 }, (_, i) => ({
+      mainEntity: Array.from({ length: 10 }, (_, i) => ({
         '@type': 'Question',
         name: T(lang, `q${i + 1}`),
         acceptedAnswer: { '@type': 'Answer', text: T(lang, `a${i + 1}`) },
@@ -388,6 +389,14 @@ const LASTMOD = (() => {
 })();
 const lastmodFor = (lang) => LASTMOD[lang]?.date || BUILD_DATE;
 
+// ---------------------------------------------------------------- template landing page
+// A static, non-localised page at /free-budget-planner-template/ that gives away our own
+// budget spreadsheet. See template-page.mjs for why it is separate from the app pages.
+const TEMPLATE_XLSX = 'assets/templates/Wumbi-Budget-Planner-Template.xlsx';
+if (!existsSync(TEMPLATE_XLSX)) throw new Error(`build: ${TEMPLATE_XLSX} is missing`);
+copyFile(TEMPLATE_XLSX, join(OUT, TEMPLATE_XLSX));
+write(TEMPLATE_PAGE.path.replace(/^\/|\/$/g, '') + '/index.html', templatePage());
+
 write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
 ${LANGS.map((lang) => `  <url>
@@ -396,6 +405,10 @@ ${LANGS.map((lang) => `  <url>
 ${LANGS.map((l) => `    <xhtml:link rel="alternate" hreflang="${l}" href="${esc(langUrl(l))}"/>`).join('\n')}
     <xhtml:link rel="alternate" hreflang="x-default" href="${esc(langUrl(SITE.defaultLang))}"/>
   </url>`).join('\n')}
+  <url>
+    <loc>${esc(SITE.url + TEMPLATE_PAGE.path)}</loc>
+    <lastmod>${BUILD_DATE}</lastmod>
+  </url>
 </urlset>
 `);
 
@@ -517,6 +530,13 @@ ErrorDocument 404 /404.html
 AddType image/webp .webp
 AddType font/woff2 .woff2
 AddType application/manifest+json .webmanifest
+AddType application/vnd.openxmlformats-officedocument.spreadsheetml.sheet .xlsx
+
+# The giveaway spreadsheet: always save it, never render it in a browser tab.
+<FilesMatch "\\.xlsx$">
+  Header set Content-Disposition "attachment"
+  Header set Cache-Control "public, max-age=86400"
+</FilesMatch>
 `);
 
 // ---------------------------------------------------------------- report

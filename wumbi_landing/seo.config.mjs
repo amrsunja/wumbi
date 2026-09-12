@@ -1,6 +1,11 @@
 // Single source of truth for everything a crawler reads.
 // Consumed by build.mjs (head tags, JSON-LD, sitemap) and prerender.mjs (OG images).
 // Page copy lives in i18n.js; this file holds only what never appears on screen.
+//
+// Keyword strategy (COPY_AUDIT.md §4): head terms (budget tracker / budget planner /
+// finance app) go here so the page is ELIGIBLE; the long tails (no bank link, no
+// account, offline, free, multi-currency) are what we actually win. Template-intent
+// queries (budget planner excel / template) live on /free-budget-planner-template/.
 
 export const SITE = {
   name: 'Wumbi',
@@ -18,21 +23,24 @@ export const SITE = {
 };
 
 // Structured-data facts about the product. Keep in sync with the page copy.
+// Wumbi is freemium: the free tier is the product, premium adds to it.
 export const APP = {
   category: 'FinanceApplication',
   subCategory: 'Personal budgeting',
   platforms: ['iOS', 'Android'],
   price: '0',
   currency: 'USD',
+  offerDescription: 'Free plan with unlimited transactions. Premium available at launch.',
   features: [
-    'One-tap income, expense and transfer logging',
+    'One-tap income, expense and transfer logging in about three seconds',
     'Free-form #tags instead of fixed categories',
     'Force-directed tag map',
-    '13 currencies including Bitcoin to 8 decimals',
-    'AES-256 encrypted local database, no account',
+    '64 currencies including Bitcoin, Ethereum and USDT to 8 decimals',
+    'AES-256 encrypted local database, no account required',
     'Full offline use with cached exchange rates',
     'Subscriptions and upcoming transactions',
-    'Income vs expense progress charts',
+    'Income vs expense progress charts, monthly and yearly',
+    'Optional encrypted backup and bank sync on premium',
   ],
 };
 
@@ -45,61 +53,74 @@ export const OG_LOCALE = {
 // title ≤ 60 chars, description 140–160 — anything longer is truncated in SERPs.
 export const LOCALES = {
   en: {
-    title: 'Wumbi — Local-first budget app, tags not categories',
-    ogTitle: 'Wumbi — Track money in seconds',
+    title: 'Free Budget Tracker App, No Bank Login - Wumbi',
+    ogTitle: 'Wumbi: log an expense in three seconds',
     description:
-      'Log income and expenses in seconds with #tags instead of categories. 13 currencies, AES-256 encrypted on your phone, no account, no bank linking.',
-    keywords: ['budgeting app', 'expense tracker', 'local-first', 'offline budget app', 'no account budgeting', 'tag based expense tracker', 'multi currency wallet', 'privacy budgeting app'],
-    ogAlt: 'Wumbi — a local-first budgeting app for iOS and Android',
+      'Wumbi is a free budget tracker for iPhone and Android. Log an expense in three seconds using tags, not categories. 64 currencies, works offline, no sign-up.',
+    keywords: ['budget tracker', 'budget tracker app', 'budget app', 'budget planner', 'free budget planner', 'personal finance tracker', 'finance app', 'expense tracker', 'offline budget app', 'budget app without linking bank account', 'expense tracker no account', 'private budget app', 'multi currency budget app', 'manual expense tracker', 'budget app no subscription'],
+    ogAlt: 'Wumbi, a free budget tracker app for iPhone and Android',
   },
   fr: {
-    title: 'Wumbi — Budget local, des tags plutôt que des catégories',
-    ogTitle: 'Wumbi — Suivez votre argent en quelques secondes',
+    title: 'Appli budget gratuite, sans banque ni compte - Wumbi',
+    ogTitle: 'Wumbi : note une dépense en trois secondes',
     description:
-      'Saisissez revenus et dépenses en quelques secondes avec des #tags au lieu de catégories. 13 devises, chiffrement AES-256 sur le téléphone, sans compte.',
-    keywords: ['application budget', 'suivi des dépenses', 'budget hors ligne', 'sans compte', 'gestion budget multidevise', 'application budget privée'],
-    ogAlt: 'Wumbi — application de budget local-first pour iOS et Android',
+      'Wumbi est une appli de budget gratuite pour iPhone et Android. Note une dépense en trois secondes avec des tags, pas des catégories. 64 devises, hors ligne.',
+    keywords: ['application budget', 'suivi de budget', 'gestion budget', 'planificateur de budget', 'budget gratuit', 'suivi des dépenses', 'budget hors ligne', 'application budget sans compte', 'application budget sans banque', 'budget multidevise', 'finances personnelles application'],
+    ogAlt: 'Wumbi, une appli de budget gratuite pour iPhone et Android',
   },
   de: {
-    title: 'Wumbi — Budget-App mit Tags statt Kategorien',
-    ogTitle: 'Wumbi — Geld in Sekunden erfassen',
+    title: 'Kostenlose Budget App ohne Konto und Bank - Wumbi',
+    ogTitle: 'Wumbi: eine Ausgabe in drei Sekunden erfassen',
     description:
-      'Einnahmen und Ausgaben in Sekunden mit #Tags statt Kategorien erfassen. 13 Währungen, AES-256 verschlüsselt auf dem Handy, ohne Konto und ohne Bankzugang.',
-    keywords: ['haushaltsbuch app', 'ausgaben tracker', 'budget app offline', 'ohne konto', 'mehrwährungs budget', 'datenschutz finanz app'],
-    ogAlt: 'Wumbi — local-first Budget-App für iOS und Android',
+      'Wumbi ist eine kostenlose Budget-App für iPhone und Android. Ausgabe in drei Sekunden erfassen, mit Tags statt Kategorien. 64 Währungen, auch offline.',
+    keywords: ['budget app', 'haushaltsbuch app', 'haushaltsbuch kostenlos', 'ausgaben tracker', 'finanz app', 'budgetplaner', 'budget app offline', 'budget app ohne konto', 'budget app ohne bankzugang', 'mehrwährungs budget', 'datenschutz finanz app'],
+    ogAlt: 'Wumbi, eine kostenlose Budget-App für iPhone und Android',
   },
   nl: {
-    title: 'Wumbi — Budget-app met tags in plaats van categorieën',
-    ogTitle: 'Wumbi — Houd je geld in seconden bij',
+    title: 'Gratis budget-app zonder account of bank - Wumbi',
+    ogTitle: 'Wumbi: leg een uitgave vast in drie seconden',
     description:
-      'Inkomsten en uitgaven in seconden vastleggen met #tags in plaats van categorieën. 13 valuta, AES-256 versleuteld op je telefoon, zonder account.',
-    keywords: ['budget app', 'uitgaven bijhouden', 'offline budget app', 'zonder account', 'multivaluta portemonnee', 'privacy budget app'],
-    ogAlt: 'Wumbi — local-first budget-app voor iOS en Android',
+      'Wumbi is een gratis budget-app voor iPhone en Android. Leg een uitgave in drie seconden vast met tags in plaats van categorieën. 64 valuta, werkt offline.',
+    keywords: ['budget app', 'budget bijhouden', 'gratis budget app', 'uitgaven bijhouden', 'huishoudboekje app', 'budgetplanner', 'offline budget app', 'budget app zonder account', 'budget app zonder bank', 'multivaluta budget', 'privacy budget app'],
+    ogAlt: 'Wumbi, een gratis budget-app voor iPhone en Android',
   },
   tr: {
-    title: 'Wumbi — Kategori değil etiket kullanan bütçe uygulaması',
-    ogTitle: 'Wumbi — Parayı saniyeler içinde kaydedin',
+    title: 'Ücretsiz bütçe takip uygulaması, hesapsız - Wumbi',
+    ogTitle: 'Wumbi: bir gideri üç saniyede kaydet',
     description:
-      'Gelir ve giderleri kategoriler yerine #etiketlerle saniyeler içinde kaydedin. 13 para birimi, telefonda AES-256 şifreleme, hesap gerekmez.',
-    keywords: ['bütçe uygulaması', 'harcama takibi', 'çevrimdışı bütçe', 'hesapsız bütçe', 'çoklu para birimi cüzdan', 'gizlilik finans uygulaması'],
-    ogAlt: 'Wumbi — iOS ve Android için local-first bütçe uygulaması',
+      'Wumbi, iPhone ve Android için ücretsiz bütçe takip uygulaması. Kategori yerine etiketle üç saniyede gider kaydet. 64 para birimi, çevrimdışı çalışır.',
+    keywords: ['bütçe uygulaması', 'bütçe takip uygulaması', 'ücretsiz bütçe uygulaması', 'harcama takibi', 'finans uygulaması', 'bütçe planlayıcı', 'çevrimdışı bütçe', 'hesapsız bütçe uygulaması', 'banka bağlantısız bütçe', 'çoklu para birimi bütçe', 'gizlilik finans uygulaması'],
+    ogAlt: 'Wumbi, iPhone ve Android için ücretsiz bütçe takip uygulaması',
   },
   ru: {
-    title: 'Wumbi — учёт финансов с тегами, без аккаунта',
-    ogTitle: 'Wumbi — записывайте траты за секунды',
+    title: 'Бесплатный трекер расходов без банка - Wumbi',
+    ogTitle: 'Wumbi: записывай траты за три секунды',
     description:
-      'Записывайте доходы и расходы за секунды: #теги вместо категорий, 13 валют, шифрование AES-256 на телефоне, без аккаунта и подключения банка.',
-    keywords: ['приложение для учёта расходов', 'учёт финансов', 'бюджет офлайн', 'без регистрации', 'мультивалютный кошелёк', 'приватное финансовое приложение', 'трекер расходов'],
-    ogAlt: 'Wumbi — приложение для учёта финансов на iOS и Android',
+      'Бесплатный трекер расходов для iPhone и Android. Записывай трату за три секунды: теги вместо категорий, 64 валюты, работает офлайн, без регистрации.',
+    keywords: ['трекер расходов', 'приложение для учёта расходов', 'учёт финансов', 'личные финансы', 'планировщик бюджета', 'бесплатный трекер расходов', 'приложение для бюджета', 'учёт расходов офлайн', 'учёт расходов без регистрации', 'бюджет без привязки банка', 'мультивалютный учёт', 'приложение для бюджета без рекламы'],
+    ogAlt: 'Wumbi, бесплатный трекер расходов для iPhone и Android',
   },
   ar: {
-    title: 'Wumbi — تطبيق ميزانية بالوسوم بدل الفئات',
-    ogTitle: 'Wumbi — سجّل أموالك في ثوانٍ',
+    title: 'تطبيق ميزانية مجاني بلا حساب بنكي - Wumbi',
+    ogTitle: 'Wumbi: سجّل مصروفًا في ثلاث ثوانٍ',
     description:
-      'سجّل الدخل والمصروفات في ثوانٍ باستخدام #الوسوم بدل الفئات. 13 عملة، تشفير AES-256 على هاتفك، بلا حساب وبلا ربط بنكي.',
-    keywords: ['تطبيق ميزانية', 'تتبع المصروفات', 'ميزانية دون اتصال', 'بدون حساب', 'محفظة متعددة العملات', 'تطبيق مالي خاص'],
-    ogAlt: 'Wumbi — تطبيق ميزانية محلي أولًا لنظامي iOS و Android',
+      'Wumbi تطبيق ميزانية مجاني لـ iPhone و Android. سجّل مصروفًا في ثلاث ثوانٍ بالوسوم بدل الفئات. 64 عملة، ويعمل دون اتصال وبلا تسجيل.',
+    keywords: ['تطبيق ميزانية', 'تطبيق ميزانية مجاني', 'تتبع المصروفات', 'إدارة الميزانية', 'تطبيق مالي', 'مخطط ميزانية', 'ميزانية دون اتصال', 'تطبيق ميزانية بدون حساب', 'ميزانية بلا ربط بنكي', 'محفظة متعددة العملات', 'تطبيق مالي خاص'],
+    ogAlt: 'Wumbi، تطبيق ميزانية مجاني لـ iPhone و Android',
   },
+};
+
+// The /free-budget-planner-template/ page: an original Excel + Google Sheets budget
+// template given away to catch the template-intent cluster (budget planner excel,
+// budget tracker template, excel finance tracker) that the app pages must not target.
+export const TEMPLATE_PAGE = {
+  path: '/free-budget-planner-template/',
+  file: 'budget-planner-template',   // assets/templates/<file>.xlsx and .csv
+  version: '1.0',
+  title: 'Free Budget Planner Template for Excel and Google Sheets',
+  description:
+    'A free monthly budget planner template for Excel and Google Sheets. 12 months, auto totals, category rollups and a savings-rate dashboard. No email required.',
+  keywords: ['budget planner template', 'budget planner excel', 'excel finance tracker', 'budget tracker template', 'free budget planner', 'monthly budget planner', 'weekly budget planner', 'online budget planner', 'budget spreadsheet', 'google sheets budget template'],
 };
 
 // URL for a locale: default language sits at the root, the rest in /<lang>/.
