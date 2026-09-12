@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Montserrat:wght@300;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<style>
+html,body{margin:0;padding:0;background:#FAFAF8;color:#456285;font-family:Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
+*{box-sizing:border-box}
+a{color:#3B82F6;text-decoration:none}a:hover{color:#2563EB}
+input::placeholder{color:#AEC2D4}
+input:focus{outline:none}
+@keyframes wumbiFloat{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-14px) rotate(2deg)}}
+@keyframes wumbiBreathe{0%,100%{box-shadow:0 0 9px 0 rgba(var(--c),.35)}50%{box-shadow:0 0 23px 0 rgba(var(--c),.8),0 0 37px 9px rgba(var(--c),.1)}}
+@keyframes marquee{from{transform:translate3d(0,0,0)}to{transform:translate3d(-25%,0,0)}}
+#marquee-track{display:flex;width:max-content;will-change:transform;animation:marquee var(--marquee-dur,38s) linear infinite}
+#marquee-track:hover{animation-play-state:paused}
+@media (prefers-reduced-motion:reduce){#marquee-track{animation-duration:calc(var(--marquee-dur,38s) * 2)}}
+@keyframes fabPulse{0%,100%{box-shadow:0 4px 12px rgba(59,130,246,.35)}50%{box-shadow:0 6px 22px rgba(59,130,246,.55)}}
+@keyframes keyTap{0%{background:rgba(255,255,255,.5)}40%{background:rgba(174,194,212,.35)}100%{background:rgba(255,255,255,.5)}}
+</style>
+</helmet>
+
+<canvas id="ambient" style="position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none"></canvas>
+
+<div style="position:relative;z-index:1;min-height:100vh;overflow-x:clip">
+
+<!-- NAV -->
+<nav style="position:sticky;top:0;z-index:20;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);background:rgba(250,250,248,.72);border-bottom:1px solid rgba(174,194,212,.3)">
+  <div style="max-width:1120px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px">
+    <div style="display:flex;align-items:center;gap:10px">
+      <img src="assets/app_logo.png" alt="Wumbi" style="width:32px;height:32px;border-radius:9px">
+      <span style="font-size:17px;font-weight:700;letter-spacing:-0.2px">Wumbi</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:22px">
+      <a href="#features" style="font-size:14px;font-weight:600;color:#456285">Features</a>
+      <a href="#insights" style="font-size:14px;font-weight:600;color:#456285">Tag map</a>
+      <a href="#screens" style="font-size:14px;font-weight:600;color:#456285">Screens</a>
+      <a href="#compare" style="font-size:14px;font-weight:600;color:#456285">Compare</a>
+      <button onClick="{{ goWaitlist }}" style="border:0;cursor:pointer;background:#3B82F6;color:#fff;font:600 14px Inter;padding:10px 18px;border-radius:999px;box-shadow:0 4px 12px rgba(59,130,246,.35)" style-hover="background:#2563EB">Join waitlist</button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header style="max-width:1120px;margin:0 auto;padding:72px 24px 40px;display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:48px;align-items:center">
+  <div style="display:flex;flex-direction:column;gap:26px;max-width:540px">
+    <div data-hero style="display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(174,194,212,.5);border-radius:999px;padding:6px 12px 6px 8px;width:fit-content;font-size:12px;font-weight:700;letter-spacing:1.2px;color:#AEC2D4;text-transform:uppercase">
+      <span style="width:8px;height:8px;border-radius:50%;background:#3B82F6;--c:59,130,246;animation:wumbiBreathe 2.6s ease-in-out infinite"></span>
+      Coming soon · iOS &amp; Android
+    </div>
+    <h1 data-hero style="margin:0;font-size:clamp(40px,5.4vw,66px);line-height:1.02;font-weight:300;letter-spacing:-1.5px;text-wrap:balance">Track money in seconds.<br><strong style="font-weight:700">No categories, just tags.</strong></h1>
+    <p data-hero style="margin:0;font-size:18px;line-height:1.55;color:#6F7F92;font-weight:400;max-width:460px;text-wrap:pretty">Wumbi is a minimalist, local-first budgeting app. Type the amount, tap Income or Expense, done. Your data is encrypted and never leaves your device.</p>
+    <div data-hero style="display:flex;flex-wrap:wrap;gap:12px">
+      <button onClick="{{ focusHero }}" aria-label="App Store — join the waitlist" style="border:0;cursor:pointer;display:flex;align-items:center;gap:10px;background:#101010;color:#fff;padding:10px 20px 10px 14px;border-radius:12px;text-align:left;box-shadow:0 2px 4px -2px rgba(0,0,0,.1)" style-hover="background:#2F2F2F">
+        <span style="width:22px;height:22px;display:block;border-radius:6px;background:linear-gradient(180deg,#60A5FA,#3B82F6)"></span>
+        <span style="display:flex;flex-direction:column;line-height:1.1"><span style="font:500 10px Inter;opacity:.75;letter-spacing:.2px">Coming soon on the</span><span style="font:600 18px Inter;letter-spacing:-0.2px">App Store</span></span>
+      </button>
+      <button onClick="{{ focusHero }}" aria-label="Google Play — join the waitlist" style="border:0;cursor:pointer;display:flex;align-items:center;gap:10px;background:#101010;color:#fff;padding:10px 20px 10px 14px;border-radius:12px;text-align:left;box-shadow:0 2px 4px -2px rgba(0,0,0,.1)" style-hover="background:#2F2F2F">
+        <span style="width:22px;height:22px;display:block;background:linear-gradient(135deg,#3B82F6,#65AF83 50%,#F59E0B);clip-path:polygon(0 0,100% 50%,0 100%)"></span>
+        <span style="display:flex;flex-direction:column;line-height:1.1"><span style="font:500 10px Inter;opacity:.75;letter-spacing:.2px">Coming soon on</span><span style="font:600 18px Inter;letter-spacing:-0.2px">Google Play</span></span>
+      </button>
+    </div>
+    <div data-hero style="display:flex;flex-direction:column;gap:10px;max-width:460px">
+      <sc-if value="{{ notSubmitted }}" hint-placeholder-val="{{ true }}">
+        <form onSubmit="{{ submit }}" style="display:flex;gap:8px;flex-wrap:wrap;background:rgba(255,255,255,.72);border:1px solid rgba(174,194,212,.4);border-radius:16px;padding:6px;backdrop-filter:blur(8px)">
+          <input id="hero-email" type="email" required placeholder="you@email.com" value="{{ email }}" onChange="{{ setEmail }}" style="flex:1;min-width:200px;height:46px;border:0;background:transparent;color:#456285;padding:0 14px;font:500 16px Inter">
+          <button type="submit" style="height:46px;border:0;cursor:pointer;background:#3B82F6;color:#fff;font:600 15px Inter;padding:0 20px;border-radius:11px;box-shadow:0 4px 12px rgba(59,130,246,.35);white-space:nowrap" style-hover="background:#2563EB">Join the waitlist</button>
+        </form>
+        <sc-if value="{{ hasError }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;color:#C03649;font-weight:500">{{ error }}</span></sc-if>
+        <p style="margin:0;font-size:13px;color:#AEC2D4;font-weight:500">One email on launch day. No newsletter, no spam.</p>
+      </sc-if>
+      <sc-if value="{{ submitted }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.72);border:1px solid rgba(174,194,212,.4);border-radius:16px;padding:12px 14px">
+          <span style="width:32px;height:32px;border-radius:50%;background:#3B82F6;color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700">✓</span>
+          <div><div style="font-size:15px;font-weight:600">You're on the list.</div><div style="font-size:13px;color:#6F7F92;margin-top:1px">We'll write to {{ email }} on launch day.</div></div>
+        </div>
+      </sc-if>
+    </div>
+  </div>
+
+  <div style="position:relative;display:flex;justify-content:center;align-items:flex-end;min-height:720px">
+    <img id="hero-mascot" src="assets/wumbi_hello.png" alt="Wumbi mascot waving" style="position:absolute;left:-20px;bottom:40px;width:min(300px,42%);z-index:2;animation:wumbiFloat 6s ease-in-out infinite;filter:drop-shadow(0 24px 30px rgba(69,98,133,.22))">
+    <!-- DASHBOARD PHONE -->
+    <div id="hero-phone" data-screen-label="Dashboard" style="width:300px;height:640px;border-radius:44px;background:#FAFAF8;border:1px solid rgba(174,194,212,.3);box-shadow:0 40px 80px -24px rgba(69,98,133,.3),0 2px 4px -2px rgba(0,0,0,.1);overflow:hidden;position:relative;flex-shrink:0;margin-left:120px">
+      <div style="height:60px;display:flex;align-items:center;padding:8px 8px 0"><span style="width:44px"></span><span style="flex:1;text-align:center;font-size:11px;font-weight:700;letter-spacing:1.6px;color:#AEC2D4">MY MONEY</span><span style="width:44px;height:44px;display:flex;align-items:center;justify-content:center"><span style="width:22px;height:22px;background:#456285;-webkit-mask:url(assets/icons/settings-01.svg) center/contain no-repeat;mask:url(assets/icons/settings-01.svg) center/contain no-repeat"></span></span></div>
+      <div style="padding:52px 16px 0;display:flex;flex-direction:column;align-items:center">
+        <div id="hero-total" style="font:300 40px Montserrat;letter-spacing:-0.5px;color:#456285">$12,345.67</div>
+        <div style="margin-top:20px;font-size:13px;font-weight:500;color:#AEC2D4">Across 4 wallets</div>
+        <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;justify-content:center">
+          <span style="display:flex;align-items:center;gap:4px;border:1px solid rgba(174,194,212,.3);border-radius:20px;padding:6px 10px;font-size:11px;font-weight:600;color:#AEC2D4"><span style="width:14px;height:14px;background:#456285;-webkit-mask:url(assets/icons/search-md.svg) center/contain no-repeat;mask:url(assets/icons/search-md.svg) center/contain no-repeat"></span>Search</span>
+          <span style="display:flex;align-items:center;gap:4px;border:1px solid rgba(174,194,212,.3);border-radius:20px;padding:6px 10px;font-size:11px;font-weight:600;color:#AEC2D4"><span style="width:14px;height:14px;background:#456285;-webkit-mask:url(assets/icons/bar-chart-10.svg) center/contain no-repeat;mask:url(assets/icons/bar-chart-10.svg) center/contain no-repeat"></span>Progress</span>
+          <span style="display:flex;align-items:center;gap:4px;border:1px solid rgba(174,194,212,.3);border-radius:20px;padding:6px 10px;font-size:11px;font-weight:600;color:#AEC2D4"><span style="width:14px;height:14px;background:#456285;-webkit-mask:url(assets/icons/hash-01.svg) center/contain no-repeat;mask:url(assets/icons/hash-01.svg) center/contain no-repeat"></span>Tags</span>
+        </div>
+      </div>
+      <div style="margin-top:48px;padding:0 24px;display:flex;justify-content:space-between;align-items:center"><span style="font-size:17px;font-weight:700">Wallets</span><span style="display:flex;align-items:center;gap:5px;font-size:13px;font-weight:600;color:#3B82F6"><span style="width:16px;height:16px;border:1.5px solid #3B82F6;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;line-height:1">+</span>New Wallet</span></div>
+      <div style="margin-top:12px;padding:0 24px;display:flex;flex-direction:column">
+        <sc-for list="{{ wallets }}" as="w" hint-placeholder-count="4">
+          <div style="display:flex;align-items:center;padding:16px 0">
+            <span style="width:10px;height:10px;border-radius:50%;background:{{ w.color }};--c:{{ w.rgb }};animation:wumbiBreathe 2.6s ease-in-out infinite;animation-delay:{{ w.delay }}"></span>
+            <span style="margin-left:18px;flex:1;display:flex;flex-direction:column"><span style="font-size:14px;font-weight:600">{{ w.name }}</span><span style="font-size:11px;font-weight:700;letter-spacing:1.2px;color:#AEC2D4">{{ w.code }}</span></span>
+            <span style="font-size:14px;font-weight:600;letter-spacing:-0.43px">{{ w.balance }}</span>
+          </div>
+        </sc-for>
+      </div>
+      <div style="position:absolute;right:24px;bottom:24px;width:52px;height:52px;border-radius:50%;background:#3B82F6;display:flex;align-items:center;justify-content:center;animation:fabPulse 3s ease-in-out infinite"><span style="width:26px;height:26px;background:#fff;-webkit-mask:url(assets/icons/plus.svg) center/contain no-repeat;mask:url(assets/icons/plus.svg) center/contain no-repeat"></span></div>
+    </div>
+  </div>
+</header>
+
+<!-- CURRENCY MARQUEE -->
+<div style="border-top:1px solid rgba(174,194,212,.3);border-bottom:1px solid rgba(174,194,212,.3);padding:16px 0;overflow:hidden;mask:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);-webkit-mask:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)">
+  <div id="marquee-track" style="--marquee-dur:{{ marqueeDuration }}">
+    <sc-for list="{{ marqueeCopies }}" as="copy" hint-placeholder-count="4">
+    <div aria-hidden="{{ copy.hidden }}" style="display:flex;gap:56px;padding-right:56px;flex-shrink:0">
+      <sc-for list="{{ currencies }}" as="c" hint-placeholder-count="13">
+        <span style="display:flex;align-items:baseline;gap:8px;white-space:nowrap"><span style="font:700 18px Montserrat;color:#456285">{{ c.symbol }}</span><span style="font-size:12px;font-weight:700;letter-spacing:1.2px;color:#AEC2D4">{{ c.code }}</span></span>
+      </sc-for>
+    </div>
+    </sc-for>
+  </div>
+</div>
+
+<!-- 3-SECOND PITCH -->
+<section id="speed" style="max-width:1120px;margin:0 auto;padding:120px 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:64px;align-items:center">
+  <div style="display:flex;justify-content:center;order:2">
+    <!-- TRANSACTION PHONE (live demo) -->
+    <div data-reveal data-screen-label="Transaction" style="width:300px;height:640px;border-radius:44px;background:#FAFAF8;border:1px solid rgba(174,194,212,.3);box-shadow:0 40px 80px -24px rgba(69,98,133,.3);overflow:hidden;position:relative;display:flex;flex-direction:column;padding:0 16px 8px">
+      <div style="height:60px;display:flex;align-items:center;margin:0 -8px;padding-top:8px"><span style="width:44px;height:44px;display:flex;align-items:center;justify-content:center"><span style="width:24px;height:24px;background:#456285;-webkit-mask:url(assets/icons/arrow-narrow-left.svg) center/contain no-repeat;mask:url(assets/icons/arrow-narrow-left.svg) center/contain no-repeat"></span></span></div>
+      <div style="display:flex;justify-content:center;align-items:center;gap:6px;margin-top:4px">
+        <span style="display:flex;align-items:center;gap:4px;padding:6px 4px;font-size:11px;font-weight:700;letter-spacing:.3px;color:#AEC2D4">USD<span style="width:16px;height:16px;background:#456285;-webkit-mask:url(assets/icons/chevron-down.svg) center/contain no-repeat;mask:url(assets/icons/chevron-down.svg) center/contain no-repeat"></span></span>
+        <span style="width:1px;height:14px;background:rgba(174,194,212,.3)"></span>
+        <span style="display:flex;align-items:center;gap:6px;padding:6px 4px;font-size:11px;font-weight:700;letter-spacing:.3px"><span style="width:8px;height:8px;border-radius:50%;background:#65AF83;box-shadow:0 0 8px rgba(101,175,131,.5)"></span>Savings Vault<span style="width:16px;height:16px;background:#456285;-webkit-mask:url(assets/icons/chevron-down.svg) center/contain no-repeat;mask:url(assets/icons/chevron-down.svg) center/contain no-repeat"></span></span>
+      </div>
+      <div id="demo-amount" style="margin-top:12px;text-align:center;font:700 40px Montserrat;color:#AEC2D4;letter-spacing:-0.5px;min-height:54px">0</div>
+      <div style="height:18px"></div>
+      <div id="demo-desc" style="margin-top:16px;text-align:center;font-size:14px;font-weight:500;color:#AEC2D4;min-height:20px">description</div>
+      <div id="demo-tags" style="margin-top:8px;text-align:center;font-size:13px;font-weight:500;color:#AEC2D4;min-height:20px;display:flex;justify-content:center;gap:6px">#tags</div>
+      <div style="flex:1"></div>
+      <div id="demo-saved" style="opacity:0;align-self:center;display:flex;align-items:center;gap:6px;background:#fff;border-radius:12px;padding:8px 12px;box-shadow:0 2px 4px -2px rgba(0,0,0,.1);font-size:11px;font-weight:600;transform:translateY(8px)"><span style="width:8px;height:8px;border-radius:50%;background:#3B82F6"></span>Saved · <span style="color:#3B82F6">+$14.50</span> · screen stays open</div>
+      <div style="margin-top:12px;display:flex;justify-content:center;gap:10px">
+        <span style="display:flex;align-items:center;gap:3px;padding:6px;font-size:11px;font-weight:500;letter-spacing:.2px;color:#AEC2D4">Today<span style="width:14px;height:14px;background:#AEC2D4;-webkit-mask:url(assets/icons/chevron-down.svg) center/contain no-repeat;mask:url(assets/icons/chevron-down.svg) center/contain no-repeat"></span></span>
+        <span style="display:flex;align-items:center;gap:3px;padding:6px;font-size:11px;font-weight:500;letter-spacing:.2px;color:#AEC2D4">Never<span style="width:14px;height:14px;background:#AEC2D4;-webkit-mask:url(assets/icons/chevron-down.svg) center/contain no-repeat;mask:url(assets/icons/chevron-down.svg) center/contain no-repeat"></span></span>
+      </div>
+      <div style="margin:12px 28px 0;display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+        <sc-for list="{{ keys }}" as="k" hint-placeholder-count="12">
+          <div id="{{ k.id }}" style="height:54px;border-radius:10px;background:rgba(255,255,255,.5);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:500;color:#456285">{{ k.label }}<sc-if value="{{ k.isDelete }}" hint-placeholder-val="{{ false }}"><span style="width:22px;height:22px;background:#456285;-webkit-mask:url(assets/icons/delete.svg) center/contain no-repeat;mask:url(assets/icons/delete.svg) center/contain no-repeat"></span></sc-if></div>
+        </sc-for>
+      </div>
+      <div style="margin-top:12px;display:flex">
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;padding:8px 0"><span style="width:40px;height:40px;display:flex;align-items:center;justify-content:center"><img src="assets/icons/transfer.svg" alt="" style="width:40px;height:40px;filter:opacity(.6)"></span><span style="font-size:9px;font-weight:700;letter-spacing:1px;color:#AEC2D4">TRANSFER</span></div>
+        <div id="demo-income" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;padding:8px 0"><img src="assets/icons/income.svg" alt="" style="width:40px;height:40px"><span style="font-size:9px;font-weight:700;letter-spacing:1px">INCOME</span></div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;padding:8px 0"><span style="width:40px;height:40px;background:#456285;-webkit-mask:url(assets/icons/expense.svg) center/contain no-repeat;mask:url(assets/icons/expense.svg) center/contain no-repeat"></span><span style="font-size:9px;font-weight:700;letter-spacing:1px">EXPENSE</span></div>
+      </div>
+    </div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:22px;order:1">
+    <span data-reveal style="font-size:11px;font-weight:600;letter-spacing:1.2px;color:#AEC2D4;text-transform:uppercase">Built for one thing</span>
+    <h2 data-reveal style="margin:0;font-size:clamp(34px,4vw,52px);line-height:1.05;font-weight:300;letter-spacing:-1px;text-wrap:balance">Log a transaction in <strong style="font-weight:700">under three seconds.</strong></h2>
+    <p data-reveal style="margin:0;font-size:17px;line-height:1.6;color:#6F7F92;max-width:460px;text-wrap:pretty">Open, type the amount, tap Income or Expense. Wumbi saves instantly and stays open for the next one — no confirmation screens, no category pickers.</p>
+    <div data-reveal-stagger style="display:flex;flex-direction:column;gap:14px;margin-top:6px">
+      <div style="display:flex;gap:14px;align-items:flex-start"><span style="width:28px;height:28px;flex-shrink:0;border-radius:8px;background:rgba(59,130,246,.12);color:#3B82F6;display:flex;align-items:center;justify-content:center;font:700 12px Inter">1</span><div><div style="font-size:15px;font-weight:600">Custom numpad, haptic on touch-down</div><div style="font-size:14px;color:#6F7F92;margin-top:2px">Every key responds the instant your finger lands.</div></div></div>
+      <div style="display:flex;gap:14px;align-items:flex-start"><span style="width:28px;height:28px;flex-shrink:0;border-radius:8px;background:rgba(59,130,246,.12);color:#3B82F6;display:flex;align-items:center;justify-content:center;font:700 12px Inter">2</span><div><div style="font-size:15px;font-weight:600">One-tap commit</div><div style="font-size:14px;color:#6F7F92;margin-top:2px">Income, Expense or Transfer saves immediately. No “Save” button.</div></div></div>
+      <div style="display:flex;gap:14px;align-items:flex-start"><span style="width:28px;height:28px;flex-shrink:0;border-radius:8px;background:rgba(59,130,246,.12);color:#3B82F6;display:flex;align-items:center;justify-content:center;font:700 12px Inter">3</span><div><div style="font-size:15px;font-weight:600">Type in any currency</div><div style="font-size:14px;color:#6F7F92;margin-top:2px">Enter €, pay from a $ wallet — Wumbi converts and stores both amounts.</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features" style="max-width:1120px;margin:0 auto;padding:40px 24px 120px">
+  <div style="max-width:620px;display:flex;flex-direction:column;gap:18px;margin-bottom:56px">
+    <span data-reveal style="font-size:11px;font-weight:600;letter-spacing:1.2px;color:#AEC2D4;text-transform:uppercase">Everything in the app</span>
+    <h2 data-reveal style="margin:0;font-size:clamp(34px,4vw,52px);line-height:1.05;font-weight:300;letter-spacing:-1px;text-wrap:balance">Simple on the surface. <strong style="font-weight:700">Serious underneath.</strong></h2>
+  </div>
+  <div data-reveal-stagger style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px">
+    <sc-for list="{{ features }}" as="f" hint-placeholder-count="8">
+      <div style="background:rgba(255,255,255,.72);border:1px solid rgba(174,194,212,.3);border-radius:24px;padding:26px;display:flex;flex-direction:column;gap:14px;backdrop-filter:blur(8px)" style-hover="border-color:rgba(59,130,246,.45);transform:translateY(-3px);transition:all .3s ease">
+        <span style="width:44px;height:44px;border-radius:12px;background:rgba(59,130,246,.12);display:flex;align-items:center;justify-content:center"><span style="width:22px;height:22px;background:#3B82F6;-webkit-mask:url({{ f.icon }}) center/contain no-repeat;mask:url({{ f.icon }}) center/contain no-repeat"></span></span>
+        <div style="font-size:17px;font-weight:600;letter-spacing:-0.2px">{{ f.title }}</div>
+        <div style="font-size:14px;line-height:1.55;color:#6F7F92;text-wrap:pretty">{{ f.body }}</div>
+      </div>
+    </sc-for>
+  </div>
+  <div data-reveal style="margin-top:28px;display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center">
+    <span style="font-size:12px;font-weight:700;letter-spacing:1.2px;color:#AEC2D4;text-transform:uppercase;margin-right:6px">Also</span>
+    <sc-for list="{{ extras }}" as="e" hint-placeholder-count="9">
+      <span style="border:1px solid rgba(174,194,212,.4);border-radius:999px;padding:7px 12px;font-size:13px;font-weight:600;color:#456285;background:rgba(255,255,255,.5)">{{ e }}</span>
+    </sc-for>
+  </div>
+</section>
+
+<!-- TAG MAP + PROGRESS -->
+<section id="insights" style="max-width:1120px;margin:0 auto;padding:40px 24px 120px;display:flex;flex-direction:column;gap:72px">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:64px;align-items:center">
+    <div style="display:flex;flex-direction:column;gap:22px">
+      <span data-reveal style="font-size:11px;font-weight:600;letter-spacing:1.2px;color:#AEC2D4;text-transform:uppercase">Tag map</span>
+      <h2 data-reveal style="margin:0;font-size:clamp(34px,4vw,52px);line-height:1.05;font-weight:300;letter-spacing:-1px;text-wrap:balance">See how your money <strong style="font-weight:700">connects.</strong></h2>
+      <p data-reveal style="margin:0;font-size:17px;line-height:1.6;color:#6F7F92;max-width:460px;text-wrap:pretty">Every tag becomes a bubble. Bigger circles moved more money; lines connect tags used on the same transaction. Pinch, pan, drag a bubble, tap it to open the tag.</p>
+      <div data-reveal-stagger style="display:flex;flex-direction:column;gap:14px;margin-top:6px">
+        <div style="display:flex;gap:14px;align-items:flex-start"><span style="width:28px;height:28px;flex-shrink:0;border-radius:8px;background:rgba(59,130,246,.12);display:flex;align-items:center;justify-content:center"><span style="width:14px;height:14px;background:#3B82F6;-webkit-mask:url(assets/icons/hash-01.svg) center/contain no-repeat;mask:url(assets/icons/hash-01.svg) center/contain no-repeat"></span></span><div><div style="font-size:15px;font-weight:600">A live force-directed graph</div><div style="font-size:14px;color:#6F7F92;margin-top:2px">Bubbles settle on their own. Nudge one and the map reflows.</div></div></div>
+        <div style="display:flex;gap:14px;align-items:flex-start"><span style="width:28px;height:28px;flex-shrink:0;border-radius:8px;background:rgba(59,130,246,.12);display:flex;align-items:center;justify-content:center"><span style="width:14px;height:14px;background:#3B82F6;-webkit-mask:url(assets/icons/search-md.svg) center/contain no-repeat;mask:url(assets/icons/search-md.svg) center/contain no-repeat"></span></span><div><div style="font-size:15px;font-weight:600">Spent · Earned · Net per tag</div><div style="font-size:14px;color:#6F7F92;margin-top:2px">Open any bubble for its transactions across every wallet.</div></div></div>
+      </div>
+      <p data-reveal style="margin:0;font-size:13px;color:#AEC2D4;font-weight:500">Try it — drag a bubble in the phone.</p>
+    </div>
+    <div style="display:flex;justify-content:center">
+      <!-- TAGS PHONE (map view) -->
+      <div data-reveal data-screen-label="Tags map" style="width:300px;height:640px;border-radius:44px;background:#FAFAF8;border:1px solid rgba(174,194,212,.3);box-shadow:0 40px 80px -24px rgba(69,98,133,.3);overflow:hidden;position:relative;display:flex;flex-direction:column">
+        <div style="height:60px;display:flex;align-items:center;padding:8px 8px 0;position:relative;z-index:2"><span style="width:44px;height:44px;display:flex;align-items:center;justify-content:center"><span style="width:24px;height:24px;background:#456285;-webkit-mask:url(assets/icons/arrow-narrow-left.svg) center/contain no-repeat;mask:url(assets/icons/arrow-narrow-left.svg) center/contain no-repeat"></span></span><span style="flex:1;text-align:center;font-size:11px;font-weight:700;letter-spacing:1.6px;color:#AEC2D4">TAGS</span><span style="width:44px"></span></div>
+        <div style="margin-top:4px;display:flex;justify-content:center;gap:8px;position:relative;z-index:2">
+          <span style="padding:6px 12px;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:13px;font-weight:600;color:#AEC2D4">List<span style="width:0;height:2px"></span></span>
+          <span style="padding:6px 12px;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:13px;font-weight:600;color:#3B82F6">Map<span style="width:22px;height:2px;border-radius:1px;background:#3B82F6"></span></span>
+        </div>
+        <canvas id="tag-graph" width="300" height="520" style="position:absolute;left:0;top:112px;width:300px;height:520px;cursor:grab;touch-action:none"></canvas>
+        <div style="position:absolute;left:24px;right:24px;bottom:22px;text-align:center;font-size:11px;font-weight:500;color:#AEC2D4;pointer-events:none">Bigger circles moved more money. Lines connect tags used together.</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:64px;align-items:center">
+    <div style="display:flex;justify-content:center;order:2">
+      <!-- PROGRESS PHONE -->
+      <div data-reveal data-screen-label="Progress" style="width:300px;height:640px;border-radius:44px;background:#FAFAF8;border:1px solid rgba(174,194,212,.3);box-shadow:0 40px 80px -24px rgba(69,98,133,.3);overflow:hidden;position:relative;display:flex;flex-direction:column">
+        <div style="position:absolute;inset:auto -40px -60px;height:220px;background:radial-gradient(circle at 25% 100%,rgba(59,130,246,.16),transparent 60%),radial-gradient(circle at 80% 100%,rgba(139,92,246,.12),transparent 55%);pointer-events:none"></div>
+        <div style="height:60px;display:flex;align-items:center;padding:8px 8px 0"><span style="width:44px;height:44px;display:flex;align-items:center;justify-content:center"><span style="width:24px;height:24px;background:#456285;-webkit-mask:url(assets/icons/arrow-narrow-left.svg) center/contain no-repeat;mask:url(assets/icons/arrow-narrow-left.svg) center/contain no-repeat"></span></span><span style="flex:1;text-align:center;font-size:11px;font-weight:700;letter-spacing:1.6px;color:#AEC2D4">PROGRESS</span><span style="width:44px"></span></div>
+        <div style="padding:4px 16px 0;display:flex;flex-direction:column;align-items:center;position:relative">
+          <span style="display:flex;align-items:center;gap:6px;border:1px solid rgba(174,194,212,.3);border-radius:20px;padding:7px 12px;font-size:11px;font-weight:600;color:#AEC2D4"><span style="width:14px;height:14px;background:#456285;-webkit-mask:url(assets/icons/bank-note-01.svg) center/contain no-repeat;mask:url(assets/icons/bank-note-01.svg) center/contain no-repeat"></span>All wallets<span style="width:14px;height:14px;background:#456285;-webkit-mask:url(assets/icons/chevron-down.svg) center/contain no-repeat;mask:url(assets/icons/chevron-down.svg) center/contain no-repeat"></span></span>
+          <div style="margin-top:8px;display:flex;gap:8px">
+            <span style="padding:6px 12px;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:13px;font-weight:600;color:#3B82F6">Month<span style="width:22px;height:2px;border-radius:1px;background:#3B82F6"></span></span>
+            <span style="padding:6px 12px;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:13px;font-weight:600;color:#AEC2D4">Year<span style="width:0;height:2px"></span></span>
+          </div>
+          <div id="progress-net" style="margin-top:14px;font:300 31px Montserrat;color:#3B82F6;letter-spacing:-0.5px">+$1,230.00</div>
+          <div style="margin-top:6px;font-size:12px;font-weight:500;color:#AEC2D4">Oct 2026 · vs last month</div>
+          <div style="margin-top:14px;display:flex;gap:10px;width:100%">
+            <sc-for list="{{ statTiles }}" as="s" hint-placeholder-count="3">
+              <div style="flex:1;min-width:0;background:#fff;border:1px solid rgba(174,194,212,.3);border-radius:14px;padding:10px 10px;display:flex;flex-direction:column;gap:4px">
+                <span style="font-size:10px;font-weight:600;letter-spacing:1.2px;color:#AEC2D4">{{ s.label }}</span>
+                <span style="font-size:13px;font-weight:600;color:{{ s.color }};white-space:nowrap">{{ s.value }}</span>
+                <span style="font-size:11px;font-weight:500;color:{{ s.deltaColor }}">{{ s.delta }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="margin-top:12px;width:100%;background:#fff;border:1px solid rgba(174,194,212,.3);border-radius:20px;padding:14px 12px 8px">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:0 4px"><span style="font-size:13px;font-weight:600;white-space:nowrap">Income vs Expense</span><span style="display:flex;gap:8px;font-size:10px;white-space:nowrap;font-weight:500;color:#AEC2D4"><span style="display:flex;align-items:center;gap:5px"><span style="width:8px;height:8px;border-radius:50%;background:#3B82F6"></span>Income</span><span style="display:flex;align-items:center;gap:5px"><span style="width:8px;height:8px;border-radius:50%;background:#101010"></span>Expense</span></span></div>
+            <div id="progress-bars" style="margin-top:12px;height:112px;display:flex;justify-content:space-around;align-items:flex-end">
+              <sc-for list="{{ bars }}" as="b" hint-placeholder-count="6">
+                <div style="display:flex;flex-direction:column;align-items:center;gap:8px;height:100%;justify-content:flex-end">
+                  <div style="display:flex;gap:4px;align-items:flex-end;height:88px">
+                    <span style="width:12px;height:88px;border-radius:6px;background:rgba(174,194,212,.14);display:flex;align-items:flex-end;overflow:hidden"><span data-bar style="display:block;width:100%;height:{{ b.income }};border-radius:6px;background:linear-gradient(180deg,rgba(59,130,246,.55),#3B82F6);transform-origin:bottom"></span></span>
+                    <span style="width:12px;height:88px;border-radius:6px;background:rgba(174,194,212,.14);display:flex;align-items:flex-end;overflow:hidden"><span data-bar style="display:block;width:100%;height:{{ b.expense }};border-radius:6px;background:linear-gradient(180deg,rgba(16,16,16,.55),#101010);transform-origin:bottom"></span></span>
+                  </div>
+                  <span style="font-size:11px;font-weight:{{ b.weight }};color:{{ b.labelColor }}">{{ b.label }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="margin-top:10px;width:100%;background:#fff;border:1px solid rgba(174,194,212,.3);border-radius:20px;padding:12px 12px 12px;display:flex;gap:14px;align-items:center">
+            <div id="progress-donut" style="width:68px;height:68px;border-radius:50%;flex-shrink:0;background:conic-gradient(#4C6FFF 0 34%,#FF9F1C 34% 58%,#3DD68C 58% 74%,#B15CFF 74% 86%,#AEC2D4 86% 100%);-webkit-mask:radial-gradient(circle,transparent 24px,#000 25px);mask:radial-gradient(circle,transparent 24px,#000 25px)"></div>
+            <div style="flex:1;display:flex;flex-direction:column;gap:4px;min-width:0">
+              <span style="font-size:13px;font-weight:600">Spending by tag</span>
+              <sc-for list="{{ tagShares }}" as="t" hint-placeholder-count="4">
+                <span style="display:flex;align-items:center;gap:6px;font-size:11px;font-weight:500;color:#AEC2D4"><span style="width:8px;height:8px;border-radius:50%;background:{{ t.color }}"></span><span style="flex:1;color:#456285;font-weight:600">#{{ t.name }}</span>{{ t.pct }}</span>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:22px;order:1">
+      <span data-reveal style="font-size:11px;font-weight:600;letter-spacing:1.2px;color:#AEC2D4;text-transform:uppercase">Progress</span>
+      <h2 data-reveal style="margin:0;font-size:clamp(34px,4vw,52px);line-height:1.05;font-weight:300;letter-spacing:-1px;text-wrap:balance">Know where the month went — <strong style="font-weight:700">without a spreadsheet.</strong></h2>
+      <p data-reveal style="margin:0;font-size:17px;line-height:1.6;color:#6F7F92;max-width:460px;text-wrap:pretty">Income against expense for the last six months or years, the running period compared with the one before, a trend line, and spending split by tag. Scope it to all wallets or just one.</p>
+      <div data-reveal-stagger style="display:flex;flex-wrap:wrap;gap:8px 10px">
+        <span style="border:1px solid rgba(174,194,212,.4);border-radius:999px;padding:7px 12px;font-size:13px;font-weight:600;background:rgba(255,255,255,.5)">Month · Year</span>
+        <span style="border:1px solid rgba(174,194,212,.4);border-radius:999px;padding:7px 12px;font-size:13px;font-weight:600;background:rgba(255,255,255,.5)">▲ ▼ vs last period</span>
+        <span style="border:1px solid rgba(174,194,212,.4);border-radius:999px;padding:7px 12px;font-size:13px;font-weight:600;background:rgba(255,255,255,.5)">Trend line</span>
+        <span style="border:1px solid rgba(174,194,212,.4);border-radius:999px;padding:7px 12px;font-size:13px;font-weight:600;background:rgba(255,255,255,.5)">Spending by tag</span>
+        <span style="border:1px solid rgba(174,194,212,.4);border-radius:999px;padding:7px 12px;font-size:13px;font-weight:600;background:rgba(255,255,255,.5)">Per wallet or all</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SCREENS -->
+<section id="screens" style="padding:40px 0 60px">
+  <div style="max-width:1120px;margin:0 auto;padding:0 24px 56px;display:flex;flex-direction:column;gap:18px;max-width:1120px">
+    <span data-reveal style="font-size:11px;font-weight:600;letter-spacing:1.2px;color:#AEC2D4;text-transform:uppercase">Five screens. Nothing else.</span>
+    <h2 data-reveal style="margin:0;font-size:clamp(34px,4vw,52px);line-height:1.05;font-weight:300;letter-spacing:-1px;text-wrap:balance;max-width:700px">One screen per job. <strong style="font-weight:700">Every secondary choice is a sheet.</strong></h2>
+  </div>
+  <div id="screen-rail" style="display:flex;flex-wrap:wrap;gap:36px;padding:20px 24px 110px;justify-content:center;max-width:1120px;margin:0 auto">
+
+    <!-- WALLET DETAILS -->
+    <div data-phone data-screen-label="Wallet Details" style="width:300px;height:640px;border-radius:44px;background:#FAFAF8;border:1px solid rgba(174,194,212,.3);box-shadow:0 40px 80px -24px rgba(69,98,133,.3);overflow:hidden;position:relative;flex-shrink:0">
+      <div style="height:60px;display:flex;align-items:center;justify-content:space-between;padding:8px 8px 0"><span style="width:44px;height:44px;display:flex;align-items:center;justify-content:center"><span style="width:24px;height:24px;background:#456285;-webkit-mask:url(assets/icons/arrow-narrow-left.svg) center/contain no-repeat;mask:url(assets/icons/arrow-narrow-left.svg) center/contain no-repeat"></span></span><span style="width:44px"></span></div>
+      <img src="assets/wumbi_look.png" alt="" style="position:absolute;right:8px;top:64px;height:64px">
+      <div style="padding:8px 24px 0;display:flex;flex-direction:column;align-items:center">
+        <div style="display:flex;align-items:center;gap:6px"><span style="padding:6px 4px;font-size:11px;font-weight:700;letter-spacing:.3px;color:#AEC2D4">USD</span><span style="width:1px;height:14px;background:rgba(174,194,212,.3)"></span><span style="display:flex;align-items:center;gap:6px;padding:6px 4px;font-size:11px;font-weight:700;letter-spacing:.3px"><span style="width:8px;height:8px;border-radius:50%;background:#65AF83;box-shadow:0 0 8px rgba(101,175,131,.5)"></span>Savings Vault<span style="width:16px;height:16px;background:#456285;-webkit-mask:url(assets/icons/chevron-down.svg) center/contain no-repeat;mask:url(assets/icons/chevron-down.svg) center/contain no-repeat"></span></span></div>
+        <div style="margin-top:28px;font:300 40px Montserrat;letter-spacing:-0.5px">$1,234.56</div>
+        <div style="margin-top:10px;display:flex;align-items:center;gap:4px;font-size:11px;font-weight:500;color:#AEC2D4"><span style="width:14px;height:14px;background:#456285;-webkit-mask:url(assets/icons/repeat-01.svg) center/contain no-repeat;mask:url(assets/icons/repeat-01.svg) center/contain no-repeat"></span>2 Subscriptions<span style="width:14px;height:14px;background:#456285;-webkit-mask:url(assets/icons/chevron-right.svg) center/contain no-repeat;mask:url(assets/icons/chevron-right.svg) center/contain no-repeat"></span></div>
+      </div>
+      <div style="margin-top:24px;padding:0 24px;display:flex;justify-content:space-between;font-size:11px;font-weight:600;color:#AEC2D4"><span>Filter</span><span>Newest first</span></div>
+      <div style="padding:4px 24px 0;display:flex;flex-direction:column">
+        <sc-for list="{{ txns }}" as="t" hint-placeholder-count="5">
+          <div style="display:flex;align-items:center;padding:14px 0;border-bottom:1px solid rgba(174,194,212,.3)">
+            <div style="flex:1;display:flex;flex-direction:column;gap:3px;min-width:0"><span style="font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ t.title }}</span><span style="font-size:11px;font-weight:500;color:#AEC2D4">{{ t.date }}</span><span style="display:flex;gap:6px;margin-top:3px"><sc-for list="{{ t.tags }}" as="g" hint-placeholder-count="0"><span style="background:rgba(59,130,246,.1);color:#3B82F6;border-radius:10px;padding:2px 7px;font-size:9px;font-weight:600">#{{ g }}</span></sc-for></span></div>
+            <span style="margin-left:12px;font-size:14px;font-weight:600;color:{{ t.color }}">{{ t.amount }}</span>
+          </div>
+        </sc-for>
+      </div>
+      <div style="position:absolute;right:24px;bottom:24px;width:52px;height:52px;border-radius:50%;background:#3B82F6;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(59,130,246,.35)"><span style="width:26px;height:26px;background:#fff;-webkit-mask:url(assets/icons/plus.svg) center/contain no-repeat;mask:url(assets/icons/plus.svg) center/contain no-repeat"></span></div>
+    </div>
+
+    <!-- CREATE WALLET -->
+    <div data-phone data-screen-label="Create Wallet" style="width:300px;height:640px;border-radius:44px;background:#FAFAF8;border:1px solid rgba(174,194,212,.3);box-shadow:0 40px 80px -24px rgba(69,98,133,.3);overflow:hidden;position:relative;flex-shrink:0;display:flex;flex-direction:column;padding:0 16px 8px">
+      <div style="height:60px;display:flex;align-items:center;margin:0 -8px;padding-top:8px"><span style="width:44px;height:44px;display:flex;align-items:center;justify-content:center"><span style="width:24px;height:24px;background:#456285;-webkit-mask:url(assets/icons/arrow-narrow-left.svg) center/contain no-repeat;mask:url(assets/icons/arrow-narrow-left.svg) center/contain no-repeat"></span></span></div>
+      <div style="margin-top:24px;text-align:center;font-size:29px;font-weight:300;color:#AEC2D4">Wallet Name</div>
+      <div style="margin-top:12px;padding:8px 0;display:flex;justify-content:center;align-items:baseline;gap:10px"><span style="font-size:29px;font-weight:300;color:#AEC2D4">$</span><span style="font:300 36px Montserrat;color:#AEC2D4">0.00</span></div>
+      <div style="margin-top:56px;height:48px;display:flex;align-items:center;justify-content:space-between"><span style="font-size:14px;font-weight:500">Currency</span><span style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:#AEC2D4">USD ($)<span style="width:18px;height:18px;background:#456285;-webkit-mask:url(assets/icons/chevron-right.svg) center/contain no-repeat;mask:url(assets/icons/chevron-right.svg) center/contain no-repeat"></span></span></div>
+      <div style="height:48px;display:flex;align-items:center;justify-content:space-between"><span style="font-size:14px;font-weight:500">Primary Wallet</span><span style="width:51px;height:31px;border-radius:16px;background:#3B82F6;position:relative"><span style="position:absolute;top:2px;right:2px;width:27px;height:27px;border-radius:50%;background:#fff;box-shadow:0 3px 8px rgba(0,0,0,.15)"></span></span></div>
+      <div style="margin-top:24px;display:grid;grid-template-columns:repeat(5,34px);gap:12px 16px;justify-content:center">
+        <sc-for list="{{ swatches }}" as="s" hint-placeholder-count="20">
+          <span style="width:34px;height:34px;padding:3px;border-radius:10px;border:2px solid {{ s.ring }}"><span style="display:block;width:100%;height:100%;border-radius:6px;background:{{ s.color }}"></span></span>
+        </sc-for>
+      </div>
+      <div style="flex:1"></div>
+      <div style="display:flex;justify-content:space-between;padding:8px 8px 16px;font-size:16px;font-weight:600"><span style="color:#AEC2D4">Delete</span><span style="color:#3B82F6">Save</span></div>
+    </div>
+
+    <!-- DARK DASHBOARD -->
+    <div data-phone data-screen-label="Dashboard (dark)" style="width:300px;height:640px;border-radius:44px;background:#120F1B;border:1px solid #191524;box-shadow:0 40px 80px -24px rgba(18,15,27,.5);overflow:hidden;position:relative;flex-shrink:0;color:#D6E2F0">
+      <div style="position:absolute;inset:auto -40px -60px;height:260px;background:radial-gradient(circle at 30% 100%,rgba(59,130,246,.28),transparent 60%),radial-gradient(circle at 80% 100%,rgba(139,92,246,.22),transparent 55%);pointer-events:none"></div>
+      <div style="height:60px;display:flex;align-items:center;padding:8px 8px 0"><span style="width:44px"></span><span style="flex:1;text-align:center;font-size:11px;font-weight:700;letter-spacing:1.6px;color:#AEC2D4">MY MONEY</span><span style="width:44px;height:44px;display:flex;align-items:center;justify-content:center"><span style="width:22px;height:22px;background:#456285;-webkit-mask:url(assets/icons/settings-01.svg) center/contain no-repeat;mask:url(assets/icons/settings-01.svg) center/contain no-repeat"></span></span></div>
+      <div style="padding:52px 16px 0;display:flex;flex-direction:column;align-items:center">
+        <div style="font:300 40px Montserrat;letter-spacing:-0.5px">$12,345.67</div>
+        <div style="margin-top:20px;font-size:13px;font-weight:500;color:#AEC2D4">Across 4 wallets</div>
+        <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;justify-content:center">
+          <span style="display:flex;align-items:center;gap:4px;border:1px solid #191524;border-radius:20px;padding:6px 10px;font-size:11px;font-weight:600;color:#AEC2D4"><span style="width:14px;height:14px;background:#456285;-webkit-mask:url(assets/icons/search-md.svg) center/contain no-repeat;mask:url(assets/icons/search-md.svg) center/contain no-repeat"></span>Search</span>
+          <span style="display:flex;align-items:center;gap:4px;border:1px solid #191524;border-radius:20px;padding:6px 10px;font-size:11px;font-weight:600;color:#AEC2D4"><span style="width:14px;height:14px;background:#456285;-webkit-mask:url(assets/icons/bar-chart-10.svg) center/contain no-repeat;mask:url(assets/icons/bar-chart-10.svg) center/contain no-repeat"></span>Progress</span>
+          <span style="display:flex;align-items:center;gap:4px;border:1px solid #191524;border-radius:20px;padding:6px 10px;font-size:11px;font-weight:600;color:#AEC2D4"><span style="width:14px;height:14px;background:#456285;-webkit-mask:url(assets/icons/hash-01.svg) center/contain no-repeat;mask:url(assets/icons/hash-01.svg) center/contain no-repeat"></span>Tags</span>
+        </div>
+      </div>
+      <div style="margin-top:48px;padding:0 24px;display:flex;justify-content:space-between;align-items:center"><span style="font-size:17px;font-weight:700">Wallets</span><span style="display:flex;align-items:center;gap:5px;font-size:13px;font-weight:600;color:#3B82F6"><span style="width:16px;height:16px;border:1.5px solid #3B82F6;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;line-height:1">+</span>New Wallet</span></div>
+      <div style="margin-top:12px;padding:0 24px;display:flex;flex-direction:column">
+        <sc-for list="{{ wallets }}" as="w" hint-placeholder-count="4">
+          <div style="display:flex;align-items:center;padding:16px 0">
+            <span style="width:10px;height:10px;border-radius:50%;background:{{ w.color }};box-shadow:0 0 12px {{ w.color }}"></span>
+            <span style="margin-left:18px;flex:1;display:flex;flex-direction:column"><span style="font-size:14px;font-weight:600">{{ w.name }}</span><span style="font-size:11px;font-weight:700;letter-spacing:1.2px;color:#AEC2D4">{{ w.code }}</span></span>
+            <span style="font-size:14px;font-weight:600;letter-spacing:-0.43px">{{ w.balance }}</span>
+          </div>
+        </sc-for>
+      </div>
+      <div style="position:absolute;right:24px;bottom:24px;width:52px;height:52px;border-radius:50%;background:#3B82F6;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(59,130,246,.35)"><span style="width:26px;height:26px;background:#fff;-webkit-mask:url(assets/icons/plus.svg) center/contain no-repeat;mask:url(assets/icons/plus.svg) center/contain no-repeat"></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARE -->
+<sc-if value="{{ showCompare }}" hint-placeholder-val="{{ true }}">
+<section id="compare" style="max-width:1120px;margin:0 auto;padding:40px 24px 120px">
+  <div style="max-width:620px;display:flex;flex-direction:column;gap:18px;margin-bottom:48px">
+    <span data-reveal style="font-size:11px;font-weight:600;letter-spacing:1.2px;color:#AEC2D4;text-transform:uppercase">Why switch</span>
+    <h2 data-reveal style="margin:0;font-size:clamp(34px,4vw,52px);line-height:1.05;font-weight:300;letter-spacing:-1px;text-wrap:balance">Less app. <strong style="font-weight:700">More of your money accounted for.</strong></h2>
+  </div>
+  <div data-reveal style="background:rgba(255,255,255,.75);border:1px solid rgba(174,194,212,.3);border-radius:24px;overflow:hidden;backdrop-filter:blur(8px)">
+    <div style="display:grid;grid-template-columns:minmax(120px,1.1fr) minmax(0,1.4fr) minmax(0,1.4fr);padding:18px 24px;border-bottom:1px solid rgba(174,194,212,.3);font-size:11px;font-weight:600;letter-spacing:1.2px;color:#AEC2D4;text-transform:uppercase;gap:16px">
+      <span></span>
+      <span style="display:flex;align-items:center;gap:8px;color:#3B82F6"><img src="assets/app_logo.png" alt="" style="width:20px;height:20px;border-radius:6px">Wumbi</span>
+      <span>Typical budgeting apps</span>
+    </div>
+    <sc-for list="{{ compare }}" as="r" hint-placeholder-count="7">
+      <div style="display:grid;grid-template-columns:minmax(120px,1.1fr) minmax(0,1.4fr) minmax(0,1.4fr);padding:18px 24px;border-bottom:1px solid rgba(174,194,212,.3);gap:16px;align-items:start">
+        <span style="font-size:15px;font-weight:600">{{ r.label }}</span>
+        <span style="display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:1.5;color:#456285;font-weight:500"><span style="flex-shrink:0;width:20px;height:20px;border-radius:50%;background:rgba(59,130,246,.12);color:#3B82F6;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;margin-top:1px">✓</span>{{ r.wumbi }}</span>
+        <span style="display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:1.5;color:#6F7F92"><span style="flex-shrink:0;width:20px;height:20px;border-radius:50%;background:rgba(174,194,212,.25);color:#AEC2D4;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;margin-top:1px">–</span>{{ r.other }}</span>
+      </div>
+    </sc-for>
+  </div>
+</section>
+</sc-if>
+
+<!-- WAITLIST -->
+<section id="waitlist" style="max-width:1120px;margin:0 auto;padding:40px 24px 120px">
+  <div data-reveal style="position:relative;background:#456285;border-radius:32px;padding:clamp(40px,6vw,80px) clamp(24px,5vw,72px);color:#fff;overflow:hidden;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:40px;align-items:center">
+    <div style="position:absolute;inset:0;background:radial-gradient(circle at 15% 110%,rgba(59,130,246,.55),transparent 50%),radial-gradient(circle at 90% -10%,rgba(139,92,246,.35),transparent 45%);pointer-events:none"></div>
+    <div style="position:relative;display:flex;flex-direction:column;gap:18px">
+      <span style="font-size:11px;font-weight:600;letter-spacing:1.2px;color:#AEC2D4;text-transform:uppercase">Waitlist</span>
+      <h2 style="margin:0;font-size:clamp(32px,3.8vw,48px);line-height:1.05;font-weight:300;letter-spacing:-1px;text-wrap:balance">Be first when <strong style="font-weight:700">Wumbi</strong> lands on the App Store and Google Play.</h2>
+      <p style="margin:0;font-size:16px;line-height:1.55;color:#D6E2F0;max-width:440px;text-wrap:pretty">One email on launch day. No newsletter, no spam — that would be very un-Wumbi.</p>
+      <sc-if value="{{ notSubmitted }}" hint-placeholder-val="{{ true }}">
+        <form onSubmit="{{ submit }}" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">
+          <input id="waitlist-email" type="email" required placeholder="you@email.com" value="{{ email }}" onChange="{{ setEmail }}" style="flex:1;min-width:220px;height:52px;border-radius:14px;border:1px solid rgba(214,226,240,.35);background:rgba(255,255,255,.1);color:#fff;padding:0 18px;font:500 16px Inter" style-focus="border-color:#fff;background:rgba(255,255,255,.16)">
+          <button type="submit" style="height:52px;border:0;cursor:pointer;background:#3B82F6;color:#fff;font:600 16px Inter;padding:0 24px;border-radius:14px;box-shadow:0 4px 12px rgba(59,130,246,.35);white-space:nowrap" style-hover="background:#2563EB">Join the waitlist</button>
+        </form>
+        <sc-if value="{{ hasError }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;color:#FF697D;font-weight:500">{{ error }}</span></sc-if>
+      </sc-if>
+      <sc-if value="{{ submitted }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top:8px;display:flex;align-items:center;gap:14px;background:rgba(255,255,255,.1);border:1px solid rgba(214,226,240,.35);border-radius:14px;padding:16px 18px">
+          <span style="width:36px;height:36px;border-radius:50%;background:#3B82F6;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700">✓</span>
+          <div><div style="font-size:16px;font-weight:600">You're on the list.</div><div style="font-size:14px;color:#D6E2F0;margin-top:2px">We'll write to {{ email }} on launch day.</div></div>
+        </div>
+      </sc-if>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:6px">
+        <button onClick="{{ focusEmail }}" style="border:1px solid rgba(214,226,240,.35);cursor:pointer;display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.06);color:#fff;padding:8px 16px 8px 12px;border-radius:12px;text-align:left" style-hover="background:rgba(255,255,255,.14)"><span style="width:18px;height:18px;display:block;border-radius:5px;background:linear-gradient(180deg,#60A5FA,#3B82F6)"></span><span style="display:flex;flex-direction:column;line-height:1.1"><span style="font:500 9px Inter;opacity:.75">Coming soon on the</span><span style="font:600 15px Inter">App Store</span></span></button>
+        <button onClick="{{ focusEmail }}" style="border:1px solid rgba(214,226,240,.35);cursor:pointer;display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.06);color:#fff;padding:8px 16px 8px 12px;border-radius:12px;text-align:left" style-hover="background:rgba(255,255,255,.14)"><span style="width:18px;height:18px;display:block;background:linear-gradient(135deg,#3B82F6,#65AF83 50%,#F59E0B);clip-path:polygon(0 0,100% 50%,0 100%)"></span><span style="display:flex;flex-direction:column;line-height:1.1"><span style="font:500 9px Inter;opacity:.75">Coming soon on</span><span style="font:600 15px Inter">Google Play</span></span></button>
+      </div>
+    </div>
+    <div style="position:relative;display:flex;justify-content:center;align-items:center;min-height:280px">
+      <img src="assets/wumbi_take_money.png" alt="Wumbi holding a banknote" style="width:min(300px,80%);animation:wumbiFloat 7s ease-in-out infinite;filter:drop-shadow(0 30px 40px rgba(16,16,16,.35))">
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer style="border-top:1px solid rgba(174,194,212,.3);padding:32px 24px">
+  <div style="max-width:1120px;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:16px;font-size:13px;color:#AEC2D4;font-weight:500">
+    <div style="display:flex;align-items:center;gap:10px;color:#456285"><img src="assets/app_logo.png" alt="" style="width:24px;height:24px;border-radius:7px"><span style="font-weight:700">Wumbi</span><span style="color:#AEC2D4">· local-first budgeting</span></div>
+    <div style="display:flex;gap:20px"><a href="mailto:support@wumbi.app" style="color:#456285;font-weight:600">support@wumbi.app</a><span>© 2026 Wumbi</span></div>
+  </div>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;motion&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;rich&quot;,&quot;calm&quot;],&quot;default&quot;:&quot;rich&quot;,&quot;tsType&quot;:&quot;'rich' | 'calm'&quot;,&quot;section&quot;:&quot;Motion&quot;},&quot;showCompare&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Sections&quot;}}">
+class Component extends DCLogic {
+  state = { email: '', submitted: false, error: '' };
+
+  componentDidMount() {
+    this.startAmbient();
+    this.waitFor(() => window.gsap && window.ScrollTrigger, () => this.startGsap());
+  }
+  componentWillUnmount() { cancelAnimationFrame(this.raf); cancelAnimationFrame(this.tagRaf); this.stopped = true; if (window.gsap && this.tl) this.tl.kill(); }
+
+  waitFor(test, cb, n = 0) { if (test()) return cb(); if (n > 100) return; setTimeout(() => this.waitFor(test, cb, n + 1), 100); }
+
+  scrollToWaitlist = () => {
+    const el = document.getElementById('waitlist');
+    if (!el) return;
+    const y = el.getBoundingClientRect().top + window.scrollY - 40;
+    window.scrollTo({ top: y, behavior: 'smooth' });
+    setTimeout(() => document.getElementById('waitlist-email')?.focus({ preventScroll: true }), 700);
+  };
+
+  startAmbient() {
+    const canvas = document.getElementById('ambient');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const tints = ['#8B5CF6', '#3B82F6', '#60A5FA', '#2563EB', '#3B82F6', '#8B5CF6'];
+    // [fx, fy, phase, radius, cx, cy, ax, ay, weight] — ported from UiAmbientBackground; top blobs re-enabled for the hero.
+    const blobs = [
+      [1, 2, 0.0, 0.30, 0.18, 0.02, 0.22, 0.05, 1.0],
+      [2, 1, 2.1, 0.24, 0.78, 0.08, 0.18, 0.05, 0.85],
+      [1, 3, 4.0, 0.20, 0.50, -0.04, 0.30, 0.04, 0.6],
+      [2, 1, 1.0, 0.32, 0.80, 0.98, 0.22, 0.05, 1.0],
+      [1, 2, 3.3, 0.26, 0.22, 0.92, 0.20, 0.06, 0.85],
+      [3, 1, 5.2, 0.18, 0.55, 1.04, 0.28, 0.04, 0.6],
+    ];
+    const hex = (h, a) => `rgba(${parseInt(h.slice(1, 3), 16)},${parseInt(h.slice(3, 5), 16)},${parseInt(h.slice(5, 7), 16)},${a})`;
+    const intensity = this.props.motion === 'calm' ? 0.55 : 1;
+    const start = performance.now();
+    const draw = (now) => {
+      if (this.stopped) return;
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      const W = window.innerWidth, H = window.innerHeight;
+      if (canvas.width !== W * dpr || canvas.height !== H * dpr) { canvas.width = W * dpr; canvas.height = H * dpr; }
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.fillStyle = '#FAFAF8'; ctx.fillRect(0, 0, W, H);
+      ctx.globalCompositeOperation = 'multiply';
+      const angle = ((now - start) / 32000) * Math.PI * 2;
+      const base = Math.max(W, H);
+      blobs.forEach((b, i) => {
+        const dx = Math.sin(angle * b[0] + b[2]) * W * b[6];
+        const dy = Math.cos(angle * b[1] + b[2]) * H * b[7];
+        const cx = W * b[4] + dx, cy = H * b[5] + dy, r = base * b[3];
+        const pulse = 1 + 0.12 * Math.sin(angle + b[2]);
+        const a = Math.min(1, 0.2 * b[8] * pulse * intensity);
+        const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+        const c = tints[i % tints.length];
+        g.addColorStop(0, hex(c, a)); g.addColorStop(0.4, hex(c, a * 0.5)); g.addColorStop(1, hex(c, 0));
+        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fill();
+      });
+      this.raf = requestAnimationFrame(draw);
+    };
+    this.raf = requestAnimationFrame(draw);
+  }
+
+  startGsap() {
+    const { gsap, ScrollTrigger } = window;
+    gsap.registerPlugin(ScrollTrigger);
+    const calm = this.props.motion === 'calm';
+    const dist = calm ? 18 : 40;
+
+    gsap.from('[data-hero]', { y: 30, opacity: 0, duration: 1, stagger: 0.09, ease: 'power3.out', delay: 0.1 });
+    gsap.from('#hero-phone', { y: 90, opacity: 0, rotate: 4, duration: 1.4, ease: 'power3.out', delay: 0.25 });
+    gsap.from('#hero-mascot', { x: -60, opacity: 0, duration: 1.2, ease: 'back.out(1.4)', delay: 0.6 });
+    gsap.to('#hero-phone', { y: -70, ease: 'none', scrollTrigger: { trigger: '#hero-phone', start: 'top 60%', end: 'bottom top', scrub: true } });
+
+    gsap.utils.toArray('[data-reveal]').forEach((el) => {
+      gsap.from(el, { y: dist, opacity: 0, duration: 1, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 88%', once: true } });
+    });
+    gsap.utils.toArray('[data-reveal-stagger]').forEach((el) => {
+      gsap.from(el.children, { y: dist, opacity: 0, duration: 0.9, stagger: 0.1, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 85%', once: true } });
+    });
+    gsap.utils.toArray('[data-phone]').forEach((el, i) => {
+      gsap.from(el, { y: 80 + i * 30, opacity: 0, rotate: (i - 1) * 3, duration: 1.2, ease: 'power3.out', scrollTrigger: { trigger: '#screen-rail', start: 'top 80%', once: true } });
+      if (!calm) gsap.to(el, { y: (i % 2 ? -1 : 1) * 24, ease: 'none', scrollTrigger: { trigger: '#screen-rail', start: 'top bottom', end: 'bottom top', scrub: true } });
+    });
+
+    // Hero total: count up once.
+    const total = document.getElementById('hero-total');
+    if (total) {
+      const o = { v: 9800 };
+      gsap.to(o, { v: 12345.67, duration: 1.8, ease: 'power2.out', delay: 0.5, onUpdate: () => { total.textContent = '$' + o.v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); } });
+    }
+
+    this.buildDemo();
+    this.startTagGraph();
+
+    // Progress bars grow in when the phone scrolls into view.
+    gsap.from('[data-bar]', { scaleY: 0, duration: 1.1, stagger: 0.06, ease: 'power3.out', scrollTrigger: { trigger: '#progress-bars', start: 'top 85%', once: true } });
+    const net = document.getElementById('progress-net');
+    if (net) {
+      const o = { v: 0 };
+      gsap.to(o, { v: 1230, duration: 1.6, ease: 'power2.out', scrollTrigger: { trigger: net, start: 'top 85%', once: true }, onUpdate: () => { net.textContent = '+$' + o.v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); } });
+    }
+  }
+
+  // Force-directed tag map — constants ported from TagGraphSimulation / TagGraphPainter / TagPalette.
+  startTagGraph() {
+    const canvas = document.getElementById('tag-graph');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const W = 300, H = 520, dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = W * dpr; canvas.height = H * dpr;
+    const palette = ['#FF5E5B', '#FF9F1C', '#FFD166', '#B8E062', '#3DD68C', '#00C2A8', '#21B4E8', '#4C6FFF', '#7B61FF', '#B15CFF', '#E45CC4', '#FF6FA5', '#F7735A', '#D9A441', '#5FB37A', '#2E8FA6', '#8C7CFF', '#FF8A3D'];
+    const colorOf = (name) => { let h = 5381; for (const ch of name) h = ((h << 5) + h + ch.charCodeAt(0)) & 0x7fffffff; return palette[h % palette.length]; };
+    const data = [['food', 1240, '-$1,240'], ['work', 4200, '+$4,200'], ['coffee', 186, '-$186'], ['home', 800, '-$800'], ['trip', 640, '-$640'], ['friends', 220, '-$220'], ['gym', 60, '-$60'], ['transport', 130, '-$130'], ['books', 48, '-$48'], ['gifts', 95, '-$95']];
+    const linksRaw = [['food', 'coffee', 6], ['coffee', 'friends', 5], ['food', 'friends', 4], ['trip', 'transport', 4], ['trip', 'food', 3], ['work', 'coffee', 3], ['work', 'transport', 2], ['friends', 'gifts', 2], ['home', 'books', 1], ['gym', 'transport', 1], ['books', 'coffee', 2]];
+    const maxV = Math.max(...data.map((d) => d[1]));
+    const GA = 2.399963229728653;
+    const nodes = data.map(([name, v, amt], i) => ({ name, amt, r: 14 + 22 * Math.sqrt(v / maxV), color: colorOf(name), x: Math.cos(i * GA) * 38 * Math.sqrt(i), y: Math.sin(i * GA) * 38 * Math.sqrt(i), vx: 0, vy: 0, pinned: false }));
+    const idx = Object.fromEntries(nodes.map((n, i) => [n.name, i]));
+    const maxC = Math.max(...linksRaw.map((l) => l[2]));
+    const edges = linksRaw.map(([a, b, c]) => ({ a: idx[a], b: idx[b], w: c / maxC }));
+    const K = { rep: 110, col: 0.25, spring: 0.012, center: 0.006, damp: 0.82, max: 14 };
+    let settled = false, iter = 0;
+    const step = () => {
+      if (settled) return;
+      const n = nodes.length, fx = new Array(n).fill(0), fy = new Array(n).fill(0);
+      for (let i = 0; i < n; i++) for (let j = i + 1; j < n; j++) {
+        const a = nodes[i], b = nodes[j];
+        let dx = b.x - a.x, dy = b.y - a.y, d = Math.hypot(dx, dy);
+        if (d < 0.5) { dx = Math.cos(i + j * 0.7); dy = Math.sin(i - j * 0.7); d = 1; }
+        const ux = dx / d, uy = dy / d, sd = Math.max(d, 8);
+        let push = K.rep * (a.r + b.r) / (sd * sd);
+        const minD = a.r + b.r + 10; if (d < minD) push += (minD - d) * K.col;
+        fx[i] -= ux * push; fy[i] -= uy * push; fx[j] += ux * push; fy[j] += uy * push;
+      }
+      for (const e of edges) {
+        const a = nodes[e.a], b = nodes[e.b];
+        const dx = b.x - a.x, dy = b.y - a.y, d = Math.max(Math.hypot(dx, dy), 1);
+        const rest = a.r + b.r + 28 + 90 * (1 - e.w);
+        const f = (d - rest) * K.spring * (0.35 + 0.65 * e.w);
+        fx[e.a] += dx / d * f; fy[e.a] += dy / d * f; fx[e.b] -= dx / d * f; fy[e.b] -= dy / d * f;
+      }
+      let maxS = 0, anyPinned = false;
+      nodes.forEach((nd, i) => {
+        if (nd.pinned) { anyPinned = true; nd.vx = nd.vy = 0; return; }
+        let vx = (nd.vx + fx[i] - nd.x * K.center) * K.damp, vy = (nd.vy + fy[i] - nd.y * K.center) * K.damp;
+        const s = Math.hypot(vx, vy); if (s > K.max) { vx = vx / s * K.max; vy = vy / s * K.max; }
+        nd.vx = vx; nd.vy = vy; nd.x += vx; nd.y += vy; if (s > maxS) maxS = s;
+      });
+      iter++;
+      if (!anyPinned && ((iter >= 40 && maxS < 0.03) || iter >= 900)) settled = true;
+    };
+    const lighten = (hex) => { const r = parseInt(hex.slice(1, 3), 16), g = parseInt(hex.slice(3, 5), 16), b = parseInt(hex.slice(5, 7), 16); return `rgba(${Math.min(255, r + 36)},${Math.min(255, g + 36)},${Math.min(255, b + 36)},.75)`; };
+    const lum = (hex) => (0.2126 * parseInt(hex.slice(1, 3), 16) + 0.7152 * parseInt(hex.slice(3, 5), 16) + 0.0722 * parseInt(hex.slice(5, 7), 16)) / 255;
+    const hexA = (hex, a) => `rgba(${parseInt(hex.slice(1, 3), 16)},${parseInt(hex.slice(3, 5), 16)},${parseInt(hex.slice(5, 7), 16)},${a})`;
+    // Fit-to-frame: the app pans (InteractiveViewer); here we scale the settled graph into the phone instead.
+    let scale = 1;
+    const fit = () => {
+      let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9;
+      for (const nd of nodes) { const pad = nd.r < 26 ? nd.r + 30 : nd.r + 6; x0 = Math.min(x0, nd.x - pad - 20); x1 = Math.max(x1, nd.x + pad + 20); y0 = Math.min(y0, nd.y - nd.r - 6); y1 = Math.max(y1, nd.y + pad); }
+      const target = Math.min(1, 264 / Math.max(1, x1 - x0), 440 / Math.max(1, y1 - y0));
+      scale += (target - scale) * 0.12;
+    };
+    const draw = () => {
+      fit();
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, W, H);
+      ctx.save(); ctx.translate(W / 2, H / 2 - 20); ctx.scale(scale, scale);
+      ctx.lineCap = 'round';
+      for (const e of edges) {
+        const a = nodes[e.a], b = nodes[e.b];
+        ctx.strokeStyle = `rgba(174,194,212,${0.14 + 0.34 * e.w})`; ctx.lineWidth = 0.5 + 0.7 * e.w;
+        ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+      }
+      for (const nd of nodes) {
+        ctx.save(); ctx.shadowColor = hexA(nd.color, 0.26); ctx.shadowBlur = 12; ctx.fillStyle = hexA(nd.color, 0.26);
+        ctx.beginPath(); ctx.arc(nd.x, nd.y, nd.r * 1.08, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+        ctx.fillStyle = nd.color; ctx.beginPath(); ctx.arc(nd.x, nd.y, nd.r, 0, Math.PI * 2); ctx.fill();
+        ctx.strokeStyle = lighten(nd.color); ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(nd.x, nd.y, nd.r - 0.5, 0, Math.PI * 2); ctx.stroke();
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        const showAmt = nd.r >= 24;
+        if (nd.r >= 26) {
+          const ls = Math.min(14, Math.max(10, nd.r * 0.4)), as = Math.min(11, Math.max(8, nd.r * 0.3));
+          const ink = lum(nd.color) > 0.5 ? '#101010' : '#FFFFFF';
+          ctx.fillStyle = ink; ctx.font = `700 ${ls}px Inter`; ctx.fillText('#' + nd.name, nd.x, nd.y + (showAmt ? -as * 0.7 : 0));
+          if (showAmt) { ctx.globalAlpha = 0.85; ctx.font = `600 ${as}px Inter`; ctx.fillText(nd.amt, nd.x, nd.y + ls * 0.75); ctx.globalAlpha = 1; }
+        } else {
+          ctx.fillStyle = '#456285'; ctx.font = '500 12px Inter'; ctx.fillText('#' + nd.name, nd.x, nd.y + nd.r + 10);
+          if (showAmt) { ctx.fillStyle = '#AEC2D4'; ctx.font = '500 10px Inter'; ctx.fillText(nd.amt, nd.x, nd.y + nd.r + 23); }
+        }
+      }
+      ctx.restore();
+    };
+    const loop = () => { if (this.stopped) return; step(); draw(); this.tagRaf = requestAnimationFrame(loop); };
+    loop();
+    // Drag a bubble (long-press-and-drag in the app; plain drag here).
+    let dragging = null;
+    const pos = (ev) => { const r = canvas.getBoundingClientRect(); return { x: ((ev.clientX - r.left) * (W / r.width) - W / 2) / scale, y: ((ev.clientY - r.top) * (H / r.height) - H / 2 + 20) / scale }; };
+    canvas.addEventListener('pointerdown', (ev) => {
+      const p = pos(ev);
+      for (let i = nodes.length - 1; i >= 0; i--) { const nd = nodes[i], rr = Math.max(nd.r, 18); if ((nd.x - p.x) ** 2 + (nd.y - p.y) ** 2 <= rr * rr) { dragging = nd; nd.pinned = true; settled = false; iter = 0; canvas.setPointerCapture(ev.pointerId); canvas.style.cursor = 'grabbing'; break; } }
+    });
+    canvas.addEventListener('pointermove', (ev) => { if (!dragging) return; const p = pos(ev); dragging.x = p.x; dragging.y = p.y; settled = false; iter = 0; });
+    const release = () => { if (!dragging) return; dragging.pinned = false; dragging.vx = dragging.vy = 0; dragging = null; settled = false; iter = 0; canvas.style.cursor = 'grab'; };
+    canvas.addEventListener('pointerup', release); canvas.addEventListener('pointercancel', release);
+  }
+
+  // Looping "3-second entry" demo on the Transaction phone.
+  buildDemo() {
+    const { gsap } = window;
+    const amount = document.getElementById('demo-amount');
+    const desc = document.getElementById('demo-desc');
+    const tags = document.getElementById('demo-tags');
+    const saved = document.getElementById('demo-saved');
+    const income = document.getElementById('demo-income');
+    if (!amount) return;
+    const tap = (id) => { const k = document.getElementById(id); if (k) { k.style.animation = 'none'; void k.offsetWidth; k.style.animation = 'keyTap .35s ease'; } };
+    const setAmt = (t) => { amount.textContent = t; amount.style.color = t === '0' ? '#AEC2D4' : '#456285'; };
+    const tl = gsap.timeline({ repeat: -1, repeatDelay: 1.2, scrollTrigger: { trigger: '#speed', start: 'top 70%', toggleActions: 'play pause resume pause' } });
+    tl.call(() => { setAmt('0'); desc.textContent = 'description'; desc.style.color = '#AEC2D4'; tags.innerHTML = '#tags'; tags.style.color = '#AEC2D4'; })
+      .to({}, { duration: 0.6 })
+      .call(() => { tap('key-1'); setAmt('1'); }).to({}, { duration: 0.28 })
+      .call(() => { tap('key-4'); setAmt('14'); }).to({}, { duration: 0.28 })
+      .call(() => { tap('key-dot'); setAmt('14.'); }).to({}, { duration: 0.28 })
+      .call(() => { tap('key-5'); setAmt('14.5'); }).to({}, { duration: 0.28 })
+      .call(() => { tap('key-0'); setAmt('14.50'); }).to({}, { duration: 0.5 })
+      .call(() => { desc.textContent = 'Coffee with Anna'; desc.style.color = '#456285'; }).to({}, { duration: 0.4 })
+      .call(() => { tags.style.color = '#3B82F6'; tags.innerHTML = '<span style="background:rgba(59,130,246,.1);border-radius:10px;padding:2px 7px;font-size:12px;font-weight:600">#coffee</span><span style="background:rgba(59,130,246,.1);border-radius:10px;padding:2px 7px;font-size:12px;font-weight:600">#friends</span>'; }).to({}, { duration: 0.6 })
+      .to(income, { scale: 0.86, duration: 0.12, ease: 'power2.in' })
+      .to(income, { scale: 1, duration: 0.35, ease: 'back.out(3)' })
+      .call(() => setAmt('0'))
+      .to(saved, { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' }, '<')
+      .call(() => { desc.textContent = 'description'; desc.style.color = '#AEC2D4'; tags.innerHTML = '#tags'; tags.style.color = '#AEC2D4'; }, null, '+=0.1')
+      .to(saved, { opacity: 0, y: 8, duration: 0.4 }, '+=1.4');
+    this.tl = tl;
+  }
+
+  renderVals() {
+    const W = [
+      { name: 'Checking', code: 'EUR', balance: '€5,678.90', color: '#3B82F6', rgb: '59,130,246', delay: '0s' },
+      { name: 'Savings Vault', code: 'USD', balance: '$6,234.12', color: '#65AF83', rgb: '101,175,131', delay: '-0.6s' },
+      { name: 'Crypto', code: 'BTC', balance: '₿0.00420000', color: '#F59E0B', rgb: '245,158,11', delay: '-1.2s' },
+      { name: 'Investment', code: 'GBP', balance: '£1,000.00', color: '#8B5CF6', rgb: '139,92,246', delay: '-1.8s' },
+    ];
+    const currencies = [['$', 'USD'], ['€', 'EUR'], ['£', 'GBP'], ['CHF', 'CHF'], ['CA$', 'CAD'], ['¥', 'JPY'], ['A$', 'AUD'], ['kr', 'SEK'], ['kr', 'NOK'], ['kr', 'DKK'], ['¥', 'CNY'], ['₺', 'TRY'], ['₿', 'BTC']].map(([symbol, code]) => ({ symbol, code }));
+    const keyRow = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0', '⌫'];
+    const keys = keyRow.map((k) => ({ id: k === '.' ? 'key-dot' : k === '⌫' ? 'key-del' : 'key-' + k, label: k === '⌫' ? '' : k, isDelete: k === '⌫' }));
+    const swatchColors = ['#3B82F6', '#F59E0B', '#EF4444', '#65AF83', '#8B5CF6', '#0EA5E9', '#06B6D4', '#14B8A6', '#10B981', '#84CC16', '#EAB308', '#F97316', '#FB7185', '#EC4899', '#D946EF', '#A855F7', '#6366F1', '#1E3A8A', '#A16207', '#64748B'];
+    const swatches = swatchColors.map((c, i) => ({ color: c, ring: i === 0 ? '#3B82F6' : 'transparent' }));
+    const txns = [
+      { title: 'Salary Payment', date: 'Oct 28, 09:00 AM', amount: '+$1,500.00', color: '#3B82F6', tags: ['work'] },
+      { title: 'Whole Foods Market', date: 'Oct 27, 06:45 PM', amount: '-$120.00', color: '#101010', tags: ['food'] },
+      { title: 'Monthly Rent', date: 'Oct 26, 10:00 AM · Monthly', amount: '-$800.00', color: '#101010', tags: ['home'] },
+      { title: 'Freelance Project', date: 'Oct 25, 02:15 PM · 600.00 EUR @ 1.0833', amount: '+$650.00', color: '#3B82F6', tags: [] },
+      { title: 'Savings Transfer', date: 'Oct 24, 11:30 AM', amount: '-$50.00', color: '#AEC2D4', tags: [] },
+    ];
+    const features = [
+      { icon: 'assets/icons/zap.svg', title: 'One-tap logging', body: 'Income, Expense or Transfer commits instantly and the screen stays open. Fields reset, wallet and currency stay put.' },
+      { icon: 'assets/icons/hash-01.svg', title: 'Tags, not categories', body: 'Type #coffee #trip #work as you go — tags are created on the fly. A tag map shows which tags move the most money together.' },
+      { icon: 'assets/icons/bank-note-01.svg', title: 'Wallets in any currency', body: '13 currencies including Bitcoin to 8 decimals. Each wallet keeps its own; your total is converted to the one you choose.' },
+      { icon: 'assets/icons/lock-01.svg', title: 'Local-first & encrypted', body: 'No account, no server. An AES-256 encrypted database on your phone, key kept in secure storage. Reset everything with one tap.' },
+      { icon: 'assets/icons/repeat-01.svg', title: 'Subscriptions', body: 'Set Repeat — daily, weekly, monthly, yearly — and it becomes a subscription you can pause, edit or stop. See the monthly total at a glance.' },
+      { icon: 'assets/icons/bar-chart-10.svg', title: 'Progress', body: 'Income vs expense by month or year, a trend line, and spending by tag — across all wallets or just one.' },
+      { icon: 'assets/icons/search-md.svg', title: 'Search everything', body: 'Find any transaction by description, amount, wallet name or tag. Filter and sort every wallet’s history.' },
+      { icon: 'assets/icons/wifi-off.svg', title: 'Works offline', body: 'Exchange rates are cached on-device; every transaction remembers the rate it used, so history never shifts.' },
+    ];
+    const extras = ['Dark mode', '7 languages', 'Upcoming transactions', 'Swipe to delete with undo', 'Drag to reorder wallets', 'Haptic numpad', 'Transfers between currencies', 'Show / hide the mascot'];
+    const compare = [
+      { label: 'Logging a purchase', wumbi: 'Type amount, tap once. About three seconds, screen stays open.', other: 'Multi-step form: category, account, notes, confirm.' },
+      { label: 'Organising', wumbi: 'Free-form #tags typed inline, created automatically.', other: 'Fixed category trees you have to maintain.' },
+      { label: 'Account', wumbi: 'None. No sign-up, no email, no password.', other: 'Account required, often with bank linking.' },
+      { label: 'Where your data lives', wumbi: 'On your device, AES-256 encrypted. Nothing leaves the phone.', other: 'On the vendor’s servers.' },
+      { label: 'Currencies', wumbi: '13 incl. Bitcoin. Per-wallet currency, converted total, type in any.', other: 'Usually one currency, or a paid add-on.' },
+      { label: 'Offline', wumbi: 'Fully usable offline; rates cached for 12 hours.', other: 'Needs a connection to sync or open.' },
+      { label: 'Recurring payments', wumbi: 'A Repeat chip on every transaction; pause or stop anytime.', other: 'Often behind a subscription tier.' },
+    ];
+    const statTiles = [
+      { label: 'INCOME', value: '$4,850.00', color: '#3B82F6', delta: '▲ 12%', deltaColor: '#3B82F6' },
+      { label: 'EXPENSE', value: '$3,620.00', color: '#101010', delta: '▼ 8%', deltaColor: '#3B82F6' },
+      { label: 'NET', value: '+$1,230.00', color: '#3B82F6', delta: '▲ 41%', deltaColor: '#3B82F6' },
+    ];
+    const bars = [['May', 62, 70], ['Jun', 58, 66], ['Jul', 74, 60], ['Aug', 66, 78], ['Sep', 80, 72], ['Oct', 100, 75]].map(([label, i, e], k) => ({ label, income: i + '%', expense: e + '%', weight: k === 5 ? 700 : 500, labelColor: k === 5 ? '#3B82F6' : '#AEC2D4' }));
+    const tagShares = [{ name: 'food', color: '#4C6FFF', pct: '34%' }, { name: 'home', color: '#FF9F1C', pct: '24%' }, { name: 'trip', color: '#3DD68C', pct: '16%' }, { name: 'coffee', color: '#B15CFF', pct: '12%' }];
+    return {
+      statTiles, bars, tagShares,
+      wallets: W, currencies, keys, swatches, txns, features, extras, compare,
+      marqueeCopies: [{ hidden: 'false' }, { hidden: 'true' }, { hidden: 'true' }, { hidden: 'true' }],
+      marqueeDuration: this.props.motion === 'calm' ? '60s' : '38s',
+      showCompare: this.props.showCompare ?? true,
+      email: this.state.email, submitted: this.state.submitted, notSubmitted: !this.state.submitted,
+      hasError: !!this.state.error, error: this.state.error,
+      setEmail: (e) => this.setState({ email: e.target.value, error: '' }),
+      submit: (e) => {
+        e.preventDefault();
+        const v = this.state.email.trim();
+        if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)) return this.setState({ error: 'Please enter a valid email address.' });
+        try { const list = JSON.parse(localStorage.getItem('wumbi.waitlist') || '[]'); list.push({ email: v, at: Date.now() }); localStorage.setItem('wumbi.waitlist', JSON.stringify(list)); } catch (_) {}
+        this.setState({ submitted: true, email: v });
+      },
+      goWaitlist: this.scrollToWaitlist,
+      focusHero: () => document.getElementById('hero-email')?.focus(),
+      focusEmail: () => document.getElementById('waitlist-email')?.focus(),
+    };
+  }
+}
+</script>
+</body>
+</html>
