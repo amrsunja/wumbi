@@ -15,6 +15,8 @@ const SITE = {
   themeColor: '#3B82F6',
 };
 
+const LANGS = ['en', 'fr', 'de', 'nl', 'tr', 'ru', 'ar']; // must match i18n.js meta
+
 const REACT_URL = 'https://unpkg.com/react@18.3.1/umd/react.production.min.js';
 const REACT_DOM_URL = 'https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js';
 
@@ -35,6 +37,7 @@ mkdirSync(join(OUT, 'vendor'), { recursive: true });
 copyFile('node_modules/react/umd/react.production.min.js', join(OUT, 'vendor', 'react.production.min.js'));
 copyFile('node_modules/react-dom/umd/react-dom.production.min.js', join(OUT, 'vendor', 'react-dom.production.min.js'));
 copyFile('support.js', join(OUT, 'support.js'));
+copyFile('i18n.js', join(OUT, 'i18n.js'));
 copyDir('assets', join(OUT, 'assets'));
 
 let html = readFileSync(SRC, 'utf8');
@@ -46,6 +49,8 @@ const head = `
 <link rel="icon" type="image/png" href="assets/app_logo.png">
 <link rel="apple-touch-icon" href="assets/app_logo.png">
 <link rel="canonical" href="${SITE.url}">
+${LANGS.map((l) => `<link rel="alternate" hreflang="${l}" href="${SITE.url}?lang=${l}">`).join('\n')}
+<link rel="alternate" hreflang="x-default" href="${SITE.url}">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Wumbi">
 <meta property="og:title" content="${SITE.title}">
@@ -57,9 +62,10 @@ const head = `
 <meta name="twitter:description" content="${SITE.description}">
 <meta name="twitter:image" content="${abs(SITE.image)}">
 <script>window.__resources=${JSON.stringify({ [REACT_URL]: './vendor/react.production.min.js', [REACT_DOM_URL]: './vendor/react-dom.production.min.js' })};</script>
+<script src="./i18n.js"></script>
 <script src="./support.js"></script>`;
 
-const marker = '<script src="./support.js"></script>';
+const marker = '<script src="./i18n.js"></script>\n<script src="./support.js"></script>';
 if (!html.includes(marker)) throw new Error(`build: "${marker}" not found in ${SRC}`);
 html = html.replace(marker, head.trim());
 writeFileSync(join(OUT, 'index.html'), html);

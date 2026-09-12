@@ -3,17 +3,18 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./i18n.js"></script>
 <script src="./support.js"></script>
 </head>
 <body>
 <x-dc>
 <helmet>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Montserrat:wght@300;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Montserrat:wght@300;700&family=Noto+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 <style>
-html,body{margin:0;padding:0;background:#FAFAF8;color:#456285;font-family:Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
+html,body{margin:0;padding:0;background:#FAFAF8;color:#456285;font-family:Inter,'Noto Sans Arabic',system-ui,sans-serif;-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
 *{box-sizing:border-box}
 a{color:#3B82F6;text-decoration:none}a:hover{color:#2563EB}
 input::placeholder{color:#AEC2D4}
@@ -23,6 +24,12 @@ input:focus{outline:none}
 @keyframes marquee{from{transform:translate3d(0,0,0)}to{transform:translate3d(-25%,0,0)}}
 #marquee-track{display:flex;width:max-content;will-change:transform;animation:marquee var(--marquee-dur,38s) linear infinite}
 #marquee-track:hover{animation-play-state:paused}
+@keyframes marqueeRtl{from{transform:translate3d(0,0,0)}to{transform:translate3d(25%,0,0)}}
+[dir=rtl] #marquee-track{animation-name:marqueeRtl}
+[dir=rtl] .store-btn{text-align:right}
+#lang-select{appearance:none;-webkit-appearance:none;border:1px solid rgba(174,194,212,.5);border-radius:999px;background:rgba(255,255,255,.6) url(assets/icons/chevron-down.svg) no-repeat;background-size:14px;background-position:right 8px center;color:#456285;font:600 13px Inter,'Noto Sans Arabic',system-ui;padding:7px 26px 7px 12px;cursor:pointer}
+[dir=rtl] #lang-select{background-position:left 8px center;padding:7px 12px 7px 26px}
+#lang-select:focus{outline:none;border-color:#3B82F6}
 @media (prefers-reduced-motion:reduce){#marquee-track{animation-duration:calc(var(--marquee-dur,38s) * 2)}}
 @keyframes fabPulse{0%,100%{box-shadow:0 4px 12px rgba(59,130,246,.35)}50%{box-shadow:0 6px 22px rgba(59,130,246,.55)}}
 @keyframes keyTap{0%{background:rgba(255,255,255,.5)}40%{background:rgba(174,194,212,.35)}100%{background:rgba(255,255,255,.5)}}
@@ -31,7 +38,7 @@ input:focus{outline:none}
 
 <canvas id="ambient" style="position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none"></canvas>
 
-<div style="position:relative;z-index:1;min-height:100vh;overflow-x:clip">
+<div dir="{{ dir }}" lang="{{ lang }}" style="position:relative;z-index:1;min-height:100vh;overflow-x:clip">
 
 <!-- NAV -->
 <nav style="position:sticky;top:0;z-index:20;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);background:rgba(250,250,248,.72);border-bottom:1px solid rgba(174,194,212,.3)">
@@ -41,11 +48,14 @@ input:focus{outline:none}
       <span style="font-size:17px;font-weight:700;letter-spacing:-0.2px">Wumbi</span>
     </div>
     <div style="display:flex;align-items:center;gap:22px">
-      <a href="#features" style="font-size:14px;font-weight:600;color:#456285">Features</a>
-      <a href="#insights" style="font-size:14px;font-weight:600;color:#456285">Tag map</a>
-      <a href="#screens" style="font-size:14px;font-weight:600;color:#456285">Screens</a>
-      <a href="#compare" style="font-size:14px;font-weight:600;color:#456285">Compare</a>
-      <button onClick="{{ goWaitlist }}" style="border:0;cursor:pointer;background:#3B82F6;color:#fff;font:600 14px Inter;padding:10px 18px;border-radius:999px;box-shadow:0 4px 12px rgba(59,130,246,.35)" style-hover="background:#2563EB">Join waitlist</button>
+      <a href="#features" style="font-size:14px;font-weight:600;color:#456285">{{ L.navFeatures }}</a>
+      <a href="#insights" style="font-size:14px;font-weight:600;color:#456285">{{ L.navTagMap }}</a>
+      <a href="#screens" style="font-size:14px;font-weight:600;color:#456285">{{ L.navScreens }}</a>
+      <a href="#compare" style="font-size:14px;font-weight:600;color:#456285">{{ L.navCompare }}</a>
+      <button onClick="{{ goWaitlist }}" style="border:0;cursor:pointer;background:#3B82F6;color:#fff;font:600 14px Inter;padding:10px 18px;border-radius:999px;box-shadow:0 4px 12px rgba(59,130,246,.35)" style-hover="background:#2563EB">{{ L.navJoin }}</button>
+      <select id="lang-select" aria-label="{{ L.langLabel }}" value="{{ lang }}" onChange="{{ setLang }}">
+        <sc-for list="{{ langs }}" as="lg" hint-placeholder-count="7"><option value="{{ lg.code }}">{{ lg.name }}</option></sc-for>
+      </select>
     </div>
   </div>
 </nav>
@@ -55,64 +65,64 @@ input:focus{outline:none}
   <div style="display:flex;flex-direction:column;gap:26px;max-width:540px">
     <div data-hero style="display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(174,194,212,.5);border-radius:999px;padding:6px 12px 6px 8px;width:fit-content;font-size:12px;font-weight:700;letter-spacing:1.2px;color:#AEC2D4;text-transform:uppercase">
       <span style="width:8px;height:8px;border-radius:50%;background:#3B82F6;--c:59,130,246;animation:wumbiBreathe 2.6s ease-in-out infinite"></span>
-      Coming soon · iOS &amp; Android
+      {{ L.heroBadge }}
     </div>
-    <h1 data-hero style="margin:0;font-size:clamp(40px,5.4vw,66px);line-height:1.02;font-weight:300;letter-spacing:-1.5px;text-wrap:balance">Track money in seconds.<br><strong style="font-weight:700">No categories, just tags.</strong></h1>
-    <p data-hero style="margin:0;font-size:18px;line-height:1.55;color:#6F7F92;font-weight:400;max-width:460px;text-wrap:pretty">Wumbi is a minimalist, local-first budgeting app. Type the amount, tap Income or Expense, done. Your data is encrypted and never leaves your device.</p>
+    <h1 data-hero style="margin:0;font-size:clamp(40px,5.4vw,66px);line-height:1.02;font-weight:300;letter-spacing:-1.5px;text-wrap:balance">{{ L.heroTitle1 }}<br><strong style="font-weight:700">{{ L.heroTitle2 }}</strong></h1>
+    <p data-hero style="margin:0;font-size:18px;line-height:1.55;color:#6F7F92;font-weight:400;max-width:460px;text-wrap:pretty">{{ L.heroLead }}</p>
     <div data-hero style="display:flex;flex-wrap:wrap;gap:12px">
-      <button onClick="{{ focusHero }}" aria-label="App Store — join the waitlist" style="border:0;cursor:pointer;display:flex;align-items:center;gap:10px;background:#101010;color:#fff;padding:10px 20px 10px 14px;border-radius:12px;text-align:left;box-shadow:0 2px 4px -2px rgba(0,0,0,.1)" style-hover="background:#2F2F2F">
-        <span style="width:22px;height:22px;display:block;border-radius:6px;background:linear-gradient(180deg,#60A5FA,#3B82F6)"></span>
-        <span style="display:flex;flex-direction:column;line-height:1.1"><span style="font:500 10px Inter;opacity:.75;letter-spacing:.2px">Coming soon on the</span><span style="font:600 18px Inter;letter-spacing:-0.2px">App Store</span></span>
+      <button onClick="{{ focusHero }}" aria-label="{{ L.storeAppleAria }}" class="store-btn" style="border:0;cursor:pointer;display:flex;align-items:center;gap:10px;background:#101010;color:#fff;padding:10px 20px 10px 14px;border-radius:12px;text-align:left;box-shadow:0 2px 4px -2px rgba(0,0,0,.1)" style-hover="background:#2F2F2F">
+        <img src="assets/app-store.svg" alt="" style="width:26px;height:26px;display:block;border-radius:6px">
+        <span style="display:flex;flex-direction:column;line-height:1.1"><span style="font:500 10px Inter;opacity:.75;letter-spacing:.2px">{{ L.storeSoonOnThe }}</span><span style="font:600 18px Inter;letter-spacing:-0.2px">App Store</span></span>
       </button>
-      <button onClick="{{ focusHero }}" aria-label="Google Play — join the waitlist" style="border:0;cursor:pointer;display:flex;align-items:center;gap:10px;background:#101010;color:#fff;padding:10px 20px 10px 14px;border-radius:12px;text-align:left;box-shadow:0 2px 4px -2px rgba(0,0,0,.1)" style-hover="background:#2F2F2F">
-        <span style="width:22px;height:22px;display:block;background:linear-gradient(135deg,#3B82F6,#65AF83 50%,#F59E0B);clip-path:polygon(0 0,100% 50%,0 100%)"></span>
-        <span style="display:flex;flex-direction:column;line-height:1.1"><span style="font:500 10px Inter;opacity:.75;letter-spacing:.2px">Coming soon on</span><span style="font:600 18px Inter;letter-spacing:-0.2px">Google Play</span></span>
+      <button onClick="{{ focusHero }}" aria-label="{{ L.storeGoogleAria }}" class="store-btn" style="border:0;cursor:pointer;display:flex;align-items:center;gap:10px;background:#101010;color:#fff;padding:10px 20px 10px 14px;border-radius:12px;text-align:left;box-shadow:0 2px 4px -2px rgba(0,0,0,.1)" style-hover="background:#2F2F2F">
+        <img src="assets/google-play.svg" alt="" style="width:24px;height:24px;display:block;margin:0 1px">
+        <span style="display:flex;flex-direction:column;line-height:1.1"><span style="font:500 10px Inter;opacity:.75;letter-spacing:.2px">{{ L.storeSoonOn }}</span><span style="font:600 18px Inter;letter-spacing:-0.2px">Google Play</span></span>
       </button>
     </div>
     <div data-hero style="display:flex;flex-direction:column;gap:10px;max-width:460px">
       <sc-if value="{{ notSubmitted }}" hint-placeholder-val="{{ true }}">
         <form onSubmit="{{ submit }}" style="display:flex;gap:8px;flex-wrap:wrap;background:rgba(255,255,255,.72);border:1px solid rgba(174,194,212,.4);border-radius:16px;padding:6px;backdrop-filter:blur(8px)">
           <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none">
-          <input id="hero-email" type="email" required placeholder="you@email.com" value="{{ email }}" onChange="{{ setEmail }}" style="flex:1;min-width:200px;height:46px;border:0;background:transparent;color:#456285;padding:0 14px;font:500 16px Inter">
+          <input id="hero-email" type="email" required placeholder="{{ L.emailPlaceholder }}" value="{{ email }}" onChange="{{ setEmail }}" style="flex:1;min-width:200px;height:46px;border:0;background:transparent;color:#456285;padding:0 14px;font:500 16px Inter">
           <button type="submit" disabled="{{ sending }}" style="height:46px;border:0;cursor:pointer;background:#3B82F6;color:#fff;font:600 15px Inter;padding:0 20px;border-radius:11px;box-shadow:0 4px 12px rgba(59,130,246,.35);white-space:nowrap" style-hover="background:#2563EB">{{ submitLabel }}</button>
         </form>
         <sc-if value="{{ hasError }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;color:#C03649;font-weight:500">{{ error }}</span></sc-if>
-        <p style="margin:0;font-size:13px;color:#AEC2D4;font-weight:500">One email on launch day. No newsletter, no spam.</p>
+        <p style="margin:0;font-size:13px;color:#AEC2D4;font-weight:500">{{ L.heroNote }}</p>
       </sc-if>
       <sc-if value="{{ submitted }}" hint-placeholder-val="{{ false }}">
         <div style="display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.72);border:1px solid rgba(174,194,212,.4);border-radius:16px;padding:12px 14px">
           <span style="width:32px;height:32px;border-radius:50%;background:#3B82F6;color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700">✓</span>
-          <div><div style="font-size:15px;font-weight:600">You're on the list.</div><div style="font-size:13px;color:#6F7F92;margin-top:1px">We'll write to {{ email }} on launch day.</div></div>
+          <div><div style="font-size:15px;font-weight:600">{{ L.doneTitle }}</div><div style="font-size:13px;color:#6F7F92;margin-top:1px">{{ doneMsg }}</div></div>
         </div>
       </sc-if>
     </div>
   </div>
 
   <div style="position:relative;display:flex;justify-content:center;align-items:flex-end;min-height:720px">
-    <img id="hero-mascot" src="assets/wumbi_hello.png" alt="Wumbi mascot waving" style="position:absolute;left:-20px;bottom:40px;width:min(300px,42%);z-index:2;animation:wumbiFloat 6s ease-in-out infinite;filter:drop-shadow(0 24px 30px rgba(69,98,133,.22))">
+    <img id="hero-mascot" src="assets/wumbi_hello.png" alt="{{ L.altHello }}" style="position:absolute;inset-inline-start:-20px;bottom:40px;width:min(300px,42%);z-index:2;animation:wumbiFloat 6s ease-in-out infinite;filter:drop-shadow(0 24px 30px rgba(69,98,133,.22))">
     <!-- DASHBOARD PHONE -->
-    <div id="hero-phone" data-screen-label="Dashboard" style="width:300px;height:640px;border-radius:44px;background:#FAFAF8;border:1px solid rgba(174,194,212,.3);box-shadow:0 40px 80px -24px rgba(69,98,133,.3),0 2px 4px -2px rgba(0,0,0,.1);overflow:hidden;position:relative;flex-shrink:0;margin-left:120px">
-      <div style="height:60px;display:flex;align-items:center;padding:8px 8px 0"><span style="width:44px"></span><span style="flex:1;text-align:center;font-size:11px;font-weight:700;letter-spacing:1.6px;color:#AEC2D4">MY MONEY</span><span style="width:44px;height:44px;display:flex;align-items:center;justify-content:center"><span style="width:22px;height:22px;background:#456285;-webkit-mask:url(assets/icons/settings-01.svg) center/contain no-repeat;mask:url(assets/icons/settings-01.svg) center/contain no-repeat"></span></span></div>
+    <div id="hero-phone" data-screen-label="Dashboard" style="width:300px;height:640px;border-radius:44px;background:#FAFAF8;border:1px solid rgba(174,194,212,.3);box-shadow:0 40px 80px -24px rgba(69,98,133,.3),0 2px 4px -2px rgba(0,0,0,.1);overflow:hidden;position:relative;flex-shrink:0;margin-inline-start:120px">
+      <div style="height:60px;display:flex;align-items:center;padding:8px 8px 0"><span style="width:44px"></span><span style="flex:1;text-align:center;font-size:11px;font-weight:700;letter-spacing:1.6px;color:#AEC2D4;text-transform:uppercase">{{ L.dashTitle }}</span><span style="width:44px;height:44px;display:flex;align-items:center;justify-content:center"><span style="width:22px;height:22px;background:#456285;-webkit-mask:url(assets/icons/settings-01.svg) center/contain no-repeat;mask:url(assets/icons/settings-01.svg) center/contain no-repeat"></span></span></div>
       <div style="padding:52px 16px 0;display:flex;flex-direction:column;align-items:center">
         <div id="hero-total" style="font:300 40px Montserrat;letter-spacing:-0.5px;color:#456285">$12,345.67</div>
-        <div style="margin-top:20px;font-size:13px;font-weight:500;color:#AEC2D4">Across 4 wallets</div>
+        <div style="margin-top:20px;font-size:13px;font-weight:500;color:#AEC2D4">{{ L.dashAcross }}</div>
         <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;justify-content:center">
-          <span style="display:flex;align-items:center;gap:4px;border:1px solid rgba(174,194,212,.3);border-radius:20px;padding:6px 10px;font-size:11px;font-weight:600;color:#AEC2D4"><span style="width:14px;height:14px;background:#456285;-webkit-mask:url(assets/icons/search-md.svg) center/contain no-repeat;mask:url(assets/icons/search-md.svg) center/contain no-repeat"></span>Search</span>
-          <span style="display:flex;align-items:center;gap:4px;border:1px solid rgba(174,194,212,.3);border-radius:20px;padding:6px 10px;font-size:11px;font-weight:600;color:#AEC2D4"><span style="width:14px;height:14px;background:#456285;-webkit-mask:url(assets/icons/bar-chart-10.svg) center/contain no-repeat;mask:url(assets/icons/bar-chart-10.svg) center/contain no-repeat"></span>Progress</span>
-          <span style="display:flex;align-items:center;gap:4px;border:1px solid rgba(174,194,212,.3);border-radius:20px;padding:6px 10px;font-size:11px;font-weight:600;color:#AEC2D4"><span style="width:14px;height:14px;background:#456285;-webkit-mask:url(assets/icons/hash-01.svg) center/contain no-repeat;mask:url(assets/icons/hash-01.svg) center/contain no-repeat"></span>Tags</span>
+          <span style="display:flex;align-items:center;gap:4px;border:1px solid rgba(174,194,212,.3);border-radius:20px;padding:6px 10px;font-size:11px;font-weight:600;color:#AEC2D4"><span style="width:14px;height:14px;background:#456285;-webkit-mask:url(assets/icons/search-md.svg) center/contain no-repeat;mask:url(assets/icons/search-md.svg) center/contain no-repeat"></span>{{ L.dashSearch }}</span>
+          <span style="display:flex;align-items:center;gap:4px;border:1px solid rgba(174,194,212,.3);border-radius:20px;padding:6px 10px;font-size:11px;font-weight:600;color:#AEC2D4"><span style="width:14px;height:14px;background:#456285;-webkit-mask:url(assets/icons/bar-chart-10.svg) center/contain no-repeat;mask:url(assets/icons/bar-chart-10.svg) center/contain no-repeat"></span>{{ L.dashProgress }}</span>
+          <span style="display:flex;align-items:center;gap:4px;border:1px solid rgba(174,194,212,.3);border-radius:20px;padding:6px 10px;font-size:11px;font-weight:600;color:#AEC2D4"><span style="width:14px;height:14px;background:#456285;-webkit-mask:url(assets/icons/hash-01.svg) center/contain no-repeat;mask:url(assets/icons/hash-01.svg) center/contain no-repeat"></span>{{ L.dashTags }}</span>
         </div>
       </div>
-      <div style="margin-top:48px;padding:0 24px;display:flex;justify-content:space-between;align-items:center"><span style="font-size:17px;font-weight:700">Wallets</span><span style="display:flex;align-items:center;gap:5px;font-size:13px;font-weight:600;color:#3B82F6"><span style="width:16px;height:16px;border:1.5px solid #3B82F6;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;line-height:1">+</span>New Wallet</span></div>
+      <div style="margin-top:48px;padding:0 24px;display:flex;justify-content:space-between;align-items:center"><span style="font-size:17px;font-weight:700">{{ L.dashWallets }}</span><span style="display:flex;align-items:center;gap:5px;font-size:13px;font-weight:600;color:#3B82F6"><span style="width:16px;height:16px;border:1.5px solid #3B82F6;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;line-height:1">+</span>{{ L.dashNewWallet }}</span></div>
       <div style="margin-top:12px;padding:0 24px;display:flex;flex-direction:column">
         <sc-for list="{{ wallets }}" as="w" hint-placeholder-count="4">
           <div style="display:flex;align-items:center;padding:16px 0">
             <span style="width:10px;height:10px;border-radius:50%;background:{{ w.color }};--c:{{ w.rgb }};animation:wumbiBreathe 2.6s ease-in-out infinite;animation-delay:{{ w.delay }}"></span>
-            <span style="margin-left:18px;flex:1;display:flex;flex-direction:column"><span style="font-size:14px;font-weight:600">{{ w.name }}</span><span style="font-size:11px;font-weight:700;letter-spacing:1.2px;color:#AEC2D4">{{ w.code }}</span></span>
+            <span style="margin-inline-start:18px;flex:1;display:flex;flex-direction:column"><span style="font-size:14px;font-weight:600">{{ w.name }}</span><span style="font-size:11px;font-weight:700;letter-spacing:1.2px;color:#AEC2D4">{{ w.code }}</span></span>
             <span style="font-size:14px;font-weight:600;letter-spacing:-0.43px">{{ w.balance }}</span>
           </div>
         </sc-for>
       </div>
-      <div style="position:absolute;right:24px;bottom:24px;width:52px;height:52px;border-radius:50%;background:#3B82F6;display:flex;align-items:center;justify-content:center;animation:fabPulse 3s ease-in-out infinite"><span style="width:26px;height:26px;background:#fff;-webkit-mask:url(assets/icons/plus.svg) center/contain no-repeat;mask:url(assets/icons/plus.svg) center/contain no-repeat"></span></div>
+      <div style="position:absolute;inset-inline-end:24px;bottom:24px;width:52px;height:52px;border-radius:50%;background:#3B82F6;display:flex;align-items:center;justify-content:center;animation:fabPulse 3s ease-in-out infinite"><span style="width:26px;height:26px;background:#fff;-webkit-mask:url(assets/icons/plus.svg) center/contain no-repeat;mask:url(assets/icons/plus.svg) center/contain no-repeat"></span></div>
     </div>
   </div>
 </header>
@@ -139,17 +149,17 @@ input:focus{outline:none}
       <div style="display:flex;justify-content:center;align-items:center;gap:6px;margin-top:4px">
         <span style="display:flex;align-items:center;gap:4px;padding:6px 4px;font-size:11px;font-weight:700;letter-spacing:.3px;color:#AEC2D4">USD<span style="width:16px;height:16px;background:#456285;-webkit-mask:url(assets/icons/chevron-down.svg) center/contain no-repeat;mask:url(assets/icons/chevron-down.svg) center/contain no-repeat"></span></span>
         <span style="width:1px;height:14px;background:rgba(174,194,212,.3)"></span>
-        <span style="display:flex;align-items:center;gap:6px;padding:6px 4px;font-size:11px;font-weight:700;letter-spacing:.3px"><span style="width:8px;height:8px;border-radius:50%;background:#65AF83;box-shadow:0 0 8px rgba(101,175,131,.5)"></span>Savings Vault<span style="width:16px;height:16px;background:#456285;-webkit-mask:url(assets/icons/chevron-down.svg) center/contain no-repeat;mask:url(assets/icons/chevron-down.svg) center/contain no-repeat"></span></span>
+        <span style="display:flex;align-items:center;gap:6px;padding:6px 4px;font-size:11px;font-weight:700;letter-spacing:.3px"><span style="width:8px;height:8px;border-radius:50%;background:#65AF83;box-shadow:0 0 8px rgba(101,175,131,.5)"></span>{{ L.walletSavings }}<span style="width:16px;height:16px;background:#456285;-webkit-mask:url(assets/icons/chevron-down.svg) center/contain no-repeat;mask:url(assets/icons/chevron-down.svg) center/contain no-repeat"></span></span>
       </div>
       <div id="demo-amount" style="margin-top:12px;text-align:center;font:700 40px Montserrat;color:#AEC2D4;letter-spacing:-0.5px;min-height:54px">0</div>
       <div style="height:18px"></div>
-      <div id="demo-desc" style="margin-top:16px;text-align:center;font-size:14px;font-weight:500;color:#AEC2D4;min-height:20px">description</div>
-      <div id="demo-tags" style="margin-top:8px;text-align:center;font-size:13px;font-weight:500;color:#AEC2D4;min-height:20px;display:flex;justify-content:center;gap:6px">#tags</div>
+      <div id="demo-desc" style="margin-top:16px;text-align:center;font-size:14px;font-weight:500;color:#AEC2D4;min-height:20px">{{ L.demoDesc }}</div>
+      <div id="demo-tags" style="margin-top:8px;text-align:center;font-size:13px;font-weight:500;color:#AEC2D4;min-height:20px;display:flex;justify-content:center;gap:6px">{{ L.demoTags }}</div>
       <div style="flex:1"></div>
-      <div id="demo-saved" style="opacity:0;align-self:center;display:flex;align-items:center;gap:6px;background:#fff;border-radius:12px;padding:8px 12px;box-shadow:0 2px 4px -2px rgba(0,0,0,.1);font-size:11px;font-weight:600;transform:translateY(8px)"><span style="width:8px;height:8px;border-radius:50%;background:#3B82F6"></span>Saved · <span style="color:#3B82F6">+$14.50</span> · screen stays open</div>
+      <div id="demo-saved" style="opacity:0;align-self:center;display:flex;align-items:center;gap:6px;background:#fff;border-radius:12px;padding:8px 12px;box-shadow:0 2px 4px -2px rgba(0,0,0,.1);font-size:10px;font-weight:600;white-space:nowrap;transform:translateY(8px)"><span style="width:8px;height:8px;border-radius:50%;background:#3B82F6"></span>{{ L.demoSaved }} · <span style="color:#3B82F6">+$14.50</span> · {{ L.demoStays }}</div>
       <div style="margin-top:12px;display:flex;justify-content:center;gap:10px">
-        <span style="display:flex;align-items:center;gap:3px;padding:6px;font-size:11px;font-weight:500;letter-spacing:.2px;color:#AEC2D4">Today<span style="width:14px;height:14px;background:#AEC2D4;-webkit-mask:url(assets/icons/chevron-down.svg) center/contain no-repeat;mask:url(assets/icons/chevron-down.svg) center/contain no-repeat"></span></span>
-        <span style="display:flex;align-items:center;gap:3px;padding:6px;font-size:11px;font-weight:500;letter-spacing:.2px;color:#AEC2D4">Never<span style="width:14px;height:14px;background:#AEC2D4;-webkit-mask:url(assets/icons/chevron-down.svg) center/contain no-repeat;mask:url(assets/icons/chevron-down.svg) center/contain no-repeat"></span></span>
+        <span style="display:flex;align-items:center;gap:3px;padding:6px;font-size:11px;font-weight:500;letter-spacing:.2px;color:#AEC2D4">{{ L.today }}<span style="width:14px;height:14px;background:#AEC2D4;-webkit-mask:url(assets/icons/chevron-down.svg) center/contain no-repeat;mask:url(assets/icons/chevron-down.svg) center/contain no-repeat"></span></span>
+        <span style="display:flex;align-items:center;gap:3px;padding:6px;font-size:11px;font-weight:500;letter-spacing:.2px;color:#AEC2D4">{{ L.never }}<span style="width:14px;height:14px;background:#AEC2D4;-webkit-mask:url(assets/icons/chevron-down.svg) center/contain no-repeat;mask:url(assets/icons/chevron-down.svg) center/contain no-repeat"></span></span>
       </div>
       <div style="margin:12px 28px 0;display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
         <sc-for list="{{ keys }}" as="k" hint-placeholder-count="12">
@@ -157,20 +167,20 @@ input:focus{outline:none}
         </sc-for>
       </div>
       <div style="margin-top:12px;display:flex">
-        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;padding:8px 0"><span style="width:40px;height:40px;display:flex;align-items:center;justify-content:center"><img src="assets/icons/transfer.svg" alt="" style="width:40px;height:40px;filter:opacity(.6)"></span><span style="font-size:9px;font-weight:700;letter-spacing:1px;color:#AEC2D4">TRANSFER</span></div>
-        <div id="demo-income" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;padding:8px 0"><img src="assets/icons/income.svg" alt="" style="width:40px;height:40px"><span style="font-size:9px;font-weight:700;letter-spacing:1px">INCOME</span></div>
-        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;padding:8px 0"><span style="width:40px;height:40px;background:#456285;-webkit-mask:url(assets/icons/expense.svg) center/contain no-repeat;mask:url(assets/icons/expense.svg) center/contain no-repeat"></span><span style="font-size:9px;font-weight:700;letter-spacing:1px">EXPENSE</span></div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;padding:8px 0"><span style="width:40px;height:40px;display:flex;align-items:center;justify-content:center"><img src="assets/icons/transfer.svg" alt="" style="width:40px;height:40px;filter:opacity(.6)"></span><span style="font-size:9px;font-weight:700;letter-spacing:1px;color:#AEC2D4;text-transform:uppercase">{{ L.transfer }}</span></div>
+        <div id="demo-income" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;padding:8px 0"><img src="assets/icons/income.svg" alt="" style="width:40px;height:40px"><span style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase">{{ L.income }}</span></div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;padding:8px 0"><span style="width:40px;height:40px;background:#456285;-webkit-mask:url(assets/icons/expense.svg) center/contain no-repeat;mask:url(assets/icons/expense.svg) center/contain no-repeat"></span><span style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase">{{ L.expense }}</span></div>
       </div>
     </div>
   </div>
   <div style="display:flex;flex-direction:column;gap:22px;order:1">
-    <span data-reveal style="font-size:11px;font-weight:600;letter-spacing:1.2px;color:#AEC2D4;text-transform:uppercase">Built for one thing</span>
-    <h2 data-reveal style="margin:0;font-size:clamp(34px,4vw,52px);line-height:1.05;font-weight:300;letter-spacing:-1px;text-wrap:balance">Log a transaction in <strong style="font-weight:700">under three seconds.</strong></h2>
-    <p data-reveal style="margin:0;font-size:17px;line-height:1.6;color:#6F7F92;max-width:460px;text-wrap:pretty">Open, type the amount, tap Income or Expense. Wumbi saves instantly and stays open for the next one — no confirmation screens, no category pickers.</p>
+    <span data-reveal style="font-size:11px;font-weight:600;letter-spacing:1.2px;color:#AEC2D4;text-transform:uppercase">{{ L.speedKicker }}</span>
+    <h2 data-reveal style="margin:0;font-size:clamp(34px,4vw,52px);line-height:1.05;font-weight:300;letter-spacing:-1px;text-wrap:balance">{{ L.speedTitle1 }} <strong style="font-weight:700">{{ L.speedTitle2 }}</strong></h2>
+    <p data-reveal style="margin:0;font-size:17px;line-height:1.6;color:#6F7F92;max-width:460px;text-wrap:pretty">{{ L.speedLead }}</p>
     <div data-reveal-stagger style="display:flex;flex-direction:column;gap:14px;margin-top:6px">
-      <div style="display:flex;gap:14px;align-items:flex-start"><span style="width:28px;height:28px;flex-shrink:0;border-radius:8px;background:rgba(59,130,246,.12);color:#3B82F6;display:flex;align-items:center;justify-content:center;font:700 12px Inter">1</span><div><div style="font-size:15px;font-weight:600">Custom numpad, haptic on touch-down</div><div style="font-size:14px;color:#6F7F92;margin-top:2px">Every key responds the instant your finger lands.</div></div></div>
-      <div style="display:flex;gap:14px;align-items:flex-start"><span style="width:28px;height:28px;flex-shrink:0;border-radius:8px;background:rgba(59,130,246,.12);color:#3B82F6;display:flex;align-items:center;justify-content:center;font:700 12px Inter">2</span><div><div style="font-size:15px;font-weight:600">One-tap commit</div><div style="font-size:14px;color:#6F7F92;margin-top:2px">Income, Expense or Transfer saves immediately. No “Save” button.</div></div></div>
-      <div style="display:flex;gap:14px;align-items:flex-start"><span style="width:28px;height:28px;flex-shrink:0;border-radius:8px;background:rgba(59,130,246,.12);color:#3B82F6;display:flex;align-items:center;justify-content:center;font:700 12px Inter">3</span><div><div style="font-size:15px;font-weight:600">Type in any currency</div><div style="font-size:14px;color:#6F7F92;margin-top:2px">Enter €, pay from a $ wallet — Wumbi converts and stores both amounts.</div></div></div>
+      <div style="display:flex;gap:14px;align-items:flex-start"><span style="width:28px;height:28px;flex-shrink:0;border-radius:8px;background:rgba(59,130,246,.12);color:#3B82F6;display:flex;align-items:center;justify-content:center;font:700 12px Inter">1</span><div><div style="font-size:15px;font-weight:600">{{ L.step1Title }}</div><div style="font-size:14px;color:#6F7F92;margin-top:2px">{{ L.step1Body }}</div></div></div>
+      <div style="display:flex;gap:14px;align-items:flex-start"><span style="width:28px;height:28px;flex-shrink:0;border-radius:8px;background:rgba(59,130,246,.12);color:#3B82F6;display:flex;align-items:center;justify-content:center;font:700 12px Inter">2</span><div><div style="font-size:15px;font-weight:600">{{ L.step2Title }}</div><div style="font-size:14px;color:#6F7F92;margin-top:2px">{{ L.step2Body }}</div></div></div>
+      <div style="display:flex;gap:14px;align-items:flex-start"><span style="width:28px;height:28px;flex-shrink:0;border-radius:8px;background:rgba(59,130,246,.12);color:#3B82F6;display:flex;align-items:center;justify-content:center;font:700 12px Inter">3</span><div><div style="font-size:15px;font-weight:600">{{ L.step3Title }}</div><div style="font-size:14px;color:#6F7F92;margin-top:2px">{{ L.step3Body }}</div></div></div>
     </div>
   </div>
 </section>
@@ -178,8 +188,8 @@ input:focus{outline:none}
 <!-- FEATURES -->
 <section id="features" style="max-width:1120px;margin:0 auto;padding:40px 24px 120px">
   <div style="max-width:620px;display:flex;flex-direction:column;gap:18px;margin-bottom:56px">
-    <span data-reveal style="font-size:11px;font-weight:600;letter-spacing:1.2px;color:#AEC2D4;text-transform:uppercase">Everything in the app</span>
-    <h2 data-reveal style="margin:0;font-size:clamp(34px,4vw,52px);line-height:1.05;font-weight:300;letter-spacing:-1px;text-wrap:balance">Simple on the surface. <strong style="font-weight:700">Serious underneath.</strong></h2>
+    <span data-reveal style="font-size:11px;font-weight:600;letter-spacing:1.2px;color:#AEC2D4;text-transform:uppercase">{{ L.featKicker }}</span>
+    <h2 data-reveal style="margin:0;font-size:clamp(34px,4vw,52px);line-height:1.05;font-weight:300;letter-spacing:-1px;text-wrap:balance">{{ L.featTitle1 }} <strong style="font-weight:700">{{ L.featTitle2 }}</strong></h2>
   </div>
   <div data-reveal-stagger style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px">
     <sc-for list="{{ features }}" as="f" hint-placeholder-count="8">
@@ -191,7 +201,7 @@ input:focus{outline:none}
     </sc-for>
   </div>
   <div data-reveal style="margin-top:28px;display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center">
-    <span style="font-size:12px;font-weight:700;letter-spacing:1.2px;color:#AEC2D4;text-transform:uppercase;margin-right:6px">Also</span>
+    <span style="font-size:12px;font-weight:700;letter-spacing:1.2px;color:#AEC2D4;text-transform:uppercase;margin-inline-end:6px">{{ L.alsoLabel }}</span>
     <sc-for list="{{ extras }}" as="e" hint-placeholder-count="9">
       <span style="border:1px solid rgba(174,194,212,.4);border-radius:999px;padding:7px 12px;font-size:13px;font-weight:600;color:#456285;background:rgba(255,255,255,.5)">{{ e }}</span>
     </sc-for>
@@ -202,25 +212,25 @@ input:focus{outline:none}
 <section id="insights" style="max-width:1120px;margin:0 auto;padding:40px 24px 120px;display:flex;flex-direction:column;gap:72px">
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:64px;align-items:center">
     <div style="display:flex;flex-direction:column;gap:22px">
-      <span data-reveal style="font-size:11px;font-weight:600;letter-spacing:1.2px;color:#AEC2D4;text-transform:uppercase">Tag map</span>
-      <h2 data-reveal style="margin:0;font-size:clamp(34px,4vw,52px);line-height:1.05;font-weight:300;letter-spacing:-1px;text-wrap:balance">See how your money <strong style="font-weight:700">connects.</strong></h2>
-      <p data-reveal style="margin:0;font-size:17px;line-height:1.6;color:#6F7F92;max-width:460px;text-wrap:pretty">Every tag becomes a bubble. Bigger circles moved more money; lines connect tags used on the same transaction. Pinch, pan, drag a bubble, tap it to open the tag.</p>
+      <span data-reveal style="font-size:11px;font-weight:600;letter-spacing:1.2px;color:#AEC2D4;text-transform:uppercase">{{ L.tagKicker }}</span>
+      <h2 data-reveal style="margin:0;font-size:clamp(34px,4vw,52px);line-height:1.05;font-weight:300;letter-spacing:-1px;text-wrap:balance">{{ L.tagTitle1 }} <strong style="font-weight:700">{{ L.tagTitle2 }}</strong></h2>
+      <p data-reveal style="margin:0;font-size:17px;line-height:1.6;color:#6F7F92;max-width:460px;text-wrap:pretty">{{ L.tagLead }}</p>
       <div data-reveal-stagger style="display:flex;flex-direction:column;gap:14px;margin-top:6px">
-        <div style="display:flex;gap:14px;align-items:flex-start"><span style="width:28px;height:28px;flex-shrink:0;border-radius:8px;background:rgba(59,130,246,.12);display:flex;align-items:center;justify-content:center"><span style="width:14px;height:14px;background:#3B82F6;-webkit-mask:url(assets/icons/hash-01.svg) center/contain no-repeat;mask:url(assets/icons/hash-01.svg) center/contain no-repeat"></span></span><div><div style="font-size:15px;font-weight:600">A live force-directed graph</div><div style="font-size:14px;color:#6F7F92;margin-top:2px">Bubbles settle on their own. Nudge one and the map reflows.</div></div></div>
-        <div style="display:flex;gap:14px;align-items:flex-start"><span style="width:28px;height:28px;flex-shrink:0;border-radius:8px;background:rgba(59,130,246,.12);display:flex;align-items:center;justify-content:center"><span style="width:14px;height:14px;background:#3B82F6;-webkit-mask:url(assets/icons/search-md.svg) center/contain no-repeat;mask:url(assets/icons/search-md.svg) center/contain no-repeat"></span></span><div><div style="font-size:15px;font-weight:600">Spent · Earned · Net per tag</div><div style="font-size:14px;color:#6F7F92;margin-top:2px">Open any bubble for its transactions across every wallet.</div></div></div>
+        <div style="display:flex;gap:14px;align-items:flex-start"><span style="width:28px;height:28px;flex-shrink:0;border-radius:8px;background:rgba(59,130,246,.12);display:flex;align-items:center;justify-content:center"><span style="width:14px;height:14px;background:#3B82F6;-webkit-mask:url(assets/icons/hash-01.svg) center/contain no-repeat;mask:url(assets/icons/hash-01.svg) center/contain no-repeat"></span></span><div><div style="font-size:15px;font-weight:600">{{ L.tagStep1Title }}</div><div style="font-size:14px;color:#6F7F92;margin-top:2px">{{ L.tagStep1Body }}</div></div></div>
+        <div style="display:flex;gap:14px;align-items:flex-start"><span style="width:28px;height:28px;flex-shrink:0;border-radius:8px;background:rgba(59,130,246,.12);display:flex;align-items:center;justify-content:center"><span style="width:14px;height:14px;background:#3B82F6;-webkit-mask:url(assets/icons/search-md.svg) center/contain no-repeat;mask:url(assets/icons/search-md.svg) center/contain no-repeat"></span></span><div><div style="font-size:15px;font-weight:600">{{ L.tagStep2Title }}</div><div style="font-size:14px;color:#6F7F92;margin-top:2px">{{ L.tagStep2Body }}</div></div></div>
       </div>
-      <p data-reveal style="margin:0;font-size:13px;color:#AEC2D4;font-weight:500">Try it — drag a bubble in the phone.</p>
+      <p data-reveal style="margin:0;font-size:13px;color:#AEC2D4;font-weight:500">{{ L.tagTry }}</p>
     </div>
     <div style="display:flex;justify-content:center">
       <!-- TAGS PHONE (map view) -->
       <div data-reveal data-screen-label="Tags map" style="width:300px;height:640px;border-radius:44px;background:#FAFAF8;border:1px solid rgba(174,194,212,.3);box-shadow:0 40px 80px -24px rgba(69,98,133,.3);overflow:hidden;position:relative;display:flex;flex-direction:column">
-        <div style="height:60px;display:flex;align-items:center;padding:8px 8px 0;position:relative;z-index:2"><span style="width:44px;height:44px;display:flex;align-items:center;justify-content:center"><span style="width:24px;height:24px;background:#456285;-webkit-mask:url(assets/icons/arrow-narrow-left.svg) center/contain no-repeat;mask:url(assets/icons/arrow-narrow-left.svg) center/contain no-repeat"></span></span><span style="flex:1;text-align:center;font-size:11px;font-weight:700;letter-spacing:1.6px;color:#AEC2D4">TAGS</span><span style="width:44px"></span></div>
+        <div style="height:60px;display:flex;align-items:center;padding:8px 8px 0;position:relative;z-index:2"><span style="width:44px;height:44px;display:flex;align-items:center;justify-content:center"><span style="width:24px;height:24px;background:#456285;-webkit-mask:url(assets/icons/arrow-narrow-left.svg) center/contain no-repeat;mask:url(assets/icons/arrow-narrow-left.svg) center/contain no-repeat"></span></span><span style="flex:1;text-align:center;font-size:11px;font-weight:700;letter-spacing:1.6px;color:#AEC2D4;text-transform:uppercase">{{ L.tagsTitle }}</span><span style="width:44px"></span></div>
         <div style="margin-top:4px;display:flex;justify-content:center;gap:8px;position:relative;z-index:2">
-          <span style="padding:6px 12px;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:13px;font-weight:600;color:#AEC2D4">List<span style="width:0;height:2px"></span></span>
-          <span style="padding:6px 12px;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:13px;font-weight:600;color:#3B82F6">Map<span style="width:22px;height:2px;border-radius:1px;background:#3B82F6"></span></span>
+          <span style="padding:6px 12px;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:13px;font-weight:600;color:#AEC2D4">{{ L.tagsList }}<span style="width:0;height:2px"></span></span>
+          <span style="padding:6px 12px;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:13px;font-weight:600;color:#3B82F6">{{ L.tagsMap }}<span style="width:22px;height:2px;border-radius:1px;background:#3B82F6"></span></span>
         </div>
         <canvas id="tag-graph" width="300" height="520" style="position:absolute;left:0;top:112px;width:300px;height:520px;cursor:grab;touch-action:none"></canvas>
-        <div style="position:absolute;left:24px;right:24px;bottom:22px;text-align:center;font-size:11px;font-weight:500;color:#AEC2D4;pointer-events:none">Bigger circles moved more money. Lines connect tags used together.</div>
+        <div style="position:absolute;left:24px;right:24px;bottom:22px;text-align:center;font-size:11px;font-weight:500;color:#AEC2D4;pointer-events:none">{{ L.tagsHint }}</div>
       </div>
     </div>
   </div>
@@ -230,26 +240,26 @@ input:focus{outline:none}
       <!-- PROGRESS PHONE -->
       <div data-reveal data-screen-label="Progress" style="width:300px;height:640px;border-radius:44px;background:#FAFAF8;border:1px solid rgba(174,194,212,.3);box-shadow:0 40px 80px -24px rgba(69,98,133,.3);overflow:hidden;position:relative;display:flex;flex-direction:column">
         <div style="position:absolute;inset:auto -40px -60px;height:220px;background:radial-gradient(circle at 25% 100%,rgba(59,130,246,.16),transparent 60%),radial-gradient(circle at 80% 100%,rgba(139,92,246,.12),transparent 55%);pointer-events:none"></div>
-        <div style="height:60px;display:flex;align-items:center;padding:8px 8px 0"><span style="width:44px;height:44px;display:flex;align-items:center;justify-content:center"><span style="width:24px;height:24px;background:#456285;-webkit-mask:url(assets/icons/arrow-narrow-left.svg) center/contain no-repeat;mask:url(assets/icons/arrow-narrow-left.svg) center/contain no-repeat"></span></span><span style="flex:1;text-align:center;font-size:11px;font-weight:700;letter-spacing:1.6px;color:#AEC2D4">PROGRESS</span><span style="width:44px"></span></div>
+        <div style="height:60px;display:flex;align-items:center;padding:8px 8px 0"><span style="width:44px;height:44px;display:flex;align-items:center;justify-content:center"><span style="width:24px;height:24px;background:#456285;-webkit-mask:url(assets/icons/arrow-narrow-left.svg) center/contain no-repeat;mask:url(assets/icons/arrow-narrow-left.svg) center/contain no-repeat"></span></span><span style="flex:1;text-align:center;font-size:11px;font-weight:700;letter-spacing:1.6px;color:#AEC2D4;text-transform:uppercase">{{ L.progTitle }}</span><span style="width:44px"></span></div>
         <div style="padding:4px 16px 0;display:flex;flex-direction:column;align-items:center;position:relative">
-          <span style="display:flex;align-items:center;gap:6px;border:1px solid rgba(174,194,212,.3);border-radius:20px;padding:7px 12px;font-size:11px;font-weight:600;color:#AEC2D4"><span style="width:14px;height:14px;background:#456285;-webkit-mask:url(assets/icons/bank-note-01.svg) center/contain no-repeat;mask:url(assets/icons/bank-note-01.svg) center/contain no-repeat"></span>All wallets<span style="width:14px;height:14px;background:#456285;-webkit-mask:url(assets/icons/chevron-down.svg) center/contain no-repeat;mask:url(assets/icons/chevron-down.svg) center/contain no-repeat"></span></span>
+          <span style="display:flex;align-items:center;gap:6px;border:1px solid rgba(174,194,212,.3);border-radius:20px;padding:7px 12px;font-size:11px;font-weight:600;color:#AEC2D4"><span style="width:14px;height:14px;background:#456285;-webkit-mask:url(assets/icons/bank-note-01.svg) center/contain no-repeat;mask:url(assets/icons/bank-note-01.svg) center/contain no-repeat"></span>{{ L.progAllWallets }}<span style="width:14px;height:14px;background:#456285;-webkit-mask:url(assets/icons/chevron-down.svg) center/contain no-repeat;mask:url(assets/icons/chevron-down.svg) center/contain no-repeat"></span></span>
           <div style="margin-top:8px;display:flex;gap:8px">
-            <span style="padding:6px 12px;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:13px;font-weight:600;color:#3B82F6">Month<span style="width:22px;height:2px;border-radius:1px;background:#3B82F6"></span></span>
-            <span style="padding:6px 12px;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:13px;font-weight:600;color:#AEC2D4">Year<span style="width:0;height:2px"></span></span>
+            <span style="padding:6px 12px;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:13px;font-weight:600;color:#3B82F6">{{ L.progMonth }}<span style="width:22px;height:2px;border-radius:1px;background:#3B82F6"></span></span>
+            <span style="padding:6px 12px;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:13px;font-weight:600;color:#AEC2D4">{{ L.progYear }}<span style="width:0;height:2px"></span></span>
           </div>
           <div id="progress-net" style="margin-top:14px;font:300 31px Montserrat;color:#3B82F6;letter-spacing:-0.5px">+$1,230.00</div>
-          <div style="margin-top:6px;font-size:12px;font-weight:500;color:#AEC2D4">Oct 2026 · vs last month</div>
+          <div style="margin-top:6px;font-size:12px;font-weight:500;color:#AEC2D4">{{ progPeriod }} · {{ L.progVsLast }}</div>
           <div style="margin-top:14px;display:flex;gap:10px;width:100%">
             <sc-for list="{{ statTiles }}" as="s" hint-placeholder-count="3">
               <div style="flex:1;min-width:0;background:#fff;border:1px solid rgba(174,194,212,.3);border-radius:14px;padding:10px 10px;display:flex;flex-direction:column;gap:4px">
-                <span style="font-size:10px;font-weight:600;letter-spacing:1.2px;color:#AEC2D4">{{ s.label }}</span>
+                <span style="font-size:10px;font-weight:600;letter-spacing:1.2px;color:#AEC2D4;text-transform:uppercase">{{ s.label }}</span>
                 <span style="font-size:13px;font-weight:600;color:{{ s.color }};white-space:nowrap">{{ s.value }}</span>
                 <span style="font-size:11px;font-weight:500;color:{{ s.deltaColor }}">{{ s.delta }}</span>
               </div>
             </sc-for>
           </div>
           <div style="margin-top:12px;width:100%;background:#fff;border:1px solid rgba(174,194,212,.3);border-radius:20px;padding:14px 12px 8px">
-            <div style="display:flex;justify-content:space-between;align-items:center;padding:0 4px"><span style="font-size:13px;font-weight:600;white-space:nowrap">Income vs Expense</span><span style="display:flex;gap:8px;font-size:10px;white-space:nowrap;font-weight:500;color:#AEC2D4"><span style="display:flex;align-items:center;gap:5px"><span style="width:8px;height:8px;border-radius:50%;background:#3B82F6"></span>Income</span><span style="display:flex;align-items:center;gap:5px"><span style="width:8px;height:8px;border-radius:50%;background:#101010"></span>Expense</span></span></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:0 4px"><span style="font-size:13px;font-weight:600;white-space:nowrap">{{ L.progChartTitle }}</span><span style="display:flex;gap:8px;font-size:10px;white-space:nowrap;font-weight:500;color:#AEC2D4"><span style="display:flex;align-items:center;gap:5px"><span style="width:8px;height:8px;border-radius:50%;background:#3B82F6"></span>{{ L.income }}</span><span style="display:flex;align-items:center;gap:5px"><span style="width:8px;height:8px;border-radius:50%;background:#101010"></span>{{ L.expense }}</span></span></div>
             <div id="progress-bars" style="margin-top:12px;height:112px;display:flex;justify-content:space-around;align-items:flex-end">
               <sc-for list="{{ bars }}" as="b" hint-placeholder-count="6">
                 <div style="display:flex;flex-direction:column;align-items:center;gap:8px;height:100%;justify-content:flex-end">
@@ -265,7 +275,7 @@ input:focus{outline:none}
           <div style="margin-top:10px;width:100%;background:#fff;border:1px solid rgba(174,194,212,.3);border-radius:20px;padding:12px 12px 12px;display:flex;gap:14px;align-items:center">
             <div id="progress-donut" style="width:68px;height:68px;border-radius:50%;flex-shrink:0;background:conic-gradient(#4C6FFF 0 34%,#FF9F1C 34% 58%,#3DD68C 58% 74%,#B15CFF 74% 86%,#AEC2D4 86% 100%);-webkit-mask:radial-gradient(circle,transparent 24px,#000 25px);mask:radial-gradient(circle,transparent 24px,#000 25px)"></div>
             <div style="flex:1;display:flex;flex-direction:column;gap:4px;min-width:0">
-              <span style="font-size:13px;font-weight:600">Spending by tag</span>
+              <span style="font-size:13px;font-weight:600">{{ L.progByTag }}</span>
               <sc-for list="{{ tagShares }}" as="t" hint-placeholder-count="4">
                 <span style="display:flex;align-items:center;gap:6px;font-size:11px;font-weight:500;color:#AEC2D4"><span style="width:8px;height:8px;border-radius:50%;background:{{ t.color }}"></span><span style="flex:1;color:#456285;font-weight:600">#{{ t.name }}</span>{{ t.pct }}</span>
               </sc-for>
@@ -275,15 +285,15 @@ input:focus{outline:none}
       </div>
     </div>
     <div style="display:flex;flex-direction:column;gap:22px;order:1">
-      <span data-reveal style="font-size:11px;font-weight:600;letter-spacing:1.2px;color:#AEC2D4;text-transform:uppercase">Progress</span>
-      <h2 data-reveal style="margin:0;font-size:clamp(34px,4vw,52px);line-height:1.05;font-weight:300;letter-spacing:-1px;text-wrap:balance">Know where the month went — <strong style="font-weight:700">without a spreadsheet.</strong></h2>
-      <p data-reveal style="margin:0;font-size:17px;line-height:1.6;color:#6F7F92;max-width:460px;text-wrap:pretty">Income against expense for the last six months or years, the running period compared with the one before, a trend line, and spending split by tag. Scope it to all wallets or just one.</p>
+      <span data-reveal style="font-size:11px;font-weight:600;letter-spacing:1.2px;color:#AEC2D4;text-transform:uppercase">{{ L.progKicker }}</span>
+      <h2 data-reveal style="margin:0;font-size:clamp(34px,4vw,52px);line-height:1.05;font-weight:300;letter-spacing:-1px;text-wrap:balance">{{ L.progTitle1 }} <strong style="font-weight:700">{{ L.progTitle2 }}</strong></h2>
+      <p data-reveal style="margin:0;font-size:17px;line-height:1.6;color:#6F7F92;max-width:460px;text-wrap:pretty">{{ L.progLead }}</p>
       <div data-reveal-stagger style="display:flex;flex-wrap:wrap;gap:8px 10px">
-        <span style="border:1px solid rgba(174,194,212,.4);border-radius:999px;padding:7px 12px;font-size:13px;font-weight:600;background:rgba(255,255,255,.5)">Month · Year</span>
-        <span style="border:1px solid rgba(174,194,212,.4);border-radius:999px;padding:7px 12px;font-size:13px;font-weight:600;background:rgba(255,255,255,.5)">▲ ▼ vs last period</span>
-        <span style="border:1px solid rgba(174,194,212,.4);border-radius:999px;padding:7px 12px;font-size:13px;font-weight:600;background:rgba(255,255,255,.5)">Trend line</span>
-        <span style="border:1px solid rgba(174,194,212,.4);border-radius:999px;padding:7px 12px;font-size:13px;font-weight:600;background:rgba(255,255,255,.5)">Spending by tag</span>
-        <span style="border:1px solid rgba(174,194,212,.4);border-radius:999px;padding:7px 12px;font-size:13px;font-weight:600;background:rgba(255,255,255,.5)">Per wallet or all</span>
+        <span style="border:1px solid rgba(174,194,212,.4);border-radius:999px;padding:7px 12px;font-size:13px;font-weight:600;background:rgba(255,255,255,.5)">{{ L.chipMonthYear }}</span>
+        <span style="border:1px solid rgba(174,194,212,.4);border-radius:999px;padding:7px 12px;font-size:13px;font-weight:600;background:rgba(255,255,255,.5)">{{ L.chipVs }}</span>
+        <span style="border:1px solid rgba(174,194,212,.4);border-radius:999px;padding:7px 12px;font-size:13px;font-weight:600;background:rgba(255,255,255,.5)">{{ L.chipTrend }}</span>
+        <span style="border:1px solid rgba(174,194,212,.4);border-radius:999px;padding:7px 12px;font-size:13px;font-weight:600;background:rgba(255,255,255,.5)">{{ L.chipByTag }}</span>
+        <span style="border:1px solid rgba(174,194,212,.4);border-radius:999px;padding:7px 12px;font-size:13px;font-weight:600;background:rgba(255,255,255,.5)">{{ L.chipPerWallet }}</span>
       </div>
     </div>
   </div>
@@ -292,72 +302,72 @@ input:focus{outline:none}
 <!-- SCREENS -->
 <section id="screens" style="padding:40px 0 60px">
   <div style="max-width:1120px;margin:0 auto;padding:0 24px 56px;display:flex;flex-direction:column;gap:18px;max-width:1120px">
-    <span data-reveal style="font-size:11px;font-weight:600;letter-spacing:1.2px;color:#AEC2D4;text-transform:uppercase">Five screens. Nothing else.</span>
-    <h2 data-reveal style="margin:0;font-size:clamp(34px,4vw,52px);line-height:1.05;font-weight:300;letter-spacing:-1px;text-wrap:balance;max-width:700px">One screen per job. <strong style="font-weight:700">Every secondary choice is a sheet.</strong></h2>
+    <span data-reveal style="font-size:11px;font-weight:600;letter-spacing:1.2px;color:#AEC2D4;text-transform:uppercase">{{ L.screensKicker }}</span>
+    <h2 data-reveal style="margin:0;font-size:clamp(34px,4vw,52px);line-height:1.05;font-weight:300;letter-spacing:-1px;text-wrap:balance;max-width:700px">{{ L.screensTitle1 }} <strong style="font-weight:700">{{ L.screensTitle2 }}</strong></h2>
   </div>
   <div id="screen-rail" style="display:flex;flex-wrap:wrap;gap:36px;padding:20px 24px 110px;justify-content:center;max-width:1120px;margin:0 auto">
 
     <!-- WALLET DETAILS -->
     <div data-phone data-screen-label="Wallet Details" style="width:300px;height:640px;border-radius:44px;background:#FAFAF8;border:1px solid rgba(174,194,212,.3);box-shadow:0 40px 80px -24px rgba(69,98,133,.3);overflow:hidden;position:relative;flex-shrink:0">
       <div style="height:60px;display:flex;align-items:center;justify-content:space-between;padding:8px 8px 0"><span style="width:44px;height:44px;display:flex;align-items:center;justify-content:center"><span style="width:24px;height:24px;background:#456285;-webkit-mask:url(assets/icons/arrow-narrow-left.svg) center/contain no-repeat;mask:url(assets/icons/arrow-narrow-left.svg) center/contain no-repeat"></span></span><span style="width:44px"></span></div>
-      <img src="assets/wumbi_look.png" alt="" style="position:absolute;right:8px;top:64px;height:64px">
+      <img src="assets/wumbi_look.png" alt="" style="position:absolute;inset-inline-end:8px;top:64px;height:64px">
       <div style="padding:8px 24px 0;display:flex;flex-direction:column;align-items:center">
-        <div style="display:flex;align-items:center;gap:6px"><span style="padding:6px 4px;font-size:11px;font-weight:700;letter-spacing:.3px;color:#AEC2D4">USD</span><span style="width:1px;height:14px;background:rgba(174,194,212,.3)"></span><span style="display:flex;align-items:center;gap:6px;padding:6px 4px;font-size:11px;font-weight:700;letter-spacing:.3px"><span style="width:8px;height:8px;border-radius:50%;background:#65AF83;box-shadow:0 0 8px rgba(101,175,131,.5)"></span>Savings Vault<span style="width:16px;height:16px;background:#456285;-webkit-mask:url(assets/icons/chevron-down.svg) center/contain no-repeat;mask:url(assets/icons/chevron-down.svg) center/contain no-repeat"></span></span></div>
+        <div style="display:flex;align-items:center;gap:6px"><span style="padding:6px 4px;font-size:11px;font-weight:700;letter-spacing:.3px;color:#AEC2D4">USD</span><span style="width:1px;height:14px;background:rgba(174,194,212,.3)"></span><span style="display:flex;align-items:center;gap:6px;padding:6px 4px;font-size:11px;font-weight:700;letter-spacing:.3px"><span style="width:8px;height:8px;border-radius:50%;background:#65AF83;box-shadow:0 0 8px rgba(101,175,131,.5)"></span>{{ L.walletSavings }}<span style="width:16px;height:16px;background:#456285;-webkit-mask:url(assets/icons/chevron-down.svg) center/contain no-repeat;mask:url(assets/icons/chevron-down.svg) center/contain no-repeat"></span></span></div>
         <div style="margin-top:28px;font:300 40px Montserrat;letter-spacing:-0.5px">$1,234.56</div>
-        <div style="margin-top:10px;display:flex;align-items:center;gap:4px;font-size:11px;font-weight:500;color:#AEC2D4"><span style="width:14px;height:14px;background:#456285;-webkit-mask:url(assets/icons/repeat-01.svg) center/contain no-repeat;mask:url(assets/icons/repeat-01.svg) center/contain no-repeat"></span>2 Subscriptions<span style="width:14px;height:14px;background:#456285;-webkit-mask:url(assets/icons/chevron-right.svg) center/contain no-repeat;mask:url(assets/icons/chevron-right.svg) center/contain no-repeat"></span></div>
+        <div style="margin-top:10px;display:flex;align-items:center;gap:4px;font-size:11px;font-weight:500;color:#AEC2D4"><span style="width:14px;height:14px;background:#456285;-webkit-mask:url(assets/icons/repeat-01.svg) center/contain no-repeat;mask:url(assets/icons/repeat-01.svg) center/contain no-repeat"></span>{{ L.wdSubs }}<span style="width:14px;height:14px;background:#456285;-webkit-mask:url(assets/icons/chevron-right.svg) center/contain no-repeat;mask:url(assets/icons/chevron-right.svg) center/contain no-repeat"></span></div>
       </div>
-      <div style="margin-top:24px;padding:0 24px;display:flex;justify-content:space-between;font-size:11px;font-weight:600;color:#AEC2D4"><span>Filter</span><span>Newest first</span></div>
+      <div style="margin-top:24px;padding:0 24px;display:flex;justify-content:space-between;font-size:11px;font-weight:600;color:#AEC2D4"><span>{{ L.wdFilter }}</span><span>{{ L.wdNewest }}</span></div>
       <div style="padding:4px 24px 0;display:flex;flex-direction:column">
         <sc-for list="{{ txns }}" as="t" hint-placeholder-count="5">
           <div style="display:flex;align-items:center;padding:14px 0;border-bottom:1px solid rgba(174,194,212,.3)">
             <div style="flex:1;display:flex;flex-direction:column;gap:3px;min-width:0"><span style="font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ t.title }}</span><span style="font-size:11px;font-weight:500;color:#AEC2D4">{{ t.date }}</span><span style="display:flex;gap:6px;margin-top:3px"><sc-for list="{{ t.tags }}" as="g" hint-placeholder-count="0"><span style="background:rgba(59,130,246,.1);color:#3B82F6;border-radius:10px;padding:2px 7px;font-size:9px;font-weight:600">#{{ g }}</span></sc-for></span></div>
-            <span style="margin-left:12px;font-size:14px;font-weight:600;color:{{ t.color }}">{{ t.amount }}</span>
+            <span style="margin-inline-start:12px;font-size:14px;font-weight:600;color:{{ t.color }}">{{ t.amount }}</span>
           </div>
         </sc-for>
       </div>
-      <div style="position:absolute;right:24px;bottom:24px;width:52px;height:52px;border-radius:50%;background:#3B82F6;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(59,130,246,.35)"><span style="width:26px;height:26px;background:#fff;-webkit-mask:url(assets/icons/plus.svg) center/contain no-repeat;mask:url(assets/icons/plus.svg) center/contain no-repeat"></span></div>
+      <div style="position:absolute;inset-inline-end:24px;bottom:24px;width:52px;height:52px;border-radius:50%;background:#3B82F6;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(59,130,246,.35)"><span style="width:26px;height:26px;background:#fff;-webkit-mask:url(assets/icons/plus.svg) center/contain no-repeat;mask:url(assets/icons/plus.svg) center/contain no-repeat"></span></div>
     </div>
 
     <!-- CREATE WALLET -->
     <div data-phone data-screen-label="Create Wallet" style="width:300px;height:640px;border-radius:44px;background:#FAFAF8;border:1px solid rgba(174,194,212,.3);box-shadow:0 40px 80px -24px rgba(69,98,133,.3);overflow:hidden;position:relative;flex-shrink:0;display:flex;flex-direction:column;padding:0 16px 8px">
       <div style="height:60px;display:flex;align-items:center;margin:0 -8px;padding-top:8px"><span style="width:44px;height:44px;display:flex;align-items:center;justify-content:center"><span style="width:24px;height:24px;background:#456285;-webkit-mask:url(assets/icons/arrow-narrow-left.svg) center/contain no-repeat;mask:url(assets/icons/arrow-narrow-left.svg) center/contain no-repeat"></span></span></div>
-      <div style="margin-top:24px;text-align:center;font-size:29px;font-weight:300;color:#AEC2D4">Wallet Name</div>
+      <div style="margin-top:24px;text-align:center;font-size:29px;font-weight:300;color:#AEC2D4">{{ L.cwName }}</div>
       <div style="margin-top:12px;padding:8px 0;display:flex;justify-content:center;align-items:baseline;gap:10px"><span style="font-size:29px;font-weight:300;color:#AEC2D4">$</span><span style="font:300 36px Montserrat;color:#AEC2D4">0.00</span></div>
-      <div style="margin-top:56px;height:48px;display:flex;align-items:center;justify-content:space-between"><span style="font-size:14px;font-weight:500">Currency</span><span style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:#AEC2D4">USD ($)<span style="width:18px;height:18px;background:#456285;-webkit-mask:url(assets/icons/chevron-right.svg) center/contain no-repeat;mask:url(assets/icons/chevron-right.svg) center/contain no-repeat"></span></span></div>
-      <div style="height:48px;display:flex;align-items:center;justify-content:space-between"><span style="font-size:14px;font-weight:500">Primary Wallet</span><span style="width:51px;height:31px;border-radius:16px;background:#3B82F6;position:relative"><span style="position:absolute;top:2px;right:2px;width:27px;height:27px;border-radius:50%;background:#fff;box-shadow:0 3px 8px rgba(0,0,0,.15)"></span></span></div>
+      <div style="margin-top:56px;height:48px;display:flex;align-items:center;justify-content:space-between"><span style="font-size:14px;font-weight:500">{{ L.cwCurrency }}</span><span style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:#AEC2D4">USD ($)<span style="width:18px;height:18px;background:#456285;-webkit-mask:url(assets/icons/chevron-right.svg) center/contain no-repeat;mask:url(assets/icons/chevron-right.svg) center/contain no-repeat"></span></span></div>
+      <div style="height:48px;display:flex;align-items:center;justify-content:space-between"><span style="font-size:14px;font-weight:500">{{ L.cwPrimary }}</span><span style="width:51px;height:31px;border-radius:16px;background:#3B82F6;position:relative"><span style="position:absolute;top:2px;right:2px;width:27px;height:27px;border-radius:50%;background:#fff;box-shadow:0 3px 8px rgba(0,0,0,.15)"></span></span></div>
       <div style="margin-top:24px;display:grid;grid-template-columns:repeat(5,34px);gap:12px 16px;justify-content:center">
         <sc-for list="{{ swatches }}" as="s" hint-placeholder-count="20">
           <span style="width:34px;height:34px;padding:3px;border-radius:10px;border:2px solid {{ s.ring }}"><span style="display:block;width:100%;height:100%;border-radius:6px;background:{{ s.color }}"></span></span>
         </sc-for>
       </div>
       <div style="flex:1"></div>
-      <div style="display:flex;justify-content:space-between;padding:8px 8px 16px;font-size:16px;font-weight:600"><span style="color:#AEC2D4">Delete</span><span style="color:#3B82F6">Save</span></div>
+      <div style="display:flex;justify-content:space-between;padding:8px 8px 16px;font-size:16px;font-weight:600"><span style="color:#AEC2D4">{{ L.cwDelete }}</span><span style="color:#3B82F6">{{ L.cwSave }}</span></div>
     </div>
 
     <!-- DARK DASHBOARD -->
     <div data-phone data-screen-label="Dashboard (dark)" style="width:300px;height:640px;border-radius:44px;background:#120F1B;border:1px solid #191524;box-shadow:0 40px 80px -24px rgba(18,15,27,.5);overflow:hidden;position:relative;flex-shrink:0;color:#D6E2F0">
       <div style="position:absolute;inset:auto -40px -60px;height:260px;background:radial-gradient(circle at 30% 100%,rgba(59,130,246,.28),transparent 60%),radial-gradient(circle at 80% 100%,rgba(139,92,246,.22),transparent 55%);pointer-events:none"></div>
-      <div style="height:60px;display:flex;align-items:center;padding:8px 8px 0"><span style="width:44px"></span><span style="flex:1;text-align:center;font-size:11px;font-weight:700;letter-spacing:1.6px;color:#AEC2D4">MY MONEY</span><span style="width:44px;height:44px;display:flex;align-items:center;justify-content:center"><span style="width:22px;height:22px;background:#456285;-webkit-mask:url(assets/icons/settings-01.svg) center/contain no-repeat;mask:url(assets/icons/settings-01.svg) center/contain no-repeat"></span></span></div>
+      <div style="height:60px;display:flex;align-items:center;padding:8px 8px 0"><span style="width:44px"></span><span style="flex:1;text-align:center;font-size:11px;font-weight:700;letter-spacing:1.6px;color:#AEC2D4;text-transform:uppercase">{{ L.dashTitle }}</span><span style="width:44px;height:44px;display:flex;align-items:center;justify-content:center"><span style="width:22px;height:22px;background:#456285;-webkit-mask:url(assets/icons/settings-01.svg) center/contain no-repeat;mask:url(assets/icons/settings-01.svg) center/contain no-repeat"></span></span></div>
       <div style="padding:52px 16px 0;display:flex;flex-direction:column;align-items:center">
         <div style="font:300 40px Montserrat;letter-spacing:-0.5px">$12,345.67</div>
-        <div style="margin-top:20px;font-size:13px;font-weight:500;color:#AEC2D4">Across 4 wallets</div>
+        <div style="margin-top:20px;font-size:13px;font-weight:500;color:#AEC2D4">{{ L.dashAcross }}</div>
         <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;justify-content:center">
-          <span style="display:flex;align-items:center;gap:4px;border:1px solid #191524;border-radius:20px;padding:6px 10px;font-size:11px;font-weight:600;color:#AEC2D4"><span style="width:14px;height:14px;background:#456285;-webkit-mask:url(assets/icons/search-md.svg) center/contain no-repeat;mask:url(assets/icons/search-md.svg) center/contain no-repeat"></span>Search</span>
-          <span style="display:flex;align-items:center;gap:4px;border:1px solid #191524;border-radius:20px;padding:6px 10px;font-size:11px;font-weight:600;color:#AEC2D4"><span style="width:14px;height:14px;background:#456285;-webkit-mask:url(assets/icons/bar-chart-10.svg) center/contain no-repeat;mask:url(assets/icons/bar-chart-10.svg) center/contain no-repeat"></span>Progress</span>
-          <span style="display:flex;align-items:center;gap:4px;border:1px solid #191524;border-radius:20px;padding:6px 10px;font-size:11px;font-weight:600;color:#AEC2D4"><span style="width:14px;height:14px;background:#456285;-webkit-mask:url(assets/icons/hash-01.svg) center/contain no-repeat;mask:url(assets/icons/hash-01.svg) center/contain no-repeat"></span>Tags</span>
+          <span style="display:flex;align-items:center;gap:4px;border:1px solid #191524;border-radius:20px;padding:6px 10px;font-size:11px;font-weight:600;color:#AEC2D4"><span style="width:14px;height:14px;background:#456285;-webkit-mask:url(assets/icons/search-md.svg) center/contain no-repeat;mask:url(assets/icons/search-md.svg) center/contain no-repeat"></span>{{ L.dashSearch }}</span>
+          <span style="display:flex;align-items:center;gap:4px;border:1px solid #191524;border-radius:20px;padding:6px 10px;font-size:11px;font-weight:600;color:#AEC2D4"><span style="width:14px;height:14px;background:#456285;-webkit-mask:url(assets/icons/bar-chart-10.svg) center/contain no-repeat;mask:url(assets/icons/bar-chart-10.svg) center/contain no-repeat"></span>{{ L.dashProgress }}</span>
+          <span style="display:flex;align-items:center;gap:4px;border:1px solid #191524;border-radius:20px;padding:6px 10px;font-size:11px;font-weight:600;color:#AEC2D4"><span style="width:14px;height:14px;background:#456285;-webkit-mask:url(assets/icons/hash-01.svg) center/contain no-repeat;mask:url(assets/icons/hash-01.svg) center/contain no-repeat"></span>{{ L.dashTags }}</span>
         </div>
       </div>
-      <div style="margin-top:48px;padding:0 24px;display:flex;justify-content:space-between;align-items:center"><span style="font-size:17px;font-weight:700">Wallets</span><span style="display:flex;align-items:center;gap:5px;font-size:13px;font-weight:600;color:#3B82F6"><span style="width:16px;height:16px;border:1.5px solid #3B82F6;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;line-height:1">+</span>New Wallet</span></div>
+      <div style="margin-top:48px;padding:0 24px;display:flex;justify-content:space-between;align-items:center"><span style="font-size:17px;font-weight:700">{{ L.dashWallets }}</span><span style="display:flex;align-items:center;gap:5px;font-size:13px;font-weight:600;color:#3B82F6"><span style="width:16px;height:16px;border:1.5px solid #3B82F6;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;line-height:1">+</span>{{ L.dashNewWallet }}</span></div>
       <div style="margin-top:12px;padding:0 24px;display:flex;flex-direction:column">
         <sc-for list="{{ wallets }}" as="w" hint-placeholder-count="4">
           <div style="display:flex;align-items:center;padding:16px 0">
             <span style="width:10px;height:10px;border-radius:50%;background:{{ w.color }};box-shadow:0 0 12px {{ w.color }}"></span>
-            <span style="margin-left:18px;flex:1;display:flex;flex-direction:column"><span style="font-size:14px;font-weight:600">{{ w.name }}</span><span style="font-size:11px;font-weight:700;letter-spacing:1.2px;color:#AEC2D4">{{ w.code }}</span></span>
+            <span style="margin-inline-start:18px;flex:1;display:flex;flex-direction:column"><span style="font-size:14px;font-weight:600">{{ w.name }}</span><span style="font-size:11px;font-weight:700;letter-spacing:1.2px;color:#AEC2D4">{{ w.code }}</span></span>
             <span style="font-size:14px;font-weight:600;letter-spacing:-0.43px">{{ w.balance }}</span>
           </div>
         </sc-for>
       </div>
-      <div style="position:absolute;right:24px;bottom:24px;width:52px;height:52px;border-radius:50%;background:#3B82F6;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(59,130,246,.35)"><span style="width:26px;height:26px;background:#fff;-webkit-mask:url(assets/icons/plus.svg) center/contain no-repeat;mask:url(assets/icons/plus.svg) center/contain no-repeat"></span></div>
+      <div style="position:absolute;inset-inline-end:24px;bottom:24px;width:52px;height:52px;border-radius:50%;background:#3B82F6;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(59,130,246,.35)"><span style="width:26px;height:26px;background:#fff;-webkit-mask:url(assets/icons/plus.svg) center/contain no-repeat;mask:url(assets/icons/plus.svg) center/contain no-repeat"></span></div>
     </div>
   </div>
 </section>
@@ -366,14 +376,14 @@ input:focus{outline:none}
 <sc-if value="{{ showCompare }}" hint-placeholder-val="{{ true }}">
 <section id="compare" style="max-width:1120px;margin:0 auto;padding:40px 24px 120px">
   <div style="max-width:620px;display:flex;flex-direction:column;gap:18px;margin-bottom:48px">
-    <span data-reveal style="font-size:11px;font-weight:600;letter-spacing:1.2px;color:#AEC2D4;text-transform:uppercase">Why switch</span>
-    <h2 data-reveal style="margin:0;font-size:clamp(34px,4vw,52px);line-height:1.05;font-weight:300;letter-spacing:-1px;text-wrap:balance">Less app. <strong style="font-weight:700">More of your money accounted for.</strong></h2>
+    <span data-reveal style="font-size:11px;font-weight:600;letter-spacing:1.2px;color:#AEC2D4;text-transform:uppercase">{{ L.cmpKicker }}</span>
+    <h2 data-reveal style="margin:0;font-size:clamp(34px,4vw,52px);line-height:1.05;font-weight:300;letter-spacing:-1px;text-wrap:balance">{{ L.cmpTitle1 }} <strong style="font-weight:700">{{ L.cmpTitle2 }}</strong></h2>
   </div>
   <div data-reveal style="background:rgba(255,255,255,.75);border:1px solid rgba(174,194,212,.3);border-radius:24px;overflow:hidden;backdrop-filter:blur(8px)">
     <div style="display:grid;grid-template-columns:minmax(120px,1.1fr) minmax(0,1.4fr) minmax(0,1.4fr);padding:18px 24px;border-bottom:1px solid rgba(174,194,212,.3);font-size:11px;font-weight:600;letter-spacing:1.2px;color:#AEC2D4;text-transform:uppercase;gap:16px">
       <span></span>
       <span style="display:flex;align-items:center;gap:8px;color:#3B82F6"><img src="assets/app_logo.png" alt="" style="width:20px;height:20px;border-radius:6px">Wumbi</span>
-      <span>Typical budgeting apps</span>
+      <span>{{ L.cmpOther }}</span>
     </div>
     <sc-for list="{{ compare }}" as="r" hint-placeholder-count="7">
       <div style="display:grid;grid-template-columns:minmax(120px,1.1fr) minmax(0,1.4fr) minmax(0,1.4fr);padding:18px 24px;border-bottom:1px solid rgba(174,194,212,.3);gap:16px;align-items:start">
@@ -391,13 +401,13 @@ input:focus{outline:none}
   <div data-reveal style="position:relative;background:#456285;border-radius:32px;padding:clamp(40px,6vw,80px) clamp(24px,5vw,72px);color:#fff;overflow:hidden;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:40px;align-items:center">
     <div style="position:absolute;inset:0;background:radial-gradient(circle at 15% 110%,rgba(59,130,246,.55),transparent 50%),radial-gradient(circle at 90% -10%,rgba(139,92,246,.35),transparent 45%);pointer-events:none"></div>
     <div style="position:relative;display:flex;flex-direction:column;gap:18px">
-      <span style="font-size:11px;font-weight:600;letter-spacing:1.2px;color:#AEC2D4;text-transform:uppercase">Waitlist</span>
-      <h2 style="margin:0;font-size:clamp(32px,3.8vw,48px);line-height:1.05;font-weight:300;letter-spacing:-1px;text-wrap:balance">Be first when <strong style="font-weight:700">Wumbi</strong> lands on the App Store and Google Play.</h2>
-      <p style="margin:0;font-size:16px;line-height:1.55;color:#D6E2F0;max-width:440px;text-wrap:pretty">One email on launch day. No newsletter, no spam — that would be very un-Wumbi.</p>
+      <span style="font-size:11px;font-weight:600;letter-spacing:1.2px;color:#AEC2D4;text-transform:uppercase">{{ L.wlKicker }}</span>
+      <h2 style="margin:0;font-size:clamp(32px,3.8vw,48px);line-height:1.05;font-weight:300;letter-spacing:-1px;text-wrap:balance">{{ L.wlTitle1 }} <strong style="font-weight:700">Wumbi</strong> {{ L.wlTitle2 }}</h2>
+      <p style="margin:0;font-size:16px;line-height:1.55;color:#D6E2F0;max-width:440px;text-wrap:pretty">{{ L.wlLead }}</p>
       <sc-if value="{{ notSubmitted }}" hint-placeholder-val="{{ true }}">
         <form onSubmit="{{ submit }}" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">
           <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none">
-          <input id="waitlist-email" type="email" required placeholder="you@email.com" value="{{ email }}" onChange="{{ setEmail }}" style="flex:1;min-width:220px;height:52px;border-radius:14px;border:1px solid rgba(214,226,240,.35);background:rgba(255,255,255,.1);color:#fff;padding:0 18px;font:500 16px Inter" style-focus="border-color:#fff;background:rgba(255,255,255,.16)">
+          <input id="waitlist-email" type="email" required placeholder="{{ L.emailPlaceholder }}" value="{{ email }}" onChange="{{ setEmail }}" style="flex:1;min-width:220px;height:52px;border-radius:14px;border:1px solid rgba(214,226,240,.35);background:rgba(255,255,255,.1);color:#fff;padding:0 18px;font:500 16px Inter" style-focus="border-color:#fff;background:rgba(255,255,255,.16)">
           <button type="submit" disabled="{{ sending }}" style="height:52px;border:0;cursor:pointer;background:#3B82F6;color:#fff;font:600 16px Inter;padding:0 24px;border-radius:14px;box-shadow:0 4px 12px rgba(59,130,246,.35);white-space:nowrap" style-hover="background:#2563EB">{{ submitLabel }}</button>
         </form>
         <sc-if value="{{ hasError }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;color:#FF697D;font-weight:500">{{ error }}</span></sc-if>
@@ -405,16 +415,16 @@ input:focus{outline:none}
       <sc-if value="{{ submitted }}" hint-placeholder-val="{{ false }}">
         <div style="margin-top:8px;display:flex;align-items:center;gap:14px;background:rgba(255,255,255,.1);border:1px solid rgba(214,226,240,.35);border-radius:14px;padding:16px 18px">
           <span style="width:36px;height:36px;border-radius:50%;background:#3B82F6;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700">✓</span>
-          <div><div style="font-size:16px;font-weight:600">You're on the list.</div><div style="font-size:14px;color:#D6E2F0;margin-top:2px">We'll write to {{ email }} on launch day.</div></div>
+          <div><div style="font-size:16px;font-weight:600">{{ L.doneTitle }}</div><div style="font-size:14px;color:#D6E2F0;margin-top:2px">{{ doneMsg }}</div></div>
         </div>
       </sc-if>
       <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:6px">
-        <button onClick="{{ focusEmail }}" style="border:1px solid rgba(214,226,240,.35);cursor:pointer;display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.06);color:#fff;padding:8px 16px 8px 12px;border-radius:12px;text-align:left" style-hover="background:rgba(255,255,255,.14)"><span style="width:18px;height:18px;display:block;border-radius:5px;background:linear-gradient(180deg,#60A5FA,#3B82F6)"></span><span style="display:flex;flex-direction:column;line-height:1.1"><span style="font:500 9px Inter;opacity:.75">Coming soon on the</span><span style="font:600 15px Inter">App Store</span></span></button>
-        <button onClick="{{ focusEmail }}" style="border:1px solid rgba(214,226,240,.35);cursor:pointer;display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.06);color:#fff;padding:8px 16px 8px 12px;border-radius:12px;text-align:left" style-hover="background:rgba(255,255,255,.14)"><span style="width:18px;height:18px;display:block;background:linear-gradient(135deg,#3B82F6,#65AF83 50%,#F59E0B);clip-path:polygon(0 0,100% 50%,0 100%)"></span><span style="display:flex;flex-direction:column;line-height:1.1"><span style="font:500 9px Inter;opacity:.75">Coming soon on</span><span style="font:600 15px Inter">Google Play</span></span></button>
+        <button onClick="{{ focusEmail }}" class="store-btn" aria-label="{{ L.storeAppleAria }}" style="border:1px solid rgba(214,226,240,.35);cursor:pointer;display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.06);color:#fff;padding:8px 16px 8px 12px;border-radius:12px;text-align:left" style-hover="background:rgba(255,255,255,.14)"><img src="assets/app-store.svg" alt="" style="width:22px;height:22px;display:block;border-radius:5px"><span style="display:flex;flex-direction:column;line-height:1.1"><span style="font:500 9px Inter;opacity:.75">{{ L.storeSoonOnThe }}</span><span style="font:600 15px Inter">App Store</span></span></button>
+        <button onClick="{{ focusEmail }}" class="store-btn" aria-label="{{ L.storeGoogleAria }}" style="border:1px solid rgba(214,226,240,.35);cursor:pointer;display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.06);color:#fff;padding:8px 16px 8px 12px;border-radius:12px;text-align:left" style-hover="background:rgba(255,255,255,.14)"><img src="assets/google-play.svg" alt="" style="width:20px;height:20px;display:block;margin:0 1px"><span style="display:flex;flex-direction:column;line-height:1.1"><span style="font:500 9px Inter;opacity:.75">{{ L.storeSoonOn }}</span><span style="font:600 15px Inter">Google Play</span></span></button>
       </div>
     </div>
     <div style="position:relative;display:flex;justify-content:center;align-items:center;min-height:280px">
-      <img src="assets/wumbi_take_money.png" alt="Wumbi holding a banknote" style="width:min(300px,80%);animation:wumbiFloat 7s ease-in-out infinite;filter:drop-shadow(0 30px 40px rgba(16,16,16,.35))">
+      <img src="assets/wumbi_take_money.png" alt="{{ L.altMoney }}" style="width:min(300px,80%);animation:wumbiFloat 7s ease-in-out infinite;filter:drop-shadow(0 30px 40px rgba(16,16,16,.35))">
     </div>
   </div>
 </section>
@@ -422,21 +432,53 @@ input:focus{outline:none}
 <!-- FOOTER -->
 <footer style="border-top:1px solid rgba(174,194,212,.3);padding:32px 24px">
   <div style="max-width:1120px;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:16px;font-size:13px;color:#AEC2D4;font-weight:500">
-    <div style="display:flex;align-items:center;gap:10px;color:#456285"><img src="assets/app_logo.png" alt="" style="width:24px;height:24px;border-radius:7px"><span style="font-weight:700">Wumbi</span><span style="color:#AEC2D4">· local-first budgeting</span></div>
-    <div style="display:flex;gap:20px"><a href="mailto:support@wumbi.app" style="color:#456285;font-weight:600">support@wumbi.app</a><span>© 2026 Wumbi</span></div>
+    <div style="display:flex;align-items:center;gap:10px;color:#456285"><img src="assets/app_logo.png" alt="" style="width:24px;height:24px;border-radius:7px"><span style="font-weight:700">Wumbi</span><span style="color:#AEC2D4">{{ L.footTag }}</span></div>
+    <div style="display:flex;gap:20px"><a href="mailto:support@wumbi.app" style="color:#456285;font-weight:600">support@wumbi.app</a><span>{{ L.footRights }}</span></div>
   </div>
 </footer>
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;motion&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;rich&quot;,&quot;calm&quot;],&quot;default&quot;:&quot;rich&quot;,&quot;tsType&quot;:&quot;'rich' | 'calm'&quot;,&quot;section&quot;:&quot;Motion&quot;},&quot;showCompare&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Sections&quot;}}">
 class Component extends DCLogic {
-  state = { email: '', submitted: false, error: '', sending: false };
+  state = { email: '', submitted: false, error: '', sending: false, lang: Component.initialLang() };
   static WEB3FORMS_KEY = '7a2c1a6d-0edf-443d-8e7a-bd8685562a5e';
+  static I18N = window.WUMBI_I18N || { meta: { en: { name: 'English', dir: 'ltr' } }, en: {} };
+  static LANGS = Object.keys(Component.I18N.meta);
+
+  // ?lang= → localStorage → navigator.languages → en
+  static initialLang() {
+    const known = Component.LANGS;
+    const norm = (v) => { const c = String(v || '').toLowerCase().split(/[-_]/)[0]; return known.includes(c) ? c : null; };
+    try { const q = norm(new URLSearchParams(location.search).get('lang')); if (q) return q; } catch (_) {}
+    try { const st = norm(localStorage.getItem('wumbi.lang')); if (st) return st; } catch (_) {}
+    for (const l of navigator.languages || [navigator.language]) { const c = norm(l); if (c) return c; }
+    return 'en';
+  }
+  // Strings for the current language, falling back to English per key.
+  L(lang = this.state.lang) { return { ...Component.I18N.en, ...(Component.I18N[lang] || {}) }; }
+  dir(lang = this.state.lang) { return (Component.I18N.meta[lang] || {}).dir || 'ltr'; }
+
+  applyLangToDocument() {
+    const html = document.documentElement;
+    html.lang = this.state.lang; html.dir = this.dir();
+    const L = this.L();
+    document.title = `Wumbi — ${L.heroTitle1}`;
+  }
 
   componentDidMount() {
+    this.applyLangToDocument();
     this.startAmbient();
     this.waitFor(() => window.gsap && window.ScrollTrigger, () => this.startGsap());
   }
+  setLang = (lang) => {
+    if (!Component.LANGS.includes(lang) || lang === this.state.lang) return;
+    this.setState({ lang, error: '' }, () => {
+      this.applyLangToDocument();
+      if (this.tagNodes) { const L = this.L(); for (const nd of this.tagNodes) nd.name = L['tag_' + nd.key] || nd.key; }
+    });
+    try { localStorage.setItem('wumbi.lang', lang); } catch (_) {}
+    try { const u = new URL(location.href); u.searchParams.set('lang', lang); history.replaceState(null, '', u); } catch (_) {}
+  };
   componentWillUnmount() { cancelAnimationFrame(this.raf); cancelAnimationFrame(this.tagRaf); this.stopped = true; if (window.gsap && this.tl) this.tl.kill(); }
 
   waitFor(test, cb, n = 0) { if (test()) return cb(); if (n > 100) return; setTimeout(() => this.waitFor(test, cb, n + 1), 100); }
@@ -547,8 +589,10 @@ class Component extends DCLogic {
     const linksRaw = [['food', 'coffee', 6], ['coffee', 'friends', 5], ['food', 'friends', 4], ['trip', 'transport', 4], ['trip', 'food', 3], ['work', 'coffee', 3], ['work', 'transport', 2], ['friends', 'gifts', 2], ['home', 'books', 1], ['gym', 'transport', 1], ['books', 'coffee', 2]];
     const maxV = Math.max(...data.map((d) => d[1]));
     const GA = 2.399963229728653;
-    const nodes = data.map(([name, v, amt], i) => ({ name, amt, r: 14 + 22 * Math.sqrt(v / maxV), color: colorOf(name), x: Math.cos(i * GA) * 38 * Math.sqrt(i), y: Math.sin(i * GA) * 38 * Math.sqrt(i), vx: 0, vy: 0, pinned: false }));
-    const idx = Object.fromEntries(nodes.map((n, i) => [n.name, i]));
+    const L0 = this.L();
+    const nodes = data.map(([key, v, amt], i) => ({ key, name: L0['tag_' + key] || key, amt, r: 14 + 22 * Math.sqrt(v / maxV), color: colorOf(key), x: Math.cos(i * GA) * 38 * Math.sqrt(i), y: Math.sin(i * GA) * 38 * Math.sqrt(i), vx: 0, vy: 0, pinned: false }));
+    this.tagNodes = nodes;
+    const idx = Object.fromEntries(nodes.map((n, i) => [n.key, i]));
     const maxC = Math.max(...linksRaw.map((l) => l[2]));
     const edges = linksRaw.map(([a, b, c]) => ({ a: idx[a], b: idx[b], w: c / maxC }));
     const K = { rep: 110, col: 0.25, spring: 0.012, center: 0.006, damp: 0.82, max: 14 };
@@ -649,71 +693,66 @@ class Component extends DCLogic {
     const tap = (id) => { const k = document.getElementById(id); if (k) { k.style.animation = 'none'; void k.offsetWidth; k.style.animation = 'keyTap .35s ease'; } };
     const setAmt = (t) => { amount.textContent = t; amount.style.color = t === '0' ? '#AEC2D4' : '#456285'; };
     const tl = gsap.timeline({ repeat: -1, repeatDelay: 1.2, scrollTrigger: { trigger: '#speed', start: 'top 70%', toggleActions: 'play pause resume pause' } });
-    tl.call(() => { setAmt('0'); desc.textContent = 'description'; desc.style.color = '#AEC2D4'; tags.innerHTML = '#tags'; tags.style.color = '#AEC2D4'; })
+    const reset = () => { const L = this.L(); desc.textContent = L.demoDesc; desc.style.color = '#AEC2D4'; tags.textContent = L.demoTags; tags.style.color = '#AEC2D4'; };
+    tl.call(() => { setAmt('0'); reset(); })
       .to({}, { duration: 0.6 })
       .call(() => { tap('key-1'); setAmt('1'); }).to({}, { duration: 0.28 })
       .call(() => { tap('key-4'); setAmt('14'); }).to({}, { duration: 0.28 })
       .call(() => { tap('key-dot'); setAmt('14.'); }).to({}, { duration: 0.28 })
       .call(() => { tap('key-5'); setAmt('14.5'); }).to({}, { duration: 0.28 })
       .call(() => { tap('key-0'); setAmt('14.50'); }).to({}, { duration: 0.5 })
-      .call(() => { desc.textContent = 'Coffee with Anna'; desc.style.color = '#456285'; }).to({}, { duration: 0.4 })
-      .call(() => { tags.style.color = '#3B82F6'; tags.innerHTML = '<span style="background:rgba(59,130,246,.1);border-radius:10px;padding:2px 7px;font-size:12px;font-weight:600">#coffee</span><span style="background:rgba(59,130,246,.1);border-radius:10px;padding:2px 7px;font-size:12px;font-weight:600">#friends</span>'; }).to({}, { duration: 0.6 })
+      .call(() => { desc.textContent = this.L().demoCoffee; desc.style.color = '#456285'; }).to({}, { duration: 0.4 })
+      .call(() => { const L = this.L(); tags.style.color = '#3B82F6'; tags.innerHTML = ''; for (const k of ['coffee', 'friends']) { const el = document.createElement('span'); el.style.cssText = 'background:rgba(59,130,246,.1);border-radius:10px;padding:2px 7px;font-size:12px;font-weight:600'; el.textContent = '#' + L['tag_' + k]; tags.appendChild(el); } }).to({}, { duration: 0.6 })
       .to(income, { scale: 0.86, duration: 0.12, ease: 'power2.in' })
       .to(income, { scale: 1, duration: 0.35, ease: 'back.out(3)' })
       .call(() => setAmt('0'))
       .to(saved, { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' }, '<')
-      .call(() => { desc.textContent = 'description'; desc.style.color = '#AEC2D4'; tags.innerHTML = '#tags'; tags.style.color = '#AEC2D4'; }, null, '+=0.1')
+      .call(reset, null, '+=0.1')
       .to(saved, { opacity: 0, y: 8, duration: 0.4 }, '+=1.4');
     this.tl = tl;
   }
 
   renderVals() {
+    const L = this.L(), lang = this.state.lang;
+    const langs = Component.LANGS.map((code) => ({ code, name: Component.I18N.meta[code].name }));
+    const fmtDate = (d, opts) => { try { return d.toLocaleString(lang, opts); } catch (_) { return d.toLocaleString('en', opts); } };
+    const txDate = (m, d, h, mi) => fmtDate(new Date(2026, m, d, h, mi), { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
     const W = [
-      { name: 'Checking', code: 'EUR', balance: '€5,678.90', color: '#3B82F6', rgb: '59,130,246', delay: '0s' },
-      { name: 'Savings Vault', code: 'USD', balance: '$6,234.12', color: '#65AF83', rgb: '101,175,131', delay: '-0.6s' },
-      { name: 'Crypto', code: 'BTC', balance: '₿0.00420000', color: '#F59E0B', rgb: '245,158,11', delay: '-1.2s' },
-      { name: 'Investment', code: 'GBP', balance: '£1,000.00', color: '#8B5CF6', rgb: '139,92,246', delay: '-1.8s' },
+      { name: L.walletChecking, code: 'EUR', balance: '€5,678.90', color: '#3B82F6', rgb: '59,130,246', delay: '0s' },
+      { name: L.walletSavings, code: 'USD', balance: '$6,234.12', color: '#65AF83', rgb: '101,175,131', delay: '-0.6s' },
+      { name: L.walletCrypto, code: 'BTC', balance: '₿0.00420000', color: '#F59E0B', rgb: '245,158,11', delay: '-1.2s' },
+      { name: L.walletInvestment, code: 'GBP', balance: '£1,000.00', color: '#8B5CF6', rgb: '139,92,246', delay: '-1.8s' },
     ];
     const currencies = [['$', 'USD'], ['€', 'EUR'], ['£', 'GBP'], ['CHF', 'CHF'], ['CA$', 'CAD'], ['¥', 'JPY'], ['A$', 'AUD'], ['kr', 'SEK'], ['kr', 'NOK'], ['kr', 'DKK'], ['¥', 'CNY'], ['₺', 'TRY'], ['₿', 'BTC']].map(([symbol, code]) => ({ symbol, code }));
     const keyRow = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0', '⌫'];
     const keys = keyRow.map((k) => ({ id: k === '.' ? 'key-dot' : k === '⌫' ? 'key-del' : 'key-' + k, label: k === '⌫' ? '' : k, isDelete: k === '⌫' }));
     const swatchColors = ['#3B82F6', '#F59E0B', '#EF4444', '#65AF83', '#8B5CF6', '#0EA5E9', '#06B6D4', '#14B8A6', '#10B981', '#84CC16', '#EAB308', '#F97316', '#FB7185', '#EC4899', '#D946EF', '#A855F7', '#6366F1', '#1E3A8A', '#A16207', '#64748B'];
     const swatches = swatchColors.map((c, i) => ({ color: c, ring: i === 0 ? '#3B82F6' : 'transparent' }));
+    const tag = (k) => L['tag_' + k] || k;
     const txns = [
-      { title: 'Salary Payment', date: 'Oct 28, 09:00 AM', amount: '+$1,500.00', color: '#3B82F6', tags: ['work'] },
-      { title: 'Whole Foods Market', date: 'Oct 27, 06:45 PM', amount: '-$120.00', color: '#101010', tags: ['food'] },
-      { title: 'Monthly Rent', date: 'Oct 26, 10:00 AM · Monthly', amount: '-$800.00', color: '#101010', tags: ['home'] },
-      { title: 'Freelance Project', date: 'Oct 25, 02:15 PM · 600.00 EUR @ 1.0833', amount: '+$650.00', color: '#3B82F6', tags: [] },
-      { title: 'Savings Transfer', date: 'Oct 24, 11:30 AM', amount: '-$50.00', color: '#AEC2D4', tags: [] },
+      { title: L.tx1, date: txDate(9, 28, 9, 0), amount: '+$1,500.00', color: '#3B82F6', tags: [tag('work')] },
+      { title: L.tx2, date: txDate(9, 27, 18, 45), amount: '-$120.00', color: '#101010', tags: [tag('food')] },
+      { title: L.tx3, date: txDate(9, 26, 10, 0) + ' · ' + L.monthly, amount: '-$800.00', color: '#101010', tags: [tag('home')] },
+      { title: L.tx4, date: txDate(9, 25, 14, 15) + ' · 600.00 EUR @ 1.0833', amount: '+$650.00', color: '#3B82F6', tags: [] },
+      { title: L.tx5, date: txDate(9, 24, 11, 30), amount: '-$50.00', color: '#AEC2D4', tags: [] },
     ];
-    const features = [
-      { icon: 'assets/icons/zap.svg', title: 'One-tap logging', body: 'Income, Expense or Transfer commits instantly and the screen stays open. Fields reset, wallet and currency stay put.' },
-      { icon: 'assets/icons/hash-01.svg', title: 'Tags, not categories', body: 'Type #coffee #trip #work as you go — tags are created on the fly. A tag map shows which tags move the most money together.' },
-      { icon: 'assets/icons/bank-note-01.svg', title: 'Wallets in any currency', body: '13 currencies including Bitcoin to 8 decimals. Each wallet keeps its own; your total is converted to the one you choose.' },
-      { icon: 'assets/icons/lock-01.svg', title: 'Local-first & encrypted', body: 'No account, no server. An AES-256 encrypted database on your phone, key kept in secure storage. Reset everything with one tap.' },
-      { icon: 'assets/icons/repeat-01.svg', title: 'Subscriptions', body: 'Set Repeat — daily, weekly, monthly, yearly — and it becomes a subscription you can pause, edit or stop. See the monthly total at a glance.' },
-      { icon: 'assets/icons/bar-chart-10.svg', title: 'Progress', body: 'Income vs expense by month or year, a trend line, and spending by tag — across all wallets or just one.' },
-      { icon: 'assets/icons/search-md.svg', title: 'Search everything', body: 'Find any transaction by description, amount, wallet name or tag. Filter and sort every wallet’s history.' },
-      { icon: 'assets/icons/wifi-off.svg', title: 'Works offline', body: 'Exchange rates are cached on-device; every transaction remembers the rate it used, so history never shifts.' },
-    ];
-    const extras = ['Dark mode', '7 languages', 'Upcoming transactions', 'Swipe to delete with undo', 'Drag to reorder wallets', 'Haptic numpad', 'Transfers between currencies', 'Show / hide the mascot'];
-    const compare = [
-      { label: 'Logging a purchase', wumbi: 'Type amount, tap once. About three seconds, screen stays open.', other: 'Multi-step form: category, account, notes, confirm.' },
-      { label: 'Organising', wumbi: 'Free-form #tags typed inline, created automatically.', other: 'Fixed category trees you have to maintain.' },
-      { label: 'Account', wumbi: 'None. No sign-up, no email, no password.', other: 'Account required, often with bank linking.' },
-      { label: 'Where your data lives', wumbi: 'On your device, AES-256 encrypted. Nothing leaves the phone.', other: 'On the vendor’s servers.' },
-      { label: 'Currencies', wumbi: '13 incl. Bitcoin. Per-wallet currency, converted total, type in any.', other: 'Usually one currency, or a paid add-on.' },
-      { label: 'Offline', wumbi: 'Fully usable offline; rates cached for 12 hours.', other: 'Needs a connection to sync or open.' },
-      { label: 'Recurring payments', wumbi: 'A Repeat chip on every transaction; pause or stop anytime.', other: 'Often behind a subscription tier.' },
-    ];
+    const featIcons = ['zap', 'hash-01', 'bank-note-01', 'lock-01', 'repeat-01', 'bar-chart-10', 'search-md', 'wifi-off'];
+    const features = featIcons.map((ic, i) => ({ icon: `assets/icons/${ic}.svg`, title: L[`f${i + 1}t`], body: L[`f${i + 1}b`] }));
+    const extras = [1, 2, 3, 4, 5, 6, 7, 8].map((i) => L['x' + i]);
+    const compare = [1, 2, 3, 4, 5, 6, 7].map((i) => ({ label: L[`c${i}l`], wumbi: L[`c${i}w`], other: L[`c${i}o`] }));
     const statTiles = [
-      { label: 'INCOME', value: '$4,850.00', color: '#3B82F6', delta: '▲ 12%', deltaColor: '#3B82F6' },
-      { label: 'EXPENSE', value: '$3,620.00', color: '#101010', delta: '▼ 8%', deltaColor: '#3B82F6' },
-      { label: 'NET', value: '+$1,230.00', color: '#3B82F6', delta: '▲ 41%', deltaColor: '#3B82F6' },
+      { label: L.statIncome, value: '$4,850.00', color: '#3B82F6', delta: '▲ 12%', deltaColor: '#3B82F6' },
+      { label: L.statExpense, value: '$3,620.00', color: '#101010', delta: '▼ 8%', deltaColor: '#3B82F6' },
+      { label: L.statNet, value: '+$1,230.00', color: '#3B82F6', delta: '▲ 41%', deltaColor: '#3B82F6' },
     ];
-    const bars = [['May', 62, 70], ['Jun', 58, 66], ['Jul', 74, 60], ['Aug', 66, 78], ['Sep', 80, 72], ['Oct', 100, 75]].map(([label, i, e], k) => ({ label, income: i + '%', expense: e + '%', weight: k === 5 ? 700 : 500, labelColor: k === 5 ? '#3B82F6' : '#AEC2D4' }));
-    const tagShares = [{ name: 'food', color: '#4C6FFF', pct: '34%' }, { name: 'home', color: '#FF9F1C', pct: '24%' }, { name: 'trip', color: '#3DD68C', pct: '16%' }, { name: 'coffee', color: '#B15CFF', pct: '12%' }];
+    const monthShort = (m) => fmtDate(new Date(2026, m, 1), { month: 'short' }).replace(/\.$/, '');
+    const bars = [[4, 62, 70], [5, 58, 66], [6, 74, 60], [7, 66, 78], [8, 80, 72], [9, 100, 75]].map(([m, i, e], k) => ({ label: monthShort(m), income: i + '%', expense: e + '%', weight: k === 5 ? 700 : 500, labelColor: k === 5 ? '#3B82F6' : '#AEC2D4' }));
+    const progPeriod = fmtDate(new Date(2026, 9, 1), { month: 'short', year: 'numeric' }).replace(/\.(?= )/, '');
+    const tagShares = [{ name: tag('food'), color: '#4C6FFF', pct: '34%' }, { name: tag('home'), color: '#FF9F1C', pct: '24%' }, { name: tag('trip'), color: '#3DD68C', pct: '16%' }, { name: tag('coffee'), color: '#B15CFF', pct: '12%' }];
     return {
+      L, lang, dir: this.dir(), langs, progPeriod,
+      setLang: (e) => this.setLang(e.target.value),
+      doneMsg: String(L.doneMsg).replace('{email}', this.state.email),
       statTiles, bars, tagShares,
       wallets: W, currencies, keys, swatches, txns, features, extras, compare,
       marqueeCopies: [{ hidden: 'false' }, { hidden: 'true' }, { hidden: 'true' }, { hidden: 'true' }],
@@ -721,13 +760,13 @@ class Component extends DCLogic {
       showCompare: this.props.showCompare ?? true,
       email: this.state.email, submitted: this.state.submitted, notSubmitted: !this.state.submitted,
       hasError: !!this.state.error, error: this.state.error,
-      sending: this.state.sending, submitLabel: this.state.sending ? 'Joining…' : 'Join the waitlist',
+      sending: this.state.sending, submitLabel: this.state.sending ? L.submitting : L.submit,
       setEmail: (e) => this.setState({ email: e.target.value, error: '' }),
       submit: async (e) => {
         e.preventDefault();
         if (this.state.sending) return;
         const v = this.state.email.trim();
-        if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)) return this.setState({ error: 'Please enter a valid email address.' });
+        if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)) return this.setState({ error: L.errInvalid });
         const botcheck = e.currentTarget?.querySelector?.('[name="botcheck"]');
         if (botcheck && botcheck.checked) return this.setState({ submitted: true, email: v }); // honeypot: pretend success
         this.setState({ sending: true, error: '' });
@@ -740,7 +779,7 @@ class Component extends DCLogic {
               subject: 'New Wumbi waitlist signup',
               from_name: 'Wumbi Landing',
               email: v,
-              message: `${v} joined the Wumbi waitlist.\nPage: ${location.href}\nLanguage: ${navigator.language}\nTime: ${new Date().toISOString()}`,
+              message: `${v} joined the Wumbi waitlist.\nPage: ${location.href}\nLanguage: ${this.state.lang} (${navigator.language})\nTime: ${new Date().toISOString()}`,
             }),
           });
           const data = await res.json().catch(() => ({}));
@@ -748,7 +787,7 @@ class Component extends DCLogic {
           try { const list = JSON.parse(localStorage.getItem('wumbi.waitlist') || '[]'); list.push({ email: v, at: Date.now() }); localStorage.setItem('wumbi.waitlist', JSON.stringify(list)); } catch (_) {}
           this.setState({ submitted: true, email: v, sending: false });
         } catch (err) {
-          this.setState({ sending: false, error: 'Could not join right now. Please try again in a moment.' });
+          this.setState({ sending: false, error: this.L().errFailed });
         }
       },
       goWaitlist: this.scrollToWaitlist,
