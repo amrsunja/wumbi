@@ -39,27 +39,33 @@ input:focus{outline:none}
 .nav-links a,.nav-menu a{font-size:14px;font-weight:600;color:#456285}
 .nav-cta{border:0;cursor:pointer;background:#3B82F6;color:#fff;font:600 14px Inter,'Noto Sans Arabic',system-ui;padding:10px 18px;border-radius:999px;box-shadow:0 4px 12px rgba(59,130,246,.35);white-space:nowrap}
 .nav-cta:hover{background:#2563EB}
-.nav-burger{display:none;position:relative;width:44px;height:44px;margin-inline-end:-10px;border:0;background:transparent;cursor:pointer;border-radius:12px;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.nav-end{display:none;align-items:center;gap:8px;margin-inline-end:-10px}
+.lang-pill{position:relative;display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 10px 0 12px;border:1px solid rgba(174,194,212,.5);border-radius:999px;background:rgba(255,255,255,.6);color:#456285;font:700 13px Inter,'Noto Sans Arabic',system-ui;letter-spacing:.4px;white-space:nowrap}
+.lang-pill .chev{width:13px;height:13px;flex-shrink:0;background:#456285;-webkit-mask:url(assets/icons/chevron-down.svg) center/contain no-repeat;mask:url(assets/icons/chevron-down.svg) center/contain no-repeat}
+/* the native select sits invisibly on top so iOS/Android show their own picker */
+.lang-pill select{position:absolute;inset:0;width:100%;height:100%;margin:0;padding:0;opacity:0;border:0;background:transparent;color:inherit;font:500 16px Inter,system-ui;-webkit-appearance:none;appearance:none;cursor:pointer}
+.lang-pill:focus-within{border-color:#3B82F6}
+.nav-burger{position:relative;width:44px;height:44px;border:0;background:transparent;cursor:pointer;border-radius:12px;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 .nav-burger span{position:absolute;left:12px;width:20px;height:2px;border-radius:2px;background:#456285;transition:transform .25s ease,opacity .2s ease,top .25s ease}
 .nav-burger span:nth-child(1){top:15px}.nav-burger span:nth-child(2){top:21px}.nav-burger span:nth-child(3){top:27px}
 .menu-open .nav-burger span:nth-child(1){top:21px;transform:rotate(45deg)}
 .menu-open .nav-burger span:nth-child(2){opacity:0;transform:scaleX(.4)}
 .menu-open .nav-burger span:nth-child(3){top:21px;transform:rotate(-45deg)}
-.nav-menu{display:none;position:absolute;top:100%;left:0;right:0;flex-direction:column;gap:4px;padding:8px 16px 18px;background:rgba(250,250,248,.98);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 1px 0 rgba(174,194,212,.3),0 18px 40px -20px rgba(69,98,133,.25);opacity:0;transform:translateY(-8px);visibility:hidden;pointer-events:none;transition:opacity .2s ease,transform .22s ease,visibility .22s}
+.nav-menu{display:none;position:absolute;top:100%;left:0;right:0;flex-direction:column;gap:4px;padding:8px 16px 18px;background:#FAFAF8;box-shadow:0 1px 0 rgba(174,194,212,.3),0 18px 40px -20px rgba(69,98,133,.25);opacity:0;transform:translateY(-8px);visibility:hidden;pointer-events:none;transition:opacity .2s ease,transform .22s ease,visibility .22s}
 .nav-menu a{display:block;padding:12px 8px;font-size:16px;border-radius:10px}
 .nav-menu a:active{background:rgba(59,130,246,.08)}
-.nav-menu-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 8px 0;border-top:1px solid rgba(174,194,212,.3);margin-top:6px}
+.nav-menu-row{display:flex;padding:12px 8px 4px;border-top:1px solid rgba(174,194,212,.3);margin-top:6px}
+.nav-menu-row .nav-cta{flex:1;padding:14px 18px;font-size:15px}
 .nav-scrim{display:none;position:fixed;top:var(--nav-h);left:0;right:0;bottom:0;z-index:19;background:rgba(69,98,133,.18);opacity:0;transition:opacity .2s ease;pointer-events:none}
 @media (max-width:899px){
   :root{--nav-h:56px}
   .nav-links{display:none}
-  .nav-burger{display:inline-flex}
+  .nav-end{display:inline-flex}
   .nav-menu,.nav-scrim{display:flex}
   .menu-open .nav-menu{opacity:1;transform:none;visibility:visible;pointer-events:auto}
   .nav-scrim.menu-open{opacity:1;pointer-events:auto}
-  .nav-menu .lang-select{font-size:16px;padding:9px 30px 9px 14px}
-  [dir=rtl] .nav-menu .lang-select{padding:9px 14px 9px 30px}
 }
+@media (max-width:359px){.lang-pill{padding:0 8px 0 10px;font-size:12px}.nav-bar{padding:0 16px}}
 @media (prefers-reduced-motion:reduce){.nav-menu,.nav-scrim,.nav-burger span{transition:none}}
 section[id],header[id]{scroll-margin-top:calc(var(--nav-h) + 8px)}
 /* ---- Compare table: horizontal scroll on narrow screens ---- */
@@ -95,7 +101,15 @@ section[id],header[id]{scroll-margin-top:calc(var(--nav-h) + 8px)}
         <sc-for list="{{ langs }}" as="lg" hint-placeholder-count="7"><option value="{{ lg.code }}">{{ lg.name }}</option></sc-for>
       </select>
     </div>
-    <button type="button" class="nav-burger" aria-label="{{ L.navMenu }}" aria-expanded="{{ menuOpen }}" aria-controls="nav-menu" onClick="{{ toggleMenu }}"><span></span><span></span><span></span></button>
+    <div class="nav-end">
+      <div class="lang-pill">
+        <span>{{ langCode }}</span><span class="chev"></span>
+        <select id="lang-select-m" aria-label="{{ L.langLabel }}" value="{{ lang }}" onChange="{{ setLang }}">
+          <sc-for list="{{ langs }}" as="lg" hint-placeholder-count="7"><option value="{{ lg.code }}">{{ lg.name }}</option></sc-for>
+        </select>
+      </div>
+      <button type="button" class="nav-burger" aria-label="{{ L.navMenu }}" aria-expanded="{{ menuOpen }}" aria-controls="nav-menu" onClick="{{ toggleMenu }}"><span></span><span></span><span></span></button>
+    </div>
   </div>
   <div id="nav-menu" class="nav-menu" aria-hidden="{{ menuClosed }}">
     <a href="#features" onClick="{{ closeMenu }}">{{ L.navFeatures }}</a>
@@ -104,9 +118,6 @@ section[id],header[id]{scroll-margin-top:calc(var(--nav-h) + 8px)}
     <a href="#compare" onClick="{{ closeMenu }}">{{ L.navCompare }}</a>
     <div class="nav-menu-row">
       <button type="button" class="nav-cta" onClick="{{ goWaitlistFromMenu }}">{{ L.navJoin }}</button>
-      <select id="lang-select-m" class="lang-select" aria-label="{{ L.langLabel }}" value="{{ lang }}" onChange="{{ setLang }}">
-        <sc-for list="{{ langs }}" as="lg" hint-placeholder-count="7"><option value="{{ lg.code }}">{{ lg.name }}</option></sc-for>
-      </select>
     </div>
   </div>
 </nav>
@@ -857,6 +868,7 @@ class Component extends DCLogic {
       goWaitlist: this.scrollToWaitlist,
       goWaitlistFromMenu: () => { this.closeMenu(); this.scrollToWaitlist(); },
       menuOpen: this.state.menuOpen, menuClosed: !this.state.menuOpen, navClass: this.state.menuOpen ? 'menu-open' : '',
+      langCode: (Component.I18N.meta[this.state.lang] || {}).short || this.state.lang.toUpperCase(),
       toggleMenu: this.toggleMenu, closeMenu: this.closeMenu,
       focusHero: () => document.getElementById('hero-email')?.focus(),
       focusEmail: () => document.getElementById('waitlist-email')?.focus(),

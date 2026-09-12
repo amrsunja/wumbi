@@ -4,13 +4,13 @@
 // Missing keys fall back to `en`. `{email}` is the only placeholder.
 window.WUMBI_I18N = {
   meta: {
-    en: { name: 'English',    dir: 'ltr' },
-    fr: { name: 'Français',   dir: 'ltr' },
-    de: { name: 'Deutsch',    dir: 'ltr' },
-    nl: { name: 'Nederlands', dir: 'ltr' },
-    tr: { name: 'Türkçe',     dir: 'ltr' },
-    ru: { name: 'Русский',    dir: 'ltr' },
-    ar: { name: 'العربية',    dir: 'rtl' },
+    en: { name: 'English',    dir: 'ltr', short: 'EN' },
+    fr: { name: 'Français',   dir: 'ltr', short: 'FR' },
+    de: { name: 'Deutsch',    dir: 'ltr', short: 'DE' },
+    nl: { name: 'Nederlands', dir: 'ltr', short: 'NL' },
+    tr: { name: 'Türkçe',     dir: 'ltr', short: 'TR' },
+    ru: { name: 'Русский',    dir: 'ltr', short: 'RU' },
+    ar: { name: 'العربية',    dir: 'rtl', short: 'AR' },
   },
 
   en: {
