@@ -2,7 +2,7 @@
 import { createServer } from 'node:http';
 import { readFileSync, existsSync, statSync } from 'node:fs';
 import { join, extname } from 'node:path';
-const types = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.png': 'image/png', '.svg': 'image/svg+xml', '.gif': 'image/gif', '.css': 'text/css' };
+const types = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.png': 'image/png', '.svg': 'image/svg+xml', '.gif': 'image/gif', '.css': 'text/css', '.webp': 'image/webp', '.woff2': 'font/woff2', '.xml': 'application/xml', '.txt': 'text/plain; charset=utf-8', '.webmanifest': 'application/manifest+json' };
 createServer((req, res) => {
   let p = join('dist', decodeURIComponent(req.url.split('?')[0]));
   if (existsSync(p) && statSync(p).isDirectory()) p = join(p, 'index.html');

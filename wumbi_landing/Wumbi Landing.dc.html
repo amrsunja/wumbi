@@ -57,6 +57,17 @@ input:focus{outline:none}
 .nav-menu-row{display:flex;padding:12px 8px 4px;border-top:1px solid rgba(174,194,212,.3);margin-top:6px}
 .nav-menu-row .nav-cta{flex:1;padding:14px 18px;font-size:15px}
 .nav-scrim{display:none;position:fixed;top:var(--nav-h);left:0;right:0;bottom:0;z-index:19;background:rgba(69,98,133,.18);opacity:0;transition:opacity .2s ease;pointer-events:none}
+.faq-list{display:flex;flex-direction:column;gap:12px;max-width:860px}
+.faq-item{background:rgba(255,255,255,.75);border:1px solid rgba(174,194,212,.3);border-radius:18px;backdrop-filter:blur(8px);overflow:hidden}
+.faq-item summary{list-style:none;cursor:pointer;display:flex;align-items:flex-start;gap:14px;padding:20px 24px;font-size:17px;font-weight:600;color:#456285;line-height:1.4}
+.faq-item summary::-webkit-details-marker{display:none}
+.faq-item summary::after{content:'';flex-shrink:0;margin-inline-start:auto;width:16px;height:16px;margin-top:4px;background:#AEC2D4;-webkit-mask:url(assets/icons/chevron-down.svg) center/contain no-repeat;mask:url(assets/icons/chevron-down.svg) center/contain no-repeat;transition:transform .22s ease}
+.faq-item[open] summary::after{transform:rotate(180deg)}
+.faq-item summary:hover{color:#3B82F6}
+.faq-a{padding:0 24px 22px;font-size:15px;line-height:1.65;color:#6F7F92;max-width:70ch;text-wrap:pretty}
+.foot-nav{display:flex;flex-wrap:wrap;gap:18px}
+.foot-nav a{color:#AEC2D4;font-weight:600}
+.foot-nav a:hover{color:#3B82F6}
 @media (max-width:899px){
   :root{--nav-h:56px}
   .nav-links{display:none}
@@ -116,6 +127,7 @@ section[id],header[id]{scroll-margin-top:calc(var(--nav-h) + 8px)}
     <a href="#insights" onClick="{{ closeMenu }}">{{ L.navTagMap }}</a>
     <a href="#screens" onClick="{{ closeMenu }}">{{ L.navScreens }}</a>
     <a href="#compare" onClick="{{ closeMenu }}">{{ L.navCompare }}</a>
+    <a href="#faq" onClick="{{ closeMenu }}">{{ L.faqKicker }}</a>
     <div class="nav-menu-row">
       <button type="button" class="nav-cta" onClick="{{ goWaitlistFromMenu }}">{{ L.navJoin }}</button>
     </div>
@@ -460,6 +472,23 @@ section[id],header[id]{scroll-margin-top:calc(var(--nav-h) + 8px)}
 </section>
 </sc-if>
 
+<!-- FAQ -->
+<section id="faq" style="max-width:1120px;margin:0 auto;padding:40px 24px 110px">
+  <div style="max-width:620px;display:flex;flex-direction:column;gap:18px;margin-bottom:44px">
+    <span data-reveal style="font-size:11px;font-weight:600;letter-spacing:1.2px;color:#AEC2D4;text-transform:uppercase">{{ L.faqKicker }}</span>
+    <h2 data-reveal style="margin:0;font-size:clamp(34px,4vw,52px);line-height:1.05;font-weight:300;letter-spacing:-1px;text-wrap:balance">{{ L.faqTitle1 }} <strong style="font-weight:700">{{ L.faqTitle2 }}</strong></h2>
+    <p data-reveal style="margin:0;font-size:17px;line-height:1.6;color:#6F7F92;text-wrap:pretty">{{ L.faqLead }}</p>
+  </div>
+  <div data-reveal class="faq-list">
+    <sc-for list="{{ faq }}" as="f" hint-placeholder-count="7">
+      <details class="faq-item">
+        <summary>{{ f.q }}</summary>
+        <div class="faq-a">{{ f.a }}</div>
+      </details>
+    </sc-for>
+  </div>
+</section>
+
 <!-- WAITLIST -->
 <section id="waitlist" style="max-width:1120px;margin:0 auto;padding:40px 24px 120px">
   <div data-reveal style="position:relative;background:#456285;border-radius:32px;padding:clamp(40px,6vw,80px) clamp(24px,5vw,72px);color:#fff;overflow:hidden;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:40px;align-items:center">
@@ -497,6 +526,7 @@ section[id],header[id]{scroll-margin-top:calc(var(--nav-h) + 8px)}
 <footer style="border-top:1px solid rgba(174,194,212,.3);padding:32px 24px">
   <div style="max-width:1120px;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:16px;font-size:13px;color:#AEC2D4;font-weight:500">
     <div style="display:flex;align-items:center;gap:10px;color:#456285"><img src="assets/app_logo.png" alt="" style="width:24px;height:24px;border-radius:7px"><span style="font-weight:700">Wumbi</span><span style="color:#AEC2D4">{{ L.footTag }}</span></div>
+    <nav class="foot-nav" aria-label="{{ L.navMenu }}"><a href="#features">{{ L.navFeatures }}</a><a href="#insights">{{ L.navTagMap }}</a><a href="#screens">{{ L.navScreens }}</a><a href="#compare">{{ L.navCompare }}</a><a href="#faq">{{ L.faqKicker }}</a></nav>
     <div style="display:flex;gap:20px"><a href="mailto:support@wumbi.app" style="color:#456285;font-weight:600">support@wumbi.app</a><span>{{ L.footRights }}</span></div>
   </div>
 </footer>
@@ -513,6 +543,9 @@ class Component extends DCLogic {
   static initialLang() {
     const known = Component.LANGS;
     const norm = (v) => { const c = String(v || '').toLowerCase().split(/[-_]/)[0]; return known.includes(c) ? c : null; };
+    // A built page is per-locale static HTML: its own language wins over anything stored,
+    // otherwise the DOM would disagree with <html lang>, canonical and hreflang.
+    try { const b = norm(window.WUMBI_LANG); if (b) return b; } catch (_) {}
     try { const q = norm(new URLSearchParams(location.search).get('lang')); if (q) return q; } catch (_) {}
     try { const st = norm(localStorage.getItem('wumbi.lang')); if (st) return st; } catch (_) {}
     for (const l of navigator.languages || [navigator.language]) { const c = norm(l); if (c) return c; }
@@ -525,6 +558,9 @@ class Component extends DCLogic {
   applyLangToDocument() {
     const html = document.documentElement;
     html.lang = this.state.lang; html.dir = this.dir();
+    // A built page carries its own SEO <title> from seo.config.mjs — leave it alone,
+    // otherwise the rendered title Google indexes differs from the one in the HTML.
+    if (window.WUMBI_LANG) return;
     const L = this.L();
     document.title = `Wumbi — ${L.heroTitle1}`;
   }
@@ -545,6 +581,14 @@ class Component extends DCLogic {
   setLang = (lang) => {
     if (lang && typeof lang === 'object' && lang.target) lang = lang.target.value;
     if (!Component.LANGS.includes(lang) || lang === this.state.lang) return;
+    // On a built site each locale is its own indexable URL — go there rather than
+    // swapping strings behind an unchanged canonical.
+    const urls = window.WUMBI_LANG_URLS;
+    if (urls && urls[lang]) {
+      try { localStorage.setItem('wumbi.lang', lang); } catch (_) {}
+      location.href = urls[lang] + location.hash;
+      return;
+    }
     this.setState({ lang, error: '' }, () => {
       this.applyLangToDocument();
       if (this.tagNodes) { const L = this.L(); for (const nd of this.tagNodes) nd.name = L['tag_' + nd.key] || nd.key; }
@@ -865,6 +909,7 @@ class Component extends DCLogic {
           this.setState({ sending: false, error: this.L().errFailed });
         }
       },
+      faq: Array.from({ length: 7 }, (_, i) => ({ q: L['q' + (i + 1)], a: L['a' + (i + 1)] })).filter((f) => f.q && f.a),
       goWaitlist: this.scrollToWaitlist,
       goWaitlistFromMenu: () => { this.closeMenu(); this.scrollToWaitlist(); },
       menuOpen: this.state.menuOpen, menuClosed: !this.state.menuOpen, navClass: this.state.menuOpen ? 'menu-open' : '',

@@ -1,75 +1,466 @@
-// Builds ./dist from "Wumbi Landing.dc.html": index.html + support.js + assets + vendored React.
-// No bundler: the page is rendered client-side by support.js (dc-runtime); we only
-// (1) name it index.html, (2) add SEO/OG head tags, (3) point the runtime at local React
-// copies instead of unpkg via window.__resources.
-import { mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync, existsSync } from 'node:fs';
-import { join } from 'node:path';
+// Builds ./dist from "Wumbi Landing.dc.html".
+//
+// The page is a Claude Design canvas rendered client-side by support.js (dc-runtime),
+// so everything a crawler needs has to be produced here, at build time:
+//   1. one static HTML file per locale — / (en, x-default) and /<lang>/ — with its own
+//      <html lang|dir>, title, description, canonical and reciprocal hreflang set
+//   2. prerendered markup injected ahead of <x-dc> (see prerender.mjs) so the page has
+//      real content with JavaScript off; it is removed the moment React mounts
+//   3. JSON-LD: SoftwareApplication + Organization + WebSite + WebPage + FAQPage
+//   4. sitemap.xml, robots.txt, site.webmanifest, 404.html, .htaccess
+//   5. assets: mascots → WebP at display size, fonts and GSAP self-hosted, React vendored
+//
+// Paths in dist are root-absolute (/assets/…) so a page at any depth resolves them.
+import { mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync, existsSync, statSync } from 'node:fs';
+import { join, dirname } from 'node:path';
+import sharp from 'sharp';
+import { SITE, APP, LOCALES, OG_LOCALE, langPath, langUrl } from './seo.config.mjs';
 
 const SRC = 'Wumbi Landing.dc.html';
 const OUT = 'dist';
-const SITE = {
-  title: 'Wumbi — Track money in seconds',
-  description: 'Local-first budgeting. Log income, expenses and transfers in seconds, in 13 currencies, with no account and no bank linking.',
-  url: process.env.SITE_URL || 'https://wumbi.app',
-  image: 'assets/app_logo.png',
-  themeColor: '#3B82F6',
-};
-
-const LANGS = ['en', 'fr', 'de', 'nl', 'tr', 'ru', 'ar']; // must match i18n.js meta
+const PRERENDER_DIR = join('seo', 'prerendered');
+const BUILD_DATE = new Date().toISOString().slice(0, 10);
 
 const REACT_URL = 'https://unpkg.com/react@18.3.1/umd/react.production.min.js';
 const REACT_DOM_URL = 'https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js';
+const GSAP_URL = 'https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js';
+const SCROLLTRIGGER_URL = 'https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js';
 
-// Overwrite-in-place copy (writeFileSync, no unlink) so it also works on mounts that forbid deletes.
-const copyFile = (from, to) => { mkdirSync(join(to, '..'), { recursive: true }); writeFileSync(to, readFileSync(from)); };
-const copyDir = (from, to) => {
-  for (const e of readdirSync(from, { withFileTypes: true })) {
-    if (e.name === '.DS_Store') continue;
-    e.isDirectory() ? copyDir(join(from, e.name), join(to, e.name)) : copyFile(join(from, e.name), join(to, e.name));
-  }
-};
+// ---------------------------------------------------------------- helpers
+// Overwrite-in-place copy (no unlink) so it also works on mounts that forbid deletes.
+const copyFile = (from, to) => { mkdirSync(dirname(to), { recursive: true }); writeFileSync(to, readFileSync(from)); };
+const write = (rel, body) => { const p = join(OUT, rel); mkdirSync(dirname(p), { recursive: true }); writeFileSync(p, body); };
+const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const kb = (p) => (statSync(p).size / 1024).toFixed(0) + ' KB';
 
+// i18n.js is a plain `window.WUMBI_I18N = {…}` assignment plus a merge IIFE — run it
+// against a fake window so page copy has exactly one source of truth.
+function loadI18n() {
+  const win = {};
+  new Function('window', readFileSync('i18n.js', 'utf8'))(win);
+  if (!win.WUMBI_I18N) throw new Error('build: i18n.js did not set window.WUMBI_I18N');
+  return win.WUMBI_I18N;
+}
+
+const I18N = loadI18n();
+const LANGS = Object.keys(I18N.meta);
+for (const l of LANGS) if (!LOCALES[l]) throw new Error(`build: seo.config.mjs has no entry for locale "${l}"`);
+const T = (lang, key) => I18N[lang]?.[key] ?? I18N.en[key] ?? '';
+
+// ---------------------------------------------------------------- clean
 try { rmSync(OUT, { recursive: true, force: true }); } catch { /* keep going: files are overwritten below */ }
 mkdirSync(join(OUT, 'vendor'), { recursive: true });
 
-// Vendor React so the live site has no unpkg dependency.
-// (paths, not require.resolve: react's "exports" map doesn't expose umd/)
+let html = readFileSync(SRC, 'utf8');
+
+// ---------------------------------------------------------------- assets: images
+// Only ship what the template actually references; the source folder carries ~20 MB of
+// unused mascot PNGs. Mascots are re-encoded to WebP at 2x their largest display size.
+const referenced = new Set([...html.matchAll(/assets\/[A-Za-z0-9_/-]+\.(?:png|svg|jpe?g)/g)].map((m) => m[0]));
+const MASCOTS = {
+  'assets/wumbi_hello.png': { width: 600, eager: true },      // hero, display max 300px → LCP
+  'assets/wumbi_take_money.png': { width: 600 },              // waitlist card, display max 300px
+  'assets/wumbi_look.png': { width: 260 },                    // peeking, display height 64px
+};
+const imgMeta = {}; // src → { out, w, h }
+
+for (const [src, opt] of Object.entries(MASCOTS)) {
+  if (!referenced.has(src)) continue;
+  const out = src.replace(/\.png$/, '.webp');
+  const buf = await sharp(src).resize({ width: opt.width, withoutEnlargement: true })
+    .webp({ quality: 82, effort: 6 }).toBuffer();
+  const meta = await sharp(buf).metadata();
+  write(out, buf);
+  imgMeta[src] = { out: '/' + out, w: meta.width, h: meta.height, eager: !!opt.eager };
+}
+
+// The logo doubles as favicon, manifest icon and OG fallback, so keep raster PNGs.
+const LOGO = 'assets/app_logo.png';
+for (const [name, size] of [['favicon-32.png', 32], ['favicon-192.png', 192], ['apple-touch-icon.png', 180], ['icon-512.png', 512]]) {
+  write(join('assets', name), await sharp(LOGO).resize(size, size).png({ compressionLevel: 9 }).toBuffer());
+}
+write('assets/app_logo.webp', await sharp(LOGO).resize(96, 96).webp({ quality: 88 }).toBuffer());
+copyFile(LOGO, join(OUT, LOGO));
+imgMeta[LOGO] = { out: '/assets/app_logo.webp', w: 96, h: 96 };
+
+// SVGs: copy every referenced literal, plus the whole icon set — feature icons are
+// assembled at runtime (`assets/icons/${name}.svg`) so they never appear as literals.
+for (const src of referenced) if (src.endsWith('.svg')) copyFile(src, join(OUT, src));
+for (const f of readdirSync(join('assets', 'icons'))) {
+  if (f.endsWith('.svg')) copyFile(join('assets', 'icons', f), join(OUT, 'assets', 'icons', f));
+}
+
+// Optional per-locale OG images produced by prerender.mjs; app_logo.png is the fallback.
+const ogFor = (lang) => {
+  const p = join('assets', 'og', `og-${lang}.png`);
+  if (existsSync(p)) { copyFile(p, join(OUT, p)); return { url: '/' + p.replace(/\\/g, '/'), w: SITE.ogWidth, h: SITE.ogHeight, type: 'image/png', card: 'summary_large_image' }; }
+  return { url: '/assets/icon-512.png', w: 512, h: 512, type: 'image/png', card: 'summary' };
+};
+
+// ---------------------------------------------------------------- assets: fonts
+// Self-hosted so the render-blocking Google Fonts round-trip disappears (and no
+// third-party request from the visitor's browser — the whole point of a local-first app).
+const FONT_FILES = [
+  ['@fontsource-variable/inter/files/inter-latin-wght-normal.woff2', 'inter-latin.woff2'],
+  ['@fontsource-variable/inter/files/inter-latin-ext-wght-normal.woff2', 'inter-latin-ext.woff2'],
+  ['@fontsource-variable/inter/files/inter-cyrillic-wght-normal.woff2', 'inter-cyrillic.woff2'],
+  ['@fontsource-variable/inter/files/inter-cyrillic-ext-wght-normal.woff2', 'inter-cyrillic-ext.woff2'],
+  ['@fontsource/montserrat/files/montserrat-latin-300-normal.woff2', 'montserrat-300.woff2'],
+  ['@fontsource/montserrat/files/montserrat-latin-700-normal.woff2', 'montserrat-700.woff2'],
+  ['@fontsource/montserrat/files/montserrat-cyrillic-300-normal.woff2', 'montserrat-cyr-300.woff2'],
+  ['@fontsource/montserrat/files/montserrat-cyrillic-700-normal.woff2', 'montserrat-cyr-700.woff2'],
+  ['@fontsource/noto-sans-arabic/files/noto-sans-arabic-arabic-400-normal.woff2', 'noto-arabic-400.woff2'],
+  ['@fontsource/noto-sans-arabic/files/noto-sans-arabic-arabic-600-normal.woff2', 'noto-arabic-600.woff2'],
+  ['@fontsource/noto-sans-arabic/files/noto-sans-arabic-arabic-700-normal.woff2', 'noto-arabic-700.woff2'],
+];
+for (const [from, to] of FONT_FILES) copyFile(join('node_modules', from), join(OUT, 'vendor', 'fonts', to));
+
+const LATIN = 'U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD';
+const LATIN_EXT = 'U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF';
+const CYRILLIC = 'U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116';
+const CYRILLIC_EXT = 'U+0460-052F,U+1C80-1C8A,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F';
+const ARABIC = 'U+0600-06FF,U+0750-077F,U+0870-088E,U+0890-0891,U+0898-08E1,U+08E3-08FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE70-FEFF';
+const face = (family, weight, file, range) =>
+  `@font-face{font-family:'${family}';font-style:normal;font-display:swap;font-weight:${weight};` +
+  `src:url(/vendor/fonts/${file}) format('woff2');unicode-range:${range}}`;
+write('vendor/fonts.css', [
+  face('Inter', '100 900', 'inter-latin.woff2', LATIN),
+  face('Inter', '100 900', 'inter-latin-ext.woff2', LATIN_EXT),
+  face('Inter', '100 900', 'inter-cyrillic.woff2', CYRILLIC),
+  face('Inter', '100 900', 'inter-cyrillic-ext.woff2', CYRILLIC_EXT),
+  face('Montserrat', '300', 'montserrat-300.woff2', LATIN),
+  face('Montserrat', '700', 'montserrat-700.woff2', LATIN),
+  face('Montserrat', '300', 'montserrat-cyr-300.woff2', CYRILLIC),
+  face('Montserrat', '700', 'montserrat-cyr-700.woff2', CYRILLIC),
+  face('Noto Sans Arabic', '400', 'noto-arabic-400.woff2', ARABIC),
+  face('Noto Sans Arabic', '600', 'noto-arabic-600.woff2', ARABIC),
+  face('Noto Sans Arabic', '700', 'noto-arabic-700.woff2', ARABIC),
+].join('\n'));
+
+// ---------------------------------------------------------------- assets: scripts
 copyFile('node_modules/react/umd/react.production.min.js', join(OUT, 'vendor', 'react.production.min.js'));
 copyFile('node_modules/react-dom/umd/react-dom.production.min.js', join(OUT, 'vendor', 'react-dom.production.min.js'));
+copyFile('node_modules/gsap/dist/gsap.min.js', join(OUT, 'vendor', 'gsap.min.js'));
+copyFile('node_modules/gsap/dist/ScrollTrigger.min.js', join(OUT, 'vendor', 'ScrollTrigger.min.js'));
 copyFile('support.js', join(OUT, 'support.js'));
 copyFile('i18n.js', join(OUT, 'i18n.js'));
-copyDir('assets', join(OUT, 'assets'));
 
-let html = readFileSync(SRC, 'utf8');
-const abs = (p) => new URL(p, SITE.url.replace(/\/?$/, '/')).href;
-const head = `
-<title>${SITE.title}</title>
-<meta name="description" content="${SITE.description}">
-<meta name="theme-color" content="${SITE.themeColor}">
-<link rel="icon" type="image/png" href="assets/app_logo.png">
-<link rel="apple-touch-icon" href="assets/app_logo.png">
-<link rel="canonical" href="${SITE.url}">
-${LANGS.map((l) => `<link rel="alternate" hreflang="${l}" href="${SITE.url}?lang=${l}">`).join('\n')}
-<link rel="alternate" hreflang="x-default" href="${SITE.url}">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="Wumbi">
-<meta property="og:title" content="${SITE.title}">
-<meta property="og:description" content="${SITE.description}">
-<meta property="og:url" content="${SITE.url}">
-<meta property="og:image" content="${abs(SITE.image)}">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="${SITE.title}">
-<meta name="twitter:description" content="${SITE.description}">
-<meta name="twitter:image" content="${abs(SITE.image)}">
-<script>window.__resources=${JSON.stringify({ [REACT_URL]: './vendor/react.production.min.js', [REACT_DOM_URL]: './vendor/react-dom.production.min.js' })};</script>
-<script src="./i18n.js"></script>
-<script src="./support.js"></script>`;
+// ---------------------------------------------------------------- template rewrites
+// Root-absolute asset paths, WebP mascots with intrinsic size, local fonts and GSAP.
+for (const [src, m] of Object.entries(imgMeta)) {
+  html = html.replace(new RegExp(`<img([^>]*?)src="${src}"([^>]*?)>`, 'g'),
+    (tag, a, b) => `<img${a}src="${m.out}"${b} width="${m.w}" height="${m.h}"` +
+      (m.eager ? ' decoding="async">' : ' loading="lazy" decoding="async">'));
+}
+html = html.replace(/(src|href)="assets\//g, '$1="/assets/');
+html = html.replace(/`assets\//g, '`/assets/'); // template literals in the component script
+html = html.replace(/url\(assets\//g, 'url(/assets/');
+html = html.replace(/"\.\/(support|i18n)\.js"/g, '"/$1.js"');
+html = html.replace(/<link rel="preconnect" href="https:\/\/fonts\.googleapis\.com">\s*/, '');
+html = html.replace(/<link href="https:\/\/fonts\.googleapis\.com\/[^"]*" rel="stylesheet">\s*/, '<link rel="stylesheet" href="/vendor/fonts.css">\n');
+html = html.replace(GSAP_URL, '/vendor/gsap.min.js').replace(SCROLLTRIGGER_URL, '/vendor/ScrollTrigger.min.js');
+if (html.includes('fonts.googleapis.com') || html.includes('cdn.jsdelivr.net')) throw new Error('build: a CDN reference survived the rewrite');
 
-const marker = '<script src="./i18n.js"></script>\n<script src="./support.js"></script>';
-if (!html.includes(marker)) throw new Error(`build: "${marker}" not found in ${SRC}`);
-html = html.replace(marker, head.trim());
-writeFileSync(join(OUT, 'index.html'), html);
+// ---------------------------------------------------------------- structured data
+const jsonLd = (lang) => {
+  const L = LOCALES[lang];
+  const og = ogFor(lang);
+  const graph = [
+    {
+      '@type': 'SoftwareApplication',
+      '@id': SITE.url + '/#app',
+      name: SITE.name,
+      applicationCategory: APP.category,
+      applicationSubCategory: APP.subCategory,
+      operatingSystem: APP.platforms.join(', '),
+      description: L.description,
+      inLanguage: LANGS,
+      url: langUrl(lang),
+      image: SITE.url + og.url,
+      featureList: APP.features,
+      softwareVersion: '1.0',
+      datePublished: '2026-01-01',
+      offers: { '@type': 'Offer', price: APP.price, priceCurrency: APP.currency, availability: 'https://schema.org/PreOrder' },
+      publisher: { '@id': SITE.url + '/#org' },
+    },
+    {
+      '@type': 'Organization',
+      '@id': SITE.url + '/#org',
+      name: SITE.name,
+      url: SITE.url + '/',
+      email: SITE.email,
+      logo: { '@type': 'ImageObject', url: SITE.url + '/assets/icon-512.png', width: 512, height: 512 },
+    },
+    {
+      '@type': 'WebSite',
+      '@id': SITE.url + '/#website',
+      name: SITE.name,
+      url: SITE.url + '/',
+      inLanguage: lang,
+      publisher: { '@id': SITE.url + '/#org' },
+    },
+    {
+      '@type': 'WebPage',
+      '@id': langUrl(lang) + '#webpage',
+      url: langUrl(lang),
+      name: L.title,
+      description: L.description,
+      inLanguage: lang,
+      isPartOf: { '@id': SITE.url + '/#website' },
+      about: { '@id': SITE.url + '/#app' },
+      primaryImageOfPage: { '@type': 'ImageObject', url: SITE.url + og.url },
+    },
+    {
+      '@type': 'FAQPage',
+      '@id': langUrl(lang) + '#faq',
+      inLanguage: lang,
+      mainEntity: Array.from({ length: 7 }, (_, i) => ({
+        '@type': 'Question',
+        name: T(lang, `q${i + 1}`),
+        acceptedAnswer: { '@type': 'Answer', text: T(lang, `a${i + 1}`) },
+      })).filter((q) => q.name && q.acceptedAnswer.text),
+    },
+  ];
+  return JSON.stringify({ '@context': 'https://schema.org', '@graph': graph })
+    .replace(/</g, '\\u003c'); // never let page copy close the <script> tag
+};
 
-const kb = (p) => (readFileSync(p).length / 1024).toFixed(0) + ' KB';
-console.log(`built ${OUT}/index.html (${kb(join(OUT, 'index.html'))}), support.js (${kb(join(OUT, 'support.js'))}), vendor/react*, assets/`);
+// ---------------------------------------------------------------- head
+const head = (lang) => {
+  const L = LOCALES[lang];
+  const og = ogFor(lang);
+  const hero = imgMeta['assets/wumbi_hello.png'];
+  const v = SITE.verification;
+  return [
+    `<title>${esc(L.title)}</title>`,
+    `<meta name="description" content="${esc(L.description)}">`,
+    L.keywords?.length ? `<meta name="keywords" content="${esc(L.keywords.join(', '))}">` : '',
+    `<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">`,
+    `<meta name="theme-color" content="${SITE.themeColor}">`,
+    `<meta name="apple-mobile-web-app-title" content="${SITE.name}">`,
+    `<meta name="format-detection" content="telephone=no">`,
+    v.google ? `<meta name="google-site-verification" content="${esc(v.google)}">` : '',
+    v.bing ? `<meta name="msvalidate.01" content="${esc(v.bing)}">` : '',
+    v.yandex ? `<meta name="yandex-verification" content="${esc(v.yandex)}">` : '',
+    '',
+    `<link rel="canonical" href="${langUrl(lang)}">`,
+    ...LANGS.map((l) => `<link rel="alternate" hreflang="${l}" href="${langUrl(l)}">`),
+    `<link rel="alternate" hreflang="x-default" href="${langUrl(SITE.defaultLang)}">`,
+    '',
+    `<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">`,
+    `<link rel="icon" type="image/png" sizes="192x192" href="/assets/favicon-192.png">`,
+    `<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">`,
+    `<link rel="manifest" href="/site.webmanifest">`,
+    '',
+    `<link rel="preload" as="font" type="font/woff2" href="/vendor/fonts/inter-latin.woff2" crossorigin>`,
+    I18N.meta[lang].dir === 'rtl' ? `<link rel="preload" as="font" type="font/woff2" href="/vendor/fonts/noto-arabic-400.woff2" crossorigin>` : '',
+    lang === 'ru' ? `<link rel="preload" as="font" type="font/woff2" href="/vendor/fonts/inter-cyrillic.woff2" crossorigin>` : '',
+    hero ? `<link rel="preload" as="image" href="${hero.out}" fetchpriority="high">` : '',
+    `<link rel="stylesheet" href="/vendor/fonts.css">`,
+    '',
+    `<meta property="og:type" content="website">`,
+    `<meta property="og:site_name" content="${SITE.name}">`,
+    `<meta property="og:title" content="${esc(L.ogTitle || L.title)}">`,
+    `<meta property="og:description" content="${esc(L.description)}">`,
+    `<meta property="og:url" content="${langUrl(lang)}">`,
+    `<meta property="og:locale" content="${OG_LOCALE[lang]}">`,
+    ...LANGS.filter((l) => l !== lang).map((l) => `<meta property="og:locale:alternate" content="${OG_LOCALE[l]}">`),
+    `<meta property="og:image" content="${SITE.url}${og.url}">`,
+    `<meta property="og:image:width" content="${og.w}">`,
+    `<meta property="og:image:height" content="${og.h}">`,
+    `<meta property="og:image:type" content="${og.type}">`,
+    `<meta property="og:image:alt" content="${esc(L.ogAlt)}">`,
+    '',
+    `<meta name="twitter:card" content="${og.card}">`,
+    SITE.twitter ? `<meta name="twitter:site" content="${SITE.twitter}">` : '',
+    `<meta name="twitter:title" content="${esc(L.ogTitle || L.title)}">`,
+    `<meta name="twitter:description" content="${esc(L.description)}">`,
+    `<meta name="twitter:image" content="${SITE.url}${og.url}">`,
+    `<meta name="twitter:image:alt" content="${esc(L.ogAlt)}">`,
+    '',
+    `<script type="application/ld+json">${jsonLd(lang)}</script>`,
+    '',
+    `<script>window.WUMBI_LANG=${JSON.stringify(lang)};window.WUMBI_LANG_URLS=${JSON.stringify(Object.fromEntries(LANGS.map((l) => [l, langPath(l)])))};window.__resources=${JSON.stringify({
+      [REACT_URL]: '/vendor/react.production.min.js',
+      [REACT_DOM_URL]: '/vendor/react-dom.production.min.js',
+    })};</script>`,
+    `<script src="/i18n.js"></script>`,
+    `<script src="/support.js"></script>`,
+  ].filter((l) => l !== '').join('\n');
+};
+
+// Swap the prerendered snapshot out the instant React puts something in #dc-root.
+// With JS off (or broken) the snapshot simply stays — that is the crawler's copy.
+// Removing the snapshot changes the document height, so every ScrollTrigger position
+// GSAP measured during mount is stale — refresh, or nothing below the fold reveals.
+const SWAP = `<script>(function(){` +
+  `function refresh(){if(window.ScrollTrigger)window.ScrollTrigger.refresh();}` +
+  `function d(){var p=document.getElementById('dc-prerender'),r=document.getElementById('dc-root');` +
+  `if(p&&r&&r.firstChild){p.parentNode.removeChild(p);` +
+  `requestAnimationFrame(refresh);setTimeout(refresh,300);setTimeout(refresh,1200);` +
+  `addEventListener('load',function(){setTimeout(refresh,100)});return true}return false}` +
+  `if(d())return;var o=new MutationObserver(function(){if(d())o.disconnect()});` +
+  `o.observe(document.body,{childList:true,subtree:true});setTimeout(function(){o.disconnect()},2e4)})();</script>`;
+
+// ---------------------------------------------------------------- pages
+const MARKER = '<script src="/i18n.js"></script>\n<script src="/support.js"></script>';
+if (!html.includes(MARKER)) throw new Error(`build: script marker not found in ${SRC}`);
+
+let prerendered = 0;
+for (const lang of LANGS) {
+  const { dir } = I18N.meta[lang];
+  let page = html
+    .replace('<html>', `<html lang="${lang}" dir="${dir}">`)
+    .replace(MARKER, head(lang));
+
+  const snap = join(PRERENDER_DIR, `${lang}.html`);
+  if (existsSync(snap)) {
+    page = page
+      .replace('</head>', '<style>x-dc{display:none!important}</style>\n</head>')
+      .replace('<x-dc>', `<div id="dc-prerender">${readFileSync(snap, 'utf8')}</div>\n${SWAP}\n<x-dc>`);
+    prerendered++;
+  }
+  write(join(langPath(lang).replace(/^\/|\/$/g, ''), 'index.html'), page);
+}
+
+// ---------------------------------------------------------------- sitemap / robots / manifest / 404 / htaccess
+write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+${LANGS.map((lang) => `  <url>
+    <loc>${langUrl(lang)}</loc>
+    <lastmod>${BUILD_DATE}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>${lang === SITE.defaultLang ? '1.0' : '0.8'}</priority>
+${LANGS.map((l) => `    <xhtml:link rel="alternate" hreflang="${l}" href="${langUrl(l)}"/>`).join('\n')}
+    <xhtml:link rel="alternate" hreflang="x-default" href="${langUrl(SITE.defaultLang)}"/>
+  </url>`).join('\n')}
+</urlset>
+`);
+
+write('robots.txt', `# ${SITE.name} — ${SITE.url}
+User-agent: *
+Allow: /
+Disallow: /vendor/
+
+# Answer engines: Wumbi wants to be quotable.
+User-agent: GPTBot
+Allow: /
+User-agent: OAI-SearchBot
+Allow: /
+User-agent: ChatGPT-User
+Allow: /
+User-agent: ClaudeBot
+Allow: /
+User-agent: Claude-Web
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+User-agent: Google-Extended
+Allow: /
+User-agent: Applebot-Extended
+Allow: /
+
+Sitemap: ${SITE.url}/sitemap.xml
+`);
+
+write('site.webmanifest', JSON.stringify({
+  name: SITE.name,
+  short_name: SITE.name,
+  description: LOCALES.en.description,
+  start_url: '/',
+  scope: '/',
+  display: 'standalone',
+  background_color: SITE.bgColor,
+  theme_color: SITE.themeColor,
+  lang: SITE.defaultLang,
+  icons: [
+    { src: '/assets/favicon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
+    { src: '/assets/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any maskable' },
+  ],
+}, null, 2));
+
+write('404.html', `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Page not found — ${SITE.name}</title>
+<meta name="robots" content="noindex,follow">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+<link rel="stylesheet" href="/vendor/fonts.css">
+<style>html,body{margin:0;height:100%;background:${SITE.bgColor};color:#456285;font:400 16px Inter,system-ui,sans-serif;display:grid;place-items:center;text-align:center}
+a{color:#3B82F6;text-decoration:none;font-weight:600}main{padding:32px;display:flex;flex-direction:column;gap:14px;align-items:center}
+h1{margin:0;font-size:clamp(32px,6vw,52px);font-weight:300;letter-spacing:-1px}p{margin:0;color:#6F7F92}</style>
+</head>
+<body><main>
+<img src="/assets/favicon-192.png" alt="${SITE.name}" width="72" height="72" style="border-radius:20px">
+<h1>404</h1>
+<p>That page moved, or never existed.</p>
+<a href="/">← Back to ${SITE.name}</a>
+</main></body>
+</html>
+`);
+
+// Hostinger runs Apache — compression, immutable asset caching and canonical-host redirects.
+write('.htaccess', `# ${SITE.name} — generated by build.mjs, do not edit in place
+Options -Indexes
+DirectoryIndex index.html
+ErrorDocument 404 /404.html
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Canonical host: HTTPS, no www. One redirect, never a chain.
+  RewriteCond %{HTTPS} !=on [OR]
+  RewriteCond %{HTTP_HOST} ^www\\.(.+)$ [NC]
+  RewriteRule ^ https://%1%{REQUEST_URI} [L,R=301,NE]
+
+  # Canonical trailing slash for the locale directories (/ru → /ru/).
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteCond %{REQUEST_URI} !/$
+  RewriteRule ^(.*)$ /$1/ [L,R=301]
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml application/javascript application/json application/manifest+json image/svg+xml
+</IfModule>
+<IfModule mod_brotli.c>
+  AddOutputFilterByType BROTLI_COMPRESS text/html text/css text/plain text/xml application/javascript application/json application/manifest+json image/svg+xml
+</IfModule>
+
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresDefault "access plus 1 month"
+  ExpiresByType text/html "access plus 0 seconds"
+  ExpiresByType application/xml "access plus 1 hour"
+  ExpiresByType text/plain "access plus 1 day"
+</IfModule>
+
+# Fingerprint-free build: HTML always revalidates, static assets are cached hard.
+<FilesMatch "\\.(html|xml|txt|webmanifest)$">
+  Header set Cache-Control "public, max-age=0, must-revalidate"
+</FilesMatch>
+<FilesMatch "\\.(js|css|woff2|png|webp|svg|jpg|jpeg|avif)$">
+  Header set Cache-Control "public, max-age=31536000, immutable"
+</FilesMatch>
+
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), interest-cohort=()"
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+</IfModule>
+
+AddType image/webp .webp
+AddType font/woff2 .woff2
+AddType application/manifest+json .webmanifest
+`);
+
+// ---------------------------------------------------------------- report
 if (!existsSync(join(OUT, 'assets', 'app_logo.png'))) throw new Error('build: assets missing');
+const pages = LANGS.map((l) => langPath(l)).join(' ');
+console.log(`built ${OUT}/  pages: ${pages}`);
+console.log(`  index.html ${kb(join(OUT, 'index.html'))} · support.js ${kb(join(OUT, 'support.js'))} · i18n.js ${kb(join(OUT, 'i18n.js'))}`);
+console.log(`  prerendered ${prerendered}/${LANGS.length} locales${prerendered === 0 ? '  ← run `npm run prerender` (needs Playwright + Chromium)' : ''}`);
+console.log(`  sitemap.xml · robots.txt · site.webmanifest · 404.html · .htaccess`);
