@@ -1,0 +1,8 @@
+# Backstop only — Flutter sources must never be served. See the note in
+# wumbi_landing/.htaccess: rewrite rules only, THE_REQUEST-guarded.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{ENV:REDIRECT_STATUS} ^$
+  RewriteCond %{THE_REQUEST} \s/+wumbi_app/ [NC]
+  RewriteRule ^ - [G,L]
+</IfModule>

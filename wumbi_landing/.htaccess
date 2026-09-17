@@ -1,0 +1,19 @@
+# Backstop only. This directory must never be reachable as a URL; it is here in
+# case the repository is published without the root .htaccess taking effect.
+#
+# Rewrite rules ONLY. Non-rewrite directives (<FilesMatch>, Require, …) merge
+# down into dist/ and would take the live site with them.
+#
+# Every rule is guarded by %{THE_REQUEST}, which internal rewrites do not
+# modify, so nothing here can fire on a request that the root .htaccess has
+# mapped into wumbi_landing/dist/ — no loops, no 410 on the real site.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  RewriteCond %{THE_REQUEST} \s/+wumbi_landing/dist/?([^\s?]*)[\s?] [NC]
+  RewriteRule ^ https://wumbi.app/%1 [L,R=301,NE]
+
+  RewriteCond %{ENV:REDIRECT_STATUS} ^$
+  RewriteCond %{THE_REQUEST} \s/+wumbi_landing/ [NC]
+  RewriteRule ^ - [G,L]
+</IfModule>

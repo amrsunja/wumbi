@@ -1,0 +1,79 @@
+# Wumbi — SOURCE for dist/.htaccess. Copied verbatim into dist/ by build.mjs,
+# which also asserts that the required directives below are still present.
+# Do not edit dist/.htaccess: it is deleted and rewritten on every build.
+#
+# This file must be self-sufficient. mod_rewrite does not inherit a parent
+# .htaccess into a directory that turns RewriteEngine on, so nothing from the
+# repository-root .htaccess applies once Apache is serving out of dist/.
+Options -Indexes
+DirectoryIndex index.html
+ErrorDocument 404 /404.html
+ErrorDocument 410 /404.html
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # --- Self-defence: if this directory is ever reachable as a URL (the repo
+  # being published instead of just dist/), send the crawler to the canonical
+  # path. Guarded by THE_REQUEST, which internal rewrites do not touch, so this
+  # is inert when dist/ is reached through the root .htaccess mapping and
+  # cannot produce a redirect loop.
+  RewriteCond %{THE_REQUEST} \s/+wumbi_landing/dist/?([^\s?]*)[\s?] [NC]
+  RewriteRule ^ https://wumbi.app/%1 [L,R=301,NE]
+
+  # --- Canonical host: https, no www, single hop.
+  # Only fires when this directory IS the document root. When the repo root is
+  # the document root the equivalent rule there runs first (and must, because
+  # %{REQUEST_URI} here is already the internal /wumbi_landing/dist/... path).
+  RewriteCond %{HTTPS} !=on [OR]
+  RewriteCond %{HTTP_HOST} ^www\. [NC]
+  RewriteCond %{REQUEST_URI} !^/wumbi_landing/dist(/|$)
+  RewriteRule ^ https://wumbi.app%{REQUEST_URI} [L,R=301,NE]
+
+  # --- Canonical trailing slash for directories (/ru -> /ru/).
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteCond %{REQUEST_URI} !/$
+  RewriteRule ^(.*)$ /$1/ [L,R=301]
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml application/javascript application/json application/manifest+json image/svg+xml
+</IfModule>
+<IfModule mod_brotli.c>
+  AddOutputFilterByType BROTLI_COMPRESS text/html text/css text/plain text/xml application/javascript application/json application/manifest+json image/svg+xml
+</IfModule>
+
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresDefault "access plus 1 month"
+  ExpiresByType text/html "access plus 0 seconds"
+  ExpiresByType application/xml "access plus 1 hour"
+  ExpiresByType text/plain "access plus 1 day"
+</IfModule>
+
+# Fingerprint-free build: HTML always revalidates, static assets are cached hard.
+<FilesMatch "\.(html|xml|txt|webmanifest)$">
+  Header set Cache-Control "public, max-age=0, must-revalidate"
+</FilesMatch>
+<FilesMatch "\.(js|css|woff2|png|webp|svg|jpg|jpeg|avif)$">
+  Header set Cache-Control "public, max-age=31536000, immutable"
+</FilesMatch>
+
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), interest-cohort=()"
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+</IfModule>
+
+AddType image/webp .webp
+AddType font/woff2 .woff2
+AddType application/manifest+json .webmanifest
+AddType application/vnd.openxmlformats-officedocument.spreadsheetml.sheet .xlsx
+
+# The giveaway spreadsheet: always save it, never render it in a browser tab.
+<FilesMatch "\.xlsx$">
+  Header set Content-Disposition "attachment"
+  Header set Cache-Control "public, max-age=86400"
+</FilesMatch>
