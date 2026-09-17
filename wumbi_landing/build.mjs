@@ -13,6 +13,7 @@
 // Paths in dist are root-absolute (/assets/…) so a page at any depth resolves them.
 import { mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync, existsSync, statSync } from 'node:fs';
 import { join, dirname } from 'node:path';
+import { execSync } from 'node:child_process';
 import { SITE, APP, LOCALES, OG_LOCALE, langPath, langUrl, TEMPLATE_PAGE, LEGAL } from './seo.config.mjs';
 import { templatePage } from './template-page.mjs';
 import { STATIC_PAGES } from './site-pages.mjs';
@@ -500,6 +501,15 @@ for (const needle of [
 }
 write('.htaccess', htaccess);
 
+// Deploy stamp. The only reliable way to answer "is what I built actually live?"
+// — dist/ is gitignored, so a green `git push` proves nothing about the server.
+const stamp = (() => {
+  let sha = 'nogit';
+  try { sha = execSync('git rev-parse --short HEAD', { stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim(); } catch { /* not a checkout */ }
+  return `${new Date().toISOString()} ${sha}\n`;
+})();
+write('build-stamp.txt', stamp);
+
 // ---------------------------------------------------------------- report
 if (!existsSync(join(OUT, 'assets', 'app_logo.png'))) throw new Error('build: assets missing');
 const pages = LANGS.map((l) => langPath(l)).join(' ');
@@ -509,3 +519,4 @@ if (MISSING_LEGAL.length) console.warn(`  !! seo.config.mjs LEGAL is incomplete 
 console.log(`  index.html ${kb(join(OUT, 'index.html'))} · support.js ${kb(join(OUT, 'support.js'))} · i18n.js ${kb(join(OUT, 'i18n.js'))}`);
 console.log(`  prerendered ${prerendered}/${LANGS.length} locales${prerendered === 0 ? '  ← run `npm run prerender` (needs Playwright + Chromium)' : ''}`);
 console.log(`  sitemap.xml · robots.txt · site.webmanifest · 404.html · .htaccess`);
+console.log(`  build-stamp.txt ${stamp.trim()}`);
