@@ -42,7 +42,6 @@ class SettingsNotifier extends Notifier<SettingsState> {
   /// Startup sequence (spec 6.5). Called from Splash.
   Future<void> startUp() async {
     state = state.copyWith(isLoading: true, initFailed: false);
-        await Future<void>.delayed(const Duration(milliseconds: 1400));
 
     // 1. Database — up to 3 automatic retries before surfacing the alert.
     var opened = false;
@@ -76,6 +75,7 @@ class SettingsNotifier extends Notifier<SettingsState> {
 
     // 5. Route.
     state = state.copyWith(isLoading: false);
+    await Future<void>.delayed(const Duration(milliseconds: 1400));
     _events.send(ReplaceAllRoutesEvent([
       if (data!.showOnboarding) const OnboardingRoute() else const DashboardRoute(),
     ]));
