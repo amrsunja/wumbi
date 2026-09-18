@@ -5,6 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../core/design_system/app_ui.dart';
 import '../../../core/money/money.dart';
+import '../../../core/routing/app_router.dart';
 import '../../../core/utils/constants/constants.dart';
 import '../../../core/utils/enums/transaction_type.dart';
 import '../../../core/utils/extensions/build_context_extensions.dart';
@@ -15,10 +16,10 @@ import '../../transaction/ui/widgets/repeat_labels.dart';
 import '../../wallet/data/models/wallet_model.dart';
 import '../../wallet/ui/wallets_provider.dart';
 import 'subscriptions_provider.dart';
-import 'widgets/subscription_edit_sheet.dart';
 
 /// Every recurring rule, scoped to one wallet or all of them. Active rules
-/// first, paused below; tap a row to edit, switch to pause, trash to stop.
+/// first, paused below; tap a row to open it on the Transaction page
+/// ("Edit subscription"), switch to pause, trash to stop.
 @RoutePage()
 class SubscriptionsPage extends HookConsumerWidget {
   const SubscriptionsPage({super.key, this.walletId});
@@ -71,7 +72,7 @@ class SubscriptionsPage extends HookConsumerWidget {
     Widget row(RecurringRuleModel r) => _SubscriptionRow(
           rule: r,
           walletsById: walletsById,
-          onTap: () => SubscriptionEditSheet.show(context, ruleId: r.id),
+          onTap: () => context.router.push(TransactionRoute(ruleId: r.id)),
           onToggle: (v) => ref.read(subscriptionsProvider.notifier).setActive(r.id, v),
           onDelete: () => onDelete(r),
         );

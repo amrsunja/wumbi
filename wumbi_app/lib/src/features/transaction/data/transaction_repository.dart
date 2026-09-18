@@ -255,10 +255,11 @@ class TransactionRepository {
         onWrite();
       });
 
-  /// Subscriptions page: edit a rule in place. Amount / description /
-  /// frequency / wallet / tags change; the type is fixed. `next_occurrence`
-  /// is re-derived from `start_date` when the frequency changes. Existing
-  /// occurrences are untouched.
+  /// Edit a rule in place (Transaction page, subscription mode). Amount /
+  /// description / frequency / date / wallet / tags change; type and currency
+  /// are fixed. A `nextOccurrence` in the draft re-anchors the series on that
+  /// day; otherwise `next_occurrence` is re-derived from `start_date` when the
+  /// frequency changes. Existing occurrences are untouched.
   Future<SuccessOrError<RecurringRuleModel>> updateRule(String ruleId, RecurringRuleDraft draft) =>
       Failure.exceptionsCatcher(() async {
         if (draft.description.length > kMaxDescriptionLength) {
@@ -293,7 +294,13 @@ class TransactionRepository {
             if (amount <= 0) throw const ValidationException('amount', 'Enter an amount');
             next = next.copyWith(walletId: draft.walletId ?? existing.walletId, amountMinor: amount);
           }
-          if (draft.frequency != null && draft.frequency != existing.frequency) {
+          if (draft.frequency != null) next = next.copyWith(frequency: draft.frequency!);
+          final when = draft.nextOccurrence;
+          if (when != null) {
+            // The date the user sees is the next due date: re-anchor the
+            // series on it so `advance(startDate, f, count)` keeps holding.
+            next = next.copyWith(startDate: when, nextOccurrence: when, occurrenceCount: 0);
+          } else if (draft.frequency != null && draft.frequency != existing.frequency) {
             // Keep the anchor day, re-derive the next due date after today.
             final f = draft.frequency!;
             var count = 1;
@@ -301,7 +308,7 @@ class TransactionRepository {
             while (!candidate.isAfter(now) && count < 5000) {
               candidate = advance(existing.startDate, f, ++count);
             }
-            next = next.copyWith(frequency: f, occurrenceCount: count, nextOccurrence: candidate);
+            next = next.copyWith(occurrenceCount: count, nextOccurrence: candidate);
           }
           await rules.update(txn, next);
           if (draft.tags != null) {

@@ -10,29 +10,37 @@ import '../../../core/utils/enums/transaction_status.dart';
 import '../../../core/utils/enums/transaction_type.dart';
 import '../../../core/utils/extensions/date_time_extensions.dart';
 import '../../wallet/data/models/wallet_model.dart';
+import '../data/models/recurring_rule_model.dart';
 import '../data/models/transaction_model.dart';
 
 part 'transaction_state.freezed.dart';
 
-enum TransactionMode { create, edit }
+enum TransactionMode { create, edit, editRule }
 
 enum RateStatus { none, loading, ok, stale, error }
 
-/// Route arguments: `walletId` (preselect) and/or `transactionId` (edit mode).
+/// Route arguments: `walletId` (preselect), `transactionId` (edit mode) or
+/// `ruleId` (subscription edit mode — the recurring rule itself).
 class TransactionArgs {
-  const TransactionArgs({this.walletId, this.transactionId});
+  const TransactionArgs({this.walletId, this.transactionId, this.ruleId});
 
   final String? walletId;
   final String? transactionId;
+  final String? ruleId;
 
   bool get isEdit => transactionId != null;
 
-  @override
-  bool operator ==(Object other) =>
-      other is TransactionArgs && other.walletId == walletId && other.transactionId == transactionId;
+  bool get isRuleEdit => ruleId != null;
 
   @override
-  int get hashCode => Object.hash(walletId, transactionId);
+  bool operator ==(Object other) =>
+      other is TransactionArgs &&
+      other.walletId == walletId &&
+      other.transactionId == transactionId &&
+      other.ruleId == ruleId;
+
+  @override
+  int get hashCode => Object.hash(walletId, transactionId, ruleId);
 }
 
 /// Read-only counterpart line in transfer edit mode ("→ Checking +$50.00").
@@ -40,6 +48,7 @@ class TransactionArgs {
 abstract class TransferCounterpart with _$TransferCounterpart {
   const factory TransferCounterpart({
     required String walletName,
+    required String walletId,
     required Money amount,
 
     /// True when the viewed wallet is the source (money goes *to* the counterpart).
@@ -58,6 +67,9 @@ abstract class TransactionState with _$TransactionState {
     /// Type shown in edit mode. Income ↔ expense can be switched; transfer is fixed.
     TransactionType? editingType,
     TransactionModel? existing,
+
+    /// Subscription edit mode: the recurring rule being edited.
+    RecurringRuleModel? rule,
     TransferCounterpart? counterpart,
 
     /// Target wallet (D3). Null only when there are no wallets at all.
@@ -88,14 +100,21 @@ abstract class TransactionState with _$TransactionState {
     @Default([]) List<String> initialTags,
   }) = _TransactionState;
 
-  bool get isEdit => mode == TransactionMode.edit;
+  /// Both edit flavours (a stored transaction, or a recurring rule).
+  bool get isEdit => mode != TransactionMode.create;
+
+  /// Editing the subscription (rule) itself, not one of its occurrences.
+  bool get isRuleEdit => mode == TransactionMode.editRule;
   bool get isTransferEdit => isEdit && editingType == TransactionType.transfer;
+
+  /// Transfer subscription: the destination wallet can be re-picked.
+  bool get isTransferRuleEdit => isRuleEdit && editingType == TransactionType.transfer;
   bool get sameCurrency => wallet != null && entryCurrency == wallet!.currency;
 
   /// The chosen day is after today → saving stores the row as *upcoming*
   /// (not counted until `UpcomingPoster` promotes it). Mirrors the rule the
   /// repository applies on `create` / `update`.
-  bool get willBeUpcoming => TransactionStatus.forDate(date).isUpcoming;
+  bool get willBeUpcoming => !isRuleEdit && TransactionStatus.forDate(date).isUpcoming;
 
   /// Edit mode: the loaded transaction is still upcoming (not counted yet).
   bool get isExistingUpcoming => existing?.isUpcoming ?? false;
@@ -114,8 +133,19 @@ abstract class TransactionState with _$TransactionState {
     return convertMoney(entry, w.currency, r.rate);
   }
 
-  /// Edit mode: anything differs from the loaded transaction.
+  /// Edit mode: anything differs from the loaded transaction / rule.
   bool get isDirty {
+    if (isRuleEdit) {
+      final r = rule;
+      if (r == null) return false;
+      return amountInput != initialAmountInput ||
+          description.trim() != r.description ||
+          !const ListEquality<String>().equals(tags, initialTags) ||
+          date != r.nextOccurrence.onlyDate() ||
+          repeat != r.frequency ||
+          wallet?.id != (r.isTransfer ? r.fromWalletId : r.walletId) ||
+          (r.isTransfer && counterpart?.walletId != r.toWalletId);
+    }
     final e = existing;
     if (!isEdit || e == null) return false;
     return amountInput != initialAmountInput ||

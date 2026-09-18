@@ -115,10 +115,10 @@ abstract class RecurringRuleWithTags with _$RecurringRuleWithTags {
   }) = _RecurringRuleWithTags;
 }
 
-/// Partial edit of a rule from the Subscriptions page: every field is
-/// optional — null keeps the stored value. `amountMinor` is the sent amount
-/// for transfers; `receivedAmountMinor` / `exchangeRate` only apply to
-/// cross-currency transfers.
+/// Partial edit of a rule: every field is optional — null keeps the stored
+/// value. `amountMinor` is the sent amount for transfers;
+/// `receivedAmountMinor` / `exchangeRate` only apply to cross-currency
+/// transfers. `nextOccurrence` re-anchors the whole series on that day.
 class RecurringRuleDraft {
   const RecurringRuleDraft({
     this.amountMinor,
@@ -126,6 +126,7 @@ class RecurringRuleDraft {
     this.exchangeRate,
     this.description = '',
     this.frequency,
+    this.nextOccurrence,
     this.walletId,
     this.fromWalletId,
     this.toWalletId,
@@ -137,6 +138,10 @@ class RecurringRuleDraft {
   final double? exchangeRate;
   final String description;
   final RepeatFrequency? frequency;
+
+  /// New due date. The rule is re-anchored on it (`startDate` = this day,
+  /// `occurrenceCount` = 0), so the schedule reads exactly as shown.
+  final DateTime? nextOccurrence;
   final String? walletId;
   final String? fromWalletId;
   final String? toWalletId;

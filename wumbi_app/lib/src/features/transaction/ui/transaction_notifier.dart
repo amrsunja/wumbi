@@ -21,6 +21,7 @@ import '../../tag/data/tag_repository.dart';
 import '../../wallet/data/models/wallet_model.dart';
 import '../../wallet/data/wallet_repository.dart';
 import '../../wallet/ui/wallets_provider.dart';
+import '../data/models/recurring_rule_model.dart';
 import '../data/models/transaction_model.dart';
 import '../data/transaction_repository.dart';
 import 'transaction_state.dart';
@@ -66,6 +67,17 @@ class TransactionNotifier extends Notifier<TransactionState> {
     wallet ??= ref.read(primaryWalletProvider);
 
     final today = DateTime.now().onlyDate();
+    if (args.isRuleEdit) {
+      Future.microtask(_loadRule);
+      return TransactionState(
+        mode: TransactionMode.editRule,
+        isLoading: true,
+        wallet: wallet,
+        wallets: wallets,
+        entryCurrency: wallet?.currency ?? CurrencyType.usd,
+        date: today,
+      );
+    }
     if (args.isEdit) {
       Future.microtask(_loadExisting);
       return TransactionState(
@@ -114,6 +126,7 @@ class TransactionNotifier extends Notifier<TransactionState> {
               : Money(t.toAmountMinor ?? 0, wallet?.currency ?? t.currency);
           counterpart = TransferCounterpart(
             walletName: otherName,
+            walletId: otherId,
             amount: viewedIsSource
                 ? Money(t.toAmountMinor ?? 0, other?.currency ?? otherCurrency)
                 : Money(t.fromAmountMinor ?? 0, t.currency),
@@ -163,6 +176,93 @@ class TransactionNotifier extends Notifier<TransactionState> {
     );
   }
 
+  // -------------------------------------------------- subscription (rule)
+
+  /// Subscription edit: load the rule itself. The viewed wallet is the target
+  /// (transfer: the source); the destination is the counterpart line.
+  Future<void> _loadRule() async {
+    final result = await _repo.ruleById(args.ruleId!);
+    if (!ref.mounted) return;
+    await result.when(
+      (data) async {
+        final r = data.rule;
+        final wallets = state.wallets;
+        WalletSummary? wallet;
+        TransferCounterpart? counterpart;
+        Money shown;
+
+        if (r.isTransfer) {
+          final fromId = r.fromWalletId!;
+          final toId = r.toWalletId!;
+          wallet = _find(wallets, fromId) ?? await _fetchWallet(fromId);
+          final other = _find(wallets, toId);
+          final otherName = other?.name ?? await _walletName(toId);
+          counterpart = TransferCounterpart(
+            walletName: otherName,
+            walletId: toId,
+            amount: Money(r.toAmountMinor ?? 0, other?.currency ?? r.currency),
+            outgoing: true,
+          );
+          shown = Money(r.fromAmountMinor ?? 0, r.currency);
+        } else {
+          wallet = _find(wallets, r.walletId!) ?? await _fetchWallet(r.walletId!);
+          shown = Money(r.amountMinor ?? 0, r.currency);
+        }
+        if (!ref.mounted) return;
+
+        final text = shown.toPlainString();
+        state = state.copyWith(
+          isLoading: false,
+          editingType: r.type,
+          rule: r,
+          counterpart: counterpart,
+          wallet: wallet ?? state.wallet,
+          // A subscription's currency is fixed: it is always the rule's.
+          entryCurrency: r.currency,
+          amountInput: text,
+          description: r.description,
+          tags: data.tags,
+          date: r.nextOccurrence.onlyDate(),
+          repeat: r.frequency.isNever ? RepeatFrequency.monthly : r.frequency,
+          repeatLocked: false,
+          amountPristine: true,
+          initialAmountInput: text,
+          initialTags: data.tags,
+          rate: null,
+          rateStatus: RateStatus.none,
+        );
+      },
+      (error) {
+        state = state.copyWith(isLoading: false);
+        _events.send(ShowErrorEvent(error));
+      },
+    );
+  }
+
+  /// Transfer subscription: keep the counterpart line in step with the typed
+  /// amount (the stored rate is kept, so the received side follows it).
+  void _syncRuleCounterpart() {
+    final r = state.rule;
+    final c = state.counterpart;
+    if (r == null || c == null || !r.isTransfer) return;
+    final sent = state.entryMoney;
+    if (sent == null) return;
+    final rate = r.exchangeRate;
+    final received =
+        rate == null ? Money(sent.minor, c.amount.currency) : convertMoney(sent, c.amount.currency, rate);
+    if (received.minor != c.amount.minor) {
+      state = state.copyWith(counterpart: c.copyWith(amount: received));
+    }
+  }
+
+  /// Transfer subscription: re-point the destination wallet (same currency).
+  void setRuleToWallet(WalletSummary w) {
+    final c = state.counterpart;
+    if (!state.isRuleEdit || c == null) return;
+    if (w.id == state.wallet?.id || w.currency != c.amount.currency) return;
+    state = state.copyWith(counterpart: c.copyWith(walletName: w.name, walletId: w.id));
+  }
+
   /// Re-point [state.wallet] at the fresh summary (same id); if it vanished,
   /// fall back to the primary in create mode, keep the stale one in edit mode.
   void _syncWallets(List<WalletSummary> wallets) {
@@ -210,6 +310,7 @@ class TransactionNotifier extends Notifier<TransactionState> {
       return;
     }
     state = state.copyWith(amountInput: r.value, validationError: null, amountPristine: false);
+    _syncRuleCounterpart();
     // Edit mode: re-entering a foreign-currency amount fetches a fresh rate
     // (the stored one is only reused while the amount is untouched).
     final w = state.wallet;
@@ -226,15 +327,19 @@ class TransactionNotifier extends Notifier<TransactionState> {
   void onBackspace() {
     if (state.amountInput.isEmpty) return;
     state = state.copyWith(amountInput: AmountInput.backspace(state.amountInput), amountPristine: false);
+    _syncRuleCounterpart();
   }
 
   void onClear() {
     if (state.amountInput.isEmpty) return;
     state = state.copyWith(amountInput: AmountInput.clear(), amountPristine: false);
+    _syncRuleCounterpart();
   }
 
   /// Edit mode: switch income ↔ expense (transfer cannot change).
   void setEditingType(TransactionType type) {
+    // A subscription's type never changes.
+    if (state.isRuleEdit) return;
     if (!state.isEdit || state.isTransferEdit || type == TransactionType.transfer) return;
     if (type == state.editingType) return;
     AppVibrations.selection();
@@ -244,7 +349,8 @@ class TransactionNotifier extends Notifier<TransactionState> {
   // ------------------------------------------------------------- selectors
 
   Future<void> setEntryCurrency(CurrencyType c) async {
-    if (c == state.entryCurrency) return;
+    // A subscription's currency is fixed.
+    if (state.isRuleEdit || c == state.entryCurrency) return;
     state = state.copyWith(
       entryCurrency: c,
       amountInput: AmountInput.reScale(state.amountInput, c),
@@ -257,8 +363,11 @@ class TransactionNotifier extends Notifier<TransactionState> {
   /// D3 — change the target wallet in place.
   Future<void> setWallet(WalletSummary w) async {
     if (w.id == state.wallet?.id) return;
-    if (state.isTransferEdit) return;
+    // Transfer *occurrences* are locked to their wallets; a transfer
+    // subscription may re-point its source (same currency, not the target).
+    if (state.isTransferEdit && !state.isRuleEdit) return;
     if (state.isEdit && w.currency != state.wallet?.currency) return;
+    if (state.isRuleEdit && w.id == state.counterpart?.walletId) return;
     state = state.copyWith(wallet: w, rate: null, rateStatus: RateStatus.none);
     await _ensureRate();
   }
@@ -282,6 +391,8 @@ class TransactionNotifier extends Notifier<TransactionState> {
 
   void setRepeat(RepeatFrequency f) {
     if (state.repeatLocked) return;
+    // A subscription always repeats.
+    if (state.isRuleEdit && f.isNever) return;
     state = state.copyWith(repeat: f);
   }
 
@@ -530,6 +641,7 @@ class TransactionNotifier extends Notifier<TransactionState> {
 
   /// D8 — Save in edit mode. Returns true when the screen should pop.
   Future<bool> saveEdit() async {
+    if (state.isRuleEdit) return saveRule();
     if (!state.isEdit || !_guardCommit()) return false;
     final existing = state.existing!;
     final wallet = state.wallet!;
@@ -603,6 +715,81 @@ class TransactionNotifier extends Notifier<TransactionState> {
         AppVibrations.medium();
       },
       (error) => _onSaveError(error),
+    );
+    state = state.copyWith(isSaving: false);
+    return ok;
+  }
+
+  // ------------------------------------------------- subscription: save
+
+  /// Subscription edit save. The date shown is the next due date, so the rule
+  /// is re-anchored on it. Existing occurrences are never touched.
+  Future<bool> saveRule() async {
+    final r = state.rule;
+    if (r == null || !state.isRuleEdit || !_guardCommit()) return false;
+    final sent = state.entryMoney!;
+
+    int? received;
+    if (r.isTransfer) {
+      final c = state.counterpart!;
+      received = r.exchangeRate == null
+          ? sent.minor
+          : convertMinor(sent.minor, sent.currency, c.amount.currency, r.exchangeRate!);
+    }
+
+    state = state.copyWith(isSaving: true);
+    final result = await _repo.updateRule(
+      r.id,
+      RecurringRuleDraft(
+        amountMinor: sent.minor,
+        receivedAmountMinor: received,
+        exchangeRate: r.exchangeRate,
+        description: state.description.trim(),
+        frequency: state.repeat,
+        nextOccurrence: _resolvedRuleDate(r),
+        walletId: r.isTransfer ? null : state.wallet?.id,
+        fromWalletId: r.isTransfer ? state.wallet?.id : null,
+        toWalletId: r.isTransfer ? state.counterpart?.walletId : null,
+        tags: state.tags,
+      ),
+    );
+    if (!ref.mounted) return false;
+    var ok = false;
+    result.when(
+      (_) {
+        ok = true;
+        AppVibrations.medium();
+        _events.send(ShowInfoMessageEvent(_l10n.subscriptions_saved));
+      },
+      (error) => _onSaveError(error),
+    );
+    state = state.copyWith(isSaving: false);
+    return ok;
+  }
+
+  /// Keep the rule's time of day; only the calendar day is user-editable.
+  DateTime _resolvedRuleDate(RecurringRuleModel r) {
+    final day = state.date;
+    final at = r.nextOccurrence;
+    if (at.onlyDate() == day) return at;
+    return DateTime(day.year, day.month, day.day, at.hour, at.minute, at.second);
+  }
+
+  /// Stop the subscription (soft delete). Existing occurrences stay.
+  Future<bool> stopSubscription() async {
+    final r = state.rule;
+    if (r == null || state.isSaving) return false;
+    state = state.copyWith(isSaving: true);
+    final result = await _repo.deleteRule(r.id);
+    if (!ref.mounted) return false;
+    var ok = false;
+    result.when(
+      (_) {
+        ok = true;
+        AppVibrations.heavy();
+        _events.send(ShowInfoMessageEvent(_l10n.subscriptions_stopped));
+      },
+      (error) => _events.send(ShowErrorEvent(error)),
     );
     state = state.copyWith(isSaving: false);
     return ok;

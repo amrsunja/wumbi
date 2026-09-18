@@ -23,24 +23,30 @@ import 'widgets/repeat_labels.dart';
 import 'widgets/repeat_picker_sheet.dart';
 import 'widgets/transfer_sheet.dart';
 
-/// The most important screen: create (one-tap commit, stays open) / edit.
+/// The most important screen: create (one-tap commit, stays open), edit a
+/// stored transaction, or edit a subscription (`ruleId` — the recurring rule
+/// itself, reached from the Subscriptions page).
 @RoutePage()
 class TransactionPage extends HookConsumerWidget {
   const TransactionPage({
     super.key,
     @QueryParam('walletId') this.walletId,
     @QueryParam('transactionId') this.transactionId,
+    @QueryParam('ruleId') this.ruleId,
   });
 
   final String? walletId;
   final String? transactionId;
+
+  /// Subscription edit mode.
+  final String? ruleId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
     final colors = context.colors;
     final typo = context.typo;
-    final args = TransactionArgs(walletId: walletId, transactionId: transactionId);
+    final args = TransactionArgs(walletId: walletId, transactionId: transactionId, ruleId: ruleId);
     final state = ref.watch(transactionNotifierProvider(args));
     final notifier = ref.read(transactionNotifierProvider(args).notifier);
     final base = ref.watch(baseCurrencyProvider);
@@ -129,11 +135,27 @@ class TransactionPage extends HookConsumerWidget {
       final picked = await WalletPickerSheet.show(
         context,
         wallets: state.wallets,
-        title: l10n.wallet_switch_title,
+        title: state.isTransferRuleEdit ? l10n.subscriptions_from_wallet : l10n.wallet_switch_title,
         selectedId: state.wallet?.id,
+        excludeId: state.isTransferRuleEdit ? state.counterpart?.walletId : null,
         requireCurrency: state.isEdit ? state.wallet?.currency : null,
       );
       if (picked != null) notifier.setWallet(picked);
+    }
+
+    // Transfer subscription only: the destination side of the rule.
+    Future<void> pickToWallet() async {
+      final counterpart = state.counterpart;
+      if (counterpart == null) return;
+      final picked = await WalletPickerSheet.show(
+        context,
+        wallets: state.wallets,
+        title: l10n.subscriptions_to_wallet,
+        selectedId: counterpart.walletId,
+        excludeId: state.wallet?.id,
+        requireCurrency: counterpart.amount.currency,
+      );
+      if (picked != null) notifier.setRuleToWallet(picked);
     }
 
     Future<void> pickDate() async {
@@ -142,11 +164,31 @@ class TransactionPage extends HookConsumerWidget {
     }
 
     Future<void> pickRepeat() async {
-      final picked = await RepeatPickerSheet.show(context, selected: state.repeat);
+      final picked = await RepeatPickerSheet.show(
+        context,
+        selected: state.repeat,
+        // A subscription always repeats: "Never" is not an option.
+        excludeNever: state.isRuleEdit,
+        title: state.isRuleEdit ? l10n.subscriptions_frequency : null,
+      );
       if (picked != null) notifier.setRepeat(picked);
     }
 
     Future<void> onDelete() async {
+      if (state.isRuleEdit) {
+        final stop = await UIAlertDialog.confirm(
+          context,
+          title: l10n.repeat_delete_title,
+          message: l10n.repeat_delete_message,
+          confirmLabel: l10n.subscriptions_stop,
+          cancelLabel: l10n.common_cancel,
+          destructive: true,
+        );
+        if (!stop) return;
+        final stopped = await notifier.stopSubscription();
+        if (stopped && context.mounted) context.router.maybePop();
+        return;
+      }
       final generated = state.existing?.recurringRuleId != null;
       if (generated) {
         final choice = await UIAlertDialog.choose(
@@ -197,7 +239,11 @@ class TransactionPage extends HookConsumerWidget {
       resizeToAvoidBottomInset: false,
       backgroundColor: colors.isDark ? colors.bgColor : UIColorToken.cararra,
       appBar: UIAppbar(
-        title: state.isEdit ? l10n.transaction_edit_title : '',
+        title: state.isRuleEdit
+            ? l10n.subscriptions_edit_title
+            : state.isEdit
+                ? l10n.transaction_edit_title
+                : '',
         backTap: () => context.router.maybePop(),
       ),
       // Tap anywhere outside the text fields → drop the keyboard.
@@ -215,8 +261,12 @@ class TransactionPage extends HookConsumerWidget {
                 name: wallet?.name ?? '—',
                 color: walletColor,
                 currencyType: state.entryCurrency,
-                onSelectCurrency: state.isTransferEdit ? null : pickCurrency,
-                onSelectWallet: state.isTransferEdit || state.wallets.length < 2 ? null : pickWallet,
+                // A subscription keeps its currency; a transfer subscription
+                // may still re-point its source wallet.
+                onSelectCurrency: state.isTransferEdit || state.isRuleEdit ? null : pickCurrency,
+                onSelectWallet: (state.isTransferEdit && !state.isRuleEdit) || state.wallets.length < 2
+                    ? null
+                    : pickWallet,
               ),
               const UISpace.vert(12),
 
@@ -254,7 +304,7 @@ class TransactionPage extends HookConsumerWidget {
 
               // Tags.
               UiTagInput(
-                key: ValueKey('tags-${state.existing?.id ?? 'new'}'),
+                key: ValueKey('tags-${state.existing?.id ?? state.rule?.id ?? 'new'}'),
                 tags: state.tags,
                 focusNode: tagsFocus,
                 hintText: l10n.transaction_tags_placeholder,
@@ -299,7 +349,8 @@ class TransactionPage extends HookConsumerWidget {
                         if (state.isEdit && state.isExistingUpcoming)
                           UiTypePill(label: l10n.transaction_upcoming_badge, color: colors.secondContentColor),
                         if (state.isEdit && state.editingType != null)
-                          if (state.isTransferEdit)
+                          // The type of a subscription never changes.
+                          if (state.isTransferEdit || state.isRuleEdit)
                             UiTypePill(label: _typeLabel(context, state.editingType!), color: typeColor)
                           else ...[
                             UiTypePill(
@@ -315,8 +366,20 @@ class TransactionPage extends HookConsumerWidget {
                               onTap: () => notifier.setEditingType(TransactionType.expense),
                             ),
                           ],
+                        if (state.isTransferRuleEdit && state.counterpart != null)
+                          UiChip(
+                            label: '\u2192 ${state.counterpart!.walletName}',
+                            icon: UIIconToken.icons.financeEcommerce.wallet02,
+                            onTap: pickToWallet,
+                          ),
                         UiChip(
-                          label: state.date.formatChipDate(today: l10n.common_today, yesterday: l10n.common_yesterday),
+                          // A subscription's date is its *next* due date.
+                          label: state.isRuleEdit
+                              ? l10n.repeat_next(
+                                  state.date.formatChipDate(today: l10n.common_today, yesterday: l10n.common_yesterday),
+                                )
+                              : state.date
+                                  .formatChipDate(today: l10n.common_today, yesterday: l10n.common_yesterday),
                           onTap: pickDate,
                         ),
                         if (state.repeatLocked)
@@ -325,7 +388,7 @@ class TransactionPage extends HookConsumerWidget {
                             readOnly: true,
                             highlighted: true,
                           )
-                        else if (!state.isEdit)
+                        else if (!state.isEdit || state.isRuleEdit)
                           UiChip(
                             label: repeatShortLabel(l10n, state.repeat),
                             highlighted: !state.repeat.isNever,
