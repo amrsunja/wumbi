@@ -39,6 +39,9 @@ class ProgressLinesChart extends StatelessWidget {
     // tallest of the two sets the ceiling (15 % headroom).
     final peak = math.max(stats.peakMinor / unit, 1.0);
     final maxY = peak * 1.15;
+    // Grid + axis share one rounded step, so the rules land on figures worth
+    // printing (200 / 400 / 600) instead of thirds of an arbitrary ceiling.
+    final step = _niceStep(maxY / 3);
 
     LineChartBarData line(Color color, int Function(ProgressPeriod) value) =>
         LineChartBarData(
@@ -75,11 +78,11 @@ class ProgressLinesChart extends StatelessWidget {
           minY: 0,
           maxY: maxY,
           borderData: FlBorderData(show: false),
-          // Three dashed rules instead of a filled area: with two lines any
-          // wash under them would muddy where they cross.
+          // Dashed rules instead of a filled area: with two lines any wash
+          // under them would muddy where they cross. Same step as the axis.
           gridData: FlGridData(
             drawVerticalLine: false,
-            horizontalInterval: maxY / 3,
+            horizontalInterval: step,
             getDrawingHorizontalLine: (_) => FlLine(
               color: colors.dividerColor,
               strokeWidth: 1,
@@ -87,7 +90,30 @@ class ProgressLinesChart extends StatelessWidget {
             ),
           ),
           titlesData: FlTitlesData(
-            leftTitles: const AxisTitles(),
+            // Amount scale on the left, on the same rules the grid draws, so a
+            // label never floats between lines.
+            leftTitles: AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: true,
+                reservedSize: 44,
+                interval: step,
+                getTitlesWidget: (value, meta) {
+                  // The zero rule sits on the bottom axis — labelling it just
+                  // adds noise next to the period names.
+                  if (value <= 0 || value > maxY) {
+                    return const SizedBox.shrink();
+                  }
+                  return SideTitleWidget(
+                    meta: meta,
+                    space: 6,
+                    child: Text(
+                      _axisLabel(value),
+                      style: typo.caption.copyWith(color: colors.secondContentColor),
+                    ),
+                  );
+                },
+              ),
+            ),
             rightTitles: const AxisTitles(),
             topTitles: const AxisTitles(),
             bottomTitles: AxisTitles(
@@ -158,6 +184,33 @@ class ProgressLinesChart extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  /// `$1.2k` / `$600` — compact so four labels fit a 44 px gutter. The exact
+  /// figures live in the tooltip and the KPI tiles; the axis only has to give
+  /// the lines a scale.
+  String _axisLabel(double value) {
+    final symbol = stats.currency.formatSymbol;
+    final abs = value.abs();
+    if (abs >= 1000000) return '$symbol${_short(abs / 1000000)}M';
+    if (abs >= 1000) return '$symbol${_short(abs / 1000)}k';
+    return '$symbol${_short(abs)}';
+  }
+
+  /// Rounds a raw interval up to the next 1 / 2 / 2.5 / 5 × 10^n.
+  static double _niceStep(double raw) {
+    if (raw <= 0 || !raw.isFinite) return 1;
+    final magnitude = math.pow(10, (math.log(raw) / math.ln10).floor()).toDouble();
+    for (final m in const [1.0, 2.0, 2.5, 5.0]) {
+      if (raw <= m * magnitude) return m * magnitude;
+    }
+    return 10 * magnitude;
+  }
+
+  /// One decimal under 100, none above; a trailing `.0` is dropped.
+  String _short(double v) {
+    final s = v >= 100 ? v.toStringAsFixed(0) : v.toStringAsFixed(1);
+    return s.endsWith('.0') ? s.substring(0, s.length - 2) : s;
   }
 
   /// `Income   $600.00` — the period itself is already named by the axis
