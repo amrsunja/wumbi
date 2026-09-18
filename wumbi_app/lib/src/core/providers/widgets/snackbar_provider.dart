@@ -60,11 +60,32 @@ class SnackbarProvider {
     }
   }
 
-  void showSuccess(String message, {Duration duration = const Duration(milliseconds: 1500)}) =>
-      _show(UiToast(message: message, kind: UiToastKind.success), duration);
+  /// A toast carrying an action stays up long enough to be hit: 4 s instead
+  /// of the 1.5 s a read-only confirmation gets. Tapping it always closes the
+  /// toast first, so the action's own toast is the one left on screen.
+  void _showWith(UiToastKind kind, String message, String? actionLabel, VoidCallback? onAction, Duration? duration) {
+    final hasAction = actionLabel != null && onAction != null;
+    _show(
+      UiToast(
+        message: message,
+        kind: kind,
+        actionLabel: hasAction ? actionLabel : null,
+        onAction: hasAction
+            ? () {
+                hide();
+                onAction();
+              }
+            : null,
+      ),
+      duration ?? (hasAction ? const Duration(seconds: 4) : const Duration(milliseconds: 1500)),
+    );
+  }
 
-  void showInfo(String message, {Duration duration = const Duration(milliseconds: 1500)}) =>
-      _show(UiToast(message: message, kind: UiToastKind.info), duration);
+  void showSuccess(String message, {String? actionLabel, VoidCallback? onAction, Duration? duration}) =>
+      _showWith(UiToastKind.success, message, actionLabel, onAction, duration);
+
+  void showInfo(String message, {String? actionLabel, VoidCallback? onAction, Duration? duration}) =>
+      _showWith(UiToastKind.info, message, actionLabel, onAction, duration);
 
   void showError(String message, {Duration duration = const Duration(milliseconds: 2500)}) =>
       _show(UiToast(message: message, kind: UiToastKind.error), duration);
@@ -75,18 +96,6 @@ class SnackbarProvider {
     required String actionLabel,
     required VoidCallback onUndo,
     Duration duration = const Duration(seconds: 4),
-  }) {
-    _show(
-      UiToast(
-        message: message,
-        kind: UiToastKind.info,
-        actionLabel: actionLabel,
-        onAction: () {
-          hide();
-          onUndo();
-        },
-      ),
-      duration,
-    );
-  }
+  }) =>
+      _showWith(UiToastKind.info, message, actionLabel, onUndo, duration);
 }

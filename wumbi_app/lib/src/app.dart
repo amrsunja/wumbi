@@ -77,9 +77,9 @@ class _AppState extends ConsumerState<App> with WidgetsBindingObserver {
       case ShowErrorEvent():
         snackbar.showError(event.message(ref.read(l10nProvider)));
       case ShowSuccessMessageEvent():
-        snackbar.showSuccess(event.message);
+        snackbar.showSuccess(event.message, actionLabel: event.actionLabel, onAction: event.onAction);
       case ShowInfoMessageEvent():
-        snackbar.showInfo(event.message);
+        snackbar.showInfo(event.message, actionLabel: event.actionLabel, onAction: event.onAction);
       case ShowUndoEvent():
         snackbar.showUndo(event.message, actionLabel: event.actionLabel, onUndo: event.onUndo);
       case NavigateRouteEvent():

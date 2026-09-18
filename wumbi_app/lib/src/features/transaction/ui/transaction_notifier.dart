@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../core/errors/failures/failures.dart';
@@ -398,11 +399,20 @@ class TransactionNotifier extends Notifier<TransactionState> {
         ok = true;
         AppVibrations.medium();
         final signed = type == TransactionType.income ? '+${amount.format()}' : '-${amount.format()}';
+        final cancel = _cancelAction(saved);
         if (saved.isUpcoming) {
           // Future-dated → stored as upcoming; not counted until its day.
-          _events.send(ShowInfoMessageEvent(_l10n.transaction_scheduled(signed, state.date.formatMediumDate())));
+          _events.send(ShowInfoMessageEvent(
+            _l10n.transaction_scheduled(signed, state.date.formatMediumDate()),
+            actionLabel: cancel.$1,
+            onAction: cancel.$2,
+          ));
         } else {
-          _events.send(ShowSuccessMessageEvent(_l10n.transaction_saved(signed, wallet.name)));
+          _events.send(ShowSuccessMessageEvent(
+            _l10n.transaction_saved(signed, wallet.name),
+            actionLabel: cancel.$1,
+            onAction: cancel.$2,
+          ));
         }
         _resetAfterCommit();
       },
@@ -442,10 +452,19 @@ class TransactionNotifier extends Notifier<TransactionState> {
       (saved) {
         ok = true;
         AppVibrations.medium();
+        final cancel = _cancelAction(saved);
         if (saved.isUpcoming) {
-          _events.send(ShowInfoMessageEvent(_l10n.transaction_scheduled(sent.format(), state.date.formatMediumDate())));
+          _events.send(ShowInfoMessageEvent(
+            _l10n.transaction_scheduled(sent.format(), state.date.formatMediumDate()),
+            actionLabel: cancel.$1,
+            onAction: cancel.$2,
+          ));
         } else {
-          _events.send(ShowSuccessMessageEvent(_l10n.transaction_moved(sent.format(), target.name)));
+          _events.send(ShowSuccessMessageEvent(
+            _l10n.transaction_moved(sent.format(), target.name),
+            actionLabel: cancel.$1,
+            onAction: cancel.$2,
+          ));
         }
         _resetAfterCommit();
       },
@@ -453,6 +472,36 @@ class TransactionNotifier extends Notifier<TransactionState> {
     );
     state = state.copyWith(isSaving: false);
     return ok;
+  }
+
+  /// The CANCEL button on the just-saved toast. Everything it needs is read
+  /// off `ref` now and captured, because this screen is `autoDispose` and the
+  /// toast outlives a pop — the closure must never touch `ref` again.
+  (String, VoidCallback) _cancelAction(TransactionModel saved) {
+    final repo = _repo;
+    final events = _events;
+    final l10n = _l10n;
+    return (l10n.common_cancel, () => _cancelCreated(saved, repo, events, l10n));
+  }
+
+  /// Undoing a write that is one second old: the row goes straight out, no
+  /// confirmation, and the removal reports itself with its own toast. A repeat
+  /// minted its rule inside the same write, so the rule goes with it — pausing
+  /// it (`stopRule`) would leave a dead rule in Subscriptions.
+  static Future<void> _cancelCreated(
+    TransactionModel saved,
+    TransactionRepository repo,
+    AppEvents events,
+    AppLocale l10n,
+  ) async {
+    final failure = (await repo.softDelete(saved.id)).tryGetError();
+    if (failure != null) {
+      events.send(ShowErrorEvent(failure));
+      return;
+    }
+    final ruleId = saved.recurringRuleId;
+    if (ruleId != null) await repo.deleteRule(ruleId);
+    events.send(ShowInfoMessageEvent(l10n.transaction_deleted));
   }
 
   /// [A1] keep wallet, currency, rate; clear amount, description, tags, repeat;

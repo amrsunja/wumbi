@@ -61,7 +61,7 @@ class UiToast extends StatelessWidget {
                     actionLabel!.toUpperCase(),
                     style: AppTheme.of(context).typo.inter.bold.copyWith(
                       color: UIColorToken.white,
-                      fontSize: 13,
+                      fontSize: 9,
                       letterSpacing: 0.8,
                     ),
                   ),

@@ -8,14 +8,20 @@ abstract class SingleEvent {
   const SingleEvent();
 }
 
+/// Optional [actionLabel] / [onAction] put a trailing button in the toast —
+/// "Saved … — CANCEL" right after a write, same slot [ShowUndoEvent] uses.
 class ShowSuccessMessageEvent extends SingleEvent {
   final String message;
-  const ShowSuccessMessageEvent(this.message);
+  final String? actionLabel;
+  final VoidCallback? onAction;
+  const ShowSuccessMessageEvent(this.message, {this.actionLabel, this.onAction});
 }
 
 class ShowInfoMessageEvent extends SingleEvent {
   final String message;
-  const ShowInfoMessageEvent(this.message);
+  final String? actionLabel;
+  final VoidCallback? onAction;
+  const ShowInfoMessageEvent(this.message, {this.actionLabel, this.onAction});
 }
 
 class ShowErrorEvent extends SingleEvent {
