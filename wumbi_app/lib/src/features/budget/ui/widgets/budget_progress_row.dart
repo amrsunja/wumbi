@@ -3,12 +3,15 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/design_system/app_ui.dart';
 import '../../../../core/routing/app_router.dart';
+import '../../../../core/utils/constants/constants.dart';
 import '../../../../core/utils/extensions/build_context_extensions.dart';
 import '../../data/models/budget_model.dart';
 import '../budget_labels.dart';
 
-/// [UiBudgetRow] fed from a [BudgetProgress]; taps open the budget details.
-/// Every row shows what was spent ("Spent €170 of €400") next to the caption.
+/// [UiBudgetRow] fed from a [BudgetProgress]; taps open the budget details
+/// (title → app bar, bar → ring heroes; the row's numbers seed the page so
+/// the heroes have a target on the first frame). Every row shows what was
+/// spent ("Spent €170 of €400") next to the caption.
 class BudgetProgressRow extends StatelessWidget {
   const BudgetProgressRow({super.key, required this.progress, this.onTap});
 
@@ -32,7 +35,9 @@ class BudgetProgressRow extends StatelessWidget {
       spentRatio: p.spentRatio,
       plannedRatio: p.plannedRatio,
       color: BudgetLabels.statusColor(p.status, context.colors),
-      onTap: onTap ?? () => context.router.push(BudgetDetailsRoute(budgetId: p.budget.id)),
+      titleHeroTag: heroBudgetName(p.budget.id),
+      barHeroTag: heroBudgetProgress(p.budget.id),
+      onTap: onTap ?? () => context.router.push(BudgetDetailsRoute(budgetId: p.budget.id, seed: p)),
     );
   }
 }

@@ -11,6 +11,7 @@ class UIAppbar extends StatelessWidget implements PreferredSizeWidget {
     this.action,
     this.leading,
     this.transparent = false,
+    this.titleHeroTag,
   });
 
   final String title;
@@ -22,6 +23,10 @@ class UIAppbar extends StatelessWidget implements PreferredSizeWidget {
 
   /// No background fill — lets an ambient background show through.
   final bool transparent;
+
+  /// Flies the title in from / back to a matching [UiHero] (e.g. a list
+  /// row's title).
+  final Object? titleHeroTag;
 
   @override
   Size get preferredSize => const Size(double.infinity, 60);
@@ -35,6 +40,13 @@ class UIAppbar extends StatelessWidget implements PreferredSizeWidget {
           height: 44,
           child: child == null ? null : Center(child: child),
         );
+
+    final titleText = Text(
+      title.toUpperCase(),
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      style: AppTheme.of(context).typo.inter.overline,
+    );
 
     return Container(
       color: transparent ? Colors.transparent : colors.bgColor,
@@ -55,14 +67,7 @@ class UIAppbar extends StatelessWidget implements PreferredSizeWidget {
                           )),
               ),
               Expanded(
-                child: Center(
-                  child: Text(
-                    title.toUpperCase(),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppTheme.of(context).typo.inter.overline,
-                  ),
-                ),
+                child: Center(child: titleHeroTag == null ? titleText : UiHero(tag: titleHeroTag!, child: titleText)),
               ),
               slot(action),
             ],

@@ -45,9 +45,13 @@ enum _BudgetTab { overview, transactions }
 /// budget's wallet and tags.
 @RoutePage()
 class BudgetDetailsPage extends HookConsumerWidget {
-  const BudgetDetailsPage({super.key, @PathParam('id') required this.budgetId});
+  const BudgetDetailsPage({super.key, @PathParam('id') required this.budgetId, this.seed});
 
   final String budgetId;
+
+  /// The tapped row's progress (running period): shown until the provider
+  /// loads, so the name / ring heroes have a target on the first frame.
+  final BudgetProgress? seed;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -84,7 +88,10 @@ class BudgetDetailsPage extends HookConsumerWidget {
     // Each period is its own provider instance (it starts empty): keep the
     // last numbers on screen meanwhile so the ring and counters animate from
     // them instead of flashing a skeleton.
-    final lastProgress = useRef<BudgetProgress?>(null);
+    final lastProgress = useRef<BudgetProgress?>(seed);
+    // One clock for the ring's sweep-in, shared by the hero shuttle and the
+    // ring that replaces it on landing (else it sweeps twice).
+    final ringSweepStart = useMemoized(DateTime.now);
     final lastTags = useRef<List<TagModel>>(const []);
     final loaded = state.progress.value != null;
     if (loaded) {
@@ -111,6 +118,7 @@ class BudgetDetailsPage extends HookConsumerWidget {
     return Scaffold(
       appBar: UIAppbar(
         title: progress?.budget.name ?? '',
+        titleHeroTag: heroBudgetName(budgetId),
         backTap: () => context.router.maybePop(),
         action: progress == null ? null : UIIcon(UIIconToken.icons.general.edit05, size: 22, onTap: edit),
       ),
@@ -142,7 +150,15 @@ class BudgetDetailsPage extends HookConsumerWidget {
                       if (progress == null)
                         const SizedBox(height: _kHeaderPlaceholderHeight)
                       else ...[
-                        Center(child: _Ring(progress: progress).uiFadeSlideIn(offset: 0.06, duration: UIAnim.slow)),
+                        // Flies in from the row's bar (no entrance fade: the
+                        // hero is the entrance).
+                        Center(
+                          child: UiHero(
+                            tag: heroBudgetProgress(budgetId),
+                            pushedShuttle: true,
+                            child: _Ring(progress: progress, sweepStartedAt: ringSweepStart),
+                          ),
+                        ),
                         const UISpace.vert(16),
                         _PeriodNavigator(
                           progress: progress,
@@ -789,9 +805,10 @@ class _RuleRow extends StatelessWidget {
 
 /// Ring gauge with the remaining amount, its word and "42 % used".
 class _Ring extends StatelessWidget {
-  const _Ring({required this.progress});
+  const _Ring({required this.progress, required this.sweepStartedAt});
 
   final BudgetProgress progress;
+  final DateTime sweepStartedAt;
 
   @override
   Widget build(BuildContext context) {
@@ -813,6 +830,7 @@ class _Ring extends StatelessWidget {
     final percent = p.spentRatio.isFinite ? (p.spentRatio * 100).round() : 0;
 
     return UiBudgetRing(
+      sweepStartedAt: sweepStartedAt,
       spentRatio: p.spentRatio,
       plannedRatio: p.plannedRatio,
       color: statusColor,

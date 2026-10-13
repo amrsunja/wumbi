@@ -1627,7 +1627,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get debts_empty_subtitle =>
-      'Wähle beim Verleihen eine Person auf dem Buchungsbildschirm';
+      'Tippe auf „Neue Schuld“ oder nutze Umbuchung → Schulden im Buchungsbildschirm';
 
   @override
   String get debt_new => 'Neue Schuld';
@@ -2194,6 +2194,102 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get budget_row_starts => 'Beginnt am';
+
+  @override
+  String debt_story_lent_open(String name, String left, String total, String date) {
+    return '$name schuldet dir noch $left von $total, die du am $date verliehen hast.';
+  }
+
+  @override
+  String debt_story_borrowed_open(String name, String left, String total, String date) {
+    return 'Du schuldest $name noch $left von $total, die du am $date geliehen hast.';
+  }
+
+  @override
+  String debt_story_lent_settled(String name, String total, String date) {
+    return '$name hat die $total vom $date vollständig zurückgezahlt.';
+  }
+
+  @override
+  String debt_story_borrowed_settled(String name, String total, String date) {
+    return 'Du hast $name die $total vom $date vollständig zurückgezahlt.';
+  }
+
+  @override
+  String debt_story_forgiven(String total, String date) {
+    return 'Am $date abgeschlossen — der Rest der $total wurde erlassen.';
+  }
+
+  @override
+  String get debt_stat_lent => 'Verliehen';
+
+  @override
+  String get debt_stat_borrowed => 'Geliehen';
+
+  @override
+  String get debt_stat_paid_back => 'Zurückgezahlt';
+
+  @override
+  String get debt_stat_date => 'Datum';
+
+  @override
+  String get debt_stat_due => 'Fällig';
+
+  @override
+  String get debt_note => 'Notiz';
+
+  @override
+  String get debt_add_note => 'Notiz hinzufügen';
+
+  @override
+  String get debt_got_part_back => 'Teil erhalten';
+
+  @override
+  String get debt_paid_part => 'Teil bezahlt';
+
+  @override
+  String get debt_section_details => 'Details';
+
+  @override
+  String get debts_to_receive => 'Zu bekommen';
+
+  @override
+  String get debts_to_pay => 'Zurückzuzahlen';
+
+  @override
+  String get debts_settled_empty => 'Noch keine beglichenen Schulden';
+
+  @override
+  String get transfer_debt_pay_back => 'Zurückzahlen';
+
+  @override
+  String get transfer_debt_lend => 'Verleihen';
+
+  @override
+  String get transfer_debt_lend_someone => 'Jemandem leihen…';
+
+  @override
+  String transfer_debt_lend_to(String name) {
+    return '$name leihen';
+  }
+
+  @override
+  String transfer_debt_only_left(String amount) {
+    return 'Nur noch $amount offen';
+  }
+
+  @override
+  String get transfer_debt_locked => 'Eine Schuld kann sich nicht wiederholen oder in der Zukunft liegen';
+
+  @override
+  String transfer_debt_summary_repay(String wallet, String amount, String name) {
+    return '$wallet −$amount → zahlt $name zurück';
+  }
+
+  @override
+  String transfer_debt_summary_lend(String wallet, String amount, String name) {
+    return '$wallet −$amount → an $name verliehen';
+  }
 
   @override
   String get l10nStopLineDontTouch =>

@@ -1660,7 +1660,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get debts_empty_subtitle =>
-      'اختر شخصًا في شاشة المعاملة عندما تُقرض المال';
+      'اضغط «دين جديد» أو استخدم تحويل ← الديون في شاشة المعاملة';
 
   @override
   String get debt_new => 'دين جديد';
@@ -2230,6 +2230,102 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get budget_row_starts => 'يبدأ في';
+
+  @override
+  String debt_story_lent_open(String name, String left, String total, String date) {
+    return 'لا يزال $name مدينًا لك بـ $left من أصل $total أقرضته في $date.';
+  }
+
+  @override
+  String debt_story_borrowed_open(String name, String left, String total, String date) {
+    return 'لا تزال مدينًا لـ $name بـ $left من أصل $total اقترضته في $date.';
+  }
+
+  @override
+  String debt_story_lent_settled(String name, String total, String date) {
+    return 'أعاد $name كامل مبلغ $total الذي أقرضته في $date.';
+  }
+
+  @override
+  String debt_story_borrowed_settled(String name, String total, String date) {
+    return 'سددت كامل مبلغ $total الذي اقترضته من $name في $date.';
+  }
+
+  @override
+  String debt_story_forgiven(String total, String date) {
+    return 'أُغلق في $date — تم التنازل عن باقي مبلغ $total.';
+  }
+
+  @override
+  String get debt_stat_lent => 'المُقرَض';
+
+  @override
+  String get debt_stat_borrowed => 'المُقترَض';
+
+  @override
+  String get debt_stat_paid_back => 'المُسدَّد';
+
+  @override
+  String get debt_stat_date => 'التاريخ';
+
+  @override
+  String get debt_stat_due => 'الاستحقاق';
+
+  @override
+  String get debt_note => 'ملاحظة';
+
+  @override
+  String get debt_add_note => 'إضافة ملاحظة';
+
+  @override
+  String get debt_got_part_back => 'استرددت جزءًا';
+
+  @override
+  String get debt_paid_part => 'سددت جزءًا';
+
+  @override
+  String get debt_section_details => 'التفاصيل';
+
+  @override
+  String get debts_to_receive => 'لك';
+
+  @override
+  String get debts_to_pay => 'عليك';
+
+  @override
+  String get debts_settled_empty => 'لا توجد ديون مسددة بعد';
+
+  @override
+  String get transfer_debt_pay_back => 'سداد';
+
+  @override
+  String get transfer_debt_lend => 'إقراض';
+
+  @override
+  String get transfer_debt_lend_someone => 'إقراض شخص…';
+
+  @override
+  String transfer_debt_lend_to(String name) {
+    return 'إقراض $name';
+  }
+
+  @override
+  String transfer_debt_only_left(String amount) {
+    return 'المتبقي $amount فقط';
+  }
+
+  @override
+  String get transfer_debt_locked => 'لا يمكن للدين أن يتكرر أو يكون بتاريخ مستقبلي';
+
+  @override
+  String transfer_debt_summary_repay(String wallet, String amount, String name) {
+    return '$wallet −$amount → سداد لـ $name';
+  }
+
+  @override
+  String transfer_debt_summary_lend(String wallet, String amount, String name) {
+    return '$wallet −$amount → إقراض $name';
+  }
 
   @override
   String get l10nStopLineDontTouch =>

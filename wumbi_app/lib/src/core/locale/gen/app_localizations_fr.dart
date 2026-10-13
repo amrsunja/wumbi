@@ -1630,7 +1630,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get debts_empty_subtitle =>
-      'Choisissez une personne sur l’écran de transaction quand vous prêtez';
+      'Touchez « Nouvelle dette » ou Virement → Dettes sur l’écran de transaction';
 
   @override
   String get debt_new => 'Nouvelle dette';
@@ -2209,6 +2209,102 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get budget_row_starts => 'Commence le';
+
+  @override
+  String debt_story_lent_open(String name, String left, String total, String date) {
+    return '$name vous doit encore $left sur les $total prêtés le $date.';
+  }
+
+  @override
+  String debt_story_borrowed_open(String name, String left, String total, String date) {
+    return 'Vous devez encore $left à $name sur les $total empruntés le $date.';
+  }
+
+  @override
+  String debt_story_lent_settled(String name, String total, String date) {
+    return '$name a remboursé les $total prêtés le $date.';
+  }
+
+  @override
+  String debt_story_borrowed_settled(String name, String total, String date) {
+    return 'Vous avez remboursé les $total empruntés à $name le $date.';
+  }
+
+  @override
+  String debt_story_forgiven(String total, String date) {
+    return 'Clôturée le $date — le reste des $total a été annulé.';
+  }
+
+  @override
+  String get debt_stat_lent => 'Prêté';
+
+  @override
+  String get debt_stat_borrowed => 'Emprunté';
+
+  @override
+  String get debt_stat_paid_back => 'Remboursé';
+
+  @override
+  String get debt_stat_date => 'Date';
+
+  @override
+  String get debt_stat_due => 'Échéance';
+
+  @override
+  String get debt_note => 'Note';
+
+  @override
+  String get debt_add_note => 'Ajouter une note';
+
+  @override
+  String get debt_got_part_back => 'Reçu en partie';
+
+  @override
+  String get debt_paid_part => 'Payé en partie';
+
+  @override
+  String get debt_section_details => 'Détails';
+
+  @override
+  String get debts_to_receive => 'À recevoir';
+
+  @override
+  String get debts_to_pay => 'À rembourser';
+
+  @override
+  String get debts_settled_empty => 'Aucune dette réglée';
+
+  @override
+  String get transfer_debt_pay_back => 'Rembourser';
+
+  @override
+  String get transfer_debt_lend => 'Prêter';
+
+  @override
+  String get transfer_debt_lend_someone => 'Prêter à quelqu’un…';
+
+  @override
+  String transfer_debt_lend_to(String name) {
+    return 'Prêter à $name';
+  }
+
+  @override
+  String transfer_debt_only_left(String amount) {
+    return 'Il ne reste que $amount';
+  }
+
+  @override
+  String get transfer_debt_locked => 'Une dette ne peut pas se répéter ni être datée dans le futur';
+
+  @override
+  String transfer_debt_summary_repay(String wallet, String amount, String name) {
+    return '$wallet −$amount → rembourse $name';
+  }
+
+  @override
+  String transfer_debt_summary_lend(String wallet, String amount, String name) {
+    return '$wallet −$amount → prêté à $name';
+  }
 
   @override
   String get l10nStopLineDontTouch =>

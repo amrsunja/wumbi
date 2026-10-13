@@ -1625,7 +1625,7 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get debts_empty_subtitle =>
-      'Kies een persoon op het transactiescherm als je geld leent';
+      'Tik op „Nieuwe schuld”, of gebruik Overboeking → Schulden op het transactiescherm';
 
   @override
   String get debt_new => 'Nieuwe schuld';
@@ -2191,6 +2191,102 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get budget_row_starts => 'Begint op';
+
+  @override
+  String debt_story_lent_open(String name, String left, String total, String date) {
+    return '$name is je nog $left schuldig van de $total die je op $date hebt uitgeleend.';
+  }
+
+  @override
+  String debt_story_borrowed_open(String name, String left, String total, String date) {
+    return 'Je bent $name nog $left schuldig van de $total die je op $date hebt geleend.';
+  }
+
+  @override
+  String debt_story_lent_settled(String name, String total, String date) {
+    return '$name heeft de $total van $date volledig terugbetaald.';
+  }
+
+  @override
+  String debt_story_borrowed_settled(String name, String total, String date) {
+    return 'Je hebt de $total die je op $date van $name leende volledig terugbetaald.';
+  }
+
+  @override
+  String debt_story_forgiven(String total, String date) {
+    return 'Gesloten op $date — de rest van de $total is kwijtgescholden.';
+  }
+
+  @override
+  String get debt_stat_lent => 'Uitgeleend';
+
+  @override
+  String get debt_stat_borrowed => 'Geleend';
+
+  @override
+  String get debt_stat_paid_back => 'Terugbetaald';
+
+  @override
+  String get debt_stat_date => 'Datum';
+
+  @override
+  String get debt_stat_due => 'Vervaldatum';
+
+  @override
+  String get debt_note => 'Notitie';
+
+  @override
+  String get debt_add_note => 'Notitie toevoegen';
+
+  @override
+  String get debt_got_part_back => 'Deel terug';
+
+  @override
+  String get debt_paid_part => 'Deel betaald';
+
+  @override
+  String get debt_section_details => 'Details';
+
+  @override
+  String get debts_to_receive => 'Te ontvangen';
+
+  @override
+  String get debts_to_pay => 'Terug te betalen';
+
+  @override
+  String get debts_settled_empty => 'Nog geen afgeloste schulden';
+
+  @override
+  String get transfer_debt_pay_back => 'Terugbetalen';
+
+  @override
+  String get transfer_debt_lend => 'Uitlenen';
+
+  @override
+  String get transfer_debt_lend_someone => 'Aan iemand uitlenen…';
+
+  @override
+  String transfer_debt_lend_to(String name) {
+    return 'Uitlenen aan $name';
+  }
+
+  @override
+  String transfer_debt_only_left(String amount) {
+    return 'Nog maar $amount open';
+  }
+
+  @override
+  String get transfer_debt_locked => 'Een schuld kan niet herhalen of in de toekomst liggen';
+
+  @override
+  String transfer_debt_summary_repay(String wallet, String amount, String name) {
+    return '$wallet −$amount → betaalt $name terug';
+  }
+
+  @override
+  String transfer_debt_summary_lend(String wallet, String amount, String name) {
+    return '$wallet −$amount → uitgeleend aan $name';
+  }
 
   @override
   String get l10nStopLineDontTouch =>

@@ -10,6 +10,7 @@ class UiHero extends StatelessWidget {
     required this.tag,
     required this.child,
     this.alignment = Alignment.center,
+    this.pushedShuttle = false,
   });
 
   final Object tag;
@@ -18,16 +19,22 @@ class UiHero extends StatelessWidget {
   /// Where the scaled content sits inside the flying rect.
   final Alignment alignment;
 
+  /// Fly the pushed page's widget both ways (default: the destination's).
+  /// For pairs whose shapes differ — a bar growing into a ring shrinks back
+  /// as the ring instead of snapping into a flying bar. Set on both sides.
+  final bool pushedShuttle;
+
   @override
   Widget build(BuildContext context) {
     return Hero(
       tag: tag,
       flightShuttleBuilder: (flightContext, animation, direction, fromContext, toContext) {
-        final toHero = toContext.widget as Hero;
-        final toBox = toContext.findRenderObject() as RenderBox?;
-        Widget shuttle = toHero.child;
-        if (toBox != null && toBox.hasSize) {
-          shuttle = SizedBox.fromSize(size: toBox.size, child: shuttle);
+        final source = pushedShuttle && direction == HeroFlightDirection.pop ? fromContext : toContext;
+        final hero = source.widget as Hero;
+        final box = source.findRenderObject() as RenderBox?;
+        Widget shuttle = hero.child;
+        if (box != null && box.hasSize) {
+          shuttle = SizedBox.fromSize(size: box.size, child: shuttle);
         }
         return FittedBox(fit: BoxFit.contain, alignment: alignment, clipBehavior: Clip.hardEdge, child: shuttle);
       },

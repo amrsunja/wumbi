@@ -170,11 +170,13 @@ class BudgetFormPage extends HookConsumerWidget {
     // transition has settled.
     final initialSheet = BudgetFormSheet.parse(sheet);
     final initialSheetShown = useRef(false);
+    // Looked up in build: an effect's first run happens inside the hook's
+    // initState, where inherited widgets can't be listened to.
+    final route = ModalRoute.of(context);
     useEffect(() {
       if (initialSheet == null || initialSheetShown.value) return null;
       if (state.isEdit && state.existing == null) return null;
       initialSheetShown.value = true;
-      final route = ModalRoute.of(context);
       _afterTransition(route).then((_) {
         if (!context.mounted || route?.isCurrent == false) return;
         switch (initialSheet) {

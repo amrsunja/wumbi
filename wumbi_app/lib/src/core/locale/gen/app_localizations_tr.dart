@@ -1605,7 +1605,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get debts_empty_subtitle =>
-      'Borç verirken işlem ekranında bir kişi seçin';
+      '“Yeni borç”a dokunun veya işlem ekranında Transfer → Borçlar’ı kullanın';
 
   @override
   String get debt_new => 'Yeni borç';
@@ -2166,6 +2166,102 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get budget_row_starts => 'Başlangıç';
+
+  @override
+  String debt_story_lent_open(String name, String left, String total, String date) {
+    return '$name, $date tarihinde verdiğiniz $total tutarın $left kısmını hâlâ borçlu.';
+  }
+
+  @override
+  String debt_story_borrowed_open(String name, String left, String total, String date) {
+    return '$date tarihinde ödünç aldığınız $total tutarın $left kısmını $name kişisine hâlâ borçlusunuz.';
+  }
+
+  @override
+  String debt_story_lent_settled(String name, String total, String date) {
+    return '$name, $date tarihinde verdiğiniz $total tutarın tamamını geri ödedi.';
+  }
+
+  @override
+  String debt_story_borrowed_settled(String name, String total, String date) {
+    return '$date tarihinde $name kişisinden aldığınız $total tutarın tamamını geri ödediniz.';
+  }
+
+  @override
+  String debt_story_forgiven(String total, String date) {
+    return '$date tarihinde kapandı — $total tutarın kalanı silindi.';
+  }
+
+  @override
+  String get debt_stat_lent => 'Verilen';
+
+  @override
+  String get debt_stat_borrowed => 'Alınan';
+
+  @override
+  String get debt_stat_paid_back => 'Geri ödenen';
+
+  @override
+  String get debt_stat_date => 'Tarih';
+
+  @override
+  String get debt_stat_due => 'Vade';
+
+  @override
+  String get debt_note => 'Not';
+
+  @override
+  String get debt_add_note => 'Not ekle';
+
+  @override
+  String get debt_got_part_back => 'Bir kısmı geldi';
+
+  @override
+  String get debt_paid_part => 'Bir kısmını ödedim';
+
+  @override
+  String get debt_section_details => 'Ayrıntılar';
+
+  @override
+  String get debts_to_receive => 'Alacak';
+
+  @override
+  String get debts_to_pay => 'Borç';
+
+  @override
+  String get debts_settled_empty => 'Henüz kapanan borç yok';
+
+  @override
+  String get transfer_debt_pay_back => 'Geri öde';
+
+  @override
+  String get transfer_debt_lend => 'Borç ver';
+
+  @override
+  String get transfer_debt_lend_someone => 'Birine borç ver…';
+
+  @override
+  String transfer_debt_lend_to(String name) {
+    return '$name kişisine borç ver';
+  }
+
+  @override
+  String transfer_debt_only_left(String amount) {
+    return 'Yalnızca $amount kaldı';
+  }
+
+  @override
+  String get transfer_debt_locked => 'Borç tekrarlanamaz veya ileri tarihli olamaz';
+
+  @override
+  String transfer_debt_summary_repay(String wallet, String amount, String name) {
+    return '$wallet −$amount → $name borcu ödenir';
+  }
+
+  @override
+  String transfer_debt_summary_lend(String wallet, String amount, String name) {
+    return '$wallet −$amount → $name kişisine borç';
+  }
 
   @override
   String get l10nStopLineDontTouch =>

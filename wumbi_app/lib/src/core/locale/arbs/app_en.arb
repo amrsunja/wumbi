@@ -779,7 +779,7 @@
   "debts_i_owe": "I owe",
   "debts_empty_owed_title": "Nobody owes you",
   "debts_empty_owe_title": "You owe nobody",
-  "debts_empty_subtitle": "Pick a person on the transaction screen when you lend money",
+  "debts_empty_subtitle": "Tap “New debt”, or use Transfer → Debts on the transaction screen",
   "debt_new": "New debt",
   "debts_all": "All debts",
   "debts_empty_hint": "Keep track of money you lent or borrowed",
@@ -1214,5 +1214,58 @@
   "budget_back_to_current": "Back to today",
   "budget_row_starts": "Starts on",
 
+  "debt_story_lent_open": "{name} still owes you {left} of the {total} you lent on {date}.",
+  "@debt_story_lent_open": {
+    "placeholders": {"name": {"type": "String"}, "left": {"type": "String"}, "total": {"type": "String"}, "date": {"type": "String"}}
+  },
+  "debt_story_borrowed_open": "You still owe {name} {left} of the {total} you borrowed on {date}.",
+  "@debt_story_borrowed_open": {
+    "placeholders": {"name": {"type": "String"}, "left": {"type": "String"}, "total": {"type": "String"}, "date": {"type": "String"}}
+  },
+  "debt_story_lent_settled": "{name} paid back all {total} you lent on {date}.",
+  "@debt_story_lent_settled": {
+    "placeholders": {"name": {"type": "String"}, "total": {"type": "String"}, "date": {"type": "String"}}
+  },
+  "debt_story_borrowed_settled": "You paid back all {total} you borrowed from {name} on {date}.",
+  "@debt_story_borrowed_settled": {
+    "placeholders": {"name": {"type": "String"}, "total": {"type": "String"}, "date": {"type": "String"}}
+  },
+  "debt_story_forgiven": "Closed on {date} — the rest of the {total} was forgiven.",
+  "@debt_story_forgiven": {
+    "placeholders": {"total": {"type": "String"}, "date": {"type": "String"}}
+  },
+  "debt_stat_lent": "Lent",
+  "debt_stat_borrowed": "Borrowed",
+  "debt_stat_paid_back": "Paid back",
+  "debt_stat_date": "Date",
+  "debt_stat_due": "Due",
+  "debt_note": "Note",
+  "debt_add_note": "Add a note",
+  "debt_got_part_back": "Got part back",
+  "debt_paid_part": "Paid part",
+  "debt_section_details": "Details",
+  "debts_to_receive": "To receive",
+  "debts_to_pay": "To pay back",
+  "debts_settled_empty": "No settled debts yet",
+  "transfer_debt_pay_back": "Pay back",
+  "transfer_debt_lend": "Lend",
+  "transfer_debt_lend_someone": "Lend to someone…",
+  "transfer_debt_lend_to": "Lend to {name}",
+  "@transfer_debt_lend_to": {
+    "placeholders": {"name": {"type": "String"}}
+  },
+  "transfer_debt_only_left": "Only {amount} left",
+  "@transfer_debt_only_left": {
+    "placeholders": {"amount": {"type": "String"}}
+  },
+  "transfer_debt_locked": "A debt can’t repeat or be dated in the future",
+  "transfer_debt_summary_repay": "{wallet} −{amount} → pays back {name}",
+  "@transfer_debt_summary_repay": {
+    "placeholders": {"wallet": {"type": "String"}, "amount": {"type": "String"}, "name": {"type": "String"}}
+  },
+  "transfer_debt_summary_lend": "{wallet} −{amount} → lent to {name}",
+  "@transfer_debt_summary_lend": {
+    "placeholders": {"wallet": {"type": "String"}, "amount": {"type": "String"}, "name": {"type": "String"}}
+  },
   "l10nStopLineDontTouch": "☠☠☠☠☠☠☠☠☠☠☠☠☠ Don't touch this line ☠☠☠☠☠☠☠☠☠☠☠☠☠"
 }

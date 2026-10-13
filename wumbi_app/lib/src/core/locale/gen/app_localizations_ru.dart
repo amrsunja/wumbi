@@ -1654,7 +1654,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get debts_empty_subtitle =>
-      'Выберите человека на экране операции, когда даёте в долг';
+      'Нажмите «Новый долг» или «Перевод → Долги» на экране операции';
 
   @override
   String get debt_new => 'Новый долг';
@@ -2233,6 +2233,102 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get budget_row_starts => 'Начало';
+
+  @override
+  String debt_story_lent_open(String name, String left, String total, String date) {
+    return '$name ещё должен вам $left из $total, которые вы дали в долг $date.';
+  }
+
+  @override
+  String debt_story_borrowed_open(String name, String left, String total, String date) {
+    return 'Вы ещё должны $name $left из $total, взятых в долг $date.';
+  }
+
+  @override
+  String debt_story_lent_settled(String name, String total, String date) {
+    return '$name вернул все $total, взятые $date.';
+  }
+
+  @override
+  String debt_story_borrowed_settled(String name, String total, String date) {
+    return 'Вы вернули $name все $total, взятые $date.';
+  }
+
+  @override
+  String debt_story_forgiven(String total, String date) {
+    return 'Закрыт $date — остаток от $total прощён.';
+  }
+
+  @override
+  String get debt_stat_lent => 'Дали в долг';
+
+  @override
+  String get debt_stat_borrowed => 'Взяли в долг';
+
+  @override
+  String get debt_stat_paid_back => 'Возвращено';
+
+  @override
+  String get debt_stat_date => 'Дата';
+
+  @override
+  String get debt_stat_due => 'Срок';
+
+  @override
+  String get debt_note => 'Заметка';
+
+  @override
+  String get debt_add_note => 'Добавить заметку';
+
+  @override
+  String get debt_got_part_back => 'Вернули часть';
+
+  @override
+  String get debt_paid_part => 'Вернул часть';
+
+  @override
+  String get debt_section_details => 'Подробности';
+
+  @override
+  String get debts_to_receive => 'Вам должны';
+
+  @override
+  String get debts_to_pay => 'Вы должны';
+
+  @override
+  String get debts_settled_empty => 'Закрытых долгов пока нет';
+
+  @override
+  String get transfer_debt_pay_back => 'Вернуть долг';
+
+  @override
+  String get transfer_debt_lend => 'Дать в долг';
+
+  @override
+  String get transfer_debt_lend_someone => 'Дать в долг кому-то…';
+
+  @override
+  String transfer_debt_lend_to(String name) {
+    return 'Дать в долг: $name';
+  }
+
+  @override
+  String transfer_debt_only_left(String amount) {
+    return 'Осталось только $amount';
+  }
+
+  @override
+  String get transfer_debt_locked => 'Долг не может повторяться или иметь будущую дату';
+
+  @override
+  String transfer_debt_summary_repay(String wallet, String amount, String name) {
+    return '$wallet −$amount → возврат долга: $name';
+  }
+
+  @override
+  String transfer_debt_summary_lend(String wallet, String amount, String name) {
+    return '$wallet −$amount → в долг: $name';
+  }
 
   @override
   String get l10nStopLineDontTouch =>

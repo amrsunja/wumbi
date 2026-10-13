@@ -44,3 +44,7 @@ const int kMaxPlannedOccurrencesPerRule = 400;
 const String kHeroFab = 'hero-fab-transaction';
 String heroWalletName(String walletId) => 'hero-wallet-name-$walletId';
 String heroWalletBalance(String walletId) => 'hero-wallet-balance-$walletId';
+String heroBudgetName(String budgetId) => 'hero-budget-name-$budgetId';
+String heroBudgetProgress(String budgetId) => 'hero-budget-progress-$budgetId';
+String heroDebtName(String debtId) => 'hero-debt-name-$debtId';
+String heroDebtProgress(String debtId) => 'hero-debt-progress-$debtId';

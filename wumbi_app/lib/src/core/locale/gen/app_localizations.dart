@@ -2709,7 +2709,7 @@ abstract class AppLocalizations {
   /// No description provided for @debts_empty_subtitle.
   ///
   /// In en, this message translates to:
-  /// **'Pick a person on the transaction screen when you lend money'**
+  /// **'Tap “New debt”, or use Transfer → Debts on the transaction screen'**
   String get debts_empty_subtitle;
 
   /// No description provided for @debt_new.
@@ -3484,6 +3484,162 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Starts on'**
   String get budget_row_starts;
+
+  /// No description provided for @debt_story_lent_open.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} still owes you {left} of the {total} you lent on {date}.'**
+  String debt_story_lent_open(String name, String left, String total, String date);
+
+  /// No description provided for @debt_story_borrowed_open.
+  ///
+  /// In en, this message translates to:
+  /// **'You still owe {name} {left} of the {total} you borrowed on {date}.'**
+  String debt_story_borrowed_open(String name, String left, String total, String date);
+
+  /// No description provided for @debt_story_lent_settled.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} paid back all {total} you lent on {date}.'**
+  String debt_story_lent_settled(String name, String total, String date);
+
+  /// No description provided for @debt_story_borrowed_settled.
+  ///
+  /// In en, this message translates to:
+  /// **'You paid back all {total} you borrowed from {name} on {date}.'**
+  String debt_story_borrowed_settled(String name, String total, String date);
+
+  /// No description provided for @debt_story_forgiven.
+  ///
+  /// In en, this message translates to:
+  /// **'Closed on {date} — the rest of the {total} was forgiven.'**
+  String debt_story_forgiven(String total, String date);
+
+  /// No description provided for @debt_stat_lent.
+  ///
+  /// In en, this message translates to:
+  /// **'Lent'**
+  String get debt_stat_lent;
+
+  /// No description provided for @debt_stat_borrowed.
+  ///
+  /// In en, this message translates to:
+  /// **'Borrowed'**
+  String get debt_stat_borrowed;
+
+  /// No description provided for @debt_stat_paid_back.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid back'**
+  String get debt_stat_paid_back;
+
+  /// No description provided for @debt_stat_date.
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get debt_stat_date;
+
+  /// No description provided for @debt_stat_due.
+  ///
+  /// In en, this message translates to:
+  /// **'Due'**
+  String get debt_stat_due;
+
+  /// No description provided for @debt_note.
+  ///
+  /// In en, this message translates to:
+  /// **'Note'**
+  String get debt_note;
+
+  /// No description provided for @debt_add_note.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a note'**
+  String get debt_add_note;
+
+  /// No description provided for @debt_got_part_back.
+  ///
+  /// In en, this message translates to:
+  /// **'Got part back'**
+  String get debt_got_part_back;
+
+  /// No description provided for @debt_paid_part.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid part'**
+  String get debt_paid_part;
+
+  /// No description provided for @debt_section_details.
+  ///
+  /// In en, this message translates to:
+  /// **'Details'**
+  String get debt_section_details;
+
+  /// No description provided for @debts_to_receive.
+  ///
+  /// In en, this message translates to:
+  /// **'To receive'**
+  String get debts_to_receive;
+
+  /// No description provided for @debts_to_pay.
+  ///
+  /// In en, this message translates to:
+  /// **'To pay back'**
+  String get debts_to_pay;
+
+  /// No description provided for @debts_settled_empty.
+  ///
+  /// In en, this message translates to:
+  /// **'No settled debts yet'**
+  String get debts_settled_empty;
+
+  /// No description provided for @transfer_debt_pay_back.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay back'**
+  String get transfer_debt_pay_back;
+
+  /// No description provided for @transfer_debt_lend.
+  ///
+  /// In en, this message translates to:
+  /// **'Lend'**
+  String get transfer_debt_lend;
+
+  /// No description provided for @transfer_debt_lend_someone.
+  ///
+  /// In en, this message translates to:
+  /// **'Lend to someone…'**
+  String get transfer_debt_lend_someone;
+
+  /// No description provided for @transfer_debt_lend_to.
+  ///
+  /// In en, this message translates to:
+  /// **'Lend to {name}'**
+  String transfer_debt_lend_to(String name);
+
+  /// No description provided for @transfer_debt_only_left.
+  ///
+  /// In en, this message translates to:
+  /// **'Only {amount} left'**
+  String transfer_debt_only_left(String amount);
+
+  /// No description provided for @transfer_debt_locked.
+  ///
+  /// In en, this message translates to:
+  /// **'A debt can’t repeat or be dated in the future'**
+  String get transfer_debt_locked;
+
+  /// No description provided for @transfer_debt_summary_repay.
+  ///
+  /// In en, this message translates to:
+  /// **'{wallet} −{amount} → pays back {name}'**
+  String transfer_debt_summary_repay(String wallet, String amount, String name);
+
+  /// No description provided for @transfer_debt_summary_lend.
+  ///
+  /// In en, this message translates to:
+  /// **'{wallet} −{amount} → lent to {name}'**
+  String transfer_debt_summary_lend(String wallet, String amount, String name);
 
   /// No description provided for @l10nStopLineDontTouch.
   ///

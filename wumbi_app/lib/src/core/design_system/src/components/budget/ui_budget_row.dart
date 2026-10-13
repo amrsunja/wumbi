@@ -20,6 +20,8 @@ class UiBudgetRow extends StatelessWidget {
     this.barHeight = 6,
     this.padding = const EdgeInsets.symmetric(vertical: 12),
     this.onTap,
+    this.titleHeroTag,
+    this.barHeroTag,
   });
 
   final String title;
@@ -46,6 +48,10 @@ class UiBudgetRow extends StatelessWidget {
   final EdgeInsets padding;
   final VoidCallback? onTap;
 
+  /// Hero tags shared with the details page (title → app bar, bar → ring).
+  final Object? titleHeroTag;
+  final Object? barHeroTag;
+
   /// [spent] with [spentEmphasis] highlighted, wherever the locale puts it.
   InlineSpan _spentSpan(TextStyle base) {
     final text = spent!;
@@ -65,6 +71,10 @@ class UiBudgetRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final typo = AppTheme.of(context).typo.inter;
+    final titleHeroTag = this.titleHeroTag;
+    final barHeroTag = this.barHeroTag;
+    final titleText = Text(title, maxLines: 1, overflow: TextOverflow.ellipsis, style: typo.rowTitle);
+    final bar = UiBudgetBar(spentRatio: spentRatio, plannedRatio: plannedRatio, color: color, height: barHeight);
     return UITap(
       onTap: onTap,
       child: Padding(
@@ -75,7 +85,14 @@ class UiBudgetRow extends StatelessWidget {
             Row(
               children: [
                 Expanded(
-                  child: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis, style: typo.rowTitle),
+                  child: titleHeroTag == null
+                      ? titleText
+                      // Hugs the text so the flight starts from the words,
+                      // not the whole row width.
+                      : Align(
+                          alignment: Alignment.centerLeft,
+                          child: UiHero(tag: titleHeroTag, alignment: Alignment.centerLeft, child: titleText),
+                        ),
                 ),
                 const UISpace.horz(12),
                 Text(
@@ -86,7 +103,7 @@ class UiBudgetRow extends StatelessWidget {
               ],
             ),
             const UISpace.vert(8),
-            UiBudgetBar(spentRatio: spentRatio, plannedRatio: plannedRatio, color: color, height: barHeight),
+            if (barHeroTag == null) bar else UiHero(tag: barHeroTag, pushedShuttle: true, child: bar),
             const UISpace.vert(6),
             if (spent == null)
               Text(caption, maxLines: 2, overflow: TextOverflow.ellipsis, style: typo.caption)

@@ -16,6 +16,8 @@ class UiDebtRow extends StatelessWidget {
     this.color = UIColorToken.blue,
     this.dimmed = false,
     this.onTap,
+    this.titleHeroTag,
+    this.barHeroTag,
   });
 
   /// Person name.
@@ -36,10 +38,18 @@ class UiDebtRow extends StatelessWidget {
   final bool dimmed;
   final VoidCallback? onTap;
 
+  /// Hero tags shared with the details page (name → app bar, bar → ring).
+  final Object? titleHeroTag;
+  final Object? barHeroTag;
+
   @override
   Widget build(BuildContext context) {
     final typo = AppTheme.of(context).typo.inter;
     final hasCaption = caption.isNotEmpty || alert != null;
+    final titleHeroTag = this.titleHeroTag;
+    final barHeroTag = this.barHeroTag;
+    final titleText = Text(title, maxLines: 1, overflow: TextOverflow.ellipsis, style: typo.rowTitle);
+    final bar = UiBudgetBar(spentRatio: paidRatio, color: color, height: 4);
     return Opacity(
       opacity: dimmed ? 0.55 : 1,
       child: UITap(
@@ -51,7 +61,14 @@ class UiDebtRow extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Expanded(child: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis, style: typo.rowTitle)),
+                  Expanded(
+                    child: titleHeroTag == null
+                        ? titleText
+                        : Align(
+                            alignment: Alignment.centerLeft,
+                            child: UiHero(tag: titleHeroTag, alignment: Alignment.centerLeft, child: titleText),
+                          ),
+                  ),
                   const UISpace.horz(12),
                   Text(trailing, maxLines: 1, style: typo.rowTitle),
                 ],
@@ -73,7 +90,7 @@ class UiDebtRow extends StatelessWidget {
                 ),
               ],
               const UISpace.vert(8),
-              UiBudgetBar(spentRatio: paidRatio, color: color, height: 4),
+              if (barHeroTag == null) bar else UiHero(tag: barHeroTag, pushedShuttle: true, child: bar),
             ],
           ),
         ),
