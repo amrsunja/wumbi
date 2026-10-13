@@ -10,6 +10,7 @@ import '../../../core/utils/constants/constants.dart';
 import '../../../core/utils/enums/transaction_type.dart';
 import '../../../core/utils/extensions/build_context_extensions.dart';
 import '../../../core/utils/extensions/date_time_extensions.dart';
+import '../../../core/utils/hooks/use_swipe_tabs.dart';
 import '../../../core/utils/state_management/app_events.dart';
 import '../../../core/utils/state_management/single_events.dart';
 import '../../../core/utils/typedefs.dart';
@@ -34,7 +35,7 @@ enum _TagAction { rename, move, addNested, delete }
 enum _TagTab { transactions, wallets, nested }
 
 /// `/tags/:id` — same anatomy as Wallet Details: a fixed header (tag path,
-/// net total, spent · earned, tab bar) and one scrollable tab body —
+/// net total, spent · earned, tab bar) and swipeable tab bodies —
 /// Transactions (default), Wallets, Nested tags. Rows dissolve under the
 /// tab bar like on the Dashboard.
 @RoutePage()
@@ -50,8 +51,7 @@ class TagDetailsPage extends HookConsumerWidget {
     final notifier = ref.read(tagDetailsProvider(tagId).notifier);
     final showMascot = ref.watch(showMascotProvider);
     final scrollController = useScrollController();
-    final tabIndex = useState(0);
-    final tab = _TagTab.values[tabIndex.value];
+    final tabs = useSwipeTabs();
 
     useEffect(() {
       void onScroll() {
@@ -156,12 +156,6 @@ class TagDetailsPage extends HookConsumerWidget {
 
     void openTag(String id) => context.router.push(TagDetailsRoute(tagId: id));
 
-    void selectTab(int i) {
-      if (i == tabIndex.value) return;
-      AppVibrations.selection();
-      tabIndex.value = i;
-    }
-
     return Scaffold(
       appBar: UIAppbar(
         backTap: () => context.router.maybePop(),
@@ -211,8 +205,8 @@ class TagDetailsPage extends HookConsumerWidget {
                             expanded: true,
                             labels: [l10n.tag_transactions, l10n.tag_wallets, l10n.tag_nested_tags],
                             counts: [null, state.wallets.length, state.children.length],
-                            selectedIndex: tabIndex.value,
-                            onChanged: selectTab,
+                            selectedIndex: tabs.index,
+                            onChanged: tabs.onTabTap,
                           ),
                         ],
                       ),
@@ -225,16 +219,23 @@ class TagDetailsPage extends HookConsumerWidget {
                       ),
                   ],
                 ),
-                // Only the tab body scrolls; a new key remounts it and
-                // replays the cascade.
+                // Swipeable tab bodies (only they scroll). Pages are not kept
+                // alive, so the cascade replays on every switch.
                 Expanded(
-                  child: KeyedSubtree(
-                    key: ValueKey('$tagId-${tab.name}'),
-                    child: switch (tab) {
-                      _TagTab.transactions => _TransactionsTab(state: state, controller: scrollController),
-                      _TagTab.wallets => _WalletsTab(state: state),
-                      _TagTab.nested => _NestedTab(state: state, onOpen: openTag, onAdd: addNested),
-                    },
+                  child: PageView(
+                    controller: tabs.controller,
+                    onPageChanged: tabs.onPageChanged,
+                    children: [
+                      for (final t in _TagTab.values)
+                        KeyedSubtree(
+                          key: ValueKey('$tagId-${t.name}'),
+                          child: switch (t) {
+                            _TagTab.transactions => _TransactionsTab(state: state, controller: scrollController),
+                            _TagTab.wallets => _WalletsTab(state: state),
+                            _TagTab.nested => _NestedTab(state: state, onOpen: openTag, onAdd: addNested),
+                          },
+                        ),
+                    ],
                   ),
                 ),
               ],
@@ -353,17 +354,21 @@ class _SpentEarned extends StatelessWidget {
 /// Scrollable tab body: smoke edges + one-shot cascade. [ready] flips once
 /// the data has loaded so the cascade plays on the real rows.
 class _TabScroll extends StatelessWidget {
-  const _TabScroll({required this.ready, required this.slivers, this.controller});
+  const _TabScroll({required this.ready, required this.slivers, this.controller, this.topFade = 32});
 
   final bool ready;
   final List<Widget> slivers;
   final ScrollController? controller;
+
+  /// 0 for lists with sticky month headers: the pinned header is the edge.
+  final double topFade;
 
   @override
   Widget build(BuildContext context) {
     return UIStaggerScope(
       key: ValueKey(ready),
       child: UIScrollEdgeFade(
+        top: topFade,
         child: CustomScrollView(
           controller: controller,
           physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
@@ -419,37 +424,51 @@ class _TransactionsTab extends StatelessWidget {
     final l10n = context.l10n;
     final rows = state.transactions.value;
 
-    final items = <Widget>[];
-    if (rows != null) {
-      DateTime? lastMonth;
-      for (final row in rows) {
-        final date = row.transaction.transactionDate.toLocal();
-        if (lastMonth == null || !date.isSameMonth(lastMonth)) {
-          items.add(MonthDivider(label: date.formatMonthYear()));
-          lastMonth = date;
-        } else {
-          items.add(const UIDivider());
-        }
-        items.add(_TransactionTile(row: row));
+    // Month sections (rows arrive newest first); each header sticks while
+    // its month is on screen.
+    final months = <(DateTime, List<TransactionRow>)>[];
+    for (final row in rows ?? const <TransactionRow>[]) {
+      final date = row.transaction.transactionDate.toLocal();
+      if (months.isEmpty || !months.last.$1.isSameMonth(date)) {
+        months.add((date, [row]));
+      } else {
+        months.last.$2.add(row);
       }
+    }
+    final sections = <Widget>[];
+    var stagger = 0;
+    for (final (month, monthRows) in months) {
+      final header = stagger++;
+      final first = stagger;
+      stagger += monthRows.length;
+      sections.add(
+        SliverStickySection(
+          key: ValueKey('month-${month.year}-${month.month}'),
+          header: UIStaggerItem(index: header, child: MonthDivider(label: month.formatMonthYear())),
+          sliver: SliverList.separated(
+            itemCount: monthRows.length,
+            separatorBuilder: (_, _) => const UIDivider(),
+            itemBuilder: (context, i) => UIStaggerItem(
+              key: ValueKey('row-${monthRows[i].id}'),
+              index: first + i,
+              child: _TransactionTile(row: monthRows[i]),
+            ),
+          ),
+        ),
+      );
     }
 
     return _TabScroll(
       ready: rows != null,
       controller: controller,
+      topFade: 0,
       slivers: [
         if (rows == null)
           const _Loading()
         else if (rows.isEmpty)
           _Empty(title: l10n.tag_no_transactions)
         else
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: kListHorzPadding),
-            sliver: SliverList.builder(
-              itemCount: items.length,
-              itemBuilder: (context, i) => UIStaggerItem(index: i, child: items[i]),
-            ),
-          ),
+          ...sections,
         if (state.isLoadingMore)
           const SliverToBoxAdapter(
             child: Padding(

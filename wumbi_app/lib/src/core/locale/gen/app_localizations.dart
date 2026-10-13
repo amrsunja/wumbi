@@ -759,7 +759,7 @@ abstract class AppLocalizations {
   /// No description provided for @transaction_edit_title.
   ///
   /// In en, this message translates to:
-  /// **'Edit'**
+  /// **'Edit transaction'**
   String get transaction_edit_title;
 
   /// No description provided for @transaction_description_placeholder.
@@ -2316,6 +2316,12 @@ abstract class AppLocalizations {
   /// **'name'**
   String get budget_name_placeholder;
 
+  /// No description provided for @budget_name_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Budget name: {name}'**
+  String budget_name_hint(String name);
+
   /// No description provided for @budget_what_counts.
   ///
   /// In en, this message translates to:
@@ -2729,24 +2735,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Hold to reorder'**
   String get dashboard_reorder_hint;
-
-  /// No description provided for @dashboard_budgets_over.
-  ///
-  /// In en, this message translates to:
-  /// **'{count} over limit'**
-  String dashboard_budgets_over(int count);
-
-  /// No description provided for @dashboard_budgets_at_risk.
-  ///
-  /// In en, this message translates to:
-  /// **'{count} at risk'**
-  String dashboard_budgets_at_risk(int count);
-
-  /// No description provided for @dashboard_budgets_on_track.
-  ///
-  /// In en, this message translates to:
-  /// **'All on track'**
-  String get dashboard_budgets_on_track;
 
   /// No description provided for @dashboard_debts_to_receive.
   ///
@@ -3341,6 +3329,12 @@ abstract class AppLocalizations {
   /// **'Left out of the Dashboard total — handy for savings, shared or tracking-only wallets.'**
   String get wallet_include_in_total_off;
 
+  /// No description provided for @dashboard_wallets_not_counted.
+  ///
+  /// In en, this message translates to:
+  /// **'Not counted in total'**
+  String get dashboard_wallets_not_counted;
+
   /// No description provided for @dashboard_wallets_excluded.
   ///
   /// In en, this message translates to:
@@ -3364,6 +3358,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Leftovers raise the next period\'s limit, overspending lowers it.'**
   String get budget_rollover_both_desc;
+
+  /// No description provided for @budget_planned_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Planned payments'**
+  String get budget_planned_title;
+
+  /// No description provided for @budget_planned_exclude.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t count planned'**
+  String get budget_planned_exclude;
+
+  /// No description provided for @budget_planned_exclude_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Only payments already made count against the limit. Upcoming payments and subscriptions count once they\'re paid.'**
+  String get budget_planned_exclude_desc;
 
   /// No description provided for @budget_used_percent.
   ///
@@ -3406,6 +3418,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, =1{1 day left} other{{count} days left}}'**
   String budget_days_left(int count);
+
+  /// No description provided for @subscriptions_monthly_spend.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly spend'**
+  String get subscriptions_monthly_spend;
+
+  /// No description provided for @subscriptions_active_empty.
+  ///
+  /// In en, this message translates to:
+  /// **'No active subscriptions'**
+  String get subscriptions_active_empty;
+
+  /// No description provided for @subscriptions_paused_empty.
+  ///
+  /// In en, this message translates to:
+  /// **'No paused subscriptions'**
+  String get subscriptions_paused_empty;
+
+  /// No description provided for @budgets_summary_over.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{You\'re over 1 budget} other{You\'re over {count} budgets}}'**
+  String budgets_summary_over(int count);
+
+  /// No description provided for @budgets_summary_close.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 budget is close to its limit} other{{count} budgets are close to their limits}}'**
+  String budgets_summary_close(int count);
+
+  /// No description provided for @budgets_summary_ok.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{You\'re within your budget} other{You\'re within your budgets}}'**
+  String budgets_summary_ok(int count);
+
+  /// No description provided for @budget_edit_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit budget'**
+  String get budget_edit_title;
+
+  /// No description provided for @wallet_edit_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit wallet'**
+  String get wallet_edit_title;
+
+  /// No description provided for @budget_tab_overview.
+  ///
+  /// In en, this message translates to:
+  /// **'Overview'**
+  String get budget_tab_overview;
+
+  /// No description provided for @budget_back_to_current.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to today'**
+  String get budget_back_to_current;
+
+  /// No description provided for @budget_row_starts.
+  ///
+  /// In en, this message translates to:
+  /// **'Starts on'**
+  String get budget_row_starts;
 
   /// No description provided for @l10nStopLineDontTouch.
   ///

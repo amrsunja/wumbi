@@ -6,16 +6,15 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../core/design_system/app_ui.dart';
 import '../../../core/money/money.dart';
 import '../../../core/routing/app_router.dart';
-import '../../../core/utils/app_vibrations.dart';
 import '../../../core/utils/constants/constants.dart';
-import '../../../core/utils/enums/debt_role.dart';
 import '../../../core/utils/enums/repeat_frequency.dart';
 import '../../../core/utils/enums/transaction_type.dart';
 import '../../../core/utils/extensions/build_context_extensions.dart';
 import '../../../core/utils/extensions/date_time_extensions.dart';
+import '../../../core/utils/hooks/use_swipe_tabs.dart';
 import '../../../core/utils/typedefs.dart';
-import '../../budget/data/budget_metrics.dart';
 import '../../budget/data/models/budget_model.dart';
+import '../../budget/ui/budget_labels.dart';
 import '../../budget/ui/budgets_provider.dart';
 import '../../budget/ui/widgets/budget_progress_row.dart';
 import '../../debt/ui/debt_labels.dart';
@@ -39,10 +38,10 @@ const double _kListBottomInset = 96;
 
 enum _WalletTab { transactions, budgets, subscriptions }
 
-/// Wallet Details: fixed header (wallet / currency, balance, tab bar) and one
-/// scrollable tab body — Transactions (filter / sort, swipe to delete),
-/// Budgets scoped to this wallet (+ Set a spending limit) and Subscriptions
-/// touching it. Switching tab (or wallet) remounts the body, which replays
+/// Wallet Details: fixed header (wallet / currency, balance, tab bar) and
+/// swipeable tab bodies — Transactions (filter / sort), Budgets scoped to
+/// this wallet (+ Set a spending limit) and Subscriptions touching it.
+/// Switching tab (swipe or tap) or wallet rebuilds the body, which replays
 /// the row cascade; rows dissolve under the tab bar like on the Dashboard.
 @RoutePage()
 class WalletDetailsPage extends HookConsumerWidget {
@@ -62,8 +61,7 @@ class WalletDetailsPage extends HookConsumerWidget {
     final wallets = ref.watch(walletsProvider).value ?? const <WalletSummary>[];
     final scrollController = useScrollController();
     final showMascot = ref.watch(showMascotProvider);
-    final tabIndex = useState(0);
-    final tab = _WalletTab.values[tabIndex.value];
+    final tabs = useSwipeTabs();
 
     useEffect(() {
       void onScroll() {
@@ -93,12 +91,6 @@ class WalletDetailsPage extends HookConsumerWidget {
       );
       if (picked == null) return;
       currentId.value = picked.id;
-    }
-
-    void selectTab(int i) {
-      if (i == tabIndex.value) return;
-      AppVibrations.selection();
-      tabIndex.value = i;
     }
 
     return Scaffold(
@@ -161,8 +153,8 @@ class WalletDetailsPage extends HookConsumerWidget {
                           expanded: true,
                           labels: [l10n.wallet_tab_transactions, l10n.wallet_tab_budgets, l10n.wallet_tab_subscriptions],
                           counts: [null, budgetCount, subscriptionCount],
-                          selectedIndex: tabIndex.value,
-                          onChanged: selectTab,
+                          selectedIndex: tabs.index,
+                          onChanged: tabs.onTabTap,
                         ),
                       ],
                     ),
@@ -175,22 +167,30 @@ class WalletDetailsPage extends HookConsumerWidget {
                     ),
                 ],
               ),
-              // Only the tab body scrolls. A new key (tab or wallet) remounts
-              // it and replays the cascade.
+              // Swipeable tab bodies (only they scroll). Pages are not kept
+              // alive, so the cascade replays on every switch; the wallet id
+              // in the key remounts them after a wallet switch.
               Expanded(
-                child: KeyedSubtree(
-                  key: ValueKey('$id-${tab.name}'),
-                  child: switch (tab) {
-                    _WalletTab.transactions => _TransactionsTab(
-                        walletId: id,
-                        wallet: wallet,
-                        state: state,
-                        notifier: notifier,
-                        controller: scrollController,
+                child: PageView(
+                  controller: tabs.controller,
+                  onPageChanged: tabs.onPageChanged,
+                  children: [
+                    for (final t in _WalletTab.values)
+                      KeyedSubtree(
+                        key: ValueKey('$id-${t.name}'),
+                        child: switch (t) {
+                          _WalletTab.transactions => _TransactionsTab(
+                              walletId: id,
+                              wallet: wallet,
+                              state: state,
+                              notifier: notifier,
+                              controller: scrollController,
+                            ),
+                          _WalletTab.budgets => _BudgetsTab(walletId: id),
+                          _WalletTab.subscriptions => _SubscriptionsTab(walletId: id),
+                        },
                       ),
-                    _WalletTab.budgets => _BudgetsTab(walletId: id),
-                    _WalletTab.subscriptions => _SubscriptionsTab(walletId: id),
-                  },
+                  ],
                 ),
               ),
             ],
@@ -229,7 +229,13 @@ final _walletRulesProvider = Provider.autoDispose.family<List<RecurringRuleModel
 /// the data has loaded so the cascade plays on the real rows, not on the
 /// skeleton.
 class _TabScroll extends StatelessWidget {
-  const _TabScroll({required this.ready, required this.slivers, this.controller, this.bottomInset = true});
+  const _TabScroll({
+    required this.ready,
+    required this.slivers,
+    this.controller,
+    this.bottomInset = true,
+    this.topFade = 32,
+  });
 
   final bool ready;
   final List<Widget> slivers;
@@ -239,11 +245,15 @@ class _TabScroll extends StatelessWidget {
   /// ([SliverFillRemaining]), which must not scroll.
   final bool bottomInset;
 
+  /// 0 for lists with sticky month headers: the pinned header is the edge.
+  final double topFade;
+
   @override
   Widget build(BuildContext context) {
     return UIStaggerScope(
       key: ValueKey(ready),
       child: UIScrollEdgeFade(
+        top: topFade,
         child: CustomScrollView(
           controller: controller,
           physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
@@ -328,8 +338,16 @@ class _TransactionsTab extends StatelessWidget {
           child: _TabScroll(
             ready: state.transactions.value != null && wallet != null,
             controller: controller,
+            // Sticky headers whenever the list is sectioned (upcoming group
+            // or date sort); the plain amount-sorted list keeps the fade.
+            topFade: _TransactionList.hasSections(state) ? 0 : 32,
             slivers: [
-              _TransactionList(walletId: walletId, wallet: wallet, state: state, notifier: notifier),
+              ..._TransactionList(
+                walletId: walletId,
+                wallet: wallet,
+                state: state,
+                notifier: notifier,
+              ).slivers(context),
               if (state.isLoadingMore)
                 const SliverToBoxAdapter(
                   child: Padding(
@@ -357,15 +375,7 @@ class _BudgetsTab extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
     final budgets = ref.watch(_walletScopedBudgetsProvider(walletId));
-    final over = budgets?.where((p) => p.status == BudgetStatus.over).length ?? 0;
-    final atRisk = budgets?.where((p) => p.status == BudgetStatus.atRisk).length ?? 0;
-    final running = budgets?.where(isRunningBudget).length ?? 0;
-
-    final parts = <(String, Color?)>[
-      if (over > 0) (l10n.dashboard_budgets_over(over), UIColorToken.neg500),
-      if (atRisk > 0) (l10n.dashboard_budgets_at_risk(atRisk), UIColorToken.buttercup),
-      if (running > 0 && over == 0 && atRisk == 0) (l10n.dashboard_budgets_on_track, null),
-    ];
+    final parts = <(String, Color?)>[?BudgetLabels.summary(l10n, budgets ?? const [])];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -435,7 +445,8 @@ class _BudgetsTab extends ConsumerWidget {
   }
 }
 
-/// Every subscription touching this wallet (pause switch, stop).
+/// Every subscription touching this wallet (pause switch; stop from the
+/// edit page).
 class _SubscriptionsTab extends ConsumerWidget {
   const _SubscriptionsTab({required this.walletId});
 
@@ -508,9 +519,9 @@ class _SubscriptionsTab extends ConsumerWidget {
                                     rule: r,
                                     walletsById: walletsById,
                                     tags: tagsByRule[r.id] ?? const [],
+                                    showWallet: false,
                                     onTap: () => context.router.push(TransactionRoute(ruleId: r.id)),
                                     onToggle: (v) => ref.read(subscriptionsProvider.notifier).setActive(r.id, v),
-                                    onDelete: () => confirmStopSubscription(context, ref, r),
                                   ),
                                   if (i + 1 < rules.length) const UIDivider(),
                                 ],
@@ -666,33 +677,12 @@ class _ToolbarButton extends StatelessWidget {
 
 // ----------------------------------------------------------------- list items
 
-/// One flat, heterogeneous sliver: group headers, month dividers and rows.
-/// Keys are derived from the item (row id / month) so swipe-to-delete state
-/// survives reloads.
-sealed class _ListItem {
-  const _ListItem();
-}
-
-class _UpcomingHeaderItem extends _ListItem {
-  const _UpcomingHeaderItem(this.count);
-
-  final int count;
-}
-
-class _MonthItem extends _ListItem {
-  const _MonthItem(this.month);
-
-  /// First instant of the month (local).
-  final DateTime month;
-}
-
-class _RowItem extends _ListItem {
-  const _RowItem(this.row);
-
-  final TransactionRow row;
-}
-
-class _TransactionList extends StatelessWidget {
+/// Builds the Transactions tab's slivers: an "Upcoming" section, then one
+/// section per month (date sorts only), each with a sticky header
+/// ([SliverStickySection]). Amount sorts list past rows without months.
+/// Returned as a list so every section is a direct child of the scroll view
+/// (sections must not be nested in another group).
+class _TransactionList {
   const _TransactionList({
     required this.walletId,
     required this.wallet,
@@ -705,123 +695,129 @@ class _TransactionList extends StatelessWidget {
   final WalletDetailsState state;
   final WalletDetailsNotifier notifier;
 
-  /// The datasource already orders upcoming rows first; groups are formed
-  /// while iterating. Month dividers only make sense for date sorts.
-  static List<_ListItem> _buildItems(List<TransactionRow> rows, TransactionSort sort) {
-    final items = <_ListItem>[];
-    final upcomingCount = rows.where((r) => r.transaction.isUpcoming).length;
-    var upcomingHeaderAdded = false;
-    DateTime? lastMonth;
-
-    for (final row in rows) {
-      final t = row.transaction;
-      if (t.isUpcoming) {
-        if (!upcomingHeaderAdded) {
-          items.add(_UpcomingHeaderItem(upcomingCount));
-          upcomingHeaderAdded = true;
-        }
-        items.add(_RowItem(row));
-        continue;
-      }
-      if (!sort.byAmount) {
-        final date = t.transactionDate.toLocal();
-        if (lastMonth == null || !lastMonth.isSameMonth(date)) {
-          items.add(_MonthItem(date.monthStart));
-          lastMonth = date;
-        }
-      }
-      items.add(_RowItem(row));
-    }
-    return items;
+  /// True when the loaded list will render at least one sticky header.
+  static bool hasSections(WalletDetailsState state) {
+    final rows = state.transactions.value;
+    if (rows == null || rows.isEmpty) return false;
+    return !state.sort.byAmount || rows.any((r) => r.transaction.isUpcoming);
   }
 
-  @override
-  Widget build(BuildContext context) {
+  List<Widget> slivers(BuildContext context) {
     final l10n = context.l10n;
     final rows = state.transactions.value;
+    final wallet = this.wallet;
 
     if (rows == null || wallet == null) {
-      return const SliverToBoxAdapter(
-        child: Padding(padding: EdgeInsets.symmetric(horizontal: kListHorzPadding), child: UiSkeletonList(rows: 5)),
-      );
+      return const [
+        SliverToBoxAdapter(
+          child: Padding(padding: EdgeInsets.symmetric(horizontal: kListHorzPadding), child: UiSkeletonList(rows: 5)),
+        ),
+      ];
     }
 
     if (rows.isEmpty) {
       if (state.filter.isEmpty) {
-        return SliverToBoxAdapter(
-          child: UiEmptyState(
-            image: AppAssets.images.wumbiTakeMoney.path,
-            title: l10n.wallet_empty_title,
-            subtitle: l10n.wallet_empty_subtitle,
+        return [
+          SliverToBoxAdapter(
+            child: UiEmptyState(
+              image: AppAssets.images.wumbiTakeMoney.path,
+              title: l10n.wallet_empty_title,
+              subtitle: l10n.wallet_empty_subtitle,
+            ),
           ),
-        );
+        ];
       }
-      return SliverToBoxAdapter(
-        child: UiEmptyState(
-          image: AppAssets.images.wumbiOo.path,
-          title: l10n.wallet_filter_no_results_title,
-          subtitle: l10n.wallet_filter_no_results_subtitle,
-          action: UiTextButton(
-            label: l10n.wallet_filter_clear,
-            fontSize: 16,
-            onTap: notifier.clearFilter,
+      return [
+        SliverToBoxAdapter(
+          child: UiEmptyState(
+            image: AppAssets.images.wumbiOo.path,
+            title: l10n.wallet_filter_no_results_title,
+            subtitle: l10n.wallet_filter_no_results_subtitle,
+            action: UiTextButton(
+              label: l10n.wallet_filter_clear,
+              fontSize: 16,
+              onTap: notifier.clearFilter,
+            ),
           ),
         ),
+      ];
+    }
+
+    // The datasource already orders upcoming rows first.
+    final upcoming = rows.where((r) => r.transaction.isUpcoming).toList();
+    final past = rows.where((r) => !r.transaction.isUpcoming).toList();
+
+    var stagger = 0;
+
+    // Rows with hairlines between them; stagger indices continue across
+    // sections so the cascade reads top to bottom.
+    Widget rowList(List<TransactionRow> list) {
+      final first = stagger;
+      stagger += list.length;
+      return SliverList.separated(
+        itemCount: list.length,
+        separatorBuilder: (_, _) => const UIDivider(),
+        itemBuilder: (context, i) {
+          final row = list[i];
+          return UIStaggerItem(
+            key: ValueKey('row-${row.id}'),
+            index: first + i,
+            child: _TransactionTile(
+              row: row,
+              wallet: wallet,
+              onTap: () => openTransactionRow(context, row, walletId: walletId),
+            ),
+          );
+        },
       );
     }
 
-    final items = _buildItems(rows, state.sort);
+    Widget section(String key, MonthDivider header, List<TransactionRow> list) {
+      final headerIndex = stagger++;
+      return SliverStickySection(
+        key: ValueKey(key),
+        header: UIStaggerItem(index: headerIndex, child: header),
+        sliver: rowList(list),
+      );
+    }
 
-    return SliverPadding(
-      padding: const EdgeInsets.symmetric(horizontal: kListHorzPadding),
-      sliver: SliverList.builder(
-        itemCount: items.length,
-        itemBuilder: (context, index) {
-          final item = items[index];
-          // Hairline only between two consecutive rows, never before a header.
-          final hairline = index + 1 < items.length && items[index + 1] is _RowItem;
-          final Widget child = switch (item) {
-            _UpcomingHeaderItem(:final count) => MonthDivider(
-                key: const ValueKey('upcoming-header'),
-                label: l10n.wallet_upcoming_section,
-                caption: l10n.wallet_upcoming_hint(count),
-              ),
-            _MonthItem(:final month) => MonthDivider(
-                key: ValueKey('month-${month.year}-${month.month}'),
-                label: month.formatMonthYear(),
-              ),
-            _RowItem(:final row) => Column(
-                key: ValueKey('row-${row.id}'),
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _SwipeToDelete(
-                    id: row.id,
-                    onDelete: () {
-                      AppVibrations.heavy();
-                      notifier.deleteTransaction(
-                        row,
-                        message: (cascaded) => switch (row.debtRole) {
-                          DebtRole.principal => l10n.debt_cascade_deleted(cascaded),
-                          DebtRole.repayment => l10n.debt_return_deleted,
-                          null => l10n.transaction_deleted,
-                        },
-                        undoLabel: l10n.common_undo,
-                      );
-                    },
-                    child: _TransactionTile(
-                      row: row,
-                      wallet: wallet!,
-                      onTap: () => openTransactionRow(context, row, walletId: walletId),
-                    ),
-                  ),
-                  if (hairline) const UIDivider(),
-                ],
-              ),
-          };
-          return UIStaggerItem(key: child.key, index: index, child: child);
-        },
-      ),
-    );
+    final slivers = <Widget>[
+      if (upcoming.isNotEmpty)
+        section(
+          'upcoming',
+          MonthDivider(label: l10n.wallet_upcoming_section, caption: l10n.wallet_upcoming_hint(upcoming.length)),
+          upcoming,
+        ),
+    ];
+
+    if (past.isEmpty) return slivers;
+
+    if (state.sort.byAmount) {
+      slivers.add(
+        SliverPadding(
+          key: const ValueKey('by-amount'),
+          padding: EdgeInsets.fromLTRB(kListHorzPadding, upcoming.isEmpty ? 0 : 8, kListHorzPadding, 0),
+          sliver: rowList(past),
+        ),
+      );
+      return slivers;
+    }
+
+    final months = <(DateTime, List<TransactionRow>)>[];
+    for (final row in past) {
+      final date = row.transaction.transactionDate.toLocal();
+      if (months.isEmpty || !months.last.$1.isSameMonth(date)) {
+        months.add((date.monthStart, [row]));
+      } else {
+        months.last.$2.add(row);
+      }
+    }
+    for (final (month, list) in months) {
+      slivers.add(
+        section('month-${month.year}-${month.month}', MonthDivider(label: month.formatMonthYear()), list),
+      );
+    }
+    return slivers;
   }
 }
 
@@ -885,32 +881,5 @@ class _TransactionTile extends StatelessWidget {
     var s = r.toStringAsFixed(4);
     if (s.contains('.')) s = s.replaceAll(RegExp(r'0+$'), '').replaceAll(RegExp(r'\.$'), '');
     return s;
-  }
-}
-
-/// Swipe left → red background with trash icon; release → delete immediately.
-class _SwipeToDelete extends StatelessWidget {
-  const _SwipeToDelete({required this.id, required this.child, required this.onDelete});
-
-  final String id;
-  final Widget child;
-  final VoidCallback onDelete;
-
-  @override
-  Widget build(BuildContext context) {
-    return Dismissible(
-      key: ValueKey('swipe-$id'),
-      direction: DismissDirection.endToStart,
-      dismissThresholds: const {DismissDirection.endToStart: 0.35},
-      resizeDuration: const Duration(milliseconds: 250),
-      onDismissed: (_) => onDelete(),
-      background: Container(
-        alignment: AlignmentDirectional.centerEnd,
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        decoration: BoxDecoration(color: UIColorToken.red, borderRadius: BorderRadius.circular(12)),
-        child: UIIcon(UIIconToken.icons.general.trash01, color: UIColorToken.white, size: 22),
-      ),
-      child: child,
-    );
   }
 }

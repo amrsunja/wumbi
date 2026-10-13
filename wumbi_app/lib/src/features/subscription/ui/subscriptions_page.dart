@@ -8,6 +8,7 @@ import '../../../core/routing/app_router.dart';
 import '../../../core/utils/constants/constants.dart';
 import '../../../core/utils/enums/repeat_frequency.dart';
 import '../../../core/utils/extensions/build_context_extensions.dart';
+import '../../../core/utils/hooks/use_swipe_tabs.dart';
 import '../../../core/utils/typedefs.dart';
 import '../../settings/ui/state_management/settings_provider.dart';
 import '../../transaction/data/models/recurring_rule_model.dart';
@@ -16,11 +17,18 @@ import '../../wallet/ui/wallets_provider.dart';
 import 'subscriptions_provider.dart';
 import 'widgets/subscription_row.dart';
 
-/// Every recurring rule, scoped to one wallet or all of them. Active rules
-/// first, paused below; tap a row to open it on the Transaction page
-/// ("Edit subscription", where it can also be stopped), switch to pause.
-/// "⊕ New Subscription" opens the Transaction page preset to a monthly
-/// repeat on the scoped wallet (the primary one for "All wallets").
+/// Room under each tab list so the last row clears the floating button.
+const double _kListBottomInset = 96;
+
+enum _SubscriptionTab { active, paused }
+
+/// `/subscriptions` — same anatomy as Tag Details: a fixed header (wallet
+/// scope, counts, monthly spend, Active | Paused tabs) and one scrollable tab
+/// body (swipe or tap to switch tabs). Tap a row to open it on the Transaction page ("Edit subscription",
+/// where it can also be stopped); the switch pauses / resumes it, moving it
+/// to the other tab. The "New Subscription" FAB opens the Transaction page
+/// preset to a monthly repeat on the scoped wallet (the primary one for
+/// "All wallets").
 @RoutePage()
 class SubscriptionsPage extends HookConsumerWidget {
   const SubscriptionsPage({super.key, this.walletId});
@@ -34,13 +42,14 @@ class SubscriptionsPage extends HookConsumerWidget {
 
     final scope = useState<String?>(walletId);
     final scopeId = scope.value;
+    final tabs = useSwipeTabs();
 
-    final rulesAsync = ref.watch(subscriptionsProvider);
-    final rules = rulesAsync.value;
+    final rules = ref.watch(subscriptionsProvider).value;
     final tagsByRule = ref.watch(subscriptionTagsProvider).value ?? const <String, List<String>>{};
     final wallets = ref.watch(walletsProvider).value ?? const <WalletSummary>[];
     final monthly = ref.watch(monthlySubscriptionTotalProvider(scopeId)).value;
     final base = ref.watch(baseCurrencyProvider);
+    final showMascot = ref.watch(showMascotProvider);
 
     final walletsById = <String, WalletSummary>{for (final w in wallets) w.id: w};
     final scopeWallet = scopeId == null ? null : walletsById[scopeId];
@@ -50,8 +59,8 @@ class SubscriptionsPage extends HookConsumerWidget {
         : scopeId == null
             ? rules
             : rules.where((r) => ruleTouchesWallet(r, scopeId)).toList();
-    final active = scoped?.where((r) => r.isActive).toList() ?? const <RecurringRuleModel>[];
-    final paused = scoped?.where((r) => !r.isActive).toList() ?? const <RecurringRuleModel>[];
+    final active = scoped?.where((r) => r.isActive).toList();
+    final paused = scoped?.where((r) => !r.isActive).toList();
 
     Future<void> pickScope() async {
       final picked = await _WalletScopeSheet.show(context, wallets: wallets, selectedId: scopeId);
@@ -59,149 +68,173 @@ class SubscriptionsPage extends HookConsumerWidget {
       scope.value = picked.walletId;
     }
 
+    // Null wallet → the Transaction page picks the primary (default) wallet.
+    Future<void> create() =>
+        context.router.push(TransactionRoute(walletId: scopeId, repeat: RepeatFrequency.monthly));
+
     Widget row(RecurringRuleModel r) => SubscriptionRow(
+          key: ValueKey('rule-${r.id}'),
           rule: r,
           walletsById: walletsById,
           tags: tagsByRule[r.id] ?? const [],
+          showWallet: scopeId == null,
           onTap: () => context.router.push(TransactionRoute(ruleId: r.id)),
           onToggle: (v) => ref.read(subscriptionsProvider.notifier).setActive(r.id, v),
         );
 
-    // Null wallet → the Transaction page picks the primary (default) wallet.
-    void create() => context.router.push(TransactionRoute(walletId: scopeId, repeat: RepeatFrequency.monthly));
-
-    final counts = <(String, Color?)>[
-      if (scoped != null && scoped.isNotEmpty) ...[
-        (l10n.subscriptions_active_count(active.length), active.isEmpty ? null : UIColorToken.blue),
-        (l10n.subscriptions_paused_count(paused.length), null),
-      ],
-    ];
+    final hasAny = scoped?.isNotEmpty ?? false;
 
     return Scaffold(
       appBar: UIAppbar(
         title: l10n.subscriptions_title,
         backTap: () => context.router.maybePop(),
       ),
-      body: CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(kPageHorzPadding, 8, kPageHorzPadding, 0),
-              child: Column(
-                children: [
-                  // Same header as the Transaction screen: currency (follows
-                  // the scope, not editable) | wallet scope.
-                  UiWalletInfoMenu(
-                    name: scopeWallet?.name ?? l10n.subscriptions_all_wallets,
-                    color: scopeWallet?.color.color ?? context.colors.secondContentColor,
-                    currencyType: scopeWallet?.currency ?? base,
-                    onSelectWallet: wallets.isEmpty ? null : pickScope,
-                  ),
-                  if (monthly != null && !monthly.isZero) ...[
-                    const UISpace.vert(16),
+      floatingActionButton: wallets.isEmpty ? null : UiFab(onTap: create, label: l10n.subscriptions_new),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // Fixed header: scope, counts, monthly spend, tabs.
+          Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(kListHorzPadding, 8, kListHorzPadding, 15),
+                child: Column(
+                  children: [
+                    // Currency follows the scope (not editable) | wallet scope.
+                    UiWalletInfoMenu(
+                      name: scopeWallet?.name ?? l10n.subscriptions_all_wallets,
+                      color: scopeWallet?.color.color ?? context.colors.secondContentColor,
+                      currencyType: scopeWallet?.currency ?? base,
+                      onSelectWallet: wallets.isEmpty ? null : pickScope,
+                    ),
+                    const UISpace.vert(22),
+                    if (monthly == null)
+                      const SizedBox(height: 54)
+                    else
+                      UiTotalAmount(money: monthly, animated: true),
+                    const UISpace.vert(6),
                     Text(
-                      l10n.subscriptions_monthly_total(monthly.format()),
+                      active == null || paused == null || !hasAny
+                          ? ''
+                          : '${l10n.subscriptions_active_count(active.length)} · '
+                              '${l10n.subscriptions_paused_count(paused.length)}',
                       textAlign: TextAlign.center,
-                      style: typo.subtitle,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: typo.caption,
+                    ),
+                    const UISpace.vert(24),
+                    UiSegmentedToggle(
+                      expanded: true,
+                      labels: [l10n.subscriptions_active, l10n.subscriptions_paused],
+                      counts: [active?.length, paused?.length],
+                      selectedIndex: tabs.index,
+                      onChanged: tabs.onTabTap,
                     ),
                   ],
-                ],
+                ),
               ),
+              if (showMascot)
+                const Positioned(
+                  right: 8,
+                  top: 4,
+                  child: UIWumbiLook(key: ValueKey('wumbi-subscriptions')),
+                ),
+            ],
+          ),
+          // Swipeable tab bodies (only they scroll). Pages are not kept
+          // alive, so the cascade replays on every switch; the scope in the
+          // key remounts them when the wallet scope changes.
+          Expanded(
+            child: PageView(
+              controller: tabs.controller,
+              onPageChanged: tabs.onPageChanged,
+              children: [
+                for (final t in _SubscriptionTab.values)
+                  _RulesTab(
+                    key: ValueKey('${scopeId ?? 'all'}-${t.name}'),
+                    rules: switch (t) {
+                      _SubscriptionTab.active => active,
+                      _SubscriptionTab.paused => paused,
+                    },
+                    // Nothing at all in this scope → explain how subscriptions
+                    // appear; otherwise just "none in this tab".
+                    emptyTitle: !hasAny
+                        ? l10n.subscriptions_empty_title
+                        : switch (t) {
+                            _SubscriptionTab.active => l10n.subscriptions_active_empty,
+                            _SubscriptionTab.paused => l10n.subscriptions_paused_empty,
+                          },
+                    emptySubtitle: hasAny ? null : l10n.subscriptions_empty_subtitle,
+                    rowBuilder: row,
+                  ),
+              ],
             ),
           ),
-          // Counts (left) + "⊕ New Subscription" (right), as on the Dashboard.
-          // The button carries 4 px of tap padding: its edge lines up with
-          // the rows' trailing edge.
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(kListHorzPadding, 20, kListHorzPadding - 4, 0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: AnimatedSwitcher(
-                      duration: UIAnim.fast,
-                      child: Text.rich(
-                        key: ValueKey('${active.length}-${paused.length}'),
-                        TextSpan(
-                          children: [
-                            for (var i = 0; i < counts.length; i++) ...[
-                              if (i > 0) const TextSpan(text: '  ·  '),
-                              TextSpan(
-                                text: counts[i].$1.toUpperCase(),
-                                style: counts[i].$2 == null ? null : TextStyle(color: counts[i].$2),
-                              ),
-                            ],
-                          ],
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: typo.sectionLabel,
-                      ),
-                    ),
-                  ),
-                  const UISpace.horz(12),
-                  UiIconTextButton(
-                    icon: UIIconToken.icons.general.plusCircle,
-                    title: l10n.subscriptions_new,
-                    color: UIColorToken.blue,
-                    onTap: wallets.isEmpty ? null : create,
-                  ),
-                ],
-              ),
-            ),
-          ),
-          if (scoped == null)
-            const SliverToBoxAdapter(
-              child: Padding(
-                padding: EdgeInsets.fromLTRB(kListHorzPadding, 32, kListHorzPadding, 0),
-                child: UiSkeletonList(rows: 5),
-              ),
-            )
-          else if (scoped.isEmpty)
-            SliverFillRemaining(
-              hasScrollBody: false,
-              child: UiEmptyState(
-                image: AppAssets.images.wumbiOo.path,
-                title: l10n.subscriptions_empty_title,
-                subtitle: l10n.subscriptions_empty_subtitle,
-              ).uiFadeSlideIn(offset: 0.06),
-            )
-          else ...[
-            if (active.isNotEmpty) ...[
-              SliverToBoxAdapter(
-                child: UiSectionLabel(
-                  text: l10n.subscriptions_active,
-                  padding: const EdgeInsets.fromLTRB(kListHorzPadding, 16, kListHorzPadding, 4),
-                ),
-              ),
-              SliverPadding(
-                padding: const EdgeInsets.symmetric(horizontal: kListHorzPadding),
-                sliver: SliverList.separated(
-                  itemCount: active.length,
-                  separatorBuilder: (_, _) => const UIDivider(),
-                  itemBuilder: (context, index) => row(active[index]),
-                ),
-              ),
-            ],
-            if (paused.isNotEmpty) ...[
-              SliverToBoxAdapter(
-                child: UiSectionLabel(
-                  text: l10n.subscriptions_paused,
-                  padding: const EdgeInsets.fromLTRB(kListHorzPadding, 24, kListHorzPadding, 4),
-                ),
-              ),
-              SliverPadding(
-                padding: const EdgeInsets.symmetric(horizontal: kListHorzPadding),
-                sliver: SliverList.separated(
-                  itemCount: paused.length,
-                  separatorBuilder: (_, _) => const UIDivider(),
-                  itemBuilder: (context, index) => row(paused[index]),
-                ),
-              ),
-            ],
-          ],
-          const SliverToBoxAdapter(child: UISpace.vert(48)),
         ],
+      ),
+    );
+  }
+}
+
+/// One tab body: skeleton → empty state | rule list. Smoke edges + one-shot
+/// cascade, like the Tag Details tabs.
+class _RulesTab extends StatelessWidget {
+  const _RulesTab({
+    super.key,
+    required this.rules,
+    required this.emptyTitle,
+    required this.emptySubtitle,
+    required this.rowBuilder,
+  });
+
+  final List<RecurringRuleModel>? rules;
+  final String emptyTitle;
+  final String? emptySubtitle;
+  final Widget Function(RecurringRuleModel) rowBuilder;
+
+  @override
+  Widget build(BuildContext context) {
+    final list = rules;
+    return UIStaggerScope(
+      key: ValueKey(list != null),
+      child: UIScrollEdgeFade(
+        child: CustomScrollView(
+          physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+          slivers: [
+            const SliverToBoxAdapter(child: UISpace.vert(4)),
+            if (list == null)
+              const SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(kListHorzPadding, 16, kListHorzPadding, 0),
+                  child: UiSkeletonList(rows: 4),
+                ),
+              )
+            else if (list.isEmpty)
+              SliverFillRemaining(
+                hasScrollBody: false,
+                child: UIStaggerItem(
+                  index: 0,
+                  child: UiEmptyState(
+                    image: AppAssets.images.wumbiOo.path,
+                    title: emptyTitle,
+                    subtitle: emptySubtitle,
+                  ),
+                ),
+              )
+            else
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: kListHorzPadding),
+                sliver: SliverList.separated(
+                  itemCount: list.length,
+                  separatorBuilder: (_, _) => const UIDivider(),
+                  itemBuilder: (context, i) => UIStaggerItem(index: i, child: rowBuilder(list[i])),
+                ),
+              ),
+            const SliverToBoxAdapter(child: UISpace.vert(_kListBottomInset)),
+          ],
+        ),
       ),
     );
   }

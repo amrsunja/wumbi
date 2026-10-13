@@ -7,25 +7,42 @@ import '../../../core/design_system/app_ui.dart';
 import '../../../core/routing/app_router.dart';
 import '../../../core/utils/app_vibrations.dart';
 import '../../../core/utils/constants/constants.dart';
+import '../../../core/utils/enums/budget_period_type.dart';
 import '../../../core/utils/extensions/build_context_extensions.dart';
 import '../../../core/utils/extensions/date_time_extensions.dart';
+import '../../../core/utils/hooks/use_swipe_tabs.dart';
 import '../../../core/utils/typedefs.dart';
+import '../../tag/data/models/tag_model.dart';
 import '../../transaction/data/models/transaction_model.dart';
 import '../../wallet/data/models/wallet_model.dart';
 import '../../wallet/ui/wallets_provider.dart';
+import '../../wallet/ui/widgets/month_divider.dart';
 import '../data/budget_metrics.dart';
 import '../data/models/budget_model.dart';
 import 'budget_details_notifier.dart';
+import 'budget_form_page.dart';
 import 'budget_labels.dart';
+import 'widgets/budget_sheets.dart';
 
-/// `/budgets/:id` (spec B&D §6.7). A budget may span several wallets, so it
-/// gets its own page: browse periods, see the numbers, and the rows counted.
+/// Room under each tab list so the last row clears the FAB.
+const double _kListBottomInset = 104;
+
+/// Ring (216) + gap + navigator: holds the header's place on first load so
+/// the tabs don't jump.
+const double _kHeaderPlaceholderHeight = 216 + 16 + 56;
+
+enum _BudgetTab { overview, transactions }
+
+/// `/budgets/:id` (spec B&D §6.7) — the name in the app bar, a fixed header
+/// (ring gauge, period navigator, tab bar) and two swipeable tabs sharing the
+/// browsed period:
+/// - Overview: pace → stat tiles → what counts (wallets, tags → their
+///   details) → rules (each opens the form on its own sheet);
+/// - Transactions: the rows the period counts.
 ///
-/// Layout: period switcher → ring gauge (remaining in the middle) → pace →
-/// stat tiles → scope chips → counted rows. Everything cascades in on first
-/// display; browsing periods keeps the previous numbers on screen and lets
-/// the ring / counters glide to the new ones. The FAB adds a transaction
-/// preset to this budget's wallet and tags.
+/// Browsing periods keeps the previous numbers on screen and lets the ring /
+/// counters glide to the new ones. The FAB adds a transaction preset to this
+/// budget's wallet and tags.
 @RoutePage()
 class BudgetDetailsPage extends HookConsumerWidget {
   const BudgetDetailsPage({super.key, @PathParam('id') required this.budgetId});
@@ -41,10 +58,12 @@ class BudgetDetailsPage extends HookConsumerWidget {
     final notifier = ref.read(budgetDetailsProvider(args).notifier);
     final scrollController = useScrollController();
     final wallets = ref.watch(walletsProvider).value ?? const <WalletSummary>[];
+    final tabs = useSwipeTabs();
 
+    // Infinite scroll of the Transactions tab (the only one on the controller).
     useEffect(() {
       void onScroll() {
-        if (!scrollController.hasClients) return;
+        if (!scrollController.hasClients || scrollController.positions.length != 1) return;
         final pos = scrollController.position;
         if (pos.maxScrollExtent > 0 && pos.pixels >= pos.maxScrollExtent * 0.8) notifier.loadMore();
       }
@@ -66,31 +85,34 @@ class BudgetDetailsPage extends HookConsumerWidget {
     // last numbers on screen meanwhile so the ring and counters animate from
     // them instead of flashing a skeleton.
     final lastProgress = useRef<BudgetProgress?>(null);
-    final lastTagNames = useRef<List<String>>(const []);
+    final lastTags = useRef<List<TagModel>>(const []);
     final loaded = state.progress.value != null;
     if (loaded) {
       lastProgress.value = state.progress.value;
-      lastTagNames.value = state.tagNames;
+      lastTags.value = state.tags;
     }
     final progress = state.progress.value ?? lastProgress.value;
-    final tagNames = loaded ? state.tagNames : lastTagNames.value;
+    final tags = loaded ? state.tags : lastTags.value;
+    final tagNames = [for (final t in tags) t.displayName];
 
     void browse(int delta) {
       AppVibrations.selection();
       offset.value = offset.value + delta;
     }
 
+    void backToCurrent() {
+      AppVibrations.selection();
+      offset.value = 0;
+    }
+
+    void edit([BudgetFormSheet? sheet]) =>
+        context.router.push(BudgetFormRoute(budgetId: budgetId, sheet: sheet?.name));
+
     return Scaffold(
       appBar: UIAppbar(
         title: progress?.budget.name ?? '',
         backTap: () => context.router.maybePop(),
-        action: progress == null
-            ? null
-            : UIIcon(
-                UIIconToken.icons.general.edit05,
-                size: 22,
-                onTap: () => context.router.push(BudgetFormRoute(budgetId: budgetId)),
-              ),
+        action: progress == null ? null : UIIcon(UIIconToken.icons.general.edit05, size: 22, onTap: edit),
       ),
       floatingActionButton: progress == null || state.notFound
           ? null
@@ -108,51 +130,65 @@ class BudgetDetailsPage extends HookConsumerWidget {
             ),
       body: state.notFound
           ? const SizedBox.shrink()
-          : CustomScrollView(
-              controller: scrollController,
-              physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-              slivers: [
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(kListHorzPadding, 4, kListHorzPadding, 0),
-                    child: progress == null
-                        ? const UiSkeletonList(rows: 3)
-                        : _Header(
-                            progress: progress,
-                            tagNames: tagNames,
-                            wallets: wallets,
-                            canGoForward: offset.value < 0,
-                            onPrevious: () => browse(-1),
-                            onNext: () => browse(1),
-                          ),
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Fixed header: ring, period navigator, tabs.
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(kListHorzPadding, 4, kListHorzPadding, 15),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      if (progress == null)
+                        const SizedBox(height: _kHeaderPlaceholderHeight)
+                      else ...[
+                        Center(child: _Ring(progress: progress).uiFadeSlideIn(offset: 0.06, duration: UIAnim.slow)),
+                        const UISpace.vert(16),
+                        _PeriodNavigator(
+                          progress: progress,
+                          offset: offset.value,
+                          onPrevious: () => browse(-1),
+                          onNext: () => browse(1),
+                          onBackToCurrent: backToCurrent,
+                        ).uiFadeSlideIn(delay: const Duration(milliseconds: 120), offset: 0.3),
+                      ],
+                      const UISpace.vert(16),
+                      UiSegmentedToggle(
+                        expanded: true,
+                        labels: [l10n.budget_tab_overview, l10n.wallet_tab_transactions],
+                        selectedIndex: tabs.index,
+                        onChanged: tabs.onTabTap,
+                      ),
+                    ],
                   ),
                 ),
-                if (progress != null && progress.subscriptionCount > 0 && progress.subscriptionPlanned != null)
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(kListHorzPadding, 12, kListHorzPadding, 0),
-                      child: _SubscriptionsLink(progress: progress),
-                    ),
+                // Swipeable tab bodies (only they scroll). Pages are not kept
+                // alive, so their cascade replays on every switch.
+                Expanded(
+                  child: PageView(
+                    controller: tabs.controller,
+                    onPageChanged: tabs.onPageChanged,
+                    children: [
+                      for (final t in _BudgetTab.values)
+                        KeyedSubtree(
+                          key: ValueKey('$budgetId-${t.name}'),
+                          child: switch (t) {
+                            _BudgetTab.overview => _OverviewTab(
+                                progress: progress,
+                                tags: tags,
+                                wallets: wallets,
+                                onEdit: edit,
+                              ),
+                            _BudgetTab.transactions => _TransactionsTab(
+                                state: state,
+                                offset: offset.value,
+                                controller: scrollController,
+                              ),
+                          },
+                        ),
+                    ],
                   ),
-                if (progress != null)
-                  SliverToBoxAdapter(
-                    child: UiSectionLabel(
-                      text: l10n.wallet_tab_transactions,
-                      padding: const EdgeInsets.fromLTRB(kListHorzPadding, 28, kListHorzPadding, 0),
-                    ).uiFadeSlideIn(delay: const Duration(milliseconds: 520), offset: 0.4),
-                  ),
-                _Rows(key: ValueKey('rows-${offset.value}'), rows: state.rows),
-                if (state.isLoadingMore)
-                  const SliverToBoxAdapter(
-                    child: Padding(
-                      padding: EdgeInsets.all(16),
-                      child: Center(
-                        child: SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2)),
-                      ),
-                    ),
-                  ),
-                // Room for the FAB under the last row.
-                const SliverToBoxAdapter(child: UISpace.vert(104)),
+                ),
               ],
             ),
     );
@@ -171,51 +207,114 @@ class BudgetDetailsPage extends HookConsumerWidget {
   }
 }
 
-class _Header extends StatelessWidget {
-  const _Header({
-    required this.progress,
-    required this.tagNames,
-    required this.wallets,
-    required this.canGoForward,
-    required this.onPrevious,
-    required this.onNext,
-  });
+// --------------------------------------------------------------------- tabs
 
-  final BudgetProgress progress;
-  final List<String> tagNames;
-  final List<WalletSummary> wallets;
-  final bool canGoForward;
-  final VoidCallback onPrevious;
-  final VoidCallback onNext;
+/// Scrollable tab body with smoke edges.
+class _TabScroll extends StatelessWidget {
+  const _TabScroll({required this.slivers, this.controller, this.topFade = 32});
+
+  final List<Widget> slivers;
+  final ScrollController? controller;
+
+  /// 0 for lists with sticky month headers: the pinned header is the edge.
+  final double topFade;
 
   @override
   Widget build(BuildContext context) {
+    return UIScrollEdgeFade(
+      top: topFade,
+      child: CustomScrollView(
+        controller: controller,
+        physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+        slivers: [
+          const SliverToBoxAdapter(child: UISpace.vert(4)),
+          ...slivers,
+          const SliverToBoxAdapter(child: UISpace.vert(_kListBottomInset)),
+        ],
+      ),
+    );
+  }
+}
+
+class _Loading extends StatelessWidget {
+  const _Loading();
+
+  @override
+  Widget build(BuildContext context) => const SliverToBoxAdapter(
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(kListHorzPadding, 16, kListHorzPadding, 0),
+          child: UiSkeletonList(rows: 4),
+        ),
+      );
+}
+
+/// Pace → tiles → what counts → rules.
+class _OverviewTab extends StatelessWidget {
+  const _OverviewTab({
+    required this.progress,
+    required this.tags,
+    required this.wallets,
+    required this.onEdit,
+  });
+
+  final BudgetProgress? progress;
+  final List<TagModel> tags;
+  final List<WalletSummary> wallets;
+  final ValueChanged<BudgetFormSheet> onEdit;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final p = progress;
+    if (p == null) return const _TabScroll(slivers: [_Loading()]);
+
     final pace = _pace(context, p);
     final statusColor = BudgetLabels.statusColor(p.status, context.colors);
 
-    return Column(
-      children: [
-        _PeriodSwitcher(
-          progress: p,
-          canGoForward: canGoForward,
-          onPrevious: onPrevious,
-          onNext: onNext,
+    Widget section(String label, Widget child, int delayMs) => Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            UiSectionLabel(text: label, padding: const EdgeInsets.fromLTRB(4, 28, 4, 8)),
+            child,
+          ],
+        ).uiFadeSlideIn(delay: Duration(milliseconds: delayMs), offset: 0.2);
+
+    return _TabScroll(
+      slivers: [
+        SliverPadding(
+          padding: const EdgeInsets.symmetric(horizontal: kListHorzPadding),
+          sliver: SliverToBoxAdapter(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Center(
+                  child: AnimatedSwitcher(
+                    duration: UIAnim.fast,
+                    child: pace == null
+                        ? const SizedBox(key: ValueKey('no-pace'), height: 0, width: double.infinity)
+                        : Padding(
+                            key: ValueKey(pace),
+                            padding: const EdgeInsets.only(top: 4, bottom: 14),
+                            child: _Pill(text: pace, color: statusColor, dot: true),
+                          ),
+                  ).uiFadeSlideIn(delay: const Duration(milliseconds: 200), offset: 0.3),
+                ),
+                const UISpace.vert(4),
+                _Stats(progress: p),
+                if (p.subscriptionCount > 0 && p.subscriptionPlanned != null) ...[
+                  const UISpace.vert(8),
+                  _SubscriptionsLink(progress: p),
+                ],
+                section(
+                  l10n.budget_what_counts,
+                  _ScopeCard(budget: p.budget, wallets: wallets, tags: tags),
+                  420,
+                ),
+                section(l10n.settings_title, _RulesCard(budget: p.budget, onTap: onEdit), 500),
+              ],
+            ),
+          ),
         ),
-        const UISpace.vert(20),
-        _Ring(progress: p).uiFadeSlideIn(offset: 0.06, duration: UIAnim.slow),
-        const UISpace.vert(16),
-        AnimatedSwitcher(
-          duration: UIAnim.fast,
-          child: pace == null
-              ? const SizedBox(key: ValueKey('no-pace'), height: 0, width: double.infinity)
-              : _Pill(key: ValueKey(pace), text: pace, color: statusColor, dot: true),
-        ).uiFadeSlideIn(delay: const Duration(milliseconds: 200), offset: 0.3),
-        const UISpace.vert(20),
-        _Stats(progress: p),
-        const UISpace.vert(16),
-        _Scope(budget: p.budget, wallets: wallets, tagNames: tagNames, incomplete: p.incomplete)
-            .uiFadeSlideIn(delay: const Duration(milliseconds: 440), offset: 0.3),
       ],
     );
   }
@@ -231,30 +330,156 @@ class _Header extends StatelessWidget {
   }
 }
 
-/// ‹ October › — the label slides in the browsing direction.
-class _PeriodSwitcher extends HookWidget {
-  const _PeriodSwitcher({
+/// The rows the period counts — month sections when the period spans
+/// several months.
+class _TransactionsTab extends StatelessWidget {
+  const _TransactionsTab({required this.state, required this.offset, required this.controller});
+
+  final BudgetDetailsState state;
+  final int offset;
+  final ScrollController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    final rows = state.rows.value;
+    // Fresh scope per period and once the rows arrive: the cascade plays on
+    // the real rows.
+    return UIStaggerScope(
+      key: ValueKey('$offset-${rows != null}'),
+      child: _TabScroll(
+        controller: controller,
+        topFade: 0,
+        slivers: [
+          ..._rowSlivers(context, rows),
+          if (state.isLoadingMore)
+            const SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.all(16),
+                child: Center(
+                  child: SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2)),
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  static List<Widget> _rowSlivers(BuildContext context, List<TransactionRow>? list) {
+    if (list == null) return const [_Loading()];
+    if (list.isEmpty) {
+      return [
+        SliverFillRemaining(
+          hasScrollBody: false,
+          child: UIStaggerItem(
+            index: 0,
+            child: UiEmptyState(image: AppAssets.images.wumbiOo.path, title: context.l10n.budget_no_spending),
+          ),
+        ),
+      ];
+    }
+
+    // Rows arrive newest first.
+    final months = <(DateTime, List<TransactionRow>)>[];
+    for (final row in list) {
+      final date = row.transaction.transactionDate.toLocal();
+      if (months.isEmpty || !months.last.$1.isSameMonth(date)) {
+        months.add((date, [row]));
+      } else {
+        months.last.$2.add(row);
+      }
+    }
+
+    Widget tile(TransactionRow row, int index) => UIStaggerItem(
+          key: ValueKey('budget-row-${row.id}'),
+          index: index,
+          child: _RowTile(row: row),
+        );
+
+    if (months.length == 1) {
+      return [
+        const SliverToBoxAdapter(child: UISpace.vert(4)),
+        SliverPadding(
+          padding: const EdgeInsets.symmetric(horizontal: kListHorzPadding),
+          sliver: SliverList.separated(
+            itemCount: list.length,
+            separatorBuilder: (_, _) => const UIDivider(),
+            itemBuilder: (context, i) => tile(list[i], i),
+          ),
+        ),
+      ];
+    }
+
+    final sections = <Widget>[];
+    var stagger = 0;
+    for (final (month, monthRows) in months) {
+      final header = stagger++;
+      final first = stagger;
+      stagger += monthRows.length;
+      sections.add(
+        SliverStickySection(
+          key: ValueKey('month-${month.year}-${month.month}'),
+          header: UIStaggerItem(index: header, child: MonthDivider(label: month.formatMonthYear())),
+          sliver: SliverList.separated(
+            itemCount: monthRows.length,
+            separatorBuilder: (_, _) => const UIDivider(),
+            itemBuilder: (context, i) => tile(monthRows[i], first + i),
+          ),
+        ),
+      );
+    }
+    return sections;
+  }
+}
+
+// ----------------------------------------------------------- period navigator
+
+/// Tinted card under the ring (fixed header):
+///
+/// ```
+/// (‹)        October 2026         (›)
+///      Oct 1 – 31 · 12 days left
+/// ```
+/// The label slides in the browsing direction; away from the running period
+/// a "Back to today" link returns to it. One-time budgets have a single
+/// period: no arrows.
+class _PeriodNavigator extends HookWidget {
+  const _PeriodNavigator({
     required this.progress,
-    required this.canGoForward,
+    required this.offset,
     required this.onPrevious,
     required this.onNext,
+    required this.onBackToCurrent,
   });
 
   final BudgetProgress progress;
-  final bool canGoForward;
+
+  /// 0 = running period, −1 = previous …
+  final int offset;
   final VoidCallback onPrevious;
   final VoidCallback onNext;
+  final VoidCallback onBackToCurrent;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final colors = context.colors;
     final typo = context.typo.inter;
     final p = progress;
     final b = p.budget;
+    final custom = b.period.isCustom;
 
-    final label = b.period.isCustom
-        ? BudgetLabels.range(p.period)
-        : BudgetLabels.period(l10n, b, p.period, isCurrent: p.isCurrent);
+    final range = BudgetLabels.range(p.period);
+    final label = custom ? range : BudgetLabels.period(l10n, b, p.period, isCurrent: p.isCurrent);
+    final caption = [
+      if (label != range) range,
+      if (p.status == BudgetStatus.notStarted)
+        l10n.budget_starts(p.period.start.formatShortDate())
+      else if (p.isCurrent)
+        l10n.budget_days_left(p.daysLeft)
+      else
+        l10n.budget_ended,
+    ].join(' · ');
 
     // +1 = moving forward in time (slide from the right), −1 = back.
     final direction = useRef(1);
@@ -264,38 +489,303 @@ class _PeriodSwitcher extends HookWidget {
       lastIndex.value = p.period.index;
     }
 
-    final text = AnimatedSwitcher(
-      duration: UIAnim.fast,
-      switchInCurve: UIAnim.easeOut,
-      switchOutCurve: UIAnim.easeOut,
-      transitionBuilder: (child, animation) {
-        final incoming = child.key == ValueKey(label);
-        final dx = (incoming ? 0.25 : -0.25) * direction.value;
-        return FadeTransition(
-          opacity: animation,
-          child: SlideTransition(
-            position: Tween<Offset>(begin: Offset(dx, 0), end: Offset.zero).animate(animation),
-            child: child,
+    Widget slide(Widget child, Object key) => AnimatedSwitcher(
+          duration: UIAnim.fast,
+          switchInCurve: UIAnim.easeOut,
+          switchOutCurve: UIAnim.easeOut,
+          layoutBuilder: (current, previous) => Stack(
+            alignment: Alignment.center,
+            children: [...previous, ?current],
           ),
+          transitionBuilder: (child, animation) {
+            final incoming = child.key == ValueKey(key);
+            final dx = (incoming ? 0.25 : -0.25) * direction.value;
+            return FadeTransition(
+              opacity: animation,
+              child: SlideTransition(
+                position: Tween<Offset>(begin: Offset(dx, 0), end: Offset.zero).animate(animation),
+                child: child,
+              ),
+            );
+          },
+          child: KeyedSubtree(key: ValueKey(key), child: child),
         );
-      },
-      child: Text(label, key: ValueKey(label), textAlign: TextAlign.center, style: typo.label),
+
+    final center = Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        slide(
+          Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, textAlign: TextAlign.center, style: typo.rowTitle),
+          label,
+        ),
+        const UISpace.vert(2),
+        slide(
+          Text(caption, maxLines: 1, overflow: TextOverflow.ellipsis, textAlign: TextAlign.center, style: typo.caption),
+          caption,
+        ),
+        AnimatedSize(
+          duration: UIAnim.fast,
+          curve: UIAnim.easeOut,
+          child: offset == 0
+              ? const SizedBox(width: double.infinity)
+              : UITap(
+                  onTap: onBackToCurrent,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 6),
+                    child: Text(
+                      l10n.budget_back_to_current,
+                      style: typo.captionBold.copyWith(color: UIColorToken.blue),
+                    ),
+                  ),
+                ),
+        ),
+      ],
     );
 
-    if (b.period.isCustom) return text;
-    return Row(
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 6, vertical: custom ? 14 : 8),
+      decoration: BoxDecoration(
+        color: colors.secondContentColor.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: custom
+          ? center
+          : Row(
+              children: [
+                _NavButton(icon: UIIconToken.icons.arrows.chevronLeft, onTap: onPrevious),
+                Expanded(child: center),
+                _NavButton(icon: UIIconToken.icons.arrows.chevronRight, onTap: offset < 0 ? onNext : null),
+              ],
+            ),
+    );
+  }
+}
+
+/// Round 40 px arrow on the card colour; dimmed when there is nowhere to go.
+class _NavButton extends StatelessWidget {
+  const _NavButton({required this.icon, required this.onTap});
+
+  final String icon;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+    return AnimatedOpacity(
+      duration: UIAnim.fast,
+      opacity: onTap == null ? 0.3 : 1,
+      child: UITap(
+        onTap: onTap,
+        child: Container(
+          width: 40,
+          height: 40,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(color: colors.fgColor, shape: BoxShape.circle),
+          child: UIIcon(icon, size: 20),
+        ),
+      ),
+    );
+  }
+}
+
+// ------------------------------------------------------------ overview cards
+
+/// Tinted rounded card holding rows separated by hairlines.
+class _Card extends StatelessWidget {
+  const _Card({required this.children});
+
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      decoration: BoxDecoration(
+        color: context.colors.secondContentColor.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        children: [
+          for (var i = 0; i < children.length; i++) ...[
+            if (i > 0) const UIDivider(),
+            children[i],
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+/// "Counts expenses from Card tagged #food." then one row per wallet and
+/// the #tags — each opens its details.
+class _ScopeCard extends StatelessWidget {
+  const _ScopeCard({required this.budget, required this.wallets, required this.tags});
+
+  final BudgetModel budget;
+  final List<WalletSummary> wallets;
+  final List<TagModel> tags;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final colors = context.colors;
+    final typo = context.typo.inter;
+    final scoped = wallets.where((w) => budget.walletIds.contains(w.id)).toList();
+
+    return _Card(
       children: [
-        UIIcon(UIIconToken.icons.arrows.chevronLeft, size: 22, onTap: onPrevious),
-        Expanded(child: text),
-        AnimatedOpacity(
-          duration: UIAnim.fast,
-          opacity: canGoForward ? 1 : 0.3,
-          child: UIIcon(UIIconToken.icons.arrows.chevronRight, size: 22, onTap: canGoForward ? onNext : null),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(4, 14, 4, 12),
+          child: Text(
+            BudgetLabels.scopeSentence(
+              l10n,
+              walletNames: scoped.map((w) => w.name).toList(),
+              tagNames: tags.map((t) => t.displayName).toList(),
+            ),
+            style: typo.body,
+          ),
+        ),
+        if (budget.walletIds.isEmpty)
+          UiListRow(
+            leading: UIIcon(UIIconToken.icons.financeEcommerce.wallet02, size: 18, color: colors.secondContentColor),
+            title: l10n.budget_all_wallets,
+          )
+        else
+          for (final w in scoped)
+            UiListRow(
+              leading: UiCircleColorBadge(color: w.color.color, size: 10),
+              title: w.name,
+              trailing: UIIcon(UIIconToken.icons.arrows.chevronRight, size: 16, color: colors.secondContentColor),
+              onTap: () => context.router.push(WalletDetailsRoute(walletId: w.id)),
+            ),
+        if (tags.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 4),
+                  child: UIIcon(UIIconToken.icons.general.hash01, size: 18, color: colors.secondContentColor),
+                ),
+                const UISpace.horz(14),
+                Expanded(
+                  child: Wrap(
+                    spacing: 6,
+                    runSpacing: 6,
+                    children: [
+                      for (final t in tags)
+                        UITap(
+                          onTap: () => context.router.push(TagDetailsRoute(tagId: t.id)),
+                          child: _Pill(text: '#${t.displayName}', color: UIColorToken.blue),
+                        ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+/// Repeats · Starts on · Carry over · Planned payments — a tap opens the
+/// form on that row's sheet.
+class _RulesCard extends StatelessWidget {
+  const _RulesCard({required this.budget, required this.onTap});
+
+  final BudgetModel budget;
+  final ValueChanged<BudgetFormSheet> onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final b = budget;
+    final custom = b.period.isCustom;
+    final anchor = b.anchorDate;
+    final end = b.endDate;
+
+    final String start = switch (b.period) {
+      BudgetPeriodType.monthly => l10n.budget_day_of_month(anchor.day),
+      BudgetPeriodType.weekly => WeekdaySheet.name(anchor.weekday),
+      BudgetPeriodType.yearly => anchor.formatShortDate(),
+      BudgetPeriodType.custom => end == null
+          ? anchor.formatMediumDate()
+          : '${anchor.formatMediumDate()} – ${DateTime(end.year, end.month, end.day - 1).formatMediumDate()}',
+    };
+
+    return _Card(
+      children: [
+        _RuleRow(
+          icon: UIIconToken.icons.mediaDevices.repeat01,
+          label: l10n.budget_repeats,
+          value: BudgetLabels.periodType(l10n, b.period),
+          onTap: () => onTap(BudgetFormSheet.period),
+        ),
+        _RuleRow(
+          icon: UIIconToken.icons.time.calendar,
+          label: custom ? l10n.budget_period_section : l10n.budget_row_starts,
+          value: start,
+          onTap: () => onTap(BudgetFormSheet.start),
+        ),
+        if (!custom)
+          _RuleRow(
+            icon: UIIconToken.icons.arrows.flipForward,
+            label: l10n.budget_carry_over,
+            value: BudgetLabels.rollover(l10n, b.rollover),
+            onTap: () => onTap(BudgetFormSheet.rollover),
+          ),
+        _RuleRow(
+          icon: UIIconToken.icons.time.clockFastForward,
+          label: l10n.budget_planned_title,
+          value: BudgetLabels.countPlanned(l10n, b.includePlanned),
+          onTap: () => onTap(BudgetFormSheet.planned),
         ),
       ],
     );
   }
 }
+
+class _RuleRow extends StatelessWidget {
+  const _RuleRow({required this.icon, required this.label, required this.value, required this.onTap});
+
+  final String icon;
+  final String label;
+  final String value;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+    final typo = context.typo.inter;
+    return UITap(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 4),
+        child: Row(
+          children: [
+            UIIcon(icon, size: 18, color: colors.secondContentColor),
+            const UISpace.horz(14),
+            Expanded(child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: typo.body)),
+            const UISpace.horz(12),
+            Flexible(
+              child: Text(
+                value,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.end,
+                style: typo.label,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ------------------------------------------------------------- shared bits
 
 /// Ring gauge with the remaining amount, its word and "42 % used".
 class _Ring extends StatelessWidget {
@@ -353,7 +843,8 @@ class _Ring extends StatelessWidget {
 }
 
 /// Spent · Limit · Planned · Per day · Forecast tiles, two per row (a lone
-/// last tile spans the row). Values cross-fade when they change.
+/// last tile spans the row). Values cross-fade when they change. When any
+/// tile has a sub line, every tile reserves it so all share one height.
 class _Stats extends StatelessWidget {
   const _Stats({required this.progress});
 
@@ -382,17 +873,15 @@ class _Stats extends StatelessWidget {
       if (perDay != null)
         _StatData(label: l10n.budget_stat_per_day, value: perDay.format(), sub: l10n.budget_days_left(p.daysLeft)),
       if (forecast != null)
-        _StatData(
-          label: l10n.budget_stat_forecast,
-          value: forecast.format(),
-          color: forecast.minor > p.limit.minor ? UIColorToken.buttercup : null,
-        ),
+        // No orange here: orange means ≥ 90 % of the limit is used.
+        _StatData(label: l10n.budget_stat_forecast, value: forecast.format()),
     ];
 
     return LayoutBuilder(
       builder: (context, constraints) {
         const gap = 10.0;
         final half = (constraints.maxWidth - gap) / 2;
+        final reserveSub = tiles.any((t) => t.sub != null);
         return Wrap(
           spacing: gap,
           runSpacing: gap,
@@ -401,7 +890,7 @@ class _Stats extends StatelessWidget {
               SizedBox(
                 key: ValueKey(tiles[i].label),
                 width: i == tiles.length - 1 && tiles.length.isOdd ? constraints.maxWidth : half,
-                child: _StatTile(data: tiles[i]).uiFadeSlideIn(
+                child: _StatTile(data: tiles[i], reserveSub: reserveSub).uiFadeSlideIn(
                   delay: Duration(milliseconds: 260 + 60 * i),
                   offset: 0.25,
                 ),
@@ -423,9 +912,12 @@ class _StatData {
 }
 
 class _StatTile extends StatelessWidget {
-  const _StatTile({required this.data});
+  const _StatTile({required this.data, required this.reserveSub});
 
   final _StatData data;
+
+  /// Keep the sub line's room even without one (equal tile heights).
+  final bool reserveSub;
 
   @override
   Widget build(BuildContext context) {
@@ -462,54 +954,20 @@ class _StatTile extends StatelessWidget {
               style: typo.rowTitle.copyWith(color: data.color),
             ),
           ),
-          if (sub != null) ...[
+          if (reserveSub) ...[
             const UISpace.vert(2),
-            fade(Text(sub, key: ValueKey(sub), maxLines: 1, overflow: TextOverflow.ellipsis, style: typo.caption)),
+            fade(
+              Text(
+                sub ?? '',
+                key: ValueKey(sub),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: typo.caption,
+              ),
+            ),
           ],
         ],
       ),
-    );
-  }
-}
-
-/// What the budget counts: wallet chips (colour dot) and #tag chips.
-class _Scope extends StatelessWidget {
-  const _Scope({required this.budget, required this.wallets, required this.tagNames, required this.incomplete});
-
-  final BudgetModel budget;
-  final List<WalletSummary> wallets;
-  final List<String> tagNames;
-
-  /// Some amounts could not be converted (no cached rate).
-  final bool incomplete;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    final colors = context.colors;
-    final scoped = wallets.where((w) => budget.walletIds.contains(w.id)).toList();
-
-    return Wrap(
-      alignment: WrapAlignment.center,
-      spacing: 6,
-      runSpacing: 6,
-      children: [
-        if (budget.walletIds.isEmpty)
-          _Pill(
-            text: l10n.budget_all_wallets,
-            color: colors.secondContentColor,
-            leading: UIIcon(UIIconToken.icons.financeEcommerce.wallet02, size: 12, color: colors.secondContentColor),
-          )
-        else
-          for (final w in scoped)
-            _Pill(
-              text: w.name,
-              color: colors.secondContentColor,
-              leading: UiCircleColorBadge(color: w.color.color, size: 8),
-            ),
-        for (final t in tagNames) _Pill(text: '#$t', color: UIColorToken.blue),
-        if (incomplete) _Pill(text: '≈', color: colors.secondContentColor),
-      ],
     );
   }
 }
@@ -587,62 +1045,25 @@ class _SubscriptionsLink extends StatelessWidget {
   }
 }
 
-class _Rows extends StatelessWidget {
-  const _Rows({super.key, required this.rows});
+class _RowTile extends StatelessWidget {
+  const _RowTile({required this.row});
 
-  final AsyncValue<List<TransactionRow>> rows;
+  final TransactionRow row;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final list = rows.value;
-    if (list == null) {
-      return const SliverToBoxAdapter(
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(kListHorzPadding, 8, kListHorzPadding, 0),
-          child: UiSkeletonList(rows: 4),
-        ),
-      );
-    }
-    if (list.isEmpty) {
-      return SliverToBoxAdapter(
-        child: UiEmptyState(image: AppAssets.images.wumbiOo.path, title: l10n.budget_no_spending)
-            .uiFadeSlideIn(delay: const Duration(milliseconds: 200), offset: 0.08),
-      );
-    }
-    // The scope is created when the rows arrive, so the cascade plays then.
-    return UIStaggerScope(
-      child: SliverPadding(
-        padding: const EdgeInsets.symmetric(horizontal: kListHorzPadding),
-        sliver: SliverList.builder(
-          itemCount: list.length,
-          itemBuilder: (context, index) {
-            final row = list[index];
-            final t = row.transaction;
-            return UIStaggerItem(
-              key: ValueKey('budget-row-${row.id}'),
-              index: index,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  UiTransactionCard(
-                    title: t.description.isEmpty ? l10n.common_expense : t.description,
-                    subtitle: t.transactionDate.formatListDate(),
-                    amount: t.amountFor(t.walletId ?? '', t.currency).abs(),
-                    direction: UiTransactionDirection.expense,
-                    secondaryText: row.walletName,
-                    tags: row.tags,
-                    upcoming: t.isUpcoming,
-                    badge: t.isUpcoming ? l10n.transaction_upcoming_badge : null,
-                    onTap: () => context.router.push(TransactionRoute(transactionId: row.id, walletId: t.walletId)),
-                  ),
-                  if (index + 1 < list.length) const UIDivider(),
-                ],
-              ),
-            );
-          },
-        ),
-      ),
+    final t = row.transaction;
+    return UiTransactionCard(
+      title: t.description.isEmpty ? l10n.common_expense : t.description,
+      subtitle: t.transactionDate.formatListDate(),
+      amount: t.amountFor(t.walletId ?? '', t.currency).abs(),
+      direction: UiTransactionDirection.expense,
+      secondaryText: row.walletName,
+      tags: row.tags,
+      upcoming: t.isUpcoming,
+      badge: t.isUpcoming ? l10n.transaction_upcoming_badge : null,
+      onTap: () => context.router.push(TransactionRoute(transactionId: row.id, walletId: t.walletId)),
     );
   }
 }

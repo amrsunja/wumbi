@@ -361,7 +361,7 @@ class TransactionPage extends HookConsumerWidget {
               LayoutBuilder(
                 builder: (context, constraints) => SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
-                  physics: const ClampingScrollPhysics(),
+                  physics: const BouncingScrollPhysics(),
                   child: ConstrainedBox(
                     constraints: BoxConstraints(minWidth: constraints.maxWidth),
                     child: Row(

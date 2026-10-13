@@ -399,7 +399,7 @@ class AppLocalizationsNl extends AppLocalizations {
       '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ TRANSACTION ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
 
   @override
-  String get transaction_edit_title => 'Bewerken';
+  String get transaction_edit_title => 'Transactie bewerken';
 
   @override
   String get transaction_description_placeholder => 'omschrijving';
@@ -1355,6 +1355,11 @@ class AppLocalizationsNl extends AppLocalizations {
   String get budget_name_placeholder => 'naam';
 
   @override
+  String budget_name_hint(String name) {
+    return 'Budgetnaam: $name';
+  }
+
+  @override
   String get budget_what_counts => 'Wat telt';
 
   @override
@@ -1633,19 +1638,6 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get dashboard_reorder_hint => 'Vasthouden om te ordenen';
-
-  @override
-  String dashboard_budgets_over(int count) {
-    return '$count overschreden';
-  }
-
-  @override
-  String dashboard_budgets_at_risk(int count) {
-    return '$count in gevaar';
-  }
-
-  @override
-  String get dashboard_budgets_on_track => 'Alles op schema';
 
   @override
   String dashboard_debts_to_receive(String amount) {
@@ -2083,6 +2075,9 @@ class AppLocalizationsNl extends AppLocalizations {
       'Telt niet mee in het totaal op het startscherm — handig voor spaargeld, gedeelde of alleen-bijhouden-portemonnees.';
 
   @override
+  String get dashboard_wallets_not_counted => 'Niet in totaalsaldo';
+
+  @override
   String dashboard_wallets_excluded(int count) {
     return '$count niet meegeteld';
   }
@@ -2098,6 +2093,16 @@ class AppLocalizationsNl extends AppLocalizations {
   @override
   String get budget_rollover_both_desc =>
       'Een rest verhoogt de volgende limiet, een overschrijding verlaagt die.';
+
+  @override
+  String get budget_planned_title => 'Geplande betalingen';
+
+  @override
+  String get budget_planned_exclude => 'Gepland niet meetellen';
+
+  @override
+  String get budget_planned_exclude_desc =>
+      'Alleen betalingen die al gedaan zijn tellen mee voor het limiet. Geplande betalingen en abonnementen tellen pas mee na betaling.';
 
   @override
   String budget_used_percent(int percent) {
@@ -2129,6 +2134,63 @@ class AppLocalizationsNl extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get subscriptions_monthly_spend => 'Maandelijkse uitgaven';
+
+  @override
+  String get subscriptions_active_empty => 'Geen actieve abonnementen';
+
+  @override
+  String get subscriptions_paused_empty => 'Geen gepauzeerde abonnementen';
+
+  @override
+  String budgets_summary_over(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Je zit boven $count budgetten',
+      one: 'Je zit boven 1 budget',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String budgets_summary_close(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count budgetten zijn bijna op',
+      one: '1 budget is bijna op',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String budgets_summary_ok(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Je blijft binnen je budgetten',
+      one: 'Je blijft binnen je budget',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get budget_edit_title => 'Budget bewerken';
+
+  @override
+  String get wallet_edit_title => 'Portemonnee bewerken';
+
+  @override
+  String get budget_tab_overview => 'Overzicht';
+
+  @override
+  String get budget_back_to_current => 'Terug naar vandaag';
+
+  @override
+  String get budget_row_starts => 'Begint op';
 
   @override
   String get l10nStopLineDontTouch =>

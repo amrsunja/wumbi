@@ -159,28 +159,15 @@ class WalletFormBody extends HookConsumerWidget {
               },
             ),
           ),
-        _FormRow(
-          label: l10n.wallet_include_in_total,
-          trailing: UISwitch(
-            value: state.includeInTotal,
-            onChanged: (v) {
-              AppVibrations.selection();
-              notifier.setIncludeInTotal(v);
-            },
-          ),
-        ),
-        // What the switch does, in plain words; the text follows its state.
-        AnimatedSwitcher(
-          duration: UIAnim.fast,
-          layoutBuilder: (current, previous) => Stack(
-            alignment: AlignmentDirectional.topStart,
-            children: [...previous, ?current],
-          ),
-          child: Text(
-            state.includeInTotal ? l10n.wallet_include_in_total_on : l10n.wallet_include_in_total_off,
-            key: ValueKey(state.includeInTotal),
-            style: typo.inter.caption,
-          ),
+        UiToggleRow(
+          title: l10n.wallet_include_in_total,
+          // What the switch does, in plain words; the text follows its state.
+          description: state.includeInTotal ? l10n.wallet_include_in_total_on : l10n.wallet_include_in_total_off,
+          value: state.includeInTotal,
+          onChanged: (v) {
+            AppVibrations.selection();
+            notifier.setIncludeInTotal(v);
+          },
         ),
         const UISpace.vert(24),
         UiColorPicker<WalletColor>(

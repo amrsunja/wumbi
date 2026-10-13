@@ -158,7 +158,7 @@
   },
 
   "l10nTransaction": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ TRANSACTION ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
-  "transaction_edit_title": "Edit",
+  "transaction_edit_title": "Edit transaction",
   "transaction_description_placeholder": "description",
   "transaction_tags_placeholder": "#tags",
   "transaction_repeat": "Repeat",
@@ -605,6 +605,12 @@
   "budget_all_spending": "All spending",
   "budget_name": "Name",
   "budget_name_placeholder": "name",
+  "budget_name_hint": "Budget name: {name}",
+  "@budget_name_hint": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
   "budget_what_counts": "What counts",
   "budget_wallets": "Wallets",
   "budget_all_wallets": "All wallets",
@@ -778,19 +784,6 @@
   "debts_all": "All debts",
   "debts_empty_hint": "Keep track of money you lent or borrowed",
   "dashboard_reorder_hint": "Hold to reorder",
-  "dashboard_budgets_over": "{count} over limit",
-  "@dashboard_budgets_over": {
-    "placeholders": {
-      "count": {"type": "int"}
-    }
-  },
-  "dashboard_budgets_at_risk": "{count} at risk",
-  "@dashboard_budgets_at_risk": {
-    "placeholders": {
-      "count": {"type": "int"}
-    }
-  },
-  "dashboard_budgets_on_track": "All on track",
   "dashboard_debts_to_receive": "{amount} to receive",
   "@dashboard_debts_to_receive": {
     "placeholders": {
@@ -1170,6 +1163,7 @@
   "wallet_include_in_total": "Count in total balance",
   "wallet_include_in_total_on": "This wallet's balance is added to the total on the Dashboard.",
   "wallet_include_in_total_off": "Left out of the Dashboard total — handy for savings, shared or tracking-only wallets.",
+  "dashboard_wallets_not_counted": "Not counted in total",
   "dashboard_wallets_excluded": "{count, plural, =1{1 not counted} other{{count} not counted}}",
   "@dashboard_wallets_excluded": {
     "placeholders": {
@@ -1179,6 +1173,9 @@
   "budget_rollover_none_desc": "Every period starts fresh with the same limit. Leftovers and overspending don't move on.",
   "budget_rollover_surplus_desc": "What you didn't spend is added to the next period's limit.",
   "budget_rollover_both_desc": "Leftovers raise the next period's limit, overspending lowers it.",
+  "budget_planned_title": "Planned payments",
+  "budget_planned_exclude": "Don't count planned",
+  "budget_planned_exclude_desc": "Only payments already made count against the limit. Upcoming payments and subscriptions count once they're paid.",
   "budget_used_percent": "{percent}% used",
   "@budget_used_percent": {
     "placeholders": {
@@ -1196,6 +1193,26 @@
       "count": {"type": "int"}
     }
   },
+  "subscriptions_monthly_spend": "Monthly spend",
+  "subscriptions_active_empty": "No active subscriptions",
+  "subscriptions_paused_empty": "No paused subscriptions",
+  "budgets_summary_over": "{count, plural, =1{You're over 1 budget} other{You're over {count} budgets}}",
+  "@budgets_summary_over": {
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "budgets_summary_close": "{count, plural, =1{1 budget is close to its limit} other{{count} budgets are close to their limits}}",
+  "@budgets_summary_close": {
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "budgets_summary_ok": "{count, plural, =1{You're within your budget} other{You're within your budgets}}",
+  "@budgets_summary_ok": {
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "budget_edit_title": "Edit budget",
+  "wallet_edit_title": "Edit wallet",
+  "budget_tab_overview": "Overview",
+  "budget_back_to_current": "Back to today",
+  "budget_row_starts": "Starts on",
 
   "l10nStopLineDontTouch": "☠☠☠☠☠☠☠☠☠☠☠☠☠ Don't touch this line ☠☠☠☠☠☠☠☠☠☠☠☠☠"
 }

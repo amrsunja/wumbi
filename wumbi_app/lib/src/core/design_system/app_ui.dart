@@ -45,6 +45,7 @@ export 'src/components/lists/ui_settings_tile.dart';
 export 'src/components/lists/ui_section_label.dart';
 export 'src/components/lists/ui_list_row.dart';
 export 'src/components/lists/ui_radio_row.dart';
+export 'src/components/lists/ui_toggle_row.dart';
 export 'src/components/states/ui_empty_state.dart';
 export 'src/components/states/ui_skeleton_list.dart';
 export 'src/components/ui_progress_dots.dart';

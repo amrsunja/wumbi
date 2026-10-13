@@ -8,6 +8,7 @@ import '../../../core/utils/extensions/date_time_extensions.dart';
 import '../data/budget_metrics.dart';
 import '../data/budget_period.dart';
 import '../data/models/budget_model.dart';
+import 'budgets_provider.dart';
 
 /// Every user-visible budget string and colour is derived here, once, so the
 /// Dashboard, Wallet Details, Budgets and details pages never disagree.
@@ -92,4 +93,39 @@ abstract class BudgetLabels {
         RolloverMode.surplus => l10n.budget_rollover_surplus_desc,
         RolloverMode.both => l10n.budget_rollover_both_desc,
       };
+
+  /// Chip / sheet label for whether planned payments count against the limit.
+  static String countPlanned(AppLocale l10n, bool include) =>
+      include ? l10n.budget_count_planned : l10n.budget_planned_exclude;
+
+  /// One-sentence explanation under each option of the Planned payments sheet.
+  static String countPlannedDescription(AppLocale l10n, bool include) =>
+      include ? l10n.budget_count_planned_desc : l10n.budget_planned_exclude_desc;
+
+  /// One sentence on how the running budgets in [budgets] are doing, and its
+  /// colour: over (red) beats close to the limit (orange) beats within
+  /// (default). Null when none is running.
+  static (String, Color?)? summary(AppLocale l10n, Iterable<BudgetProgress> budgets) {
+    final running = budgets.where(isRunningBudget).toList();
+    if (running.isEmpty) return null;
+    final over = running.where((p) => p.status == BudgetStatus.over).length;
+    if (over > 0) return (l10n.budgets_summary_over(over), UIColorToken.neg500);
+    final close = running.where((p) => p.status == BudgetStatus.atRisk).length;
+    if (close > 0) return (l10n.budgets_summary_close(close), UIColorToken.buttercup);
+    return (l10n.budgets_summary_ok(running.length), null);
+  }
+
+  /// What a budget counts, in words: "Counts expenses from Card, Cash tagged
+  /// #food or #coffee." [tagNames] without the `#`.
+  static String scopeSentence(AppLocale l10n, {required List<String> walletNames, required List<String> tagNames}) {
+    final wallets = walletNames.join(', ');
+    final tags = tagNames.map((t) => '#$t').toList();
+    final tagText = tags.length <= 1
+        ? tags.join()
+        : '${tags.sublist(0, tags.length - 1).join(', ')} ${l10n.budget_scope_or} ${tags.last}';
+    if (walletNames.isEmpty && tags.isEmpty) return l10n.budget_scope_all;
+    if (tags.isEmpty) return l10n.budget_scope_wallets(wallets);
+    if (walletNames.isEmpty) return l10n.budget_scope_tags(tagText);
+    return l10n.budget_scope_both(wallets, tagText);
+  }
 }

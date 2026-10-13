@@ -11,7 +11,7 @@ import '../../../core/utils/extensions/build_context_extensions.dart';
 import '../../../core/utils/state_management/app_events.dart';
 import '../../../core/utils/state_management/single_events.dart';
 import '../../../core/utils/typedefs.dart';
-import '../../budget/data/budget_metrics.dart';
+import '../../budget/ui/budget_labels.dart';
 import '../../budget/ui/budgets_provider.dart';
 import '../../budget/ui/widgets/budget_progress_row.dart';
 import '../../debt/ui/debts_provider.dart';
@@ -263,6 +263,8 @@ class _NoWallets extends StatelessWidget {
 
 enum _MoneyTab { wallets, budgets, debts }
 
+bool _ignore(Object? _) => true;
+
 /// Tab bar, the active tab's summary + create button (fixed), and the
 /// swipeable pages.
 ///
@@ -280,6 +282,18 @@ class _MoneyTabs extends HookConsumerWidget {
     final index = useState(0);
     final tab = _MoneyTab.values[index.value];
     final overdue = ref.watch(openDebtsBadgeProvider.select((b) => b.overdueCount > 0));
+
+    // Recompute the providers the summary line and the pages share here,
+    // before either child builds. A derived provider flushed lazily inside
+    // `_TabSummary.build` notifies its sibling page mid-build ("setState()
+    // called during build", e.g. right after saving a budget); flushed here,
+    // both listeners are descendants, which Flutter allows. `select` keeps
+    // this widget from rebuilding on their changes.
+    ref
+      ..watch(dashboardProvider.select(_ignore))
+      ..watch(dashboardBudgetsProvider.select(_ignore))
+      ..watch(debtsOverviewProvider.select(_ignore))
+      ..watch(dashboardDebtsProvider.select(_ignore));
 
     void select(int i) {
       if (i == index.value) return;
@@ -373,7 +387,7 @@ class _MoneyTabs extends HookConsumerWidget {
 
 /// One-line digest of the active tab, left of the create button:
 /// Wallets — how to reorder (only with 2+ wallets);
-/// Budgets — over limit / at risk counts, or "All on track";
+/// Budgets — one sentence: over / close to the limit / within budgets;
 /// Debts — what is owed each way (base currency) and the overdue count.
 class _TabSummary extends ConsumerWidget {
   const _TabSummary({super.key, required this.tab});
@@ -392,13 +406,7 @@ class _TabSummary extends ConsumerWidget {
         parts = [if (count > 1) (l10n.dashboard_reorder_hint, null)];
       case _MoneyTab.budgets:
         final running = ref.watch(dashboardBudgetsProvider)?.running ?? const [];
-        final over = running.where((p) => p.status == BudgetStatus.over).length;
-        final atRisk = running.where((p) => p.status == BudgetStatus.atRisk).length;
-        parts = [
-          if (over > 0) (l10n.dashboard_budgets_over(over), UIColorToken.neg500),
-          if (atRisk > 0) (l10n.dashboard_budgets_at_risk(atRisk), UIColorToken.buttercup),
-          if (running.isNotEmpty && over == 0 && atRisk == 0) (l10n.dashboard_budgets_on_track, null),
-        ];
+        parts = [?BudgetLabels.summary(l10n, running)];
       case _MoneyTab.debts:
         final o = ref.watch(debtsOverviewProvider).value;
         final approx = o != null && o.incomplete ? '≈ ' : '';
@@ -479,14 +487,18 @@ class _StaggeredRows extends StatelessWidget {
   }
 }
 
-/// Wallet rows. Long-press + drag reorders; the new first wallet becomes
-/// primary. The dragged order is shown optimistically until the DB refresh
-/// (which yields the same order) lands.
+/// Wallet rows: the ones counted in the total, then — under their own title —
+/// the ones switched out of it ("Count in total balance" off). Long-press +
+/// drag reorders within a group; the saved order is counted → not counted,
+/// so the new first wallet (primary) is a counted one whenever there is one.
+/// The dragged order is shown optimistically until the DB refresh (which
+/// yields the same order) lands.
 class _WalletsTab extends HookConsumerWidget {
   const _WalletsTab();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
     final colors = context.colors;
     final data = ref.watch(dashboardProvider).value;
     final override = useState<List<WalletSummary>?>(null);
@@ -499,13 +511,10 @@ class _WalletsTab extends HookConsumerWidget {
     if (data == null) return const _TabSkeleton();
 
     final wallets = override.value ?? data.wallets;
+    final counted = [for (final w in wallets) if (w.includeInTotal) w];
+    final excluded = [for (final w in wallets) if (!w.includeInTotal) w];
 
-    Future<void> onReorder(int oldIndex, int newIndex) async {
-      if (newIndex > oldIndex) newIndex -= 1;
-      if (oldIndex == newIndex) return;
-      final next = List<WalletSummary>.from(wallets);
-      final moved = next.removeAt(oldIndex);
-      next.insert(newIndex, moved);
+    Future<void> save(List<WalletSummary> next) async {
       override.value = next;
       AppVibrations.medium();
       final result = await ref.read(walletRepositoryProvider).reorder(next.map((w) => w.id).toList());
@@ -514,6 +523,14 @@ class _WalletsTab extends HookConsumerWidget {
         ref.read(appEventProvider).send(ShowErrorEvent(e));
       });
     }
+
+    ReorderCallback reorderWithin(List<WalletSummary> group, {required bool isCounted}) => (oldIndex, newIndex) {
+          if (newIndex > oldIndex) newIndex -= 1;
+          if (oldIndex == newIndex) return;
+          final next = List<WalletSummary>.from(group);
+          next.insert(newIndex, next.removeAt(oldIndex));
+          save(isCounted ? [...next, ...excluded] : [...counted, ...next]);
+        };
 
     Widget proxyDecorator(Widget child, int index, Animation<double> animation) {
       return AnimatedBuilder(
@@ -535,24 +552,25 @@ class _WalletsTab extends HookConsumerWidget {
       );
     }
 
-    return _TabScroll(
-      slivers: [
-        // 8 px of the gutter lives inside each item so the lifted (dragged)
-        // card gets a background inset around its content.
-        SliverPadding(
+    // [first] = position of the group's first row in the whole tab (stagger
+    // cascade, badge phase).
+    Widget group(List<WalletSummary> items, {required bool isCounted, required int first}) => SliverPadding(
+          // 8 px of the gutter lives inside each item so the lifted (dragged)
+          // card gets a background inset around its content.
           padding: const EdgeInsets.symmetric(horizontal: kListHorzPadding - 8),
           sliver: SliverReorderableList(
-            itemCount: wallets.length,
-            onReorder: onReorder,
+            itemCount: items.length,
+            onReorder: reorderWithin(items, isCounted: isCounted),
             onReorderStart: (_) => AppVibrations.light(),
             proxyDecorator: proxyDecorator,
             itemBuilder: (context, index) {
-              final w = wallets[index];
+              final w = items[index];
+              final position = first + index;
               return ReorderableDelayedDragStartListener(
                 key: ValueKey('wallet-${w.id}'),
                 index: index,
                 child: UIStaggerItem(
-                  index: index,
+                  index: position,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
                     child: UiWalletCard(
@@ -560,7 +578,7 @@ class _WalletsTab extends HookConsumerWidget {
                       balance: w.balance,
                       color: w.color.color,
                       animatedBadge: true,
-                      badgePhase: (index * 0.23) % 1,
+                      badgePhase: (position * 0.23) % 1,
                       nameHeroTag: heroWalletName(w.id),
                       balanceHeroTag: heroWalletBalance(w.id),
                       onTap: () => context.router.push(WalletDetailsRoute(walletId: w.id)),
@@ -570,7 +588,26 @@ class _WalletsTab extends HookConsumerWidget {
               );
             },
           ),
-        ),
+        );
+
+    return _TabScroll(
+      slivers: [
+        if (counted.isNotEmpty) group(counted, isCounted: true, first: 0),
+        if (excluded.isNotEmpty) ...[
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: kListHorzPadding),
+            sliver: SliverToBoxAdapter(
+              child: UIStaggerItem(
+                index: counted.length,
+                child: UiSectionLabel(
+                  text: l10n.dashboard_wallets_not_counted,
+                  padding: EdgeInsets.only(top: counted.isEmpty ? 4 : 20, bottom: 0),
+                ),
+              ),
+            ),
+          ),
+          group(excluded, isCounted: false, first: counted.length + 1),
+        ],
       ],
     );
   }

@@ -398,7 +398,7 @@ class AppLocalizationsDe extends AppLocalizations {
       '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ TRANSACTION ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
 
   @override
-  String get transaction_edit_title => 'Bearbeiten';
+  String get transaction_edit_title => 'Transaktion bearbeiten';
 
   @override
   String get transaction_description_placeholder => 'Beschreibung';
@@ -1358,6 +1358,11 @@ class AppLocalizationsDe extends AppLocalizations {
   String get budget_name_placeholder => 'Name';
 
   @override
+  String budget_name_hint(String name) {
+    return 'Budgetname: $name';
+  }
+
+  @override
   String get budget_what_counts => 'Was zählt';
 
   @override
@@ -1636,19 +1641,6 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get dashboard_reorder_hint => 'Halten zum Sortieren';
-
-  @override
-  String dashboard_budgets_over(int count) {
-    return '$count überschritten';
-  }
-
-  @override
-  String dashboard_budgets_at_risk(int count) {
-    return '$count gefährdet';
-  }
-
-  @override
-  String get dashboard_budgets_on_track => 'Alles im Rahmen';
 
   @override
   String dashboard_debts_to_receive(String amount) {
@@ -2086,6 +2078,9 @@ class AppLocalizationsDe extends AppLocalizations {
       'Nicht in der Gesamtsumme auf der Startseite – praktisch für Ersparnisse, geteilte oder reine Tracking-Konten.';
 
   @override
+  String get dashboard_wallets_not_counted => 'Nicht im Gesamtsaldo';
+
+  @override
   String dashboard_wallets_excluded(int count) {
     return '$count nicht gezählt';
   }
@@ -2101,6 +2096,16 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get budget_rollover_both_desc =>
       'Ein Rest erhöht das nächste Limit, eine Überziehung senkt es.';
+
+  @override
+  String get budget_planned_title => 'Geplante Zahlungen';
+
+  @override
+  String get budget_planned_exclude => 'Geplantes nicht zählen';
+
+  @override
+  String get budget_planned_exclude_desc =>
+      'Nur bereits getätigte Zahlungen zählen zum Limit. Geplante Zahlungen und Abos zählen erst, wenn sie bezahlt sind.';
 
   @override
   String budget_used_percent(int percent) {
@@ -2132,6 +2137,63 @@ class AppLocalizationsDe extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get subscriptions_monthly_spend => 'Monatliche Ausgaben';
+
+  @override
+  String get subscriptions_active_empty => 'Keine aktiven Abos';
+
+  @override
+  String get subscriptions_paused_empty => 'Keine pausierten Abos';
+
+  @override
+  String budgets_summary_over(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Du liegst über $count Budgets',
+      one: 'Du liegst über 1 Budget',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String budgets_summary_close(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Budgets sind fast ausgeschöpft',
+      one: '1 Budget ist fast ausgeschöpft',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String budgets_summary_ok(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Du hältst deine Budgets ein',
+      one: 'Du hältst dein Budget ein',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get budget_edit_title => 'Budget bearbeiten';
+
+  @override
+  String get wallet_edit_title => 'Konto bearbeiten';
+
+  @override
+  String get budget_tab_overview => 'Übersicht';
+
+  @override
+  String get budget_back_to_current => 'Zurück zu heute';
+
+  @override
+  String get budget_row_starts => 'Beginnt am';
 
   @override
   String get l10nStopLineDontTouch =>

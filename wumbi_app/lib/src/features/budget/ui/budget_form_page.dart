@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -26,6 +28,16 @@ import 'budget_form_notifier.dart';
 import 'budget_labels.dart';
 import 'widgets/budget_sheets.dart';
 
+/// Picker sheet the form opens on arrival (Budget Details → Settings rows).
+enum BudgetFormSheet {
+  period,
+  start,
+  rollover,
+  planned;
+
+  static BudgetFormSheet? parse(String? name) => values.asNameMap()[name];
+}
+
 /// Create / edit a budget (spec B&D §6.6). Same anatomy as the Transaction
 /// screen: currency | wallets header, big limit on an on-page numpad, name +
 /// #tags (keyboard tag bar), then period chips and a "what counts" hint.
@@ -36,11 +48,15 @@ class BudgetFormPage extends HookConsumerWidget {
     @QueryParam('budgetId') this.budgetId,
     @QueryParam('walletId') this.walletId,
     @QueryParam('tagId') this.tagId,
+    @QueryParam('sheet') this.sheet,
   });
 
   final String? budgetId;
   final String? walletId;
   final String? tagId;
+
+  /// [BudgetFormSheet] name to open once the budget is loaded (edit mode).
+  final String? sheet;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -143,6 +159,38 @@ class BudgetFormPage extends HookConsumerWidget {
       if (picked != null) notifier.setRollover(picked);
     }
 
+    Future<void> pickCountPlanned() async {
+      unfocusAll();
+      final picked = await CountPlannedSheet.show(context, selected: state.includePlanned);
+      if (picked != null) notifier.setIncludePlanned(picked);
+    }
+
+    // Opened from a Budget Details setting row: show that row's sheet once
+    // the existing values are in (the sheet preselects them) and the push
+    // transition has settled.
+    final initialSheet = BudgetFormSheet.parse(sheet);
+    final initialSheetShown = useRef(false);
+    useEffect(() {
+      if (initialSheet == null || initialSheetShown.value) return null;
+      if (state.isEdit && state.existing == null) return null;
+      initialSheetShown.value = true;
+      final route = ModalRoute.of(context);
+      _afterTransition(route).then((_) {
+        if (!context.mounted || route?.isCurrent == false) return;
+        switch (initialSheet) {
+          case BudgetFormSheet.period:
+            pickPeriod();
+          case BudgetFormSheet.start:
+            pickStart();
+          case BudgetFormSheet.rollover:
+            if (!state.period.isCustom) pickRollover();
+          case BudgetFormSheet.planned:
+            pickCountPlanned();
+        }
+      });
+      return null;
+    }, [state.existing?.id]);
+
     Future<void> save() async {
       unfocusAll();
       final ok = await notifier.save();
@@ -192,7 +240,6 @@ class BudgetFormPage extends HookConsumerWidget {
         : selectedWallets.map((w) => w.name).join(', ');
     final walletColor =
         selectedWallets.length == 1 ? selectedWallets.single.color.color : colors.secondContentColor;
-    final hasScope = selectedWallets.isNotEmpty || state.tags.isNotEmpty;
 
     final startLabel = switch (state.period) {
       BudgetPeriodType.monthly => l10n.budget_day_of_month(state.monthDay),
@@ -205,7 +252,7 @@ class BudgetFormPage extends HookConsumerWidget {
       resizeToAvoidBottomInset: false,
       backgroundColor: colors.isDark ? colors.bgColor : UIColorToken.cararra,
       appBar: UIAppbar(
-        title: state.isEdit ? l10n.common_edit : l10n.budget_new,
+        title: state.isEdit ? l10n.budget_edit_title : l10n.budget_new,
         backTap: () => context.router.maybePop(),
       ),
       // Tap anywhere outside the text fields → drop the keyboard.
@@ -264,9 +311,8 @@ class BudgetFormPage extends HookConsumerWidget {
                   focusNode: nameFocus,
                   style: UIInputFieldStyle.borderless,
                   centered: true,
-                  // Empty name → the auto name is saved; show it once there
-                  // is a scope to derive it from.
-                  hintText: hasScope ? notifier.autoName() : l10n.budget_name_placeholder,
+                  // Empty name → the auto name is saved; the hint says so.
+                  hintText: l10n.budget_name_hint(notifier.autoName()),
                   maxLength: kMaxBudgetNameLength,
                   keyboardType: TextInputType.text,
                   textInputAction: TextInputAction.next,
@@ -292,18 +338,6 @@ class BudgetFormPage extends HookConsumerWidget {
                 ),
                 const Spacer(),
 
-                // Count planned: switch + one line on what it does.
-                _ToggleRow(
-                  title: l10n.budget_count_planned,
-                  description: l10n.budget_count_planned_desc,
-                  value: state.includePlanned,
-                  onChanged: (v) {
-                    AppVibrations.selection();
-                    notifier.setIncludePlanned(v);
-                  },
-                ),
-                const UISpace.vert(8),
-
                 // Validation message.
                 AnimatedSwitcher(
                   duration: 200.ms,
@@ -324,7 +358,7 @@ class BudgetFormPage extends HookConsumerWidget {
                 LayoutBuilder(
                   builder: (context, constraints) => SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
-                    physics: const ClampingScrollPhysics(),
+                    physics: const BouncingScrollPhysics(),
                     child: ConstrainedBox(
                       constraints: BoxConstraints(minWidth: constraints.maxWidth),
                       child: Row(
@@ -347,30 +381,18 @@ class BudgetFormPage extends HookConsumerWidget {
                             UiChip(
                               label: '→ ${state.customEnd.formatMediumDate()}',
                               onTap: pickCustomEnd,
-                            )
-                          else
+                            ),
+                          UiChip(
+                            label: BudgetLabels.countPlanned(l10n, state.includePlanned),
+                            highlighted: state.includePlanned,
+                            onTap: pickCountPlanned,
+                          ),
+                          if (!state.period.isCustom)
                             UiChip(
                               label: BudgetLabels.rollover(l10n, state.rollover),
                               highlighted: state.rollover != RolloverMode.none,
                               onTap: pickRollover,
                             ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                // Period chips.
-                LayoutBuilder(
-                  builder: (context, constraints) => SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    physics: const ClampingScrollPhysics(),
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(minWidth: constraints.maxWidth),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        spacing: 10,
-                        children: [
                         ],
                       ),
                     ),
@@ -435,6 +457,21 @@ class BudgetFormPage extends HookConsumerWidget {
     );
   }
 
+  /// Completes once [route]'s push animation has finished.
+  static Future<void> _afterTransition(ModalRoute<Object?>? route) {
+    final animation = route?.animation;
+    if (animation == null || animation.status == AnimationStatus.completed) return Future.value();
+    final done = Completer<void>();
+    void onStatus(AnimationStatus status) {
+      if (status != AnimationStatus.completed) return;
+      animation.removeStatusListener(onStatus);
+      done.complete();
+    }
+
+    animation.addStatusListener(onStatus);
+    return done.future;
+  }
+
   /// "Suggested: €380 · avg. of last 3 months".
   static String _suggestionLabel(BuildContext context, BudgetFormState s) {
     final l10n = context.l10n;
@@ -448,18 +485,12 @@ class BudgetFormPage extends HookConsumerWidget {
 
   /// The single most important line for comprehension: what this budget
   /// actually counts, in words.
-  static String _scopeSentence(BuildContext context, BudgetFormState s, List<WalletSummary> wallets) {
-    final l10n = context.l10n;
-    final walletNames = wallets.map((w) => w.name).join(', ');
-    final tags = s.tags.map((t) => '#$t').toList();
-    final tagText = tags.length <= 1
-        ? tags.join()
-        : '${tags.sublist(0, tags.length - 1).join(', ')} ${l10n.budget_scope_or} ${tags.last}';
-    if (wallets.isEmpty && tags.isEmpty) return l10n.budget_scope_all;
-    if (tags.isEmpty) return l10n.budget_scope_wallets(walletNames);
-    if (wallets.isEmpty) return l10n.budget_scope_tags(tagText);
-    return l10n.budget_scope_both(walletNames, tagText);
-  }
+  static String _scopeSentence(BuildContext context, BudgetFormState s, List<WalletSummary> wallets) =>
+      BudgetLabels.scopeSentence(
+        context.l10n,
+        walletNames: wallets.map((w) => w.name).toList(),
+        tagNames: s.tags,
+      );
 }
 
 /// Tappable suggestion pill (never auto-fills the limit).
@@ -487,45 +518,6 @@ class _SuggestionChip extends StatelessWidget {
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: context.typo.inter.caption.copyWith(color: UIColorToken.blue),
-        ),
-      ),
-    );
-  }
-}
-
-/// Title + short explanation on the left, compact switch on the right; the
-/// whole row toggles.
-class _ToggleRow extends StatelessWidget {
-  const _ToggleRow({required this.title, required this.description, required this.value, required this.onChanged});
-
-  final String title;
-  final String description;
-  final bool value;
-  final ValueChanged<bool> onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    final typo = context.typo.inter;
-    return UITap(
-      onTap: () => onChanged(!value),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-        child: Row(
-          spacing: 12,
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                spacing: 2,
-                children: [
-                  Text(title, style: typo.label),
-                  Text(description, maxLines: 2, overflow: TextOverflow.ellipsis, style: typo.caption),
-                ],
-              ),
-            ),
-            UISwitch(value: value, onChanged: onChanged),
-          ],
         ),
       ),
     );

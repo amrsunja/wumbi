@@ -394,7 +394,7 @@ class AppLocalizationsTr extends AppLocalizations {
       '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ TRANSACTION ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
 
   @override
-  String get transaction_edit_title => 'Düzenle';
+  String get transaction_edit_title => 'İşlemi düzenle';
 
   @override
   String get transaction_description_placeholder => 'açıklama';
@@ -1340,6 +1340,11 @@ class AppLocalizationsTr extends AppLocalizations {
   String get budget_name_placeholder => 'ad';
 
   @override
+  String budget_name_hint(String name) {
+    return 'Bütçe adı: $name';
+  }
+
+  @override
   String get budget_what_counts => 'Neler sayılır';
 
   @override
@@ -1613,19 +1618,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get dashboard_reorder_hint => 'Sıralamak için basılı tut';
-
-  @override
-  String dashboard_budgets_over(int count) {
-    return 'limit aşan: $count';
-  }
-
-  @override
-  String dashboard_budgets_at_risk(int count) {
-    return 'riskte: $count';
-  }
-
-  @override
-  String get dashboard_budgets_on_track => 'Hepsi yolunda';
 
   @override
   String dashboard_debts_to_receive(String amount) {
@@ -2059,6 +2051,9 @@ class AppLocalizationsTr extends AppLocalizations {
       'Ana ekrandaki toplama dahil değil — birikim, ortak veya yalnızca takip cüzdanları için kullanışlı.';
 
   @override
+  String get dashboard_wallets_not_counted => 'Toplam bakiyeye dahil değil';
+
+  @override
   String dashboard_wallets_excluded(int count) {
     return '$count hariç';
   }
@@ -2074,6 +2069,16 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get budget_rollover_both_desc =>
       'Kalan bir sonraki limiti artırır, aşım ise düşürür.';
+
+  @override
+  String get budget_planned_title => 'Planlanan ödemeler';
+
+  @override
+  String get budget_planned_exclude => 'Planlananı sayma';
+
+  @override
+  String get budget_planned_exclude_desc =>
+      'Limitten yalnızca yapılmış ödemeler düşer. Yaklaşan ödemeler ve abonelikler ödendiğinde düşer.';
 
   @override
   String budget_used_percent(int percent) {
@@ -2104,6 +2109,63 @@ class AppLocalizationsTr extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get subscriptions_monthly_spend => 'Aylık harcama';
+
+  @override
+  String get subscriptions_active_empty => 'Aktif abonelik yok';
+
+  @override
+  String get subscriptions_paused_empty => 'Duraklatılmış abonelik yok';
+
+  @override
+  String budgets_summary_over(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count bütçeyi aştın',
+      one: '1 bütçeyi aştın',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String budgets_summary_close(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count bütçe limitine yakın',
+      one: '1 bütçe limitine yakın',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String budgets_summary_ok(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Bütçelerine uyuyorsun',
+      one: 'Bütçene uyuyorsun',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get budget_edit_title => 'Bütçeyi düzenle';
+
+  @override
+  String get wallet_edit_title => 'Cüzdanı düzenle';
+
+  @override
+  String get budget_tab_overview => 'Genel bakış';
+
+  @override
+  String get budget_back_to_current => 'Bugüne dön';
+
+  @override
+  String get budget_row_starts => 'Başlangıç';
 
   @override
   String get l10nStopLineDontTouch =>

@@ -416,7 +416,7 @@ class AppLocalizationsAr extends AppLocalizations {
       '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ TRANSACTION ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
 
   @override
-  String get transaction_edit_title => 'تعديل';
+  String get transaction_edit_title => 'تعديل المعاملة';
 
   @override
   String get transaction_description_placeholder => 'الوصف';
@@ -1392,6 +1392,11 @@ class AppLocalizationsAr extends AppLocalizations {
   String get budget_name_placeholder => 'الاسم';
 
   @override
+  String budget_name_hint(String name) {
+    return 'اسم الميزانية: $name';
+  }
+
+  @override
   String get budget_what_counts => 'ما الذي يُحتسب';
 
   @override
@@ -1668,19 +1673,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get dashboard_reorder_hint => 'اضغط مطولاً لإعادة الترتيب';
-
-  @override
-  String dashboard_budgets_over(int count) {
-    return 'تجاوزت الحد: $count';
-  }
-
-  @override
-  String dashboard_budgets_at_risk(int count) {
-    return 'معرضة للخطر: $count';
-  }
-
-  @override
-  String get dashboard_budgets_on_track => 'كل شيء ضمن الحد';
 
   @override
   String dashboard_debts_to_receive(String amount) {
@@ -2118,6 +2110,9 @@ class AppLocalizationsAr extends AppLocalizations {
       'لا تُحتسب في الإجمالي في الشاشة الرئيسية — مفيد للمدخرات أو المحافظ المشتركة أو محافظ المتابعة فقط.';
 
   @override
+  String get dashboard_wallets_not_counted => 'غير محتسبة في الرصيد الإجمالي';
+
+  @override
   String dashboard_wallets_excluded(int count) {
     return 'غير محتسبة: $count';
   }
@@ -2133,6 +2128,16 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get budget_rollover_both_desc =>
       'المتبقي يرفع حد الفترة التالية، والتجاوز يخفضه.';
+
+  @override
+  String get budget_planned_title => 'المدفوعات المخططة';
+
+  @override
+  String get budget_planned_exclude => 'عدم احتساب المخطط';
+
+  @override
+  String get budget_planned_exclude_desc =>
+      'تُحتسب من الحد المدفوعات المنفذة فقط. تُحتسب الدفعات القادمة والاشتراكات بعد دفعها.';
 
   @override
   String budget_used_percent(int percent) {
@@ -2168,6 +2173,63 @@ class AppLocalizationsAr extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get subscriptions_monthly_spend => 'الإنفاق الشهري';
+
+  @override
+  String get subscriptions_active_empty => 'لا توجد اشتراكات نشطة';
+
+  @override
+  String get subscriptions_paused_empty => 'لا توجد اشتراكات متوقّفة';
+
+  @override
+  String budgets_summary_over(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'تجاوزت $count ميزانيات',
+      one: 'تجاوزت ميزانية واحدة',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String budgets_summary_close(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ميزانيات قريبة من حدودها',
+      one: 'ميزانية واحدة قريبة من حدها',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String budgets_summary_ok(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'أنت ضمن ميزانياتك',
+      one: 'أنت ضمن ميزانيتك',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get budget_edit_title => 'تعديل الميزانية';
+
+  @override
+  String get wallet_edit_title => 'تعديل المحفظة';
+
+  @override
+  String get budget_tab_overview => 'نظرة عامة';
+
+  @override
+  String get budget_back_to_current => 'العودة إلى اليوم';
+
+  @override
+  String get budget_row_starts => 'يبدأ في';
 
   @override
   String get l10nStopLineDontTouch =>

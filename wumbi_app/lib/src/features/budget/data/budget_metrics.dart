@@ -7,6 +7,7 @@ import 'budget_period.dart';
 /// Budget health (spec B&D §5.5), first match wins in [computeBudgetMetrics].
 enum BudgetStatus {
   over(0),
+  /// Spent + planned reached 90 % of the limit.
   atRisk(1),
   ok(2),
   notStarted(3),
@@ -47,9 +48,6 @@ class BudgetMetrics {
   final BudgetStatus status;
 }
 
-/// Pace rule tolerance so `0.45 − 0.35` (= 0.10000000000000003) is not "over".
-const double _epsilon = 1e-9;
-
 /// Pure metrics of one period (spec B&D §5.5). [limit] is the effective
 /// limit (rollover included); [planned] is 0 outside the running period.
 BudgetMetrics computeBudgetMetrics({
@@ -86,7 +84,8 @@ BudgetMetrics computeBudgetMetrics({
     status = BudgetStatus.finished;
   } else if (limit <= 0 || spent > limit) {
     status = BudgetStatus.over;
-  } else if (spent + planned > limit || (spentRatio - timeRatio > 0.10 + _epsilon && spentRatio >= 0.25)) {
+  } else if ((spent + planned) * 10 >= limit * 9) {
+    // ≥ 90 % of the limit spent or committed (planned counts when enabled).
     status = BudgetStatus.atRisk;
   } else {
     status = BudgetStatus.ok;

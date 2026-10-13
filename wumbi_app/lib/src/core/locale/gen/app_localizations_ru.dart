@@ -407,7 +407,7 @@ class AppLocalizationsRu extends AppLocalizations {
       '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ TRANSACTION ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
 
   @override
-  String get transaction_edit_title => 'Изменить';
+  String get transaction_edit_title => 'Изменить операцию';
 
   @override
   String get transaction_description_placeholder => 'описание';
@@ -1378,6 +1378,11 @@ class AppLocalizationsRu extends AppLocalizations {
   String get budget_name_placeholder => 'название';
 
   @override
+  String budget_name_hint(String name) {
+    return 'Название бюджета: $name';
+  }
+
+  @override
   String get budget_what_counts => 'Что учитывается';
 
   @override
@@ -1663,19 +1668,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get dashboard_reorder_hint => 'Удерживайте, чтобы переставить';
-
-  @override
-  String dashboard_budgets_over(int count) {
-    return 'превышено: $count';
-  }
-
-  @override
-  String dashboard_budgets_at_risk(int count) {
-    return 'под угрозой: $count';
-  }
-
-  @override
-  String get dashboard_budgets_on_track => 'Всё в норме';
 
   @override
   String dashboard_debts_to_receive(String amount) {
@@ -2119,6 +2111,9 @@ class AppLocalizationsRu extends AppLocalizations {
       'Не входит в общую сумму на главном экране — удобно для накоплений, общих кошельков или кошельков для учёта.';
 
   @override
+  String get dashboard_wallets_not_counted => 'Не учитываются в общем балансе';
+
+  @override
   String dashboard_wallets_excluded(int count) {
     return 'не учтено: $count';
   }
@@ -2134,6 +2129,16 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get budget_rollover_both_desc =>
       'Остаток увеличивает лимит следующего периода, перерасход — уменьшает.';
+
+  @override
+  String get budget_planned_title => 'Запланированные платежи';
+
+  @override
+  String get budget_planned_exclude => 'Не учитывать запланированное';
+
+  @override
+  String get budget_planned_exclude_desc =>
+      'В лимите учитываются только уже совершённые платежи. Предстоящие платежи и подписки — только после оплаты.';
 
   @override
   String budget_used_percent(int percent) {
@@ -2167,6 +2172,67 @@ class AppLocalizationsRu extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get subscriptions_monthly_spend => 'Расходы в месяц';
+
+  @override
+  String get subscriptions_active_empty => 'Нет активных подписок';
+
+  @override
+  String get subscriptions_paused_empty => 'Нет подписок на паузе';
+
+  @override
+  String budgets_summary_over(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Превышено $count бюджета',
+      many: 'Превышено $count бюджетов',
+      few: 'Превышено $count бюджета',
+      one: 'Превышен $count бюджет',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String budgets_summary_close(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count бюджета почти исчерпаны',
+      many: '$count бюджетов почти исчерпаны',
+      few: '$count бюджета почти исчерпаны',
+      one: '$count бюджет почти исчерпан',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String budgets_summary_ok(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Вы укладываетесь в бюджеты',
+      one: 'Вы укладываетесь в бюджет',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get budget_edit_title => 'Изменить бюджет';
+
+  @override
+  String get wallet_edit_title => 'Изменить кошелёк';
+
+  @override
+  String get budget_tab_overview => 'Обзор';
+
+  @override
+  String get budget_back_to_current => 'Вернуться к текущему';
+
+  @override
+  String get budget_row_starts => 'Начало';
 
   @override
   String get l10nStopLineDontTouch =>

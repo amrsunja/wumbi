@@ -45,7 +45,7 @@ void main() {
       final m = _m(limit: 1000, spent: 800, planned: 500, now: DateTime(2026, 6, 10));
       expect(m.free, 0);
       expect(m.perDay, 0);
-      expect(m.status, BudgetStatus.atRisk, reason: 'spent + planned > limit');
+      expect(m.status, BudgetStatus.atRisk, reason: 'spent + planned ≥ 90 % of the limit');
     });
 
     test('no per-day outside the running period', () {
@@ -57,19 +57,20 @@ void main() {
   group('status', () {
     test('over beats everything', () {
       expect(_m(limit: 1000, spent: 1001, now: DateTime(2026, 6, 29)).status, BudgetStatus.over);
-      expect(_m(limit: 1000, spent: 1000, now: DateTime(2026, 6, 29)).status, BudgetStatus.ok);
+      expect(_m(limit: 1000, spent: 1000, now: DateTime(2026, 6, 29)).status, BudgetStatus.atRisk,
+          reason: 'exactly at the limit is not over yet');
     });
 
-    test('pace rule: strictly more than 10 points ahead of time', () {
-      final now = DateTime(2026, 6, 3); // 2 of 10 days → timeRatio 0.2
-      expect(_m(limit: 1000, spent: 300, period: _tenDays, now: now).status, BudgetStatus.ok, reason: '0.30 − 0.20 = 0.10');
-      expect(_m(limit: 1000, spent: 301, period: _tenDays, now: now).status, BudgetStatus.atRisk);
+    test('at risk from 90 % of the limit, whatever the pace', () {
+      final early = DateTime(2026, 6, 1); // timeRatio 0
+      expect(_m(limit: 1000, spent: 899, period: _tenDays, now: early).status, BudgetStatus.ok);
+      expect(_m(limit: 1000, spent: 900, period: _tenDays, now: early).status, BudgetStatus.atRisk);
     });
 
-    test('pace rule: only once a quarter of the limit is spent', () {
-      final now = DateTime(2026, 6, 1); // timeRatio 0
-      expect(_m(limit: 1000, spent: 249, period: _tenDays, now: now).status, BudgetStatus.ok);
-      expect(_m(limit: 1000, spent: 250, period: _tenDays, now: now).status, BudgetStatus.atRisk);
+    test('planned counts towards the 90 %', () {
+      final now = DateTime(2026, 6, 10);
+      expect(_m(limit: 1000, spent: 500, planned: 399, now: now).status, BudgetStatus.ok);
+      expect(_m(limit: 1000, spent: 500, planned: 400, now: now).status, BudgetStatus.atRisk);
     });
 
     test('effective limit ≤ 0 (rollover both) is over, without per-day', () {

@@ -7,6 +7,7 @@ import '../../../core/utils/constants/constants.dart';
 import '../../../core/utils/state_management/app_events.dart';
 import '../../../core/utils/state_management/single_events.dart';
 import '../../../core/utils/typedefs.dart';
+import '../../tag/data/models/tag_model.dart';
 import '../../tag/data/tag_repository.dart';
 import '../../transaction/data/models/transaction_model.dart';
 import '../../transaction/data/transaction_repository.dart';
@@ -36,8 +37,8 @@ abstract class BudgetDetailsState with _$BudgetDetailsState {
     required AsyncValue<BudgetProgress> progress,
     required AsyncValue<List<TransactionRow>> rows,
 
-    /// Display names of the scope tags (header summary).
-    @Default(<String>[]) List<String> tagNames,
+    /// Scope tags that still exist, in the budget's order.
+    @Default(<TagModel>[]) List<TagModel> tags,
     @Default(true) bool hasMore,
     @Default(false) bool isLoadingMore,
 
@@ -87,13 +88,13 @@ class BudgetDetailsNotifier extends Notifier<BudgetDetailsState> {
     state = state.copyWith(progress: AsyncValue.data(progress));
 
     final tags = ref.read(tagRepositoryProvider);
-    final names = <String>[];
+    final scopeTags = <TagModel>[];
     for (final id in progress.budget.tagIds) {
       final t = (await tags.byId(id)).tryGetSuccess();
-      if (t != null) names.add(t.displayName);
+      if (t != null) scopeTags.add(t);
     }
     if (!ref.mounted || requestId != _requestId) return;
-    state = state.copyWith(tagNames: names);
+    state = state.copyWith(tags: scopeTags);
 
     final shown = state.rows.value?.length ?? 0;
     final limit = shown > kTransactionsPageSize ? shown : kTransactionsPageSize;

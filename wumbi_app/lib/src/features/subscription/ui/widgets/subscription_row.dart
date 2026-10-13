@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../../core/design_system/app_ui.dart';
 import '../../../../core/money/money.dart';
@@ -9,27 +8,10 @@ import '../../../../core/utils/extensions/date_time_extensions.dart';
 import '../../../transaction/data/models/recurring_rule_model.dart';
 import '../../../transaction/ui/widgets/repeat_labels.dart';
 import '../../../wallet/data/models/wallet_model.dart';
-import '../subscriptions_provider.dart';
 
-/// "Stop this subscription?" → soft-delete the rule (occurrences stay).
-/// Shared by the Subscriptions page and the Wallet Details tab.
-Future<void> confirmStopSubscription(BuildContext context, WidgetRef ref, RecurringRuleModel r) async {
-  final l10n = context.l10n;
-  final ok = await UIAlertDialog.confirm(
-    context,
-    title: l10n.repeat_delete_title,
-    message: l10n.repeat_delete_message,
-    confirmLabel: l10n.subscriptions_stop,
-    cancelLabel: l10n.common_cancel,
-    destructive: true,
-  );
-  if (!ok) return;
-  await ref.read(subscriptionsProvider.notifier).delete(r.id, message: l10n.subscriptions_stopped);
-}
-
-/// List row with two caption lines (schedule, wallet names), the rule's tag
-/// chips (like a transaction row) and a trailing amount · switch (· trash
-/// when [onDelete] is set). Mirrors `UiListRow` spacing.
+/// List row with up to two caption lines (schedule, wallet names), the rule's tag
+/// chips (like a transaction row) and a trailing amount · switch. Stopping a
+/// subscription lives on its edit page. Mirrors `UiListRow` spacing.
 class SubscriptionRow extends StatelessWidget {
   const SubscriptionRow({
     super.key,
@@ -37,18 +19,19 @@ class SubscriptionRow extends StatelessWidget {
     required this.walletsById,
     required this.onTap,
     required this.onToggle,
-    this.onDelete,
     this.tags = const [],
+    this.showWallet = true,
   });
 
   final RecurringRuleModel rule;
   final Map<String, WalletSummary> walletsById;
   final VoidCallback onTap;
   final ValueChanged<bool> onToggle;
-
-  /// Trailing trash; null hides it (stopping stays available on the edit page).
-  final VoidCallback? onDelete;
   final List<String> tags;
+
+  /// False when the list is already scoped to one wallet: the wallet line is
+  /// dropped (transfers keep their `from → to` line).
+  final bool showWallet;
 
   String _walletName(BuildContext context, String? id) =>
       (id == null ? null : walletsById[id]?.name) ?? context.l10n.wallet_deleted_suffix;
@@ -104,7 +87,8 @@ class SubscriptionRow extends StatelessWidget {
                 children: [
                   Text(title, maxLines: 1, overflow: TextOverflow.ellipsis, style: typo.listTitle),
                   Text(schedule, maxLines: 1, overflow: TextOverflow.ellipsis, style: typo.caption),
-                  Text(walletLine, maxLines: 1, overflow: TextOverflow.ellipsis, style: typo.caption),
+                  if (showWallet || r.isTransfer)
+                    Text(walletLine, maxLines: 1, overflow: TextOverflow.ellipsis, style: typo.caption),
                   if (tags.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.only(top: 3),
@@ -120,15 +104,6 @@ class SubscriptionRow extends StatelessWidget {
             ),
             const UISpace.horz(8),
             UISwitch(value: r.isActive, onChanged: onToggle),
-            if (onDelete != null) ...[
-              const UISpace.horz(8),
-              UIIcon(
-                UIIconToken.icons.general.trash01,
-                size: 20,
-                color: UIColorToken.neg500,
-                onTap: onDelete,
-              ),
-            ],
           ],
         ),
       ),

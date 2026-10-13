@@ -7,6 +7,7 @@ import '../../../core/design_system/app_ui.dart';
 import '../../../core/routing/app_router.dart';
 import '../../../core/utils/constants/constants.dart';
 import '../../../core/utils/extensions/build_context_extensions.dart';
+import '../../../core/utils/hooks/use_swipe_tabs.dart';
 import '../../../core/utils/typedefs.dart';
 import '../data/models/tag_stats.dart';
 import '../data/models/tag_tree.dart';
@@ -27,7 +28,12 @@ class TagsPage extends HookConsumerWidget {
     final l10n = context.l10n;
     final colors = context.colors;
     final state = ref.watch(tagsProvider);
-    final view = useState(_TagsView.list);
+    final tabs = useSwipeTabs();
+    final view = _TagsView.values[tabs.index];
+    // The map pans / zooms horizontally too: once it has settled on screen
+    // the pager stops taking drags (tap "List" to go back). Updated only at
+    // scroll end so the physics never change mid-swipe.
+    final mapSettled = useState(false);
 
     void openTag(TagStats tag) => context.router.push(TagDetailsRoute(tagId: tag.id));
     Future<void> create() => createTagFlow(context, ref);
@@ -37,7 +43,7 @@ class TagsPage extends HookConsumerWidget {
     return Stack(
       children: [
         Positioned.fill(child: ColoredBox(color: colors.bgColor)),
-        if (view.value == _TagsView.map) const Positioned.fill(child: UiAmbientBackground(intensity: 0.7)),
+        if (view == _TagsView.map) const Positioned.fill(child: UiAmbientBackground(intensity: 0.7)),
         Scaffold(
           backgroundColor: Colors.transparent,
           appBar: UIAppbar(
@@ -62,26 +68,40 @@ class TagsPage extends HookConsumerWidget {
               ),
             ),
           ),
-          floatingActionButton: view.value == _TagsView.list && hasTags ? UiFab(onTap: create, label: l10n.tags_new) : null,
+          floatingActionButton: view == _TagsView.list && hasTags ? UiFab(onTap: create, label: l10n.tags_new) : null,
           body: Column(
             children: [
               const UISpace.vert(4),
               UiSegmentedToggle(
                 labels: [l10n.tags_view_list, l10n.tags_view_graph],
-                selectedIndex: view.value == _TagsView.list ? 0 : 1,
-                onChanged: (i) => view.value = i == 0 ? _TagsView.list : _TagsView.map,
+                selectedIndex: tabs.index,
+                onChanged: tabs.onTabTap,
               ),
               const UISpace.vert(8),
               Expanded(
-                child: switch (view.value) {
-                  _TagsView.list => _TagList(
-                      stats: state.stats,
-                      tree: state.tree,
-                      onTap: openTag,
-                      onCreate: create,
-                    ),
-                  _TagsView.map => _TagMap(graph: state.graph, onOpen: openTag),
-                },
+                child: NotificationListener<ScrollEndNotification>(
+                  onNotification: (n) {
+                    // depth 0 = the pager itself, not the tag list inside it.
+                    if (n.depth == 0) {
+                      mapSettled.value = (tabs.controller.page ?? 0).round() == _TagsView.map.index;
+                    }
+                    return false;
+                  },
+                  child: PageView(
+                    controller: tabs.controller,
+                    onPageChanged: tabs.onPageChanged,
+                    physics: mapSettled.value ? const NeverScrollableScrollPhysics() : null,
+                    children: [
+                      _TagList(
+                        stats: state.stats,
+                        tree: state.tree,
+                        onTap: openTag,
+                        onCreate: create,
+                      ),
+                      _TagMap(graph: state.graph, onOpen: openTag),
+                    ],
+                  ),
+                ),
               ),
             ],
           ),

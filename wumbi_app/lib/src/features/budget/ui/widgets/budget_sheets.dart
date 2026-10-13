@@ -68,6 +68,22 @@ abstract class RolloverSheet {
   }
 }
 
+/// Whether upcoming payments and subscriptions count against the limit
+/// before they're paid.
+abstract class CountPlannedSheet {
+  static Future<bool?> show(BuildContext context, {required bool selected}) {
+    final l10n = context.l10n;
+    return _radioSheet(
+      context,
+      title: l10n.budget_planned_title,
+      options: const [true, false],
+      selected: selected,
+      label: (v) => BudgetLabels.countPlanned(l10n, v),
+      description: (v) => BudgetLabels.countPlannedDescription(l10n, v),
+    );
+  }
+}
+
 /// Weekday a weekly budget starts on (`DateTime.monday` … `sunday`), names in
 /// the app locale.
 abstract class WeekdaySheet {

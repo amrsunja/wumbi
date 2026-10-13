@@ -6,7 +6,8 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../../app_ui.dart';
 
 /// 52 px blue circle with a white `+`, optional scale-in on page enter (200 ms).
-/// With [label] it becomes an extended pill: `+ New tag`.
+/// With [label] it becomes a 44 px text-only pill (`New tag`) — the list-page
+/// "create" button shared by Tags and Subscriptions.
 ///
 /// [heroTag] is *armed on tap only*: the button becomes a [Hero] right before
 /// [onTap] pushes the next route (so it flies into that page) and is disarmed
@@ -21,7 +22,7 @@ class UiFab extends StatefulWidget {
   final bool animateIn;
   final Object? heroTag;
 
-  /// Text after the `+` (extended FAB); null = round icon-only button.
+  /// Pill text (no icon); null = round `+` button.
   final String? label;
 
   @override
@@ -65,23 +66,21 @@ class _UiFabState extends State<UiFab> {
               ),
             )
           : Container(
-              height: 52,
-              padding: const EdgeInsetsDirectional.fromSTEB(16, 0, 22, 0),
+              height: 44,
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               decoration: BoxDecoration(
                 color: UIColorToken.blue,
-                borderRadius: BorderRadius.circular(26),
+                borderRadius: BorderRadius.circular(22),
                 boxShadow: UIShadowToken.buttonBlueShadow,
               ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                spacing: 8,
-                children: [
-                  UIIcon(UIIconToken.icons.general.plus, color: UIColorToken.white, size: 22),
-                  Text(
-                    widget.label!,
-                    style: AppTheme.of(context).typo.inter.rowTitle.copyWith(color: UIColorToken.white),
-                  ),
-                ],
+              // widthFactor 1: hug the label instead of filling the FAB slot.
+              child: Center(
+                widthFactor: 1,
+                child: Text(
+                  widget.label!,
+                  maxLines: 1,
+                  style: AppTheme.of(context).typo.inter.label.copyWith(color: UIColorToken.white),
+                ),
               ),
             ),
     );

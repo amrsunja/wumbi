@@ -10,6 +10,7 @@ import '../../../core/utils/extensions/build_context_extensions.dart';
 import '../../../core/utils/typedefs.dart';
 import '../data/budget_metrics.dart';
 import '../data/models/budget_model.dart';
+import 'budget_labels.dart';
 import 'budgets_provider.dart';
 import 'widgets/budget_progress_row.dart';
 
@@ -38,6 +39,8 @@ class BudgetsPage extends HookConsumerWidget {
     final active = <BudgetProgress>[...?scoped?.where(isRunningBudget)]..sort(compareBudgetSeverity);
     final upcoming = scoped?.where((p) => p.status == BudgetStatus.notStarted).toList() ?? const <BudgetProgress>[];
     final finished = scoped?.where((p) => p.status == BudgetStatus.finished).toList() ?? const <BudgetProgress>[];
+
+    final summary = scoped == null ? null : BudgetLabels.summary(l10n, scoped);
 
     void create() => context.router.push(BudgetFormRoute(walletId: walletId));
 
@@ -78,6 +81,17 @@ class BudgetsPage extends HookConsumerWidget {
               ),
             ),
           ),
+          // Same one-sentence digest as the Dashboard / Wallet tabs.
+          if (summary != null)
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(kListHorzPadding, 2, kListHorzPadding, 0),
+                child: Text(
+                  summary.$1,
+                  style: typo.regular.copyWith(color: summary.$2 ?? UIColorToken.casper, fontSize: 12),
+                ),
+              ),
+            ),
           if (scoped == null)
             const SliverToBoxAdapter(
               child: Padding(

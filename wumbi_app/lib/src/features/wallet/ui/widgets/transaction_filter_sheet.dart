@@ -236,7 +236,6 @@ class _FilterBody extends HookConsumerWidget {
                 ),
               ),
               Expanded(
-                flex: 2,
                 child: UiPrimaryButton(
                   label: l10n.common_apply,
                   onTap: () => Navigator.of(context).pop(filter.value),

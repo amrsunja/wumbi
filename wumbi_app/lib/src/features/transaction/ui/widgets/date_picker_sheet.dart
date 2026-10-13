@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/design_system/app_ui.dart';
+import '../../../../core/utils/app_vibrations.dart';
 import '../../../../core/utils/extensions/build_context_extensions.dart';
 
 /// `UICalendarPicker` (Syncfusion) inside a sheet. Min 2000-01-01 (or
 /// [minDate]), max today + 5 years (or [maxDate]) — future days are allowed so
-/// a transaction can be scheduled as *upcoming*.
+/// a transaction can be scheduled as *upcoming*. No buttons: tapping a day
+/// picks it and closes the sheet; dismissing it keeps the current date.
 abstract class DatePickerSheet {
   static Future<DateTime?> show(
     BuildContext context, {
@@ -35,47 +37,28 @@ class _DatePickerBody extends StatefulWidget {
 }
 
 class _DatePickerBodyState extends State<_DatePickerBody> {
-  late DateTime _selected = widget.initial;
+  bool _closing = false;
+
+  /// Tap a day → it highlights → the sheet closes with it.
+  Future<void> _pick(DateTime date) async {
+    if (_closing) return;
+    _closing = true;
+    AppVibrations.selection();
+    await Future<void>.delayed(const Duration(milliseconds: 150));
+    if (mounted) Navigator.of(context).pop(date);
+  }
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
     final now = DateTime.now();
-    return Column(
-      children: [
-        Expanded(
-          child: UICalendarPicker(
-            initialDate: widget.initial,
-            minDate: widget.minDate ?? DateTime(2000, 1, 1),
-            maxDate: widget.maxDate ?? DateTime(now.year + 5, now.month, now.day),
-            onChanged: (date) => setState(() => _selected = date),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(bottom: 16, top: 8),
-          child: Row(
-            spacing: 12,
-            children: [
-              Expanded(
-                flex: 2,
-                child: UiTextButton(
-                  label: l10n.common_today,
-                  style: UiTextButtonStyle.secondary,
-                  fontSize: 16,
-                  onTap: () => Navigator.of(context).pop(DateTime(now.year, now.month, now.day)),
-                ),
-              ),
-              Expanded(
-                flex: 3,
-                child: UiPrimaryButton(
-                  label: l10n.common_confirm,
-                  onTap: () => Navigator.of(context).pop(_selected),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: UICalendarPicker(
+        initialDate: widget.initial,
+        minDate: widget.minDate ?? DateTime(2000, 1, 1),
+        maxDate: widget.maxDate ?? DateTime(now.year + 5, now.month, now.day),
+        onChanged: _pick,
+      ),
     );
   }
 }

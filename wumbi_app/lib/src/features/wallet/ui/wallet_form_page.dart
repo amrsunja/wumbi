@@ -58,7 +58,10 @@ class WalletFormPage extends ConsumerWidget {
     }
 
     return Scaffold(
-      appBar: UIAppbar(backTap: () => context.router.maybePop()),
+      appBar: UIAppbar(
+        title: state.isEdit ? l10n.wallet_edit_title : l10n.dashboard_new_wallet,
+        backTap: () => context.router.maybePop(),
+      ),
       body: SafeArea(
         top: false,
         child: Column(
