@@ -4,7 +4,14 @@
 /// shape through `SQLiteMigrations`. [v1] is kept verbatim so the v1→v2
 /// migration can be tested against a real v1 database.
 abstract class SQLiteSchema {
-  static final List<String> latest = v3;
+  static final List<String> latest = v5;
+
+  /// v5 (2026-10): `wallets.include_in_total` (Dashboard total opt-out).
+  static final List<String> v5 = SQLiteSchemaV5.statements;
+
+  /// v4 (2026-10): budgets (+ wallet / tag scope links), people, debts,
+  /// debt payments, and `transactions.debt_role`.
+  static final List<String> v4 = SQLiteSchemaV4.statements;
 
   /// v3 (2026-09): `settings.show_mascot` — the mascot can be hidden app-wide.
   static final List<String> v3 = SQLiteSchemaV3.statements;
@@ -395,5 +402,180 @@ abstract class SQLiteSchemaV3 {
     ...SQLiteSchemaV2.statements.where(
       (s) => !s.contains('CREATE TABLE settings') && s != settingsSeed,
     ),
+  ];
+}
+
+/// v4 DDL, see [SQLiteSchema.v4]. `transactions` gains `debt_role` inline
+/// (a fresh install never runs `ALTER TABLE`, exactly like v2 inlined
+/// `status`); everything else in v3 is reused verbatim and the budget / debt
+/// tables are appended. [budgetsAndDebts] is shared with the v3 → v4
+/// migration so both paths create byte-identical new tables.
+abstract class SQLiteSchemaV4 {
+  static const String transactionsTable = '''
+    CREATE TABLE transactions (
+      id                    TEXT PRIMARY KEY,
+      type                  TEXT    NOT NULL CHECK (type IN ('income','expense','transfer')),
+      wallet_id             TEXT REFERENCES wallets(id),
+      amount_minor          INTEGER,
+      currency              TEXT    NOT NULL,
+      from_wallet_id        TEXT REFERENCES wallets(id),
+      to_wallet_id          TEXT REFERENCES wallets(id),
+      from_amount_minor     INTEGER,
+      to_amount_minor       INTEGER,
+      original_amount_minor INTEGER,
+      original_currency     TEXT,
+      exchange_rate         REAL,
+      description           TEXT    NOT NULL DEFAULT '',
+      transaction_date      INTEGER NOT NULL,
+      status                TEXT    NOT NULL DEFAULT 'posted' CHECK (status IN ('posted','upcoming')),
+      recurring_rule_id     TEXT REFERENCES recurring_rules(id),
+      created_at            INTEGER NOT NULL,
+      updated_at            INTEGER NOT NULL,
+      deleted_at            INTEGER,
+      sync_status           TEXT    NOT NULL DEFAULT 'pending',
+      debt_role             TEXT CHECK (debt_role IN ('principal','repayment')),
+      CHECK (
+        (type IN ('income','expense') AND wallet_id IS NOT NULL AND amount_minor IS NOT NULL AND amount_minor >= 0
+           AND from_wallet_id IS NULL AND to_wallet_id IS NULL)
+        OR
+        (type = 'transfer' AND from_wallet_id IS NOT NULL AND to_wallet_id IS NOT NULL AND from_wallet_id <> to_wallet_id
+           AND from_amount_minor IS NOT NULL AND to_amount_minor IS NOT NULL
+           AND from_amount_minor >= 0 AND to_amount_minor >= 0
+           AND wallet_id IS NULL AND amount_minor IS NULL)
+      ),
+      CHECK ((original_amount_minor IS NULL) = (original_currency IS NULL))
+    )''';
+
+  static const String debtRoleIndex =
+      'CREATE INDEX idx_tx_debt_role ON transactions(debt_role) WHERE debt_role IS NOT NULL';
+
+  /// New tables of v4 (spec Appendix A.1), in FK order.
+  static const List<String> budgetsAndDebts = [
+    // budgets -------------------------------------------------------------
+    '''
+    CREATE TABLE budgets (
+      id               TEXT PRIMARY KEY,
+      name             TEXT    NOT NULL,
+      limit_minor      INTEGER NOT NULL CHECK (limit_minor > 0),
+      currency         TEXT    NOT NULL,
+      period           TEXT    NOT NULL CHECK (period IN ('weekly','monthly','yearly','custom')),
+      anchor_date      INTEGER NOT NULL,
+      end_date         INTEGER,
+      rollover         TEXT    NOT NULL DEFAULT 'none' CHECK (rollover IN ('none','surplus','both')),
+      include_planned  INTEGER NOT NULL DEFAULT 1,
+      sort_order       INTEGER NOT NULL DEFAULT 0,
+      created_at       INTEGER NOT NULL,
+      updated_at       INTEGER NOT NULL,
+      deleted_at       INTEGER,
+      sync_status      TEXT    NOT NULL DEFAULT 'pending',
+      CHECK ((period = 'custom') = (end_date IS NOT NULL)),
+      CHECK (end_date IS NULL OR end_date > anchor_date),
+      CHECK (period <> 'custom' OR rollover = 'none')
+    )''',
+    'CREATE INDEX idx_budgets_deleted ON budgets(deleted_at)',
+    '''
+    CREATE TABLE budget_wallets (
+      budget_id  TEXT    NOT NULL REFERENCES budgets(id) ON DELETE CASCADE,
+      wallet_id  TEXT    NOT NULL REFERENCES wallets(id) ON DELETE CASCADE,
+      created_at INTEGER NOT NULL,
+      PRIMARY KEY (budget_id, wallet_id)
+    )''',
+    'CREATE INDEX idx_bw_wallet ON budget_wallets(wallet_id)',
+    '''
+    CREATE TABLE budget_tags (
+      budget_id  TEXT    NOT NULL REFERENCES budgets(id) ON DELETE CASCADE,
+      tag_id     TEXT    NOT NULL REFERENCES tags(id)    ON DELETE CASCADE,
+      created_at INTEGER NOT NULL,
+      PRIMARY KEY (budget_id, tag_id)
+    )''',
+    'CREATE INDEX idx_bt_tag ON budget_tags(tag_id)',
+
+    // people / debts ------------------------------------------------------
+    '''
+    CREATE TABLE people (
+      id              TEXT PRIMARY KEY,
+      name            TEXT    NOT NULL,
+      normalized_name TEXT    NOT NULL,
+      last_used_at    INTEGER,
+      created_at      INTEGER NOT NULL,
+      updated_at      INTEGER NOT NULL,
+      deleted_at      INTEGER,
+      sync_status     TEXT    NOT NULL DEFAULT 'pending'
+    )''',
+    'CREATE UNIQUE INDEX idx_people_normalized_active ON people(normalized_name) WHERE deleted_at IS NULL',
+    '''
+    CREATE TABLE debts (
+      id                       TEXT PRIMARY KEY,
+      person_id                TEXT    NOT NULL REFERENCES people(id),
+      direction                TEXT    NOT NULL CHECK (direction IN ('lent','borrowed')),
+      principal_minor          INTEGER NOT NULL CHECK (principal_minor > 0),
+      currency                 TEXT    NOT NULL,
+      description              TEXT    NOT NULL DEFAULT '',
+      opened_at                INTEGER NOT NULL,
+      due_date                 INTEGER,
+      principal_transaction_id TEXT REFERENCES transactions(id),
+      closed_at                INTEGER,
+      close_reason             TEXT CHECK (close_reason IN ('repaid','forgiven')),
+      created_at               INTEGER NOT NULL,
+      updated_at               INTEGER NOT NULL,
+      deleted_at               INTEGER,
+      sync_status              TEXT    NOT NULL DEFAULT 'pending',
+      CHECK ((closed_at IS NULL) = (close_reason IS NULL))
+    )''',
+    'CREATE INDEX idx_debts_person ON debts(person_id)',
+    'CREATE INDEX idx_debts_open ON debts(closed_at, due_date)',
+    'CREATE UNIQUE INDEX idx_debts_principal_tx ON debts(principal_transaction_id) WHERE principal_transaction_id IS NOT NULL',
+    '''
+    CREATE TABLE debt_payments (
+      id             TEXT PRIMARY KEY,
+      debt_id        TEXT    NOT NULL REFERENCES debts(id),
+      transaction_id TEXT REFERENCES transactions(id),
+      kind           TEXT    NOT NULL CHECK (kind IN ('repayment','forgiveness')),
+      amount_minor   INTEGER NOT NULL CHECK (amount_minor > 0),
+      paid_at        INTEGER NOT NULL,
+      created_at     INTEGER NOT NULL,
+      updated_at     INTEGER NOT NULL,
+      deleted_at     INTEGER,
+      sync_status    TEXT    NOT NULL DEFAULT 'pending',
+      CHECK (kind = 'repayment' OR transaction_id IS NULL)
+    )''',
+    'CREATE INDEX idx_dp_debt ON debt_payments(debt_id)',
+    'CREATE INDEX idx_dp_tx ON debt_payments(transaction_id)',
+  ];
+
+  static final List<String> statements = [
+    for (final s in SQLiteSchemaV3.statements)
+      if (s.contains('CREATE TABLE transactions (')) transactionsTable else s,
+    debtRoleIndex,
+    ...budgetsAndDebts,
+  ];
+}
+
+/// v5 DDL, see [SQLiteSchema.v5]. `wallets` gains `include_in_total` inline;
+/// everything else in v4 is reused verbatim.
+abstract class SQLiteSchemaV5 {
+  static const String walletsTable = '''
+    CREATE TABLE wallets (
+      id                    TEXT PRIMARY KEY,
+      name                  TEXT    NOT NULL,
+      currency              TEXT    NOT NULL,
+      initial_balance_minor INTEGER NOT NULL DEFAULT 0,
+      color                 TEXT    NOT NULL DEFAULT 'blue',
+      is_primary            INTEGER NOT NULL DEFAULT 0,
+      sort_order            INTEGER NOT NULL DEFAULT 0,
+      created_at            INTEGER NOT NULL,
+      updated_at            INTEGER NOT NULL,
+      deleted_at            INTEGER,
+      sync_status           TEXT    NOT NULL DEFAULT 'pending',
+      include_in_total      INTEGER NOT NULL DEFAULT 1
+    )''';
+
+  /// The v4 → v5 migration (same column shape as [walletsTable]).
+  static const String includeInTotalColumn =
+      'ALTER TABLE wallets ADD COLUMN include_in_total INTEGER NOT NULL DEFAULT 1';
+
+  static final List<String> statements = [
+    for (final s in SQLiteSchemaV4.statements)
+      if (s.contains('CREATE TABLE wallets (')) walletsTable else s,
   ];
 }

@@ -1,5 +1,7 @@
 import 'package:sqflite_sqlcipher/sqflite.dart';
 
+import 'sqlite_schema.dart';
+
 typedef Migration = Future<void> Function(DatabaseExecutor db);
 
 /// Ordered list of migrations. `migrations[i]` upgrades the schema from
@@ -9,7 +11,7 @@ typedef Migration = Future<void> Function(DatabaseExecutor db);
 /// A fresh install runs `SQLiteSchema.latest` in `onCreate` and never touches
 /// this list.
 abstract class SQLiteMigrations {
-  static const List<Migration> migrations = [_v1ToV2, _v2ToV3];
+  static const List<Migration> migrations = [_v1ToV2, _v2ToV3, _v3ToV4, _v4ToV5];
 
   static Future<void> upgrade(Database db, int oldVersion, int newVersion) async {
     if (oldVersion >= newVersion) return;
@@ -93,5 +95,29 @@ abstract class SQLiteMigrations {
     await db.execute(
       'ALTER TABLE settings ADD COLUMN show_mascot INTEGER NOT NULL DEFAULT 1',
     );
+  }
+
+  /// v4 (2026-10): budgets and personal debts.
+  /// * `transactions.debt_role` — 'principal' | 'repayment' | NULL. Debt
+  ///   money moves wallet balances (the view is unchanged) but is excluded
+  ///   from budgets, Progress and tag analytics.
+  /// * new tables `budgets`, `budget_wallets`, `budget_tags`, `people`,
+  ///   `debts`, `debt_payments` — shared DDL with the fresh v4 schema so the
+  ///   two paths cannot drift (asserted by `migration_v4_test`).
+  static Future<void> _v3ToV4(DatabaseExecutor db) async {
+    await db.execute(
+      "ALTER TABLE transactions ADD COLUMN debt_role TEXT CHECK (debt_role IN ('principal','repayment'))",
+    );
+    await db.execute(SQLiteSchemaV4.debtRoleIndex);
+    for (final statement in SQLiteSchemaV4.budgetsAndDebts) {
+      await db.execute(statement);
+    }
+  }
+
+  /// v5 (2026-10): `wallets.include_in_total` — whether the wallet's balance
+  /// counts towards the Dashboard total. Defaults to 1 so existing wallets
+  /// keep counting.
+  static Future<void> _v4ToV5(DatabaseExecutor db) async {
+    await db.execute(SQLiteSchemaV5.includeInTotalColumn);
   }
 }

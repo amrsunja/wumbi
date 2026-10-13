@@ -8,20 +8,22 @@ import '../../../../core/utils/extensions/build_context_extensions.dart';
 /// Bottom sheet with a single prefilled name field. Resolves with the new
 /// name, or null when dismissed / unchanged.
 abstract class TagRenameSheet {
-  static Future<String?> show(BuildContext context, {required String initialName}) {
+  /// [hint]: small caption under the field (nested-tag rules).
+  static Future<String?> show(BuildContext context, {required String initialName, String? hint}) {
     return UIModalSheet.modalSheet<String>(
       context: context,
       fitContent: true,
       title: context.l10n.tag_rename,
-      child: _RenameBody(initialName: initialName),
+      child: _RenameBody(initialName: initialName, hint: hint),
     );
   }
 }
 
 class _RenameBody extends HookWidget {
-  const _RenameBody({required this.initialName});
+  const _RenameBody({required this.initialName, this.hint});
 
   final String initialName;
+  final String? hint;
 
   @override
   Widget build(BuildContext context) {
@@ -53,6 +55,13 @@ class _RenameBody extends HookWidget {
             onChanged: (v) => text.value = v,
             onSubmitted: (_) => submit(),
           ),
+          if (hint != null) ...[
+            const UISpace.vert(8),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              child: Text(hint!, style: context.typo.inter.caption),
+            ),
+          ],
           const UISpace.vert(16),
           UiPrimaryButton(
             label: l10n.common_save,

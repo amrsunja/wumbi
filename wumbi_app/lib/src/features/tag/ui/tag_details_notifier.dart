@@ -11,6 +11,7 @@ import '../../transaction/data/models/transaction_model.dart';
 import '../../transaction/data/transaction_repository.dart';
 import '../data/models/tag_model.dart';
 import '../data/models/tag_stats.dart';
+import '../data/tag_normalizer.dart';
 import '../data/tag_repository.dart';
 
 class TagDetailsState {
@@ -21,6 +22,9 @@ class TagDetailsState {
     this.hasMore = true,
     this.isLoadingMore = false,
     this.notFound = false,
+    this.ancestors = const [],
+    this.children = const [],
+    this.descendantCount = 0,
   });
 
   /// Base-currency totals for the tag.
@@ -35,6 +39,19 @@ class TagDetailsState {
   /// The tag was deleted (or merged away) underneath the page.
   final bool notFound;
 
+  /// Parents of a nested tag, outermost first (`food`, `food/coffee` for
+  /// `food/coffee/latte`); empty at the top level.
+  final List<TagModel> ancestors;
+
+  /// Direct parent (null at the top level).
+  TagModel? get parent => ancestors.isEmpty ? null : ancestors.last;
+
+  /// Tags nested directly inside this one, most money moved first.
+  final List<TagStats> children;
+
+  /// Tags nested at any depth (delete warns about them).
+  final int descendantCount;
+
   TagDetailsState copyWith({
     AsyncValue<TagStats>? stats,
     List<TagWalletSum>? wallets,
@@ -42,6 +59,9 @@ class TagDetailsState {
     bool? hasMore,
     bool? isLoadingMore,
     bool? notFound,
+    List<TagModel>? ancestors,
+    List<TagStats>? children,
+    int? descendantCount,
   }) =>
       TagDetailsState(
         stats: stats ?? this.stats,
@@ -50,6 +70,9 @@ class TagDetailsState {
         hasMore: hasMore ?? this.hasMore,
         isLoadingMore: isLoadingMore ?? this.isLoadingMore,
         notFound: notFound ?? this.notFound,
+        ancestors: ancestors ?? this.ancestors,
+        children: children ?? this.children,
+        descendantCount: descendantCount ?? this.descendantCount,
       );
 }
 
@@ -96,6 +119,24 @@ class TagDetailsNotifier extends Notifier<TagDetailsState> {
     );
     if (missing) return;
 
+    // Family: parent + nested tags (rolled-up totals, same ranking as the hub).
+    final self = state.stats.value?.tag;
+    if (self != null) {
+      final allResult = await _tags.stats(base);
+      if (!ref.mounted || _closed) return;
+      allResult.whenSuccess((all) {
+        final byName = {for (final s in all) s.tag.normalizedName: s.tag};
+        state = state.copyWith(
+          ancestors: [
+            for (final path in TagNormalizer.ancestors(self.normalizedName))
+              if (byName[path] case final t?) t,
+          ],
+          children: _directChildren(all, self.normalizedName),
+          descendantCount: all.where((s) => TagNormalizer.isDescendant(s.tag.normalizedName, self.normalizedName)).length,
+        );
+      });
+    }
+
     final walletsResult = await _tags.walletsOfTag(tagId);
     if (!ref.mounted || _closed) return;
     walletsResult.whenSuccess((wallets) => state = state.copyWith(wallets: wallets));
@@ -113,6 +154,22 @@ class TagDetailsNotifier extends Notifier<TagDetailsState> {
       ),
       (error) => state = state.copyWith(transactions: AsyncValue.error(error, StackTrace.current)),
     );
+  }
+
+  /// Tags whose nearest existing ancestor is [parent] (a missing middle
+  /// level in old data does not hide a grandchild), in [all]'s order.
+  static List<TagStats> _directChildren(List<TagStats> all, String parent) {
+    final names = {for (final s in all) s.tag.normalizedName};
+    final out = <TagStats>[];
+    for (final s in all) {
+      if (!TagNormalizer.isDescendant(s.tag.normalizedName, parent)) continue;
+      var up = TagNormalizer.parentOf(s.tag.normalizedName);
+      while (up != null && up != parent && !names.contains(up)) {
+        up = TagNormalizer.parentOf(up);
+      }
+      if (up == parent) out.add(s);
+    }
+    return out;
   }
 
   /// Infinite scroll — next page at 80 % scroll extent.

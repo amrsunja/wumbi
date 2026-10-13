@@ -8,6 +8,7 @@ import '../../../core/money/money.dart';
 import '../../../core/utils/constants/constants.dart';
 import '../../../core/utils/extensions/build_context_extensions.dart';
 import '../../../core/utils/typedefs.dart';
+import '../../settings/ui/state_management/settings_provider.dart';
 import '../../wallet/data/models/wallet_model.dart';
 import '../../wallet/ui/wallets_provider.dart';
 import '../data/models/progress_stats.dart';
@@ -30,6 +31,7 @@ class ProgressPage extends ConsumerWidget {
     final state = ref.watch(progressProvider);
     final notifier = ref.read(progressProvider.notifier);
     final wallets = ref.watch(walletsProvider).value ?? const <WalletSummary>[];
+    final base = ref.watch(baseCurrencyProvider);
 
     WalletSummary? selected;
     for (final wallet in wallets) {
@@ -61,12 +63,15 @@ class ProgressPage extends ConsumerWidget {
             padding: const EdgeInsets.fromLTRB(kPageHorzPadding, 4, kPageHorzPadding, 48),
             child: Column(
               children: [
-                _ScopeBar(
-                  label: selected?.name ?? l10n.progress_all_wallets,
-                  color: selected?.color.color,
-                  onTap: wallets.isEmpty ? null : pickScope,
+                // Same header as the Transaction screen: the report currency
+                // (follows the scope, not editable) | the wallet scope.
+                UiWalletInfoMenu(
+                  name: selected?.name ?? l10n.progress_all_wallets,
+                  color: selected?.color.color ?? colors.secondContentColor,
+                  currencyType: selected?.currency ?? base,
+                  onSelectWallet: wallets.isEmpty ? null : pickScope,
                 ),
-                const UISpace.vert(8),
+                const UISpace.vert(16),
                 _PeriodToggle(
                   granularity: state.granularity,
                   onChanged: notifier.setGranularity,
@@ -78,45 +83,6 @@ class ProgressPage extends ConsumerWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-// -------------------------------------------------------------------- scope
-
-/// Outlined pill mirroring the dashboard header links: the wallet the page is
-/// scoped to, or "All wallets".
-class _ScopeBar extends StatelessWidget {
-  const _ScopeBar({required this.label, required this.color, required this.onTap});
-
-  final String label;
-  final Color? color;
-  final VoidCallback? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = context.colors;
-    return UITap(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
-        decoration: BoxDecoration(
-          border: Border.all(color: colors.dividerColor),
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          spacing: 6,
-          children: [
-            if (color != null)
-              UiCircleColorBadge(color: color!, size: 8)
-            else
-              UIIcon(UIIconToken.icons.financeEcommerce.wallet02, size: 14),
-            Text(label, style: context.typo.inter.captionBold),
-            if (onTap != null) UIIcon(UIIconToken.icons.arrows.chevronDown, size: 14),
-          ],
-        ),
-      ),
     );
   }
 }

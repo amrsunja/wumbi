@@ -95,10 +95,10 @@ class RecurringEngine {
               await tags.copyRuleTagsToTransaction(txn, r.id, occurrenceId, nowMillis);
               generated++;
             }
-            final nextCount = r.occurrenceCount + 1;
+            final step = nextOccurrenceStep(r.startDate, r.frequency, r.occurrenceCount);
             r = r.copyWith(
-              occurrenceCount: nextCount,
-              nextOccurrence: advance(r.startDate, r.frequency, nextCount),
+              occurrenceCount: step.count,
+              nextOccurrence: step.date,
               updatedAt: now,
             );
             if (++count >= maxPerRule) break;

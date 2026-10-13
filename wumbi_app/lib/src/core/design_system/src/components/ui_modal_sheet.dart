@@ -62,7 +62,9 @@ abstract class UIModalSheet {
                     style: AppTheme.of(context).typo.inter.rowTitle,
                   ),
                 ),
-              if (fitContent) child else Expanded(child: child),
+              // Flexible: a fit-content sheet may shrink when the keyboard
+              // eats the space; scrollable bodies then scroll, not overflow.
+              if (fitContent) Flexible(child: child) else Expanded(child: child),
             ],
           );
 

@@ -222,6 +222,19 @@ class AppLocalizationsNl extends AppLocalizations {
   String get wallet_has_transactions => 'Heeft transacties';
 
   @override
+  String get wallet_tab_transactions => 'Transacties';
+
+  @override
+  String get wallet_tab_budgets => 'Budgetten';
+
+  @override
+  String get wallet_tab_subscriptions => 'Abonnementen';
+
+  @override
+  String get wallet_budgets_empty =>
+      'Nog geen uitgavenlimieten voor deze wallet';
+
+  @override
   String get wallet_pick_another_primary => 'Kies een andere hoofdportemonnee';
 
   @override
@@ -704,6 +717,234 @@ class AppLocalizationsNl extends AppLocalizations {
   String get tag_wallet_deleted => '(verwijderd)';
 
   @override
+  String get tags_new => 'Nieuwe tag';
+
+  @override
+  String get tags_create => 'Tag maken';
+
+  @override
+  String tags_created(String name) {
+    return '#$name gemaakt';
+  }
+
+  @override
+  String tags_exists(String name) {
+    return '#$name bestaat al';
+  }
+
+  @override
+  String get tags_parent => 'Bovenliggende tag';
+
+  @override
+  String get tags_parent_none => 'Geen';
+
+  @override
+  String get tags_name_hint => 'bijv. koffie';
+
+  @override
+  String get tags_create_tip =>
+      'Tip: typ eten/koffie om een tag meteen te nesten.';
+
+  @override
+  String tags_nested_count(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count genest',
+      one: '1 genest',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get tags_help => 'Hoe gebruik je tags?';
+
+  @override
+  String get tags_graph_mode_all => 'Alles';
+
+  @override
+  String get tags_graph_mode_spending => 'Uitgaven';
+
+  @override
+  String get tags_graph_mode_income => 'Inkomsten';
+
+  @override
+  String get tags_graph_legend_size => 'Groter = meer geld';
+
+  @override
+  String get tags_graph_legend_nested => 'Genest';
+
+  @override
+  String get tags_graph_legend_together => 'Samen gebruikt';
+
+  @override
+  String get tags_graph_tap_hint => 'Tik op een cirkel om de cijfers te zien';
+
+  @override
+  String get tags_graph_open => 'Openen';
+
+  @override
+  String tags_graph_linked(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Gekoppeld aan $count tags',
+      one: 'Gekoppeld aan 1 tag',
+      zero: 'Nog geen koppelingen',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get tag_move => 'Verplaatsen';
+
+  @override
+  String tag_move_title(String name) {
+    return '#$name verplaatsen';
+  }
+
+  @override
+  String get tag_moved => 'Tag verplaatst';
+
+  @override
+  String get tag_add_nested => 'Geneste tag toevoegen';
+
+  @override
+  String get tag_nested_tags => 'Geneste tags';
+
+  @override
+  String tag_includes_nested(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Bevat $count geneste tags',
+      one: 'Bevat 1 geneste tag',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String tag_delete_nested_message(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'Deze tag en zijn $count geneste tags worden van alle transacties verwijderd. De transacties zelf blijven.',
+      one:
+          'Deze tag en zijn geneste tag worden van alle transacties verwijderd. De transacties zelf blijven.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get tag_rename_nested_hint =>
+      'Geneste tags worden ook hernoemd. Gebruik / om hem onder een andere tag te zetten.';
+
+  @override
+  String get tag_top_level => 'Hoogste niveau';
+
+  @override
+  String get tag_nested_empty => 'Nog geen geneste tags';
+
+  @override
+  String get settings_help => 'Hulp nodig?';
+
+  @override
+  String get help_title => 'Hulp nodig?';
+
+  @override
+  String get help_subtitle => 'Korte gidsen om alles uit Wumbi te halen.';
+
+  @override
+  String get help_tags_title => 'Hoe gebruik je tags?';
+
+  @override
+  String get help_tags_subtitle => 'Labels, geneste tags en de kaart';
+
+  @override
+  String get help_tags_intro =>
+      'Tags zijn korte labels zoals #koffie die je aan transacties toevoegt. Een transactie kan meerdere tags hebben, zodat je je geld vanuit elke hoek bekijkt – niet alleen per portemonnee.';
+
+  @override
+  String get help_tags_add_title => 'Een tag toevoegen';
+
+  @override
+  String get help_tags_add_body =>
+      'Typ bij het invoeren van een transactie een naam in het tagveld en kies een suggestie of maak een nieuwe. Tags hebben geen spaties – schrijf coffee-shop of coffee_shop. Hoofd- en kleine letters geven dezelfde tag.';
+
+  @override
+  String get help_tags_nested_title => 'Geneste tags';
+
+  @override
+  String get help_tags_nested_body =>
+      'Gebruik een schuine streep / om een tag in een andere te zetten, zoals mappen: eten/koffie en eten/boodschappen staan allebei in eten. De bovenliggende tag wordt voor je gemaakt.';
+
+  @override
+  String get help_tags_parent_title =>
+      'Een bovenliggende tag bevat zijn geneste tags';
+
+  @override
+  String get help_tags_parent_body =>
+      '#eten openen toont elke transactie met #eten, #eten/koffie of #eten/boodschappen. Totalen, filters en budgetten van een bovenliggende tag tellen zijn geneste tags mee. Een transactie met beide tags telt maar één keer.';
+
+  @override
+  String get help_tags_multi_title => 'Meerdere tags op één transactie';
+
+  @override
+  String get help_tags_multi_body =>
+      'Een diner op vakantie kan tegelijk #reizen en #eten/restaurant zijn. Het telt dan in allebei, en de twee tags worden verbonden op de kaart.';
+
+  @override
+  String get help_tags_manage_title => 'Maken, hernoemen, verplaatsen';
+
+  @override
+  String get help_tags_manage_body =>
+      'Tik op de Tags-pagina op + om een tag te maken en kies een bovenliggende tag om hem te nesten. Open een tag om hem te hernoemen, onder een andere tag te zetten, een geneste tag toe te voegen of te verwijderen. Hernoem je een bovenliggende tag, dan volgen zijn geneste tags; hernoem je hem naar een bestaande tag, dan worden ze samengevoegd.';
+
+  @override
+  String get help_tags_map_title => 'De kaart lezen';
+
+  @override
+  String get help_tags_map_body =>
+      'Elke cirkel is een tag: hoe groter, hoe meer geld erdoorheen ging. De ring toont het aandeel uitgaven en inkomsten. Doorgetrokken lijnen verbinden een bovenliggende tag met zijn geneste tags, vage lijnen verbinden tags op dezelfde transactie. Tik op een cirkel om de cijfers te zien.';
+
+  @override
+  String get help_tags_tips_title => 'Tips';
+
+  @override
+  String get help_tags_tip1 =>
+      'Begin breed – eten, huis, vervoer – en nest alleen als je meer detail wilt.';
+
+  @override
+  String get help_tags_tip2 =>
+      'Gebruik tags voor wat over portemonnees heen gaat: #vakantie, #cadeaus, #auto.';
+
+  @override
+  String get help_tags_tip3 =>
+      'Houd namen kort; twee of drie niveaus is genoeg.';
+
+  @override
+  String get help_tags_example => 'Voorbeeld';
+
+  @override
+  String get help_tags_example_total => 'Totaal voor #eten';
+
+  @override
+  String get help_tags_ex_parent => 'eten';
+
+  @override
+  String get help_tags_ex_child1 => 'koffie';
+
+  @override
+  String get help_tags_ex_child2 => 'boodschappen';
+
+  @override
+  String get help_tags_ex_travel => 'reizen';
+
+  @override
+  String get help_tags_ex_restaurant => 'restaurant';
+
+  @override
   String get l10nSubscriptions =>
       '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ SUBSCRIPTIONS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
 
@@ -1015,6 +1256,23 @@ class AppLocalizationsNl extends AppLocalizations {
   String get error_not_found => 'Dit item bestaat niet meer.';
 
   @override
+  String debt_error_owes_you_only(String name, String amount) {
+    return '$name is je maar $amount schuldig';
+  }
+
+  @override
+  String debt_error_you_owe_only(String name, String amount) {
+    return 'Je bent $name maar $amount schuldig';
+  }
+
+  @override
+  String get person_error_has_debts =>
+      'Vereffen of verwijder eerst de schulden van deze persoon.';
+
+  @override
+  String get debt_error_closed => 'Deze schuld is al vereffend.';
+
+  @override
   String get error_tag_name => 'Voer een tagnaam in (maximaal 30 tekens).';
 
   @override
@@ -1026,6 +1284,851 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get error_reset_app => 'App resetten';
+
+  @override
+  String get dashboard_budgets => 'Budgetten';
+
+  @override
+  String get budget_new => 'Nieuw budget';
+
+  @override
+  String get budget_empty_hint =>
+      'Stel een uitgavelimiet in voor een portemonnee of een #tag';
+
+  @override
+  String get budgets_all => 'Alle budgetten';
+
+  @override
+  String get budgets_title => 'Budgetten';
+
+  @override
+  String budget_left(String amount) {
+    return '$amount over';
+  }
+
+  @override
+  String budget_over(String amount) {
+    return '$amount te veel';
+  }
+
+  @override
+  String budget_starts(String date) {
+    return 'Begint $date';
+  }
+
+  @override
+  String get budget_ended => 'Afgelopen';
+
+  @override
+  String budget_per_day(String amount) {
+    return '$amount/dag';
+  }
+
+  @override
+  String budget_spent_of(String spent, String limit) {
+    return '$spent van $limit uitgegeven';
+  }
+
+  @override
+  String get budget_this_week => 'Deze week';
+
+  @override
+  String get budget_set_limit => 'Uitgavelimiet instellen';
+
+  @override
+  String budget_toast_suffix(String name, String amount) {
+    return '$name: $amount over';
+  }
+
+  @override
+  String budget_toast_suffix_over(String name, String amount) {
+    return '$name: $amount te veel';
+  }
+
+  @override
+  String get budget_all_spending => 'Alle uitgaven';
+
+  @override
+  String get budget_name => 'Naam';
+
+  @override
+  String get budget_name_placeholder => 'naam';
+
+  @override
+  String get budget_what_counts => 'Wat telt';
+
+  @override
+  String get budget_wallets => 'Portemonnees';
+
+  @override
+  String get budget_all_wallets => 'Alle portemonnees';
+
+  @override
+  String get budget_tags => 'Tags';
+
+  @override
+  String get budget_any_tag => 'Elke tag';
+
+  @override
+  String get budget_scope_all => 'Telt elke uitgave.';
+
+  @override
+  String budget_scope_wallets(String wallets) {
+    return 'Telt uitgaven uit $wallets.';
+  }
+
+  @override
+  String budget_scope_tags(String tags) {
+    return 'Telt uitgaven met tag $tags.';
+  }
+
+  @override
+  String budget_scope_both(String wallets, String tags) {
+    return 'Telt uitgaven uit $wallets met tag $tags.';
+  }
+
+  @override
+  String get budget_scope_or => 'of';
+
+  @override
+  String get budget_period_section => 'Periode';
+
+  @override
+  String get budget_repeats => 'Herhaling';
+
+  @override
+  String get budget_period_weekly => 'Wekelijks';
+
+  @override
+  String get budget_period_monthly => 'Maandelijks';
+
+  @override
+  String get budget_period_yearly => 'Jaarlijks';
+
+  @override
+  String get budget_period_custom => 'Eenmalig';
+
+  @override
+  String get budget_starts_on => 'Begint op';
+
+  @override
+  String get budget_first_day => 'Eerste dag';
+
+  @override
+  String get budget_last_day => 'Laatste dag';
+
+  @override
+  String budget_day_of_month(int day) {
+    return 'Dag $day';
+  }
+
+  @override
+  String get budget_start_day_title => 'Startdag';
+
+  @override
+  String get budget_start_day_hint =>
+      'Kortere maanden beginnen op hun laatste dag.';
+
+  @override
+  String get budget_start_weekday_title => 'Eerste dag van de week';
+
+  @override
+  String get budget_carry_over => 'Overdragen';
+
+  @override
+  String get budget_rollover_none => 'Niet overdragen';
+
+  @override
+  String get budget_rollover_surplus => 'Rest overdragen';
+
+  @override
+  String get budget_rollover_both => 'Rest en overschrijding overdragen';
+
+  @override
+  String get budget_count_planned => 'Gepland meetellen';
+
+  @override
+  String get budget_count_planned_hint => 'Inclusief gepland en abonnementen';
+
+  @override
+  String get budget_count_planned_desc =>
+      'Geplande betalingen en abonnementen tellen al mee voor het limiet vóór betaling.';
+
+  @override
+  String budget_suggested_months(String amount) {
+    return 'Voorstel: $amount · gem. laatste 3 maanden';
+  }
+
+  @override
+  String budget_suggested_weeks(String amount) {
+    return 'Voorstel: $amount · gem. laatste 3 weken';
+  }
+
+  @override
+  String budget_suggested_years(String amount) {
+    return 'Voorstel: $amount · gem. laatste 3 jaar';
+  }
+
+  @override
+  String get budget_deleted => 'Budget verwijderd';
+
+  @override
+  String budget_delete_title(String name) {
+    return '$name verwijderen?';
+  }
+
+  @override
+  String get budget_delete_message => 'Je transacties blijven ongewijzigd.';
+
+  @override
+  String get budget_error_name => 'Naam tot 40 tekens';
+
+  @override
+  String get budget_error_dates => 'De laatste dag moet na de eerste komen';
+
+  @override
+  String get budget_left_caption => 'over';
+
+  @override
+  String get budget_over_caption => 'te veel';
+
+  @override
+  String get budget_under_caption => 'onder budget';
+
+  @override
+  String budget_spent(String amount) {
+    return 'Uitgegeven $amount';
+  }
+
+  @override
+  String budget_planned(String amount) {
+    return 'Gepland $amount';
+  }
+
+  @override
+  String budget_limit(String amount) {
+    return 'Limiet $amount';
+  }
+
+  @override
+  String budget_carried(String amount) {
+    return '$amount overgedragen';
+  }
+
+  @override
+  String get budget_on_track => 'Op schema';
+
+  @override
+  String budget_ahead_of_pace(String amount) {
+    return '$amount voor op schema';
+  }
+
+  @override
+  String budget_faster_than_planned(String amount) {
+    return '$amount sneller dan gepland';
+  }
+
+  @override
+  String budget_forecast(String amount) {
+    return 'prognose $amount';
+  }
+
+  @override
+  String get budget_no_spending => 'Nog geen uitgaven deze periode';
+
+  @override
+  String get budgets_active => 'Actief';
+
+  @override
+  String get budgets_upcoming => 'Gepland';
+
+  @override
+  String get budgets_empty_title => 'Nog geen budgetten';
+
+  @override
+  String get budgets_empty_subtitle =>
+      'Stel een limiet in en zie wat er over is';
+
+  @override
+  String budgets_more_count(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '+$count andere budgetten',
+      one: '+1 ander budget',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String budget_per_day_for(String amount, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count dagen',
+      one: '1 dag',
+    );
+    return '$amount/dag voor $_temp0';
+  }
+
+  @override
+  String budget_subscriptions_planned(int count, String amount) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count abonnementen',
+      one: '1 abonnement',
+    );
+    return '$_temp0 · $amount';
+  }
+
+  @override
+  String budgets_finished(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Afgelopen ($count)',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String wallet_deleted_removed_budgets(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count budgetten verwijderd',
+      one: '1 budget verwijderd',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get debts_title => 'Schulden';
+
+  @override
+  String get debts_owed_to_me => 'Te ontvangen';
+
+  @override
+  String get debts_i_owe => 'Ik ben schuldig';
+
+  @override
+  String get debts_empty_owed_title => 'Niemand is je iets schuldig';
+
+  @override
+  String get debts_empty_owe_title => 'Je bent niemand iets schuldig';
+
+  @override
+  String get debts_empty_subtitle =>
+      'Kies een persoon op het transactiescherm als je geld leent';
+
+  @override
+  String get debt_new => 'Nieuwe schuld';
+
+  @override
+  String get debts_all => 'Alle schulden';
+
+  @override
+  String get debts_empty_hint => 'Houd bij wat je hebt uitgeleend of geleend';
+
+  @override
+  String get dashboard_reorder_hint => 'Vasthouden om te ordenen';
+
+  @override
+  String dashboard_budgets_over(int count) {
+    return '$count overschreden';
+  }
+
+  @override
+  String dashboard_budgets_at_risk(int count) {
+    return '$count in gevaar';
+  }
+
+  @override
+  String get dashboard_budgets_on_track => 'Alles op schema';
+
+  @override
+  String dashboard_debts_to_receive(String amount) {
+    return '$amount te ontvangen';
+  }
+
+  @override
+  String dashboard_debts_to_pay(String amount) {
+    return '$amount terug te betalen';
+  }
+
+  @override
+  String get dashboard_new => 'Nieuw';
+
+  @override
+  String get debt_they_owe_me => 'Ik krijg geld';
+
+  @override
+  String get debt_i_owe_them => 'Ik ben schuldig';
+
+  @override
+  String get debt_person => 'Persoon';
+
+  @override
+  String get debt_person_chip => 'Persoon';
+
+  @override
+  String get debt_person_title => 'Persoon';
+
+  @override
+  String get debt_person_search => 'Naam';
+
+  @override
+  String get debt_person_empty => 'Nog niemand — typ een naam';
+
+  @override
+  String get debt_person_none => 'Geen persoon';
+
+  @override
+  String get debt_choose => 'Kiezen';
+
+  @override
+  String get debt_amount => 'Bedrag';
+
+  @override
+  String get debt_note_hint => 'Notitie (optioneel)';
+
+  @override
+  String get debt_note_placeholder => 'notitie';
+
+  @override
+  String get debt_due_date => 'Vervaldatum';
+
+  @override
+  String get debt_due_title => 'Vervaldatum';
+
+  @override
+  String get debt_add_due => 'Vervaldatum';
+
+  @override
+  String get debt_due_change => 'Datum wijzigen';
+
+  @override
+  String get debt_due_remove => 'Vervaldatum verwijderen';
+
+  @override
+  String get debt_none => 'Geen';
+
+  @override
+  String get debt_money_moved => 'Geld verplaatst';
+
+  @override
+  String get debt_not_in_wallet => 'Niet via een portemonnee';
+
+  @override
+  String get debt_error_person => 'Kies een persoon';
+
+  @override
+  String get debt_gave => 'Gegeven';
+
+  @override
+  String get debt_got => 'Gekregen';
+
+  @override
+  String get debt_badge_loan => 'Lening';
+
+  @override
+  String get debt_badge_return => 'Terugbetaling';
+
+  @override
+  String get debt_overdue => 'te laat';
+
+  @override
+  String get debt_settled_label => 'Vereffend';
+
+  @override
+  String get debt_forgiven_label => 'Kwijtgescholden';
+
+  @override
+  String get debt_returned_in_full => 'Volledig terugbetaald';
+
+  @override
+  String get debt_paid_in_full => 'Volledig betaald';
+
+  @override
+  String get debt_part => 'Deel';
+
+  @override
+  String get debt_forgive => 'Kwijtschelden';
+
+  @override
+  String get debt_remind => 'Herinneren';
+
+  @override
+  String get debt_history => 'Geschiedenis';
+
+  @override
+  String get debt_edit_note => 'Notitie bewerken';
+
+  @override
+  String get debt_rename_person => 'Persoon hernoemen';
+
+  @override
+  String get debt_delete => 'Schuld verwijderen';
+
+  @override
+  String get debt_delete_title => 'Deze schuld verwijderen?';
+
+  @override
+  String get debt_deleted => 'Schuld verwijderd';
+
+  @override
+  String get debt_payment_deleted => 'Betaling verwijderd';
+
+  @override
+  String get debt_return_deleted => 'Terugbetaling verwijderd';
+
+  @override
+  String debt_due(String date) {
+    return 'vervalt $date';
+  }
+
+  @override
+  String debt_left(String amount) {
+    return '$amount open';
+  }
+
+  @override
+  String debt_left_of(String amount) {
+    return 'open van $amount';
+  }
+
+  @override
+  String debt_of(String amount) {
+    return 'van $amount';
+  }
+
+  @override
+  String debt_to_wallet(String wallet) {
+    return 'naar $wallet';
+  }
+
+  @override
+  String debt_from_wallet(String wallet) {
+    return 'van $wallet';
+  }
+
+  @override
+  String debt_owes_you(String name, String amount) {
+    return '$name is je $amount schuldig';
+  }
+
+  @override
+  String debt_you_owe(String name, String amount) {
+    return 'Je bent $name $amount schuldig';
+  }
+
+  @override
+  String debt_overall(String text) {
+    return 'In totaal: $text';
+  }
+
+  @override
+  String debt_overall_both(String name, String owed, String owe) {
+    return 'In totaal: $name is je $owed schuldig · jij $owe';
+  }
+
+  @override
+  String debt_hint_owes_you(String name, String amount) {
+    return '$name is je $amount schuldig · „Gekregen“ telt als terugbetaling';
+  }
+
+  @override
+  String debt_hint_you_owe(String name, String amount) {
+    return 'Je bent $name $amount schuldig · „Gegeven“ telt als terugbetaling';
+  }
+
+  @override
+  String debt_hint_both(String name, String owed, String owe) {
+    return '$name is je $owed schuldig · jij $owe';
+  }
+
+  @override
+  String debt_hint_none(String name) {
+    return 'Geen open schulden met $name · „Gegeven“ leent uit, „Gekregen“ leent';
+  }
+
+  @override
+  String debt_person_add(String name) {
+    return '„$name“ toevoegen';
+  }
+
+  @override
+  String debt_picker_owes_you(String amount) {
+    return 'is je $amount schuldig';
+  }
+
+  @override
+  String debt_picker_you_owe(String amount) {
+    return 'je bent $amount schuldig';
+  }
+
+  @override
+  String debt_title_lent_to(String name) {
+    return 'Uitgeleend aan $name';
+  }
+
+  @override
+  String debt_title_borrowed_from(String name) {
+    return 'Geleend van $name';
+  }
+
+  @override
+  String debt_title_paid_back_by(String name) {
+    return '$name heeft terugbetaald';
+  }
+
+  @override
+  String debt_title_paid_back_to(String name) {
+    return '$name terugbetaald';
+  }
+
+  @override
+  String debt_toast_lent(String amount, String name) {
+    return '$amount uitgeleend aan $name';
+  }
+
+  @override
+  String debt_toast_borrowed(String amount, String name) {
+    return '$amount geleend van $name';
+  }
+
+  @override
+  String debt_toast_returned(String name, String amount, String left) {
+    return '$name gaf $amount terug · $left open';
+  }
+
+  @override
+  String debt_toast_returned_settled(String name, String amount) {
+    return '$name gaf $amount terug · alles vereffend';
+  }
+
+  @override
+  String debt_toast_paid_back(String amount, String name, String left) {
+    return '$amount terugbetaald aan $name · $left open';
+  }
+
+  @override
+  String debt_toast_paid_back_settled(String amount, String name) {
+    return '$amount terugbetaald aan $name · alles vereffend';
+  }
+
+  @override
+  String debt_forgive_title(String name) {
+    return '$name kwijtschelden?';
+  }
+
+  @override
+  String debt_forgive_message(String amount) {
+    return 'De resterende $amount wordt kwijtgescholden. Er wordt geen geld verplaatst.';
+  }
+
+  @override
+  String debt_forgiven_toast(String name) {
+    return 'Schuld kwijtgescholden · $name';
+  }
+
+  @override
+  String debt_remind_message(
+    String name,
+    String amount,
+    String note,
+    String date,
+  ) {
+    return 'Hoi $name! Even een herinnering aan $amount voor $note ($date). Bedankt!';
+  }
+
+  @override
+  String debt_remind_message_no_note(String name, String amount, String date) {
+    return 'Hoi $name! Even een herinnering aan $amount ($date). Bedankt!';
+  }
+
+  @override
+  String debt_history_lent(String amount) {
+    return '$amount uitgeleend';
+  }
+
+  @override
+  String debt_history_lent_from(String amount, String wallet) {
+    return '$amount uitgeleend van $wallet';
+  }
+
+  @override
+  String debt_history_borrowed(String amount) {
+    return '$amount geleend';
+  }
+
+  @override
+  String debt_history_borrowed_into(String amount, String wallet) {
+    return '$amount geleend naar $wallet';
+  }
+
+  @override
+  String debt_history_returned(String amount) {
+    return '$amount terugbetaald';
+  }
+
+  @override
+  String debt_history_returned_to(String amount, String wallet) {
+    return '$amount terug → $wallet';
+  }
+
+  @override
+  String debt_history_paid(String amount) {
+    return '$amount terugbetaald';
+  }
+
+  @override
+  String debt_history_paid_from(String amount, String wallet) {
+    return '$amount terugbetaald van $wallet';
+  }
+
+  @override
+  String debt_history_forgiven(String amount) {
+    return '$amount kwijtgescholden';
+  }
+
+  @override
+  String debts_overdue_count(int count) {
+    return '$count te laat';
+  }
+
+  @override
+  String debts_count(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count schulden',
+      one: '1 schuld',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String debts_people_count(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count personen',
+      one: '1 persoon',
+      zero: 'Niemand',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String debts_settled(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Vereffend ($count)',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String debt_cascade_deleted(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Lening verwijderd met $count terugbetalingen',
+      one: 'Lening verwijderd met 1 terugbetaling',
+      zero: 'Lening verwijderd',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String debt_delete_message(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count transacties worden ook verwijderd.',
+      one: '1 transactie wordt ook verwijderd.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get subscriptions_new => 'Nieuw abonnement';
+
+  @override
+  String subscriptions_active_count(int count) {
+    return '$count actief';
+  }
+
+  @override
+  String subscriptions_paused_count(int count) {
+    return '$count gepauzeerd';
+  }
+
+  @override
+  String get wallet_budgets_empty_subtitle =>
+      'Stel een uitgavelimiet in om deze portemonnee onder controle te houden.';
+
+  @override
+  String get wallet_include_in_total => 'Meetellen in totaalsaldo';
+
+  @override
+  String get wallet_include_in_total_on =>
+      'Het saldo van deze portemonnee telt mee in het totaal op het startscherm.';
+
+  @override
+  String get wallet_include_in_total_off =>
+      'Telt niet mee in het totaal op het startscherm — handig voor spaargeld, gedeelde of alleen-bijhouden-portemonnees.';
+
+  @override
+  String dashboard_wallets_excluded(int count) {
+    return '$count niet meegeteld';
+  }
+
+  @override
+  String get budget_rollover_none_desc =>
+      'Elke periode begint opnieuw met dezelfde limiet. Rest en overschrijding gaan niet mee.';
+
+  @override
+  String get budget_rollover_surplus_desc =>
+      'Wat je niet hebt uitgegeven, komt bij de limiet van de volgende periode.';
+
+  @override
+  String get budget_rollover_both_desc =>
+      'Een rest verhoogt de volgende limiet, een overschrijding verlaagt die.';
+
+  @override
+  String budget_used_percent(int percent) {
+    return '$percent% gebruikt';
+  }
+
+  @override
+  String get budget_stat_spent => 'Uitgegeven';
+
+  @override
+  String get budget_stat_limit => 'Limiet';
+
+  @override
+  String get budget_stat_planned => 'Gepland';
+
+  @override
+  String get budget_stat_per_day => 'Per dag';
+
+  @override
+  String get budget_stat_forecast => 'Prognose';
+
+  @override
+  String budget_days_left(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'nog $count dagen',
+      one: 'nog 1 dag',
+    );
+    return '$_temp0';
+  }
 
   @override
   String get l10nStopLineDontTouch =>

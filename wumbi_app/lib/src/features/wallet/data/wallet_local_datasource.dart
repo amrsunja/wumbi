@@ -123,13 +123,14 @@ class WalletLocalDatasource {
       where: '${SQLiteConfig.txWalletId} = ? AND ${SQLiteConfig.deletedAt} IS NULL',
       whereArgs: [id],
     );
-    return db.update(
-      SQLiteConfig.recurringRulesTable,
-      {SQLiteConfig.ruleIsActive: 0, SQLiteConfig.updatedAt: now},
-      where:
-          '(${SQLiteConfig.txWalletId} = ?1 OR ${SQLiteConfig.txFromWalletId} = ?1 OR ${SQLiteConfig.txToWalletId} = ?1) '
-          'AND ${SQLiteConfig.deletedAt} IS NULL AND ${SQLiteConfig.ruleIsActive} = 1',
-      whereArgs: [id],
+    // Explicit indexes: mixing `?` (from the SET clause) with `?1` would bind
+    // `?1` to the first SET value instead of the wallet id.
+    return db.rawUpdate(
+      'UPDATE ${SQLiteConfig.recurringRulesTable} '
+      'SET ${SQLiteConfig.ruleIsActive} = 0, ${SQLiteConfig.updatedAt} = ?2 '
+      'WHERE (${SQLiteConfig.txWalletId} = ?1 OR ${SQLiteConfig.txFromWalletId} = ?1 OR ${SQLiteConfig.txToWalletId} = ?1) '
+      'AND ${SQLiteConfig.deletedAt} IS NULL AND ${SQLiteConfig.ruleIsActive} = 1',
+      [id, now],
     );
   }
 

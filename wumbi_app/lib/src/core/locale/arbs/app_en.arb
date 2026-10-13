@@ -77,6 +77,10 @@
   "wallet_currency": "Currency",
   "wallet_primary": "Primary Wallet",
   "wallet_has_transactions": "Has transactions",
+  "wallet_tab_transactions": "Transactions",
+  "wallet_tab_budgets": "Budgets",
+  "wallet_tab_subscriptions": "Subscriptions",
+  "wallet_budgets_empty": "No spending limits for this wallet yet",
   "wallet_pick_another_primary": "Pick another wallet as primary",
   "wallet_delete_title": "Delete {name}?",
   "@wallet_delete_title": {
@@ -334,6 +338,71 @@
   },
   "tag_not_found": "This tag no longer exists",
   "tag_wallet_deleted": "(deleted)",
+  "tags_new": "New tag",
+  "tags_create": "Create tag",
+  "tags_created": "#{name} created",
+  "@tags_created": {"placeholders": {"name": {"type": "String"}}},
+  "tags_exists": "#{name} already exists",
+  "@tags_exists": {"placeholders": {"name": {"type": "String"}}},
+  "tags_parent": "Parent tag",
+  "tags_parent_none": "No parent",
+  "tags_name_hint": "e.g. coffee",
+  "tags_create_tip": "Tip: type food/coffee to nest a tag in one go.",
+  "tags_nested_count": "{count, plural, =1{1 nested} other{{count} nested}}",
+  "@tags_nested_count": {"placeholders": {"count": {"type": "int"}}},
+  "tags_help": "How to use tags?",
+  "tags_graph_mode_all": "All",
+  "tags_graph_mode_spending": "Spending",
+  "tags_graph_mode_income": "Income",
+  "tags_graph_legend_size": "Bigger = more money",
+  "tags_graph_legend_nested": "Nested",
+  "tags_graph_legend_together": "Used together",
+  "tags_graph_tap_hint": "Tap a circle to see its numbers",
+  "tags_graph_open": "Open",
+  "tags_graph_linked": "{count, plural, =0{No links yet} =1{Linked to 1 tag} other{Linked to {count} tags}}",
+  "@tags_graph_linked": {"placeholders": {"count": {"type": "int"}}},
+  "tag_move": "Move",
+  "tag_move_title": "Move #{name}",
+  "@tag_move_title": {"placeholders": {"name": {"type": "String"}}},
+  "tag_moved": "Tag moved",
+  "tag_add_nested": "Add nested tag",
+  "tag_nested_tags": "Nested tags",
+  "tag_includes_nested": "{count, plural, =1{Includes 1 nested tag} other{Includes {count} nested tags}}",
+  "@tag_includes_nested": {"placeholders": {"count": {"type": "int"}}},
+  "tag_delete_nested_message": "{count, plural, =1{It and its nested tag will be removed from every transaction. The transactions themselves stay.} other{It and its {count} nested tags will be removed from every transaction. The transactions themselves stay.}}",
+  "@tag_delete_nested_message": {"placeholders": {"count": {"type": "int"}}},
+  "tag_rename_nested_hint": "Nested tags are renamed too. Use / to move it under another tag.",
+  "tag_top_level": "Top level",
+  "tag_nested_empty": "No nested tags yet",
+  "settings_help": "Need help?",
+  "help_title": "Need help?",
+  "help_subtitle": "Short guides to get the most out of Wumbi.",
+  "help_tags_title": "How to use tags?",
+  "help_tags_subtitle": "Labels, nested tags and the map",
+  "help_tags_intro": "Tags are short labels like #coffee that you add to transactions. A transaction can carry several tags, so you can look at your money from any angle — not only by wallet.",
+  "help_tags_add_title": "Add a tag",
+  "help_tags_add_body": "When you enter a transaction, type a name in the tags field, then pick a suggestion or create a new one. Tags have no spaces — write coffee-shop or coffee_shop. Upper and lower case give the same tag.",
+  "help_tags_nested_title": "Nested tags",
+  "help_tags_nested_body": "Use a slash / to put a tag inside another one, like folders: food/coffee and food/groceries both live inside food. The parent tag is created for you.",
+  "help_tags_parent_title": "A parent includes its nested tags",
+  "help_tags_parent_body": "Opening #food shows every transaction tagged #food, #food/coffee or #food/groceries. Totals, filters and budgets on a parent count its nested tags too. A transaction with both tags is counted only once.",
+  "help_tags_multi_title": "Several tags on one transaction",
+  "help_tags_multi_body": "A dinner on holiday can be #travel and #food/restaurant at the same time. It then counts in both, and the two tags get linked on the map.",
+  "help_tags_manage_title": "Create, rename, move",
+  "help_tags_manage_body": "On the Tags page, tap + to create a tag and pick a parent to nest it. Open a tag to rename it, move it under another parent, add a nested tag or delete it. Renaming a parent renames its nested tags; renaming into an existing tag merges the two.",
+  "help_tags_map_title": "Read the map",
+  "help_tags_map_body": "Every circle is a tag: the bigger it is, the more money it moved. Its ring shows the share of spending and income. Solid lines join a parent to its nested tags, faint lines join tags used on the same transaction. Tap a circle to see its numbers.",
+  "help_tags_tips_title": "Tips",
+  "help_tags_tip1": "Start broad — food, home, transport — and nest only when you want more detail.",
+  "help_tags_tip2": "Use tags for what cuts across wallets: #vacation, #gifts, #car.",
+  "help_tags_tip3": "Keep names short; two or three levels are plenty.",
+  "help_tags_example": "Example",
+  "help_tags_example_total": "Total for #food",
+  "help_tags_ex_parent": "food",
+  "help_tags_ex_child1": "coffee",
+  "help_tags_ex_child2": "groceries",
+  "help_tags_ex_travel": "travel",
+  "help_tags_ex_restaurant": "restaurant",
 
   "l10nSubscriptions": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ SUBSCRIPTIONS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
   "subscriptions_title": "Subscriptions",
@@ -459,10 +528,674 @@
   "error_validation": "Please check the entered values.",
   "error_wallet_has_transactions": "The currency can't change once a wallet has transactions.",
   "error_not_found": "This item no longer exists.",
+  "debt_error_owes_you_only": "{name} owes you only {amount}",
+  "@debt_error_owes_you_only": {
+    "placeholders": {
+      "name": {"type": "String"},
+      "amount": {"type": "String"}
+    }
+  },
+  "debt_error_you_owe_only": "You owe {name} only {amount}",
+  "@debt_error_you_owe_only": {
+    "placeholders": {
+      "name": {"type": "String"},
+      "amount": {"type": "String"}
+    }
+  },
+  "person_error_has_debts": "Settle or delete this person's debts first.",
+  "debt_error_closed": "This debt is already settled.",
   "error_tag_name": "Enter a tag name (up to 30 characters).",
   "error_open_db_title": "Couldn't open your data",
   "error_open_db_message": "Wumbi couldn't unlock the database on this device.",
   "error_reset_app": "Reset app",
+
+  "dashboard_budgets": "Budgets",
+  "budget_new": "New Budget",
+  "budget_empty_hint": "Set a spending limit for a wallet or a #tag",
+  "budgets_all": "All budgets",
+  "budgets_title": "Budgets",
+  "budget_left": "{amount} left",
+  "@budget_left": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "budget_over": "{amount} over",
+  "@budget_over": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "budget_starts": "Starts {date}",
+  "@budget_starts": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "budget_ended": "Ended",
+  "budget_per_day": "{amount}/day",
+  "@budget_per_day": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "budget_spent_of": "Spent {spent} of {limit}",
+  "@budget_spent_of": {
+    "placeholders": {
+      "spent": {"type": "String"},
+      "limit": {"type": "String"}
+    }
+  },
+  "budget_this_week": "This week",
+  "budget_set_limit": "Set a spending limit",
+  "budget_toast_suffix": "{name}: {amount} left",
+  "@budget_toast_suffix": {
+    "placeholders": {
+      "name": {"type": "String"},
+      "amount": {"type": "String"}
+    }
+  },
+  "budget_toast_suffix_over": "{name}: {amount} over",
+  "@budget_toast_suffix_over": {
+    "placeholders": {
+      "name": {"type": "String"},
+      "amount": {"type": "String"}
+    }
+  },
+  "budget_all_spending": "All spending",
+  "budget_name": "Name",
+  "budget_name_placeholder": "name",
+  "budget_what_counts": "What counts",
+  "budget_wallets": "Wallets",
+  "budget_all_wallets": "All wallets",
+  "budget_tags": "Tags",
+  "budget_any_tag": "Any tag",
+  "budget_scope_all": "Counts every expense.",
+  "budget_scope_wallets": "Counts expenses from {wallets}.",
+  "@budget_scope_wallets": {
+    "placeholders": {
+      "wallets": {"type": "String"}
+    }
+  },
+  "budget_scope_tags": "Counts expenses tagged {tags}.",
+  "@budget_scope_tags": {
+    "placeholders": {
+      "tags": {"type": "String"}
+    }
+  },
+  "budget_scope_both": "Counts expenses from {wallets} tagged {tags}.",
+  "@budget_scope_both": {
+    "placeholders": {
+      "wallets": {"type": "String"},
+      "tags": {"type": "String"}
+    }
+  },
+  "budget_scope_or": "or",
+  "budget_period_section": "Period",
+  "budget_repeats": "Repeats",
+  "budget_period_weekly": "Weekly",
+  "budget_period_monthly": "Monthly",
+  "budget_period_yearly": "Yearly",
+  "budget_period_custom": "One-time",
+  "budget_starts_on": "Starts on",
+  "budget_first_day": "First day",
+  "budget_last_day": "Last day",
+  "budget_day_of_month": "Day {day}",
+  "@budget_day_of_month": {
+    "placeholders": {
+      "day": {"type": "int"}
+    }
+  },
+  "budget_start_day_title": "Start day",
+  "budget_start_day_hint": "Short months start on their last day.",
+  "budget_start_weekday_title": "First day of the week",
+  "budget_carry_over": "Carry over",
+  "budget_rollover_none": "Don't carry over",
+  "budget_rollover_surplus": "Carry what's left",
+  "budget_rollover_both": "Carry what's left and overspending",
+  "budget_count_planned": "Count planned",
+  "budget_count_planned_hint": "Include upcoming and subscriptions",
+  "budget_count_planned_desc": "Upcoming payments and subscriptions count against the limit before they're paid.",
+  "budget_suggested_months": "Suggested: {amount} · avg. of last 3 months",
+  "@budget_suggested_months": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "budget_suggested_weeks": "Suggested: {amount} · avg. of last 3 weeks",
+  "@budget_suggested_weeks": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "budget_suggested_years": "Suggested: {amount} · avg. of last 3 years",
+  "@budget_suggested_years": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "budget_deleted": "Budget deleted",
+  "budget_delete_title": "Delete {name}?",
+  "@budget_delete_title": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "budget_delete_message": "Your transactions stay as they are.",
+  "budget_error_name": "Name up to 40 characters",
+  "budget_error_dates": "The last day must come after the first",
+  "budget_left_caption": "left",
+  "budget_over_caption": "over",
+  "budget_under_caption": "under",
+  "budget_spent": "Spent {amount}",
+  "@budget_spent": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "budget_planned": "Planned {amount}",
+  "@budget_planned": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "budget_limit": "Limit {amount}",
+  "@budget_limit": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "budget_carried": "{amount} carried",
+  "@budget_carried": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "budget_on_track": "On track",
+  "budget_ahead_of_pace": "{amount} ahead of pace",
+  "@budget_ahead_of_pace": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "budget_faster_than_planned": "{amount} faster than planned",
+  "@budget_faster_than_planned": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "budget_forecast": "forecast {amount}",
+  "@budget_forecast": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "budget_no_spending": "No spending yet this period",
+  "budgets_active": "Active",
+  "budgets_upcoming": "Upcoming",
+  "budgets_empty_title": "No budgets yet",
+  "budgets_empty_subtitle": "Set a limit and watch what's left",
+  "budgets_more_count": "{count, plural, =1{+1 more budget} other{+{count} more budgets}}",
+  "@budgets_more_count": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "budget_per_day_for": "{amount}/day for {count, plural, =1{1 day} other{{count} days}}",
+  "@budget_per_day_for": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "count": {"type": "int"}
+    }
+  },
+  "budget_subscriptions_planned": "{count, plural, =1{1 subscription} other{{count} subscriptions}} · {amount}",
+  "@budget_subscriptions_planned": {
+    "placeholders": {
+      "count": {"type": "int"},
+      "amount": {"type": "String"}
+    }
+  },
+  "budgets_finished": "{count, plural, other{Finished ({count})}}",
+  "@budgets_finished": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "wallet_deleted_removed_budgets": "{count, plural, =1{1 budget removed} other{{count} budgets removed}}",
+  "@wallet_deleted_removed_budgets": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+
+  "debts_title": "Debts",
+  "debts_owed_to_me": "Owed to me",
+  "debts_i_owe": "I owe",
+  "debts_empty_owed_title": "Nobody owes you",
+  "debts_empty_owe_title": "You owe nobody",
+  "debts_empty_subtitle": "Pick a person on the transaction screen when you lend money",
+  "debt_new": "New debt",
+  "debts_all": "All debts",
+  "debts_empty_hint": "Keep track of money you lent or borrowed",
+  "dashboard_reorder_hint": "Hold to reorder",
+  "dashboard_budgets_over": "{count} over limit",
+  "@dashboard_budgets_over": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "dashboard_budgets_at_risk": "{count} at risk",
+  "@dashboard_budgets_at_risk": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "dashboard_budgets_on_track": "All on track",
+  "dashboard_debts_to_receive": "{amount} to receive",
+  "@dashboard_debts_to_receive": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "dashboard_debts_to_pay": "{amount} to pay back",
+  "@dashboard_debts_to_pay": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "dashboard_new": "New",
+  "debt_they_owe_me": "They owe me",
+  "debt_i_owe_them": "I owe them",
+  "debt_person": "Person",
+  "debt_person_chip": "Person",
+  "debt_person_title": "Person",
+  "debt_person_search": "Name",
+  "debt_person_empty": "No people yet — type a name",
+  "debt_person_none": "No person",
+  "debt_choose": "Choose",
+  "debt_amount": "Amount",
+  "debt_note_hint": "Note (optional)",
+  "debt_note_placeholder": "note",
+  "debt_due_date": "Due date",
+  "debt_due_title": "Due date",
+  "debt_add_due": "Due date",
+  "debt_due_change": "Change date",
+  "debt_due_remove": "Remove due date",
+  "debt_none": "None",
+  "debt_money_moved": "Money moved",
+  "debt_not_in_wallet": "Not in a wallet",
+  "debt_error_person": "Choose a person",
+  "debt_gave": "Gave",
+  "debt_got": "Got",
+  "debt_badge_loan": "Loan",
+  "debt_badge_return": "Return",
+  "debt_overdue": "overdue",
+  "debt_settled_label": "Settled",
+  "debt_forgiven_label": "Forgiven",
+  "debt_returned_in_full": "Returned in full",
+  "debt_paid_in_full": "Paid in full",
+  "debt_part": "Part",
+  "debt_forgive": "Forgive",
+  "debt_remind": "Remind",
+  "debt_history": "History",
+  "debt_edit_note": "Edit note",
+  "debt_rename_person": "Rename person",
+  "debt_delete": "Delete debt",
+  "debt_delete_title": "Delete this debt?",
+  "debt_deleted": "Debt deleted",
+  "debt_payment_deleted": "Payment deleted",
+  "debt_return_deleted": "Return deleted",
+  "debt_due": "due {date}",
+  "@debt_due": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "debt_left": "{amount} left",
+  "@debt_left": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "debt_left_of": "left of {amount}",
+  "@debt_left_of": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "debt_of": "of {amount}",
+  "@debt_of": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "debt_to_wallet": "to {wallet}",
+  "@debt_to_wallet": {
+    "placeholders": {
+      "wallet": {"type": "String"}
+    }
+  },
+  "debt_from_wallet": "from {wallet}",
+  "@debt_from_wallet": {
+    "placeholders": {
+      "wallet": {"type": "String"}
+    }
+  },
+  "debt_owes_you": "{name} owes you {amount}",
+  "@debt_owes_you": {
+    "placeholders": {
+      "name": {"type": "String"},
+      "amount": {"type": "String"}
+    }
+  },
+  "debt_you_owe": "You owe {name} {amount}",
+  "@debt_you_owe": {
+    "placeholders": {
+      "name": {"type": "String"},
+      "amount": {"type": "String"}
+    }
+  },
+  "debt_overall": "Overall: {text}",
+  "@debt_overall": {
+    "placeholders": {
+      "text": {"type": "String"}
+    }
+  },
+  "debt_overall_both": "Overall: {name} owes you {owed} · you owe {owe}",
+  "@debt_overall_both": {
+    "placeholders": {
+      "name": {"type": "String"},
+      "owed": {"type": "String"},
+      "owe": {"type": "String"}
+    }
+  },
+  "debt_hint_owes_you": "{name} owes you {amount} · GOT counts as a return",
+  "@debt_hint_owes_you": {
+    "placeholders": {
+      "name": {"type": "String"},
+      "amount": {"type": "String"}
+    }
+  },
+  "debt_hint_you_owe": "You owe {name} {amount} · GAVE counts as paying back",
+  "@debt_hint_you_owe": {
+    "placeholders": {
+      "name": {"type": "String"},
+      "amount": {"type": "String"}
+    }
+  },
+  "debt_hint_both": "{name} owes you {owed} · you owe {owe}",
+  "@debt_hint_both": {
+    "placeholders": {
+      "name": {"type": "String"},
+      "owed": {"type": "String"},
+      "owe": {"type": "String"}
+    }
+  },
+  "debt_hint_none": "No open debts with {name} · GAVE lends, GOT borrows",
+  "@debt_hint_none": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "debt_person_add": "Add “{name}”",
+  "@debt_person_add": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "debt_picker_owes_you": "owes you {amount}",
+  "@debt_picker_owes_you": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "debt_picker_you_owe": "you owe {amount}",
+  "@debt_picker_you_owe": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "debt_title_lent_to": "Lent to {name}",
+  "@debt_title_lent_to": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "debt_title_borrowed_from": "Borrowed from {name}",
+  "@debt_title_borrowed_from": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "debt_title_paid_back_by": "{name} paid back",
+  "@debt_title_paid_back_by": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "debt_title_paid_back_to": "Paid back {name}",
+  "@debt_title_paid_back_to": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "debt_toast_lent": "Lent {amount} to {name}",
+  "@debt_toast_lent": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "name": {"type": "String"}
+    }
+  },
+  "debt_toast_borrowed": "Borrowed {amount} from {name}",
+  "@debt_toast_borrowed": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "name": {"type": "String"}
+    }
+  },
+  "debt_toast_returned": "{name} returned {amount} · {left} left",
+  "@debt_toast_returned": {
+    "placeholders": {
+      "name": {"type": "String"},
+      "amount": {"type": "String"},
+      "left": {"type": "String"}
+    }
+  },
+  "debt_toast_returned_settled": "{name} returned {amount} · all settled",
+  "@debt_toast_returned_settled": {
+    "placeholders": {
+      "name": {"type": "String"},
+      "amount": {"type": "String"}
+    }
+  },
+  "debt_toast_paid_back": "Paid back {amount} to {name} · {left} left",
+  "@debt_toast_paid_back": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "name": {"type": "String"},
+      "left": {"type": "String"}
+    }
+  },
+  "debt_toast_paid_back_settled": "Paid back {amount} to {name} · all settled",
+  "@debt_toast_paid_back_settled": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "name": {"type": "String"}
+    }
+  },
+  "debt_forgive_title": "Forgive {name}?",
+  "@debt_forgive_title": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "debt_forgive_message": "The remaining {amount} will be written off. No money moves.",
+  "@debt_forgive_message": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "debt_forgiven_toast": "Debt forgiven · {name}",
+  "@debt_forgiven_toast": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "debt_remind_message": "Hi {name}! Just a reminder about {amount} for {note} ({date}). Thanks!",
+  "@debt_remind_message": {
+    "placeholders": {
+      "name": {"type": "String"},
+      "amount": {"type": "String"},
+      "note": {"type": "String"},
+      "date": {"type": "String"}
+    }
+  },
+  "debt_remind_message_no_note": "Hi {name}! Just a reminder about {amount} ({date}). Thanks!",
+  "@debt_remind_message_no_note": {
+    "placeholders": {
+      "name": {"type": "String"},
+      "amount": {"type": "String"},
+      "date": {"type": "String"}
+    }
+  },
+  "debt_history_lent": "Lent {amount}",
+  "@debt_history_lent": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "debt_history_lent_from": "Lent {amount} from {wallet}",
+  "@debt_history_lent_from": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "wallet": {"type": "String"}
+    }
+  },
+  "debt_history_borrowed": "Borrowed {amount}",
+  "@debt_history_borrowed": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "debt_history_borrowed_into": "Borrowed {amount} into {wallet}",
+  "@debt_history_borrowed_into": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "wallet": {"type": "String"}
+    }
+  },
+  "debt_history_returned": "Returned {amount}",
+  "@debt_history_returned": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "debt_history_returned_to": "Returned {amount} → {wallet}",
+  "@debt_history_returned_to": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "wallet": {"type": "String"}
+    }
+  },
+  "debt_history_paid": "Paid back {amount}",
+  "@debt_history_paid": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "debt_history_paid_from": "Paid back {amount} from {wallet}",
+  "@debt_history_paid_from": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "wallet": {"type": "String"}
+    }
+  },
+  "debt_history_forgiven": "Forgave {amount}",
+  "@debt_history_forgiven": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "debts_overdue_count": "{count} overdue",
+  "@debts_overdue_count": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "debts_count": "{count, plural, =1{1 debt} other{{count} debts}}",
+  "@debts_count": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "debts_people_count": "{count, plural, =0{No one} =1{1 person} other{{count} people}}",
+  "@debts_people_count": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "debts_settled": "{count, plural, other{Settled ({count})}}",
+  "@debts_settled": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "debt_cascade_deleted": "{count, plural, =0{Loan deleted} =1{Loan deleted with 1 return} other{Loan deleted with {count} returns}}",
+  "@debt_cascade_deleted": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "debt_delete_message": "{count, plural, =1{1 wallet transaction will be deleted too.} other{{count} wallet transactions will be deleted too.}}",
+  "@debt_delete_message": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+
+  "subscriptions_new": "New Subscription",
+  "subscriptions_active_count": "{count} active",
+  "@subscriptions_active_count": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "subscriptions_paused_count": "{count} paused",
+  "@subscriptions_paused_count": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "wallet_budgets_empty_subtitle": "Set a spending limit to keep this wallet in check.",
+  "wallet_include_in_total": "Count in total balance",
+  "wallet_include_in_total_on": "This wallet's balance is added to the total on the Dashboard.",
+  "wallet_include_in_total_off": "Left out of the Dashboard total — handy for savings, shared or tracking-only wallets.",
+  "dashboard_wallets_excluded": "{count, plural, =1{1 not counted} other{{count} not counted}}",
+  "@dashboard_wallets_excluded": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "budget_rollover_none_desc": "Every period starts fresh with the same limit. Leftovers and overspending don't move on.",
+  "budget_rollover_surplus_desc": "What you didn't spend is added to the next period's limit.",
+  "budget_rollover_both_desc": "Leftovers raise the next period's limit, overspending lowers it.",
+  "budget_used_percent": "{percent}% used",
+  "@budget_used_percent": {
+    "placeholders": {
+      "percent": {"type": "int"}
+    }
+  },
+  "budget_stat_spent": "Spent",
+  "budget_stat_limit": "Limit",
+  "budget_stat_planned": "Planned",
+  "budget_stat_per_day": "Per day",
+  "budget_stat_forecast": "Forecast",
+  "budget_days_left": "{count, plural, =1{1 day left} other{{count} days left}}",
+  "@budget_days_left": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
 
   "l10nStopLineDontTouch": "☠☠☠☠☠☠☠☠☠☠☠☠☠ Don't touch this line ☠☠☠☠☠☠☠☠☠☠☠☠☠"
 }

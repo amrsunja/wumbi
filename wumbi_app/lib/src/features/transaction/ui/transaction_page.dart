@@ -10,6 +10,7 @@ import '../../../core/money/money.dart';
 import '../../../core/routing/app_router.dart';
 import '../../../core/utils/app_vibrations.dart';
 import '../../../core/utils/constants/constants.dart';
+import '../../../core/utils/enums/repeat_frequency.dart';
 import '../../../core/utils/enums/transaction_type.dart';
 import '../../../core/utils/extensions/build_context_extensions.dart';
 import '../../../core/utils/extensions/date_time_extensions.dart';
@@ -33,6 +34,8 @@ class TransactionPage extends HookConsumerWidget {
     @QueryParam('walletId') this.walletId,
     @QueryParam('transactionId') this.transactionId,
     @QueryParam('ruleId') this.ruleId,
+    this.repeat,
+    this.tags,
   });
 
   final String? walletId;
@@ -41,12 +44,23 @@ class TransactionPage extends HookConsumerWidget {
   /// Subscription edit mode.
   final String? ruleId;
 
+  /// Create-mode presets: "+ New Subscription" opens with a monthly repeat,
+  /// the budget details FAB with the budget's tags.
+  final RepeatFrequency? repeat;
+  final List<String>? tags;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
     final colors = context.colors;
     final typo = context.typo;
-    final args = TransactionArgs(walletId: walletId, transactionId: transactionId, ruleId: ruleId);
+    final args = TransactionArgs(
+      walletId: walletId,
+      transactionId: transactionId,
+      ruleId: ruleId,
+      repeat: repeat,
+      tags: tags,
+    );
     final state = ref.watch(transactionNotifierProvider(args));
     final notifier = ref.read(transactionNotifierProvider(args).notifier);
     final base = ref.watch(baseCurrencyProvider);
@@ -71,6 +85,12 @@ class TransactionPage extends HookConsumerWidget {
       AppVibrations.error();
       shakeController.forward(from: 0);
     }
+
+    // Refused commit (over-repayment): the notifier asks for a shake.
+    useEffect(() {
+      if (state.shakeSignal > 0) shakeController.forward(from: 0);
+      return null;
+    }, [state.shakeSignal]);
 
     void unfocusAll() {
       descriptionFocus.unfocus();
@@ -159,7 +179,10 @@ class TransactionPage extends HookConsumerWidget {
     }
 
     Future<void> pickDate() async {
-      final picked = await DatePickerSheet.show(context, initial: state.date);
+      final picked = await DatePickerSheet.show(
+        context,
+        initial: state.date,
+      );
       if (picked != null) notifier.setDate(picked);
     }
 
@@ -311,6 +334,7 @@ class TransactionPage extends HookConsumerWidget {
                 maxTags: kMaxTagsPerTransaction,
                 maxTagLength: kMaxTagLength,
                 suggestions: notifier.suggestTags,
+                suggestionsStyle: UiTagSuggestionsStyle.keyboardBar,
                 onChanged: notifier.setTags,
                 onLimitReached: notifier.onTagLimitReached,
                 onSubmitted: unfocusAll,
@@ -420,35 +444,38 @@ class TransactionPage extends HookConsumerWidget {
               // Bottom bar (edit): Delete (casper) on the left until the form is
               // touched, then it becomes Cancel (discard + pop). Save on the right.
               if (state.isEdit)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    AnimatedSwitcher(
-                      duration: 200.ms,
-                      switchInCurve: Curves.easeOut,
-                      switchOutCurve: Curves.easeIn,
-                      transitionBuilder: (child, anim) => FadeTransition(
-                        opacity: anim,
-                        child: ScaleTransition(scale: Tween(begin: 0.9, end: 1.0).animate(anim), child: child),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: kPageHorzPadding),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      AnimatedSwitcher(
+                        duration: 200.ms,
+                        switchInCurve: Curves.easeOut,
+                        switchOutCurve: Curves.easeIn,
+                        transitionBuilder: (child, anim) => FadeTransition(
+                          opacity: anim,
+                          child: ScaleTransition(scale: Tween(begin: 0.9, end: 1.0).animate(anim), child: child),
+                        ),
+                        child: state.isDirty
+                            ? UiTextButton(
+                                key: const ValueKey('cancel'),
+                                label: l10n.common_cancel,
+                                style: UiTextButtonStyle.secondary,
+                                enabled: !state.isSaving,
+                                onTap: () => context.router.maybePop(),
+                              )
+                            : UiTextButton(
+                                key: const ValueKey('delete'),
+                                label: l10n.common_delete,
+                                style: UiTextButtonStyle.secondary,
+                                enabled: !state.isSaving && !state.isLoading,
+                                onTap: onDelete,
+                              ),
                       ),
-                      child: state.isDirty
-                          ? UiTextButton(
-                              key: const ValueKey('cancel'),
-                              label: l10n.common_cancel,
-                              style: UiTextButtonStyle.secondary,
-                              enabled: !state.isSaving,
-                              onTap: () => context.router.maybePop(),
-                            )
-                          : UiTextButton(
-                              key: const ValueKey('delete'),
-                              label: l10n.common_delete,
-                              style: UiTextButtonStyle.secondary,
-                              enabled: !state.isSaving && !state.isLoading,
-                              onTap: onDelete,
-                            ),
-                    ),
-                    UiTextButton(label: l10n.common_save, enabled: !state.isSaving && !state.isLoading, onTap: onSave),
-                  ],
+                      UiTextButton(label: l10n.common_save, enabled: !state.isSaving && !state.isLoading, onTap: onSave),
+                    ],
+                  ),
                 )
               else
                 Row(

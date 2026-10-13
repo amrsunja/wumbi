@@ -12,6 +12,7 @@ class UiChip extends StatelessWidget {
     this.readOnly = false,
     this.icon,
     this.highlighted = false,
+    this.showChevron = true,
   });
 
   final String label;
@@ -21,6 +22,9 @@ class UiChip extends StatelessWidget {
 
   /// Blue text — used when Repeat is set to something other than never.
   final bool highlighted;
+
+  /// False for toggle chips (tap flips a flag, nothing opens).
+  final bool showChevron;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +43,7 @@ class UiChip extends StatelessWidget {
               label,
               style: AppTheme.of(context).typo.inter.chip.copyWith(color: color),
             ),
-            if (!readOnly) UIIcon(UIIconToken.icons.arrows.chevronDown, size: 14, color: color),
+            if (!readOnly && showChevron) UIIcon(UIIconToken.icons.arrows.chevronDown, size: 14, color: color),
           ],
         ),
       ),

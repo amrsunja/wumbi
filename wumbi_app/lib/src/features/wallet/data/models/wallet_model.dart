@@ -20,6 +20,10 @@ abstract class WalletModel with _$WalletModel {
     required WalletColor color,
     required bool isPrimary,
     required int sortOrder,
+
+    /// The balance counts towards the Dashboard total (off for savings,
+    /// shared or tracking-only wallets).
+    @Default(true) bool includeInTotal,
     required DateTime createdAt,
     required DateTime updatedAt,
     DateTime? deletedAt,
@@ -33,6 +37,7 @@ abstract class WalletModel with _$WalletModel {
         color: WalletColor.fromString(r[SQLiteConfig.walletColor] as String?),
         isPrimary: r[SQLiteConfig.walletIsPrimary] == 1,
         sortOrder: (r[SQLiteConfig.walletSortOrder] as int?) ?? 0,
+        includeInTotal: (r[SQLiteConfig.walletIncludeInTotal] as int?) != 0,
         createdAt: DateTimeExtension.fromEpochMs(r[SQLiteConfig.createdAt] as int),
         updatedAt: DateTimeExtension.fromEpochMs(r[SQLiteConfig.updatedAt] as int),
         deletedAt: r[SQLiteConfig.deletedAt] == null
@@ -48,6 +53,7 @@ abstract class WalletModel with _$WalletModel {
         SQLiteConfig.walletColor: color.dbValue,
         SQLiteConfig.walletIsPrimary: isPrimary ? 1 : 0,
         SQLiteConfig.walletSortOrder: sortOrder,
+        SQLiteConfig.walletIncludeInTotal: includeInTotal ? 1 : 0,
         SQLiteConfig.createdAt: createdAt.epochMs,
         SQLiteConfig.updatedAt: updatedAt.epochMs,
         SQLiteConfig.deletedAt: deletedAt?.epochMs,
@@ -71,6 +77,7 @@ abstract class WalletSummary with _$WalletSummary {
   CurrencyType get currency => wallet.currency;
   WalletColor get color => wallet.color;
   bool get isPrimary => wallet.isPrimary;
+  bool get includeInTotal => wallet.includeInTotal;
 }
 
 /// Input for create / update (no id, no timestamps).
@@ -82,5 +89,6 @@ abstract class WalletDraft with _$WalletDraft {
     required int initialBalanceMinor,
     required WalletColor color,
     required bool isPrimary,
+    @Default(true) bool includeInTotal,
   }) = _WalletDraft;
 }

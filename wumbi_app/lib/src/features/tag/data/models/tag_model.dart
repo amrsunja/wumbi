@@ -2,12 +2,24 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../../core/local/database/sqlite/sqlite_config.dart';
 import '../../../../core/utils/extensions/date_time_extensions.dart';
+import '../tag_normalizer.dart';
 
 part 'tag_model.freezed.dart';
 
 @freezed
 abstract class TagModel with _$TagModel {
   const TagModel._();
+
+  /// Last level of a nested tag: `coffee` for `food/coffee`.
+  String get leafName => TagNormalizer.leaf(displayName);
+
+  /// Normalized parent path, null for a top-level tag.
+  String? get parentNormalized => TagNormalizer.parentOf(normalizedName);
+
+  /// 0 = top level, 1 = `food/coffee`, …
+  int get depth => TagNormalizer.depth(normalizedName);
+
+  bool get isNested => depth > 0;
 
   const factory TagModel({
     required String id,

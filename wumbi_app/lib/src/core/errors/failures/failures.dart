@@ -2,6 +2,8 @@ import 'package:flutter/widgets.dart';
 import 'package:multiple_result/multiple_result.dart';
 
 import '../../locale/l10n.dart';
+import '../../money/money.dart';
+import '../../utils/enums/debt_direction.dart';
 import '../../utils/typedefs.dart';
 import '../exceptions/cache/cache_exception.dart';
 import '../exceptions/database/database_exception.dart';
@@ -21,6 +23,14 @@ sealed class Failure {
       return Result.error(DatabaseFailure(exception: e));
     } on FxUnavailableException {
       return Result.error(const FxUnavailableFailure());
+    } on DebtOverpaymentException catch (e) {
+      return Result.error(
+        DebtOverpaymentFailure(personName: e.personName, direction: e.direction, maxRemaining: e.maxRemaining),
+      );
+    } on PersonHasDebtsException {
+      return Result.error(const PersonHasDebtsFailure());
+    } on DebtClosedException {
+      return Result.error(const DebtClosedFailure());
     } on ValidationException catch (e) {
       return Result.error(ValidationFailure(field: e.field, message: e.message));
     } on WalletHasTransactionsException {
@@ -70,6 +80,42 @@ class ValidationFailure extends Failure {
 
   @override
   String toMessage(AppLocale locale) => message ?? locale.error_validation;
+}
+
+/// Over-repayment ([A1]). A [ValidationFailure] on the `amount` field so the
+/// Transaction screen shows it inline (with the amount shake), not as a toast.
+class DebtOverpaymentFailure extends ValidationFailure {
+  final String personName;
+  final DebtDirection direction;
+  final Money maxRemaining;
+
+  const DebtOverpaymentFailure({
+    required this.personName,
+    required this.direction,
+    required this.maxRemaining,
+  }) : super(field: 'amount');
+
+  @override
+  String toMessage(AppLocale locale) => switch (direction) {
+        DebtDirection.lent => locale.debt_error_owes_you_only(personName, maxRemaining.format()),
+        DebtDirection.borrowed => locale.debt_error_you_owe_only(personName, maxRemaining.format()),
+      };
+}
+
+/// A person with live debts cannot be deleted.
+class PersonHasDebtsFailure extends ValidationFailure {
+  const PersonHasDebtsFailure() : super(field: 'person');
+
+  @override
+  String toMessage(AppLocale locale) => locale.person_error_has_debts;
+}
+
+/// The debt was settled in the meantime (stale sheet).
+class DebtClosedFailure extends Failure {
+  const DebtClosedFailure();
+
+  @override
+  String toMessage(AppLocale locale) => locale.debt_error_closed;
 }
 
 /// Wallet currency change refused because the wallet already has transactions.

@@ -12,6 +12,7 @@ import '../../../core/providers/data/fx_provider.dart';
 import '../../../core/providers/local/sqlite_database_provider.dart';
 import '../../../core/utils/constants/constants.dart';
 import '../../../core/utils/typedefs.dart';
+import '../../budget/data/budget_local_datasource.dart';
 import 'models/tag_model.dart';
 import 'models/tag_stats.dart';
 import 'tag_local_datasource.dart';
@@ -35,6 +36,7 @@ class TagRepository {
     this.fx,
     this.onWrite,
     this.datasource = const TagLocalDatasource(),
+    this.budgets = const BudgetLocalDatasource(),
   });
 
   final SQLiteServices sqlite;
@@ -44,6 +46,9 @@ class TagRepository {
   final FxService? fx;
   final void Function()? onWrite;
   final TagLocalDatasource datasource;
+
+  /// Budget scope links (tag delete must not widen a budget to "any tag").
+  final BudgetLocalDatasource budgets;
 
   /// Attach [tags] to a new transaction. Returns the tag ids.
   Future<List<String>> attachToTransaction(
@@ -158,51 +163,134 @@ class TagRepository {
         return (await _buildStats([tag], sums, base)).first;
       });
 
-  /// Nodes (stats) + co-occurrence edges for the graph view.
-  Future<SuccessOrError<TagGraphData>> graph(CurrencyType base) =>
-      Failure.exceptionsCatcher(() async {
-        final db = sqlite.db;
-        final tags = await datasource.listAll(db);
-        final sums = await datasource.sumsByTag(db);
-        final links = await datasource.coOccurrences(db);
-        return TagGraphData(nodes: await _buildStats(tags, sums, base), links: links, base: base);
-      });
+  /// Co-occurrence edges only — the hub builds the graph from the stats it
+  /// already loaded instead of summing everything twice.
+  Future<SuccessOrError<List<TagLink>>> links() => Failure.exceptionsCatcher(() => datasource.coOccurrences(sqlite.db));
 
   Future<SuccessOrError<List<TagWalletSum>>> walletsOfTag(String tagId) =>
       Failure.exceptionsCatcher(() => datasource.walletsOfTag(sqlite.db, tagId));
 
-  /// Rename a tag. When the new normalized name already belongs to another
-  /// live tag, the two are merged into that tag (links moved, this one
+  /// Create a tag from the tags page (`food/coffee` also creates `food`).
+  /// When the name already exists the existing tag is returned with
+  /// `created: false` — nothing is written.
+  Future<SuccessOrError<({TagModel tag, bool created})>> create(String rawName) =>
+      Failure.exceptionsCatcher(() async {
+        final display = _validName(rawName);
+        final now = nowMs();
+        late ({TagModel tag, bool created}) result;
+        await sqlite.db.transaction((txn) async {
+          final existing = await datasource.byNormalizedName(txn, TagNormalizer.normalize(display));
+          if (existing != null) {
+            result = (tag: existing, created: false);
+            return;
+          }
+          result = (tag: await datasource.findOrCreate(txn, display, now), created: true);
+        });
+        if (result.created) onWrite?.call();
+        return result;
+      });
+
+  /// Rename a tag — Obsidian semantics for nested tags: every tag inside it
+  /// follows (`food` → `meals` turns `food/coffee` into `meals/coffee`), and
+  /// a new path also moves it (`coffee` → `food/coffee` nests it under
+  /// `food`, creating `food` if needed). When a new name already belongs to
+  /// another live tag the two are merged (links moved, this one
   /// soft-deleted) and the surviving tag is returned.
   Future<SuccessOrError<TagModel>> rename(String id, String newName) =>
       Failure.exceptionsCatcher(() async {
-        final display = TagNormalizer.display(newName);
-        final normalized = TagNormalizer.normalize(newName);
-        if (normalized.isEmpty) throw const ValidationException('name', 'Enter a tag name');
-        if (display.length > kMaxTagLength) throw const ValidationException('name');
+        final display = _validName(newName);
+        final normalized = TagNormalizer.normalize(display);
         final now = nowMs();
         late TagModel result;
         await sqlite.db.transaction((txn) async {
           final tag = await datasource.byId(txn, id);
           if (tag == null || tag.deletedAt != null) throw const NotFoundException('tag');
-          final clash = await datasource.byNormalizedName(txn, normalized);
-          if (clash != null && clash.id != id) {
-            await datasource.mergeInto(txn, id, clash.id, now);
-            result = (await datasource.byId(txn, clash.id))!;
-            return;
+          // A tag cannot be moved inside itself.
+          if (TagNormalizer.isDescendant(normalized, tag.normalizedName)) {
+            throw const ValidationException('name');
           }
-          await datasource.rename(txn, id, display, normalized, now);
-          result = tag.copyWith(displayName: display, normalizedName: normalized);
+          final nested = await datasource.descendants(txn, tag.normalizedName);
+          final rootDepth = TagNormalizer.segments(TagNormalizer.display(tag.displayName)).length;
+          String suffixOf(TagModel child) => TagNormalizer.segments(TagNormalizer.display(child.displayName))
+              .skip(rootDepth)
+              .join(TagNormalizer.separator);
+          // Every nested tag must still fit once moved under the new name.
+          for (final child in nested) {
+            if (display.length + 1 + suffixOf(child).length > kMaxTagLength) {
+              throw const ValidationException('name');
+            }
+          }
+          result = await _renameOne(txn, tag, display, now);
+          for (final child in nested) {
+            final current = await datasource.byId(txn, child.id);
+            if (current == null || current.deletedAt != null) continue;
+            await _renameOne(txn, current, '${result.displayName}${TagNormalizer.separator}${suffixOf(child)}', now);
+          }
         });
         onWrite?.call();
         return result;
       });
 
-  /// Soft-delete a tag and detach it from every transaction and rule.
-  Future<SuccessOrError<void>> delete(String id) => Failure.exceptionsCatcher(() async {
-        await sqlite.db.transaction((txn) => datasource.softDelete(txn, id, nowMs()));
+  Future<TagModel> _renameOne(DatabaseExecutor txn, TagModel tag, String rawDisplay, int now) async {
+    final display = TagNormalizer.display(rawDisplay);
+    final normalized = TagNormalizer.normalize(display);
+    for (final ancestor in TagNormalizer.ancestors(display)) {
+      if (TagNormalizer.normalize(ancestor) == tag.normalizedName) continue;
+      await datasource.findOrCreate(txn, ancestor, now);
+    }
+    final clash = await datasource.byNormalizedName(txn, normalized);
+    if (clash != null && clash.id != tag.id) {
+      await datasource.mergeInto(txn, tag.id, clash.id, now);
+      return (await datasource.byId(txn, clash.id))!;
+    }
+    await datasource.rename(txn, tag.id, display, normalized, now);
+    return tag.copyWith(displayName: display, normalizedName: normalized);
+  }
+
+  /// Trimmed display path; throws on empty / too long.
+  static String _validName(String raw) {
+    final display = TagNormalizer.display(raw);
+    if (display.isEmpty) throw const ValidationException('name', 'Enter a tag name');
+    if (display.length > kMaxTagLength) throw const ValidationException('name');
+    return display;
+  }
+
+  /// Soft-delete a tag **and every tag nested inside it**, detaching them
+  /// from every transaction, rule and budget. A budget whose tag scope
+  /// becomes empty is soft-deleted too: it must never silently widen to
+  /// "any tag" (spec B&D §4.4). Returns how many budgets were removed.
+  Future<SuccessOrError<int>> delete(String id) => Failure.exceptionsCatcher(() async {
+        final now = nowMs();
+        var removedBudgets = 0;
+        await sqlite.db.transaction((txn) async {
+          final tag = await datasource.byId(txn, id);
+          if (tag == null || tag.deletedAt != null) throw const NotFoundException('tag');
+          final ids = [id, for (final child in await datasource.descendants(txn, tag.normalizedName)) child.id];
+          final scoped = <String>[];
+          for (final tagId in ids) {
+            scoped.addAll(await budgets.budgetIdsWithTag(txn, tagId));
+            await datasource.softDelete(txn, tagId, now);
+          }
+          removedBudgets = await budgets.softDeleteWithoutTags(txn, scoped, now);
+        });
         onWrite?.call();
+        return removedBudgets;
       });
+
+  /// Creates the missing parents of nested tags (data typed before nesting
+  /// existed). Cheap no-op once the tree is whole; bumps the DB revision only
+  /// when something was inserted.
+  Future<void> repairHierarchy() async {
+    try {
+      var created = 0;
+      await sqlite.db.transaction((txn) async {
+        created = await datasource.createMissingAncestors(txn, nowMs());
+      });
+      if (created > 0) onWrite?.call();
+    } catch (_) {
+      // Best effort — the hub still renders orphans as top-level tags.
+    }
+  }
 
   Future<List<TagStats>> _buildStats(List<TagModel> tags, List<TagCurrencySum> sums, CurrencyType base) async {
     final byTag = <String, List<TagCurrencySum>>{};
@@ -255,13 +343,29 @@ class TagRepository {
     return out;
   }
 
-  /// Autocomplete display names (up to 5), ranked by usage then recency.
-  Future<List<String>> suggest(String prefix) async {
+  /// Autocomplete display names, ranked by usage then recency. An empty
+  /// [prefix] returns the most used tags (keyboard tag bar).
+  Future<List<String>> suggest(String prefix, {int limit = 6}) async {
     try {
-      final tags = await datasource.suggest(sqlite.db, prefix);
+      final tags = await datasource.suggest(sqlite.db, prefix, limit: limit);
       return tags.map((t) => t.displayName).toList();
     } catch (_) {
       return const [];
+    }
+  }
+
+  /// Ids of the live tags matching [names] (by normalized name). Names that
+  /// are not a tag yet are skipped — nothing is created.
+  Future<Set<String>> idsOfNames(Iterable<String> names) async {
+    try {
+      final ids = <String>{};
+      for (final raw in TagNormalizer.dedupe(names)) {
+        final tag = await datasource.byNormalizedName(sqlite.db, TagNormalizer.normalize(raw));
+        if (tag != null) ids.add(tag.id);
+      }
+      return ids;
+    } catch (_) {
+      return const {};
     }
   }
 }

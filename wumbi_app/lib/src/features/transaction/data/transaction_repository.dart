@@ -14,6 +14,8 @@ import '../../../core/utils/enums/transaction_type.dart';
 import '../../../core/utils/extensions/date_time_extensions.dart';
 import '../../../core/utils/id_generator.dart';
 import '../../../core/utils/typedefs.dart';
+import '../../debt/data/debt_repository.dart';
+import '../../debt/data/debt_resolution.dart';
 import '../../tag/data/tag_repository.dart';
 import 'models/recurring_rule_model.dart';
 import 'models/transaction_filter.dart';
@@ -25,23 +27,29 @@ final transactionRepositoryProvider = Provider<TransactionRepository>(
   (ref) => TransactionRepository(
     sqlite: ref.read(sqliteDataBaseProvider),
     tags: ref.read(tagRepositoryProvider),
+    debts: ref.read(debtRepositoryProvider),
     onWrite: ref.read(dbRevisionBumperProvider),
   ),
 );
 
-/// Transaction write, tag links and (optionally) rule creation happen in one
-/// SQLite transaction (spec 5.10).
+/// Transaction write, tag links, (optionally) rule creation and (optionally)
+/// debt bookkeeping happen in one SQLite transaction (spec 5.10, B&D §7.3).
+/// A row gets a `debt_role` only through [create] with a `DebtIntent`.
 class TransactionRepository {
   TransactionRepository({
     required this.sqlite,
     required this.tags,
     required this.onWrite,
+    DebtRepository? debts,
     this.datasource = const TransactionLocalDatasource(),
     this.rules = const RecurringRuleLocalDatasource(),
-  });
+  }) : debts = debts ?? DebtRepository(sqlite: sqlite);
 
   final SQLiteServices sqlite;
   final TagRepository tags;
+
+  /// Txn-scoped debt helpers (intent resolution, delete / restore cascades).
+  final DebtRepository debts;
   final TransactionLocalDatasource datasource;
   final RecurringRuleLocalDatasource rules;
   final void Function() onWrite;
@@ -81,6 +89,30 @@ class TransactionRepository {
         return _withTags(db, rows);
       });
 
+  /// Rows counted by a budget scope over one period (budget details page),
+  /// with their tags.
+  Future<SuccessOrError<List<TransactionRow>>> pageForScope({
+    required Set<String> walletIds,
+    required Set<String> tagIds,
+    required DateTime start,
+    required DateTime end,
+    int limit = kTransactionsPageSize,
+    int offset = 0,
+  }) =>
+      Failure.exceptionsCatcher(() async {
+        final db = sqlite.db;
+        final rows = await datasource.pageForScope(
+          db,
+          walletIds: walletIds,
+          tagIds: tagIds,
+          start: start,
+          end: end,
+          limit: limit,
+          offset: offset,
+        );
+        return _withTags(db, rows);
+      });
+
   /// Global search (`/search`) across every wallet. Blank queries return
   /// nothing rather than the whole ledger.
   Future<SuccessOrError<List<TransactionRow>>> search(
@@ -96,10 +128,21 @@ class TransactionRepository {
         return _withTags(db, rows);
       });
 
+  /// Resolves tags (one query) and, for debt-linked rows, their debt and
+  /// person (one more query) for a page of rows.
   Future<List<TransactionRow>> _withTags(DatabaseExecutor db, List<TransactionRow> rows) async {
     if (rows.isEmpty) return rows;
     final tagsByTx = await tags.datasource.tagsOfTransactions(db, rows.map((r) => r.id).toList());
-    return rows.map((r) => r.copyWith(tags: tagsByTx[r.id] ?? const [])).toList();
+    final debtIds = rows.where((r) => r.transaction.isDebtLinked).map((r) => r.id).toList();
+    final debtsByTx = await debts.datasource.debtInfoOfTransactions(db, debtIds);
+    return rows.map((r) {
+      final debt = debtsByTx[r.id];
+      return r.copyWith(
+        tags: tagsByTx[r.id] ?? const [],
+        debtId: debt?.debtId,
+        personName: debt?.personName,
+      );
+    }).toList();
   }
 
   Future<SuccessOrError<TransactionWithTags>> byId(String id) =>
@@ -125,6 +168,10 @@ class TransactionRepository {
   /// Every non-deleted rule (subscriptions page), active first.
   Future<SuccessOrError<List<RecurringRuleModel>>> allRules() =>
       Failure.exceptionsCatcher(() => rules.all(sqlite.db));
+
+  /// Tag names of every given rule (`ruleId → names`), one query.
+  Future<SuccessOrError<Map<String, List<String>>>> tagsOfRules(List<String> ids) =>
+      Failure.exceptionsCatcher(() => tags.datasource.tagsOfRules(sqlite.db, ids));
 
   Future<SuccessOrError<RecurringRuleWithTags>> ruleById(String id) => Failure.exceptionsCatcher(() async {
         final db = sqlite.db;
@@ -164,8 +211,28 @@ class TransactionRepository {
         final now = DateTime.now();
         final nowMillis = nowMs();
 
+        final intent = draft.debtIntent;
+        if (intent != null) {
+          // [A4]: no recurring debts, no upcoming debts.
+          if (!draft.repeat.isNever || TransactionStatus.forDate(draft.date, now: now).isUpcoming) {
+            throw const ValidationException('person');
+          }
+        }
+        // FX must be resolved before the SQLite transaction opens (the rate
+        // cache shares the database; a nested access would deadlock).
+        final rates = intent == null
+            ? const DebtRates()
+            : await debts.prepareRates(
+                intent,
+                walletCurrency: switch (draft) {
+                  IncomeDraft(:final amount) || ExpenseDraft(:final amount) => amount.currency,
+                  TransferDraft(:final sent) => sent.currency,
+                },
+                flow: draft.type == TransactionType.income ? DebtFlow.incoming : DebtFlow.outgoing,
+              );
+
         final ruleId = draft.repeat.isNever ? null : newId();
-        final tx = _toModel(
+        var tx = _toModel(
           draft,
           id: newId(),
           now: now,
@@ -181,6 +248,11 @@ class TransactionRepository {
           final tagIds = await tags.attachToTransaction(txn, tx.id, draft.tags, nowMillis);
           if (ruleId != null) {
             await tags.attachToRule(txn, ruleId, tagIds, nowMillis);
+          }
+          if (intent != null) {
+            final role = await debts.applyIntent(txn, tx: tx, intent: intent, rates: rates, now: nowMillis);
+            await datasource.setDebtRole(txn, tx.id, role, nowMillis);
+            tx = tx.copyWith(debtRole: role);
           }
         });
         onWrite();
@@ -198,6 +270,10 @@ class TransactionRepository {
           final existing = await datasource.byId(txn, id);
           if (existing == null || existing.deletedAt != null) {
             throw const NotFoundException('transaction');
+          }
+          // [A8]: debt money is edited from the Debt sheet (delete + re-enter).
+          if (existing.isDebtLinked || draft.debtIntent != null) {
+            throw const ValidationException('debt');
           }
           if (existing.isTransfer != (draft.type == TransactionType.transfer)) {
             throw const ValidationException('type', 'Transfer type cannot be changed');
@@ -222,24 +298,40 @@ class TransactionRepository {
       });
 
   /// Swipe-delete / edit-mode delete. `stopRule` also deactivates the rule
-  /// that generated the transaction ("Delete and stop repeating").
-  Future<SuccessOrError<void>> softDelete(String id, {bool stopRule = false}) =>
+  /// that generated the transaction ("Delete and stop repeating"). Debt
+  /// money cascades (B&D §7.5) with the same `deleted_at`, so [restore]
+  /// brings back exactly what went.
+  ///
+  /// Resolves with how many **other** wallet transactions the debt cascade
+  /// removed (0 for ordinary rows) — "Loan deleted with 2 returns".
+  Future<SuccessOrError<int>> softDelete(String id, {bool stopRule = false}) =>
       Failure.exceptionsCatcher(() async {
         final now = nowMs();
+        var cascaded = 0;
         await sqlite.db.transaction((txn) async {
           final existing = await datasource.byId(txn, id);
           if (existing == null) throw const NotFoundException('transaction');
           await datasource.softDelete(txn, id, now);
+          cascaded = await debts.onTransactionDeleted(txn, existing, now);
           if (stopRule && existing.recurringRuleId != null) {
             await rules.setActive(txn, existing.recurringRuleId!, false, now);
           }
         });
         onWrite();
+        return cascaded;
       });
 
-  /// Undo: links in `transaction_tags` were never removed, so nothing else to restore.
+  /// Undo: links in `transaction_tags` were never removed; debt rows deleted
+  /// by the same cascade (same `deleted_at`, read before restoring) come back.
   Future<SuccessOrError<void>> restore(String id) => Failure.exceptionsCatcher(() async {
-        await datasource.restore(sqlite.db, id, nowMs());
+        final now = nowMs();
+        await sqlite.db.transaction((txn) async {
+          final existing = await datasource.byId(txn, id);
+          if (existing == null) throw const NotFoundException('transaction');
+          final deletedAt = existing.deletedAt?.epochMs;
+          await datasource.restore(txn, id, now);
+          if (deletedAt != null) await debts.onTransactionRestored(txn, existing, deletedAt, now);
+        });
         onWrite();
       });
 

@@ -69,7 +69,7 @@ class InterStyle {
         numpadKey = _style(FontWeight.w500, primary, size: 24),
 
         // 10 / 700 tracking 1.0 — uppercase micro labels (type actions, pills).
-        micro = _style(FontWeight.w700, primary, size: 10, letterSpacing: 1.0),
+        micro = _style(FontWeight.w700, primary, size: 9, letterSpacing: 1.0),
 
         // 12 / 500 tracking 0.2 — date / repeat chips (was 10 in v1).
         chip = _style(FontWeight.w500, primary, size: 12, letterSpacing: 0.2),

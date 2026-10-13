@@ -18,6 +18,8 @@ import 'core/utils/enums/app_theme_type.dart';
 import 'core/utils/extensions/build_context_extensions.dart';
 import 'core/utils/state_management/app_events.dart';
 import 'core/utils/state_management/single_events.dart';
+import 'features/budget/ui/budgets_provider.dart';
+import 'features/debt/ui/debts_provider.dart';
 import 'features/settings/ui/state_management/settings_provider.dart';
 
 class App extends ConsumerStatefulWidget {
@@ -30,6 +32,15 @@ class App extends ConsumerStatefulWidget {
 class _AppState extends ConsumerState<App> with WidgetsBindingObserver {
   StreamSubscription<Object?>? _eventsSub;
   DateTime? _pausedAt;
+
+  /// Local day of the last budget / debt computation: resuming on another
+  /// day invalidates them (periods, "per day" and overdue roll over).
+  DateTime _lastDay = _today();
+
+  static DateTime _today() {
+    final now = DateTime.now();
+    return DateTime(now.year, now.month, now.day);
+  }
 
   @override
   void initState() {
@@ -65,6 +76,12 @@ class _AppState extends ConsumerState<App> with WidgetsBindingObserver {
       }
       // Upcoming transactions whose date arrived while in the background.
       ref.read(upcomingPosterProvider).postDueIfPossible();
+      final today = _today();
+      if (today != _lastDay) {
+        _lastDay = today;
+        ref.invalidate(budgetsProvider);
+        ref.invalidate(debtsOverviewProvider);
+      }
     }
   }
 

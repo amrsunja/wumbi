@@ -1,24 +1,37 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../../../utils/app_vibrations.dart';
 import '../../../app_ui.dart';
 
 typedef TagSuggestions = Future<List<String>> Function(String query);
 
+/// Where [UiTagInput] shows its autocomplete.
+enum UiTagSuggestionsStyle {
+  /// Up to 5 pills under the field, after the first typed character.
+  inline,
+
+  /// A horizontal strip docked on top of the system keyboard while the field
+  /// has focus: the most used tags right away, filtered as the user types,
+  /// plus a "+ #new" pill when the typed word is not an existing tag.
+  keyboardBar,
+}
+
 /// Inline tag editor: type words → chips. Tokenises on space, comma or Enter;
 /// leading `#` optional; backspace on empty input removes the last chip.
-/// Autocomplete (after 1 char) shows up to 5 suggestions under the field.
 class UiTagInput extends StatefulWidget {
   const UiTagInput({
     super.key,
     required this.tags,
     required this.onChanged,
     this.suggestions,
+    this.suggestionsStyle = UiTagSuggestionsStyle.inline,
     this.hintText = '#tags',
     this.maxTags = 10,
-    this.maxTagLength = 30,
+    this.maxTagLength = 48,
     this.controller,
     this.focusNode,
     this.onLimitReached,
@@ -28,6 +41,7 @@ class UiTagInput extends StatefulWidget {
   final List<String> tags;
   final ValueChanged<List<String>> onChanged;
   final TagSuggestions? suggestions;
+  final UiTagSuggestionsStyle suggestionsStyle;
   final String hintText;
   final int maxTags;
   final int maxTagLength;
@@ -63,15 +77,29 @@ class UiTagInput extends StatefulWidget {
 class _UiTagInputState extends State<UiTagInput> {
   late final TextEditingController _controller = widget.controller ?? TextEditingController();
   late final FocusNode _focusNode = widget.focusNode ?? FocusNode();
+  final OverlayPortalController _barController = OverlayPortalController();
   List<String> _suggestions = const [];
   Timer? _debounce;
   int _querySeq = 0;
+
+  bool get _barMode => widget.suggestionsStyle == UiTagSuggestionsStyle.keyboardBar;
+  int get _maxSuggestions => _barMode ? 20 : 5;
 
   @override
   void initState() {
     super.initState();
     _controller.addListener(_onTextChanged);
     _focusNode.addListener(_onFocusChanged);
+  }
+
+  @override
+  void didUpdateWidget(covariant UiTagInput oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // A chip was added / removed: the bar must hide picked tags and bring
+    // removed ones back.
+    if (_barMode && _focusNode.hasFocus && !listEquals(oldWidget.tags, widget.tags)) {
+      _querySuggestions(UiTagInput.normalize(_controller.text));
+    }
   }
 
   @override
@@ -85,10 +113,17 @@ class _UiTagInputState extends State<UiTagInput> {
   }
 
   void _onFocusChanged() {
-    if (!_focusNode.hasFocus) {
-      _commitCurrent();
-      setState(() => _suggestions = const []);
+    if (!mounted) return;
+    if (_focusNode.hasFocus) {
+      if (_barMode) {
+        _barController.show();
+        _querySuggestions(UiTagInput.normalize(_controller.text));
+      }
+      return;
     }
+    if (_barController.isShowing) _barController.hide();
+    _commitCurrent();
+    setState(() => _suggestions = const []);
   }
 
   void _onTextChanged() {
@@ -107,23 +142,26 @@ class _UiTagInputState extends State<UiTagInput> {
       widget.onChanged(tags);
       return;
     }
+    // Rebuild for the "+ #new" pill even before the query resolves.
+    if (_barMode) setState(() {});
     _querySuggestions(UiTagInput.normalize(text));
   }
 
   void _querySuggestions(String query) {
     _debounce?.cancel();
-    if (widget.suggestions == null || query.isEmpty) {
+    // Inline: nothing until the first character. Bar: top tags right away.
+    if (widget.suggestions == null || (query.isEmpty && !_barMode)) {
       if (_suggestions.isNotEmpty) setState(() => _suggestions = const []);
       return;
     }
     final seq = ++_querySeq;
-    _debounce = Timer(const Duration(milliseconds: 120), () async {
+    _debounce = Timer(Duration(milliseconds: query.isEmpty ? 0 : 120), () async {
       final result = await widget.suggestions!(query);
       if (!mounted || seq != _querySeq) return;
       final existing = widget.tags.map(UiTagInput.normalize).toSet();
       setState(() => _suggestions = result
           .where((s) => !existing.contains(UiTagInput.normalize(s)))
-          .take(5)
+          .take(_maxSuggestions)
           .toList());
     });
   }
@@ -160,9 +198,28 @@ class _UiTagInputState extends State<UiTagInput> {
   void _pickSuggestion(String s) {
     final tags = _add(widget.tags, s);
     _controller.clear();
-    setState(() => _suggestions = const []);
-    if (tags != widget.tags) widget.onChanged(tags);
+    setState(() => _suggestions = _suggestions.where((x) => x != s).toList());
+    if (tags != widget.tags) {
+      AppVibrations.selection();
+      widget.onChanged(tags);
+    }
     _focusNode.requestFocus();
+  }
+
+  void _createFromQuery() {
+    AppVibrations.selection();
+    _commitCurrent();
+    _focusNode.requestFocus();
+  }
+
+  /// "+ #word" when the typed word is neither a suggestion nor already added.
+  String? get _newTagLabel {
+    final display = UiTagInput.display(_controller.text).replaceAll(RegExp(r'\s+'), '');
+    if (display.isEmpty) return null;
+    final normalized = display.toLowerCase();
+    if (_suggestions.any((s) => UiTagInput.normalize(s) == normalized)) return null;
+    if (widget.tags.any((t) => UiTagInput.normalize(t) == normalized)) return null;
+    return display.length > widget.maxTagLength ? display.substring(0, widget.maxTagLength) : display;
   }
 
   KeyEventResult _onKey(FocusNode node, KeyEvent event) {
@@ -190,6 +247,7 @@ class _UiTagInputState extends State<UiTagInput> {
         textInputAction: TextInputAction.done,
         textCapitalization: TextCapitalization.none,
         autocorrect: false,
+        enableSuggestions: false,
         cursorColor: UIColorToken.blue,
         inputFormatters: [LengthLimitingTextInputFormatter(widget.maxTagLength + 1)],
         onSubmitted: (_) {
@@ -211,7 +269,7 @@ class _UiTagInputState extends State<UiTagInput> {
       ),
     );
 
-    return Column(
+    final body = Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         UITap(
@@ -228,7 +286,7 @@ class _UiTagInputState extends State<UiTagInput> {
             ],
           ),
         ),
-        if (_suggestions.isNotEmpty)
+        if (!_barMode && _suggestions.isNotEmpty)
           Padding(
             padding: const EdgeInsets.only(top: 4),
             child: Wrap(
@@ -255,6 +313,147 @@ class _UiTagInputState extends State<UiTagInput> {
             ),
           ),
       ],
+    );
+
+    if (!_barMode) return body;
+    return OverlayPortal(
+      controller: _barController,
+      overlayChildBuilder: (context) => _KeyboardDock(
+        // Same tap group as the field: tapping a pill does not count as a tap
+        // outside, so focus (and the keyboard) stay put.
+        child: TextFieldTapRegion(
+          child: _TagKeyboardBar(
+            suggestions: _suggestions,
+            newTag: _newTagLabel,
+            onPick: _pickSuggestion,
+            onCreate: _createFromQuery,
+          ),
+        ),
+      ),
+      child: body,
+    );
+  }
+}
+
+/// Pins its child to the top edge of the system keyboard. Reads the insets
+/// from the [View] (not the nearest [MediaQuery]) so it works whether or not
+/// the host `Scaffold` resizes for the keyboard; rebuilds on every metrics
+/// change, i.e. every frame of the keyboard animation.
+class _KeyboardDock extends StatefulWidget {
+  const _KeyboardDock({required this.child});
+
+  final Widget child;
+
+  @override
+  State<_KeyboardDock> createState() => _KeyboardDockState();
+}
+
+class _KeyboardDockState extends State<_KeyboardDock> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeMetrics() {
+    if (mounted) setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final view = View.of(context);
+    final inset = view.viewInsets.bottom / view.devicePixelRatio;
+    // No soft keyboard (hardware keyboard / simulator): sit above the home
+    // indicator instead.
+    final bottom = inset > 0 ? inset : view.padding.bottom / view.devicePixelRatio;
+    return Positioned(left: 0, right: 0, bottom: bottom, child: widget.child);
+  }
+}
+
+/// The strip itself: `+ #new` first (when typing an unknown word), then the
+/// user's existing tags, most used first.
+class _TagKeyboardBar extends StatelessWidget {
+  const _TagKeyboardBar({
+    required this.suggestions,
+    required this.newTag,
+    required this.onPick,
+    required this.onCreate,
+  });
+
+  final List<String> suggestions;
+  final String? newTag;
+  final ValueChanged<String> onPick;
+  final VoidCallback onCreate;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = AppTheme.of(context);
+    final colors = theme.colors;
+    final hasItems = suggestions.isNotEmpty || newTag != null;
+
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 150),
+      child: !hasItems
+          ? const SizedBox(width: double.infinity, height: 0)
+          : Container(
+              key: const ValueKey('tag-bar'),
+              height: 46,
+              decoration: BoxDecoration(
+                color: colors.bgColor,
+                border: Border(top: BorderSide(color: colors.dividerColor)),
+              ),
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                physics: const BouncingScrollPhysics(),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                children: [
+                  if (newTag != null)
+                    _BarPill(label: '+ #$newTag', accent: true, onTap: onCreate),
+                  for (final s in suggestions) _BarPill(label: '#$s', onTap: () => onPick(s)),
+                ],
+              ),
+            ),
+    );
+  }
+}
+
+class _BarPill extends StatelessWidget {
+  const _BarPill({required this.label, required this.onTap, this.accent = false});
+
+  final String label;
+  final VoidCallback onTap;
+  final bool accent;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = AppTheme.of(context);
+    final colors = theme.colors;
+    return Padding(
+      padding: const EdgeInsetsDirectional.only(end: 8),
+      child: UITap(
+        onTap: onTap,
+        child: Container(
+          alignment: Alignment.center,
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          decoration: BoxDecoration(
+            color: accent ? UIColorToken.blue.withValues(alpha: 0.12) : colors.fgColor,
+            border: Border.all(color: accent ? Colors.transparent : colors.dividerColor),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Text(
+            label,
+            maxLines: 1,
+            style: theme.typo.inter.chip.copyWith(color: accent ? UIColorToken.blue : colors.contentColor),
+          ),
+        ),
+      ),
     );
   }
 }

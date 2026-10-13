@@ -98,18 +98,12 @@ class SettingsPage extends ConsumerWidget {
                       switchValue: settings?.showMascot ?? true,
                       onSwitchChanged: notifier.changeMascotVisibility,
                     ),
-                    UiSectionLabel(text: l10n.settings_manage),
-                    UiSettingsTile(
-                      icon: UIIconToken.icons.general.hash01,
-                      title: l10n.settings_tags,
-                      onTap: () => context.router.push(const TagsRoute()),
-                    ),
-                    UiSettingsTile(
-                      icon: UIIconToken.icons.mediaDevices.repeat01,
-                      title: l10n.settings_subscriptions,
-                      onTap: () => context.router.push(SubscriptionsRoute()),
-                    ),
                     UiSectionLabel(text: l10n.settings_about_section),
+                    UiSettingsTile(
+                      icon: UIIconToken.icons.general.lifeBuoy01,
+                      title: l10n.settings_help,
+                      onTap: () => context.router.push(const HelpRoute()),
+                    ),
                     UiSettingsTile(
                       icon: UIIconToken.icons.general.infoCircle,
                       title: l10n.about,

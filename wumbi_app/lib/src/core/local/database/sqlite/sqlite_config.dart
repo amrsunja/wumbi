@@ -1,7 +1,7 @@
 /// Table and column names. Keep every raw SQL string keyed off these constants.
 abstract class SQLiteConfig {
   static const String dbFileName = 'wumbi.db';
-  static const int dbVersion = 3;
+  static const int dbVersion = 5;
 
   // ---------------------------------------------------------------- tables
   static const String settingsTable = 'settings';
@@ -13,6 +13,12 @@ abstract class SQLiteConfig {
   static const String recurringRuleTagsTable = 'recurring_rule_tags';
   static const String exchangeRatesTable = 'exchange_rates';
   static const String walletBalancesView = 'wallet_balances';
+  static const String budgetsTable = 'budgets';
+  static const String budgetWalletsTable = 'budget_wallets';
+  static const String budgetTagsTable = 'budget_tags';
+  static const String peopleTable = 'people';
+  static const String debtsTable = 'debts';
+  static const String debtPaymentsTable = 'debt_payments';
 
   /// Kept for existing call sites.
   static const String settingsTableName = settingsTable;
@@ -41,6 +47,7 @@ abstract class SQLiteConfig {
   static const String walletColor = 'color';
   static const String walletIsPrimary = 'is_primary';
   static const String walletSortOrder = 'sort_order';
+  static const String walletIncludeInTotal = 'include_in_total';
 
   // -------------------------------------------------------- wallet_balances
   static const String balanceWalletId = 'wallet_id';
@@ -62,6 +69,10 @@ abstract class SQLiteConfig {
   static const String txDate = 'transaction_date';
   static const String txStatus = 'status';
   static const String txRecurringRuleId = 'recurring_rule_id';
+
+  /// 'principal' | 'repayment' | NULL — debt-linked rows move balances but
+  /// are excluded from budgets, Progress and tag analytics (v4).
+  static const String txDebtRole = 'debt_role';
 
   // ---------------------------------------------------------------- tags
   static const String tagNormalizedName = 'normalized_name';
@@ -91,4 +102,48 @@ abstract class SQLiteConfig {
   static const String fxQuote = 'quote_currency';
   static const String fxRate = 'rate';
   static const String fxFetchedAt = 'fetched_at';
+
+  // -------------------------------------------------------------- budgets
+  static const String budgetName = 'name';
+  static const String budgetLimitMinor = 'limit_minor';
+  static const String budgetCurrency = 'currency';
+  static const String budgetPeriod = 'period';
+  static const String budgetAnchorDate = 'anchor_date';
+  static const String budgetEndDate = 'end_date';
+  static const String budgetRollover = 'rollover';
+  static const String budgetIncludePlanned = 'include_planned';
+  static const String budgetSortOrder = 'sort_order';
+
+  // ----------------------------------------------- budget_wallets / budget_tags
+  static const String bwBudgetId = 'budget_id';
+  static const String bwWalletId = 'wallet_id';
+  static const String btBudgetId = 'budget_id';
+  static const String btTagId = 'tag_id';
+
+  // --------------------------------------------------------------- people
+  static const String personName = 'name';
+  static const String personNormalizedName = 'normalized_name';
+  static const String personLastUsedAt = 'last_used_at';
+
+  // ---------------------------------------------------------------- debts
+  static const String debtPersonId = 'person_id';
+  static const String debtDirection = 'direction';
+  static const String debtPrincipalMinor = 'principal_minor';
+  static const String debtCurrency = 'currency';
+  static const String debtDescription = 'description';
+  static const String debtOpenedAt = 'opened_at';
+  static const String debtDueDate = 'due_date';
+  static const String debtPrincipalTransactionId = 'principal_transaction_id';
+  static const String debtClosedAt = 'closed_at';
+  static const String debtCloseReason = 'close_reason';
+
+  /// Computed column alias (`principal − live payments`), never stored.
+  static const String debtRemainingMinor = 'remaining_minor';
+
+  // -------------------------------------------------------- debt_payments
+  static const String dpDebtId = 'debt_id';
+  static const String dpTransactionId = 'transaction_id';
+  static const String dpKind = 'kind';
+  static const String dpAmountMinor = 'amount_minor';
+  static const String dpPaidAt = 'paid_at';
 }

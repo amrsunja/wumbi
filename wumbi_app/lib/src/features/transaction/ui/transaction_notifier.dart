@@ -17,6 +17,11 @@ import '../../../core/utils/enums/transaction_type.dart';
 import '../../../core/utils/extensions/date_time_extensions.dart';
 import '../../../core/utils/state_management/app_events.dart';
 import '../../../core/utils/state_management/single_events.dart';
+import '../../budget/data/budget_repository.dart';
+import '../../debt/data/debt_repository.dart';
+import '../../debt/data/models/debt_intent.dart';
+import '../../debt/ui/debt_labels.dart';
+import '../../debt/ui/person_pick.dart';
 import '../../tag/data/tag_repository.dart';
 import '../../wallet/data/models/wallet_model.dart';
 import '../../wallet/data/wallet_repository.dart';
@@ -95,7 +100,15 @@ class TransactionNotifier extends Notifier<TransactionState> {
       wallets: wallets,
       entryCurrency: wallet?.currency ?? CurrencyType.usd,
       date: today,
+      repeat: args.presetRepeat,
+      tags: _presetTags(),
     );
+  }
+
+  /// Preset tags, capped like user input.
+  List<String> _presetTags() {
+    final tags = args.presetTags;
+    return tags.length > kMaxTagsPerTransaction ? tags.sublist(0, kMaxTagsPerTransaction) : List.of(tags);
   }
 
   // ------------------------------------------------------------- edit mode
@@ -387,16 +400,35 @@ class TransactionNotifier extends Notifier<TransactionState> {
 
   void onTagLimitReached() => _showValidation(_l10n.validation_up_to_tags(kMaxTagsPerTransaction));
 
-  void setDate(DateTime day) => state = state.copyWith(date: day.onlyDate());
+  void setDate(DateTime day) {
+    var d = day.onlyDate();
+    // [A4]: a debt is never upcoming.
+    final today = DateTime.now().onlyDate();
+    if (state.hasPerson && d.isAfter(today)) d = today;
+    state = state.copyWith(date: d);
+  }
+
+  /// Person chip (create mode): select, create-on-save, or clear.
+  void setPerson(PersonPick pick) {
+    if (state.isEdit) return;
+    AppVibrations.selection();
+    state = switch (pick) {
+      PickedPerson(:final person) => state.copyWith(personId: person.id, personName: person.name),
+      NewPerson(:final name) => state.copyWith(personId: null, personName: name),
+      NoPerson() => state.copyWith(personId: null, personName: null),
+    };
+  }
 
   void setRepeat(RepeatFrequency f) {
     if (state.repeatLocked) return;
+    // [A4]: no recurring debts.
+    if (state.hasPerson && !f.isNever) return;
     // A subscription always repeats.
     if (state.isRuleEdit && f.isNever) return;
     state = state.copyWith(repeat: f);
   }
 
-  Future<List<String>> suggestTags(String query) => ref.read(tagRepositoryProvider).suggest(query);
+  Future<List<String>> suggestTags(String query) => ref.read(tagRepositoryProvider).suggest(query, limit: 20);
 
   /// Fetch (once per pair per screen session) the entry → wallet rate.
   Future<void> _ensureRate() async {
@@ -479,6 +511,11 @@ class TransactionNotifier extends Notifier<TransactionState> {
     if (!_guardCommit()) return false;
     final wallet = state.wallet!;
     final amount = state.walletMoney!;
+    final personName = state.personName;
+    // GAVE / GOT: the repository decides "new debt" vs "repayment" (§7.2).
+    final debt = personName == null
+        ? null
+        : DebtIntent.auto(person: personRefOf(personId: state.personId, name: personName));
     final draft = type == TransactionType.income
         ? TransactionDraft.income(
             walletId: wallet.id,
@@ -489,6 +526,7 @@ class TransactionNotifier extends Notifier<TransactionState> {
             tags: state.tags,
             date: _resolvedDate(),
             repeat: state.repeat,
+            debt: debt,
           )
         : TransactionDraft.expense(
             walletId: wallet.id,
@@ -499,38 +537,102 @@ class TransactionNotifier extends Notifier<TransactionState> {
             tags: state.tags,
             date: _resolvedDate(),
             repeat: state.repeat,
+            debt: debt,
           );
 
     state = state.copyWith(isSaving: true);
     final result = await _repo.create(draft);
     if (!ref.mounted) return false;
-    var ok = false;
-    result.when(
-      (saved) {
-        ok = true;
-        AppVibrations.medium();
-        final signed = type == TransactionType.income ? '+${amount.format()}' : '-${amount.format()}';
-        final cancel = _cancelAction(saved);
-        if (saved.isUpcoming) {
-          // Future-dated → stored as upcoming; not counted until its day.
-          _events.send(ShowInfoMessageEvent(
-            _l10n.transaction_scheduled(signed, state.date.formatMediumDate()),
-            actionLabel: cancel.$1,
-            onAction: cancel.$2,
-          ));
-        } else {
-          _events.send(ShowSuccessMessageEvent(
-            _l10n.transaction_saved(signed, wallet.name),
-            actionLabel: cancel.$1,
-            onAction: cancel.$2,
-          ));
-        }
-        _resetAfterCommit();
-      },
-      (error) => _onSaveError(error),
-    );
+    final saved = result.tryGetSuccess();
+    if (saved == null) {
+      _onSaveError(result.tryGetError()!);
+      state = state.copyWith(isSaving: false);
+      return false;
+    }
+
+    final signed = type == TransactionType.income ? '+${amount.format()}' : '-${amount.format()}';
+    final cancel = _cancelAction(saved);
+    final events = _events;
+    final scheduledDay = state.date.formatMediumDate();
+    _resetAfterCommit();
     state = state.copyWith(isSaving: false);
-    return ok;
+
+    if (saved.isUpcoming) {
+      // Future-dated → stored as upcoming; not counted until its day.
+      AppVibrations.medium();
+      events.send(ShowInfoMessageEvent(
+        _l10n.transaction_scheduled(signed, scheduledDay),
+        actionLabel: cancel.$1,
+        onAction: cancel.$2,
+      ));
+      return true;
+    }
+
+    // Debt-linked: "Lent €50 to Ahmed" / "Ahmed returned €50 · €100 left".
+    if (saved.isDebtLinked) {
+      final l10n = _l10n;
+      var message = l10n.transaction_saved(signed, wallet.name);
+      try {
+        final summary = (await ref.read(debtRepositoryProvider).commitSummary(saved.id)).tryGetSuccess();
+        if (summary != null) message = DebtLabels.commitToast(l10n, summary);
+      } catch (e) {
+        debugPrint('Debt summary unavailable: $e');
+      }
+      AppVibrations.medium();
+      events.send(ShowSuccessMessageEvent(message, actionLabel: cancel.$1, onAction: cancel.$2));
+      return true;
+    }
+
+    // Budget impact (spec B&D §6.5): appended to the saved message; crossing
+    // the limit with this very expense turns the toast into a warning.
+    var message = _l10n.transaction_saved(signed, wallet.name);
+    var crossed = false;
+    final impact = await _budgetImpact(saved);
+    if (impact != null) {
+      message = '$message · ${impact.suffix}';
+      crossed = impact.crossed;
+    }
+    if (crossed) {
+      AppVibrations.error();
+      events.send(ShowInfoMessageEvent(message, actionLabel: cancel.$1, onAction: cancel.$2));
+    } else {
+      AppVibrations.medium();
+      events.send(ShowSuccessMessageEvent(message, actionLabel: cancel.$1, onAction: cancel.$2));
+    }
+    return true;
+  }
+
+  /// Most severe running budget hit by a just-saved posted expense, as a
+  /// toast suffix ("Groceries: €12 left"), and whether this commit moved it
+  /// from not-over to over. Never fails the commit: any error → null.
+  Future<({String suffix, bool crossed})?> _budgetImpact(TransactionModel saved) async {
+    if (saved.type != TransactionType.expense || saved.isUpcoming || saved.isDebtLinked) return null;
+    try {
+      final l10n = _l10n;
+      final fx = _fx;
+      final list = (await ref.read(budgetRepositoryProvider).impactOf(saved.id)).tryGetSuccess();
+      if (list == null || list.isEmpty) return null;
+      final p = list.first;
+      final name = p.budget.name;
+      final suffix = p.remaining.isNegative
+          ? l10n.budget_toast_suffix_over(name, p.remaining.abs().format())
+          : l10n.budget_toast_suffix(name, p.remaining.format());
+      // "Was not over before" = S_after − amount ≤ L, amount in budget currency.
+      var crossed = false;
+      if (p.isOver) {
+        final c = p.budget.currency;
+        int? amount = saved.currency == c ? saved.amountMinor : null;
+        if (amount == null) {
+          final rate = await fx.cachedRate(saved.currency, c);
+          if (rate != null) amount = convertMinor(saved.amountMinor ?? 0, saved.currency, c, rate.rate);
+        }
+        crossed = amount != null && p.spent.minor - amount <= p.limit.minor;
+      }
+      return (suffix: suffix, crossed: crossed);
+    } catch (e) {
+      debugPrint('Budget impact unavailable: $e');
+      return null;
+    }
   }
 
   /// D5 — TRANSFER confirmed from the sheet.
@@ -615,23 +717,28 @@ class TransactionNotifier extends Notifier<TransactionState> {
     events.send(ShowInfoMessageEvent(l10n.transaction_deleted));
   }
 
-  /// [A1] keep wallet, currency, rate; clear amount, description, tags, repeat;
-  /// date resets to today only if it was today (back-filling keeps the day).
+  /// [A1] keep wallet, currency, rate; clear amount, description; tags and
+  /// repeat go back to the route presets (none by default); date resets to
+  /// today only if it was today (back-filling keeps the day).
   void _resetAfterCommit() {
     final today = DateTime.now().onlyDate();
     state = state.copyWith(
       amountInput: '',
       description: '',
-      tags: const [],
-      repeat: RepeatFrequency.never,
+      tags: _presetTags(),
+      repeat: args.presetRepeat,
       date: state.date.isToday ? today : state.date,
       validationError: null,
+      personId: null,
+      personName: null,
     );
   }
 
   void _onSaveError(Failure error) {
     if (error is ValidationFailure) {
-      _showValidation(error.message ?? _l10n.error_validation);
+      // Over-repayment ([A1]) and other refusals are inline, with a shake.
+      _showValidation(error.toMessage(_l10n));
+      if (error is DebtOverpaymentFailure) state = state.copyWith(shakeSignal: state.shakeSignal + 1);
     } else {
       _events.send(ShowErrorEvent(error));
     }

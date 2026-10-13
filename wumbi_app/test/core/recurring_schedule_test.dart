@@ -41,4 +41,36 @@ void main() {
       expect(() => advance(DateTime(2026), RepeatFrequency.never, 1), throwsStateError);
     });
   });
+
+  group('addMonthsClamped', () {
+    test('negative offsets cross the year backwards', () {
+      expect(addMonthsClamped(DateTime(2026, 1, 15), -1), DateTime(2025, 12, 15));
+      expect(addMonthsClamped(DateTime(2026, 3, 31), -1), DateTime(2026, 2, 28));
+      expect(addMonthsClamped(DateTime(2026, 2, 10), -14), DateTime(2024, 12, 10));
+      expect(addMonthsClamped(DateTime(2026, 1, 1), -12), DateTime(2025, 1, 1));
+    });
+  });
+
+  group('occurrencesFrom', () {
+    test('walks the same dates as the engine, from the stored anchor', () {
+      // A rule re-anchored by `updateRule`: start = next = Jan 31, count 0.
+      final dates = occurrencesFrom(
+        startDate: DateTime(2026, 1, 31, 12),
+        frequency: RepeatFrequency.monthly,
+        nextOccurrence: DateTime(2026, 1, 31, 12),
+        occurrenceCount: 0,
+      ).take(3).toList();
+      expect(dates, [DateTime(2026, 1, 31, 12), DateTime(2026, 2, 28, 12), DateTime(2026, 3, 31, 12)]);
+    });
+
+    test('mid-series state continues from occurrence_count', () {
+      final dates = occurrencesFrom(
+        startDate: DateTime(2026, 1, 31, 12),
+        frequency: RepeatFrequency.monthly,
+        nextOccurrence: DateTime(2026, 3, 31, 12),
+        occurrenceCount: 2,
+      ).take(2).toList();
+      expect(dates, [DateTime(2026, 3, 31, 12), DateTime(2026, 4, 30, 12)]);
+    });
+  });
 }

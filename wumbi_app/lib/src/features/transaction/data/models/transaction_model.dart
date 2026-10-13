@@ -3,10 +3,12 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../../../core/local/database/sqlite/sqlite_config.dart';
 import '../../../../core/money/currency_type.dart';
 import '../../../../core/money/money.dart';
+import '../../../../core/utils/enums/debt_role.dart';
 import '../../../../core/utils/enums/repeat_frequency.dart';
 import '../../../../core/utils/enums/transaction_status.dart';
 import '../../../../core/utils/enums/transaction_type.dart';
 import '../../../../core/utils/extensions/date_time_extensions.dart';
+import '../../../debt/data/models/debt_intent.dart';
 
 part 'transaction_model.freezed.dart';
 
@@ -31,6 +33,10 @@ abstract class TransactionModel with _$TransactionModel {
     required DateTime transactionDate,
     @Default(TransactionStatus.posted) TransactionStatus status,
     String? recurringRuleId,
+
+    /// Set only through `TransactionRepository.create` with a [DebtIntent]
+    /// (spec B&D §4.4). Null for ordinary rows.
+    DebtRole? debtRole,
     required DateTime createdAt,
     required DateTime updatedAt,
     DateTime? deletedAt,
@@ -53,6 +59,7 @@ abstract class TransactionModel with _$TransactionModel {
         transactionDate: DateTimeExtension.fromEpochMs(r[SQLiteConfig.txDate] as int),
         status: TransactionStatus.fromString(r[SQLiteConfig.txStatus] as String?),
         recurringRuleId: r[SQLiteConfig.txRecurringRuleId] as String?,
+        debtRole: DebtRole.tryFromString(r[SQLiteConfig.txDebtRole] as String?),
         createdAt: DateTimeExtension.fromEpochMs(r[SQLiteConfig.createdAt] as int),
         updatedAt: DateTimeExtension.fromEpochMs(r[SQLiteConfig.updatedAt] as int),
         deletedAt: r[SQLiteConfig.deletedAt] == null
@@ -77,6 +84,7 @@ abstract class TransactionModel with _$TransactionModel {
         SQLiteConfig.txDate: transactionDate.epochMs,
         SQLiteConfig.txStatus: status.dbValue,
         SQLiteConfig.txRecurringRuleId: recurringRuleId,
+        SQLiteConfig.txDebtRole: debtRole?.dbValue,
         SQLiteConfig.createdAt: createdAt.epochMs,
         SQLiteConfig.updatedAt: updatedAt.epochMs,
         SQLiteConfig.deletedAt: deletedAt?.epochMs,
@@ -84,6 +92,9 @@ abstract class TransactionModel with _$TransactionModel {
 
   bool get isTransfer => type == TransactionType.transfer;
   bool get isUpcoming => status.isUpcoming;
+
+  /// Debt money: moves balances, never counts as spending or income.
+  bool get isDebtLinked => debtRole != null;
 
   /// Amount typed by the user in a foreign currency (D2), if any.
   Money? get original => originalAmountMinor == null || originalCurrency == null
@@ -123,9 +134,15 @@ abstract class TransactionRow with _$TransactionRow {
 
     /// Display names, in attach order (shown on the list card).
     @Default([]) List<String> tags,
+
+    /// Debt-linked rows (spec B&D §8.6): the debt they belong to and the
+    /// person, resolved with one extra query per page. Null for ordinary rows.
+    String? debtId,
+    String? personName,
   }) = _TransactionRow;
 
   String get id => transaction.id;
+  DebtRole? get debtRole => transaction.debtRole;
 }
 
 /// Full transaction for edit mode.
@@ -154,6 +171,10 @@ sealed class TransactionDraft with _$TransactionDraft {
     required List<String> tags,
     required DateTime date,
     required RepeatFrequency repeat,
+
+    /// Person-linked GAVE / GOT (spec B&D §7.3). Requires `repeat == never`
+    /// and a non-future date.
+    DebtIntent? debt,
   }) = IncomeDraft;
 
   const factory TransactionDraft.expense({
@@ -165,6 +186,10 @@ sealed class TransactionDraft with _$TransactionDraft {
     required List<String> tags,
     required DateTime date,
     required RepeatFrequency repeat,
+
+    /// Person-linked GAVE / GOT (spec B&D §7.3). Requires `repeat == never`
+    /// and a non-future date.
+    DebtIntent? debt,
   }) = ExpenseDraft;
 
   const factory TransactionDraft.transfer({
@@ -179,6 +204,13 @@ sealed class TransactionDraft with _$TransactionDraft {
     required DateTime date,
     required RepeatFrequency repeat,
   }) = TransferDraft;
+
+  /// The debt intent of an income / expense draft; transfers never carry one.
+  DebtIntent? get debtIntent => switch (this) {
+        IncomeDraft(:final debt) => debt,
+        ExpenseDraft(:final debt) => debt,
+        TransferDraft() => null,
+      };
 
   TransactionType get type => switch (this) {
         IncomeDraft() => TransactionType.income,

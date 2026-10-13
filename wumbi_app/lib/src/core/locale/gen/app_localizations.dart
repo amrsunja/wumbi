@@ -486,6 +486,30 @@ abstract class AppLocalizations {
   /// **'Has transactions'**
   String get wallet_has_transactions;
 
+  /// No description provided for @wallet_tab_transactions.
+  ///
+  /// In en, this message translates to:
+  /// **'Transactions'**
+  String get wallet_tab_transactions;
+
+  /// No description provided for @wallet_tab_budgets.
+  ///
+  /// In en, this message translates to:
+  /// **'Budgets'**
+  String get wallet_tab_budgets;
+
+  /// No description provided for @wallet_tab_subscriptions.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscriptions'**
+  String get wallet_tab_subscriptions;
+
+  /// No description provided for @wallet_budgets_empty.
+  ///
+  /// In en, this message translates to:
+  /// **'No spending limits for this wallet yet'**
+  String get wallet_budgets_empty;
+
   /// No description provided for @wallet_pick_another_primary.
   ///
   /// In en, this message translates to:
@@ -1230,6 +1254,354 @@ abstract class AppLocalizations {
   /// **'(deleted)'**
   String get tag_wallet_deleted;
 
+  /// No description provided for @tags_new.
+  ///
+  /// In en, this message translates to:
+  /// **'New tag'**
+  String get tags_new;
+
+  /// No description provided for @tags_create.
+  ///
+  /// In en, this message translates to:
+  /// **'Create tag'**
+  String get tags_create;
+
+  /// No description provided for @tags_created.
+  ///
+  /// In en, this message translates to:
+  /// **'#{name} created'**
+  String tags_created(String name);
+
+  /// No description provided for @tags_exists.
+  ///
+  /// In en, this message translates to:
+  /// **'#{name} already exists'**
+  String tags_exists(String name);
+
+  /// No description provided for @tags_parent.
+  ///
+  /// In en, this message translates to:
+  /// **'Parent tag'**
+  String get tags_parent;
+
+  /// No description provided for @tags_parent_none.
+  ///
+  /// In en, this message translates to:
+  /// **'No parent'**
+  String get tags_parent_none;
+
+  /// No description provided for @tags_name_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. coffee'**
+  String get tags_name_hint;
+
+  /// No description provided for @tags_create_tip.
+  ///
+  /// In en, this message translates to:
+  /// **'Tip: type food/coffee to nest a tag in one go.'**
+  String get tags_create_tip;
+
+  /// No description provided for @tags_nested_count.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 nested} other{{count} nested}}'**
+  String tags_nested_count(int count);
+
+  /// No description provided for @tags_help.
+  ///
+  /// In en, this message translates to:
+  /// **'How to use tags?'**
+  String get tags_help;
+
+  /// No description provided for @tags_graph_mode_all.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get tags_graph_mode_all;
+
+  /// No description provided for @tags_graph_mode_spending.
+  ///
+  /// In en, this message translates to:
+  /// **'Spending'**
+  String get tags_graph_mode_spending;
+
+  /// No description provided for @tags_graph_mode_income.
+  ///
+  /// In en, this message translates to:
+  /// **'Income'**
+  String get tags_graph_mode_income;
+
+  /// No description provided for @tags_graph_legend_size.
+  ///
+  /// In en, this message translates to:
+  /// **'Bigger = more money'**
+  String get tags_graph_legend_size;
+
+  /// No description provided for @tags_graph_legend_nested.
+  ///
+  /// In en, this message translates to:
+  /// **'Nested'**
+  String get tags_graph_legend_nested;
+
+  /// No description provided for @tags_graph_legend_together.
+  ///
+  /// In en, this message translates to:
+  /// **'Used together'**
+  String get tags_graph_legend_together;
+
+  /// No description provided for @tags_graph_tap_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap a circle to see its numbers'**
+  String get tags_graph_tap_hint;
+
+  /// No description provided for @tags_graph_open.
+  ///
+  /// In en, this message translates to:
+  /// **'Open'**
+  String get tags_graph_open;
+
+  /// No description provided for @tags_graph_linked.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No links yet} =1{Linked to 1 tag} other{Linked to {count} tags}}'**
+  String tags_graph_linked(int count);
+
+  /// No description provided for @tag_move.
+  ///
+  /// In en, this message translates to:
+  /// **'Move'**
+  String get tag_move;
+
+  /// No description provided for @tag_move_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Move #{name}'**
+  String tag_move_title(String name);
+
+  /// No description provided for @tag_moved.
+  ///
+  /// In en, this message translates to:
+  /// **'Tag moved'**
+  String get tag_moved;
+
+  /// No description provided for @tag_add_nested.
+  ///
+  /// In en, this message translates to:
+  /// **'Add nested tag'**
+  String get tag_add_nested;
+
+  /// No description provided for @tag_nested_tags.
+  ///
+  /// In en, this message translates to:
+  /// **'Nested tags'**
+  String get tag_nested_tags;
+
+  /// No description provided for @tag_includes_nested.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Includes 1 nested tag} other{Includes {count} nested tags}}'**
+  String tag_includes_nested(int count);
+
+  /// No description provided for @tag_delete_nested_message.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{It and its nested tag will be removed from every transaction. The transactions themselves stay.} other{It and its {count} nested tags will be removed from every transaction. The transactions themselves stay.}}'**
+  String tag_delete_nested_message(int count);
+
+  /// No description provided for @tag_rename_nested_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Nested tags are renamed too. Use / to move it under another tag.'**
+  String get tag_rename_nested_hint;
+
+  /// No description provided for @tag_top_level.
+  ///
+  /// In en, this message translates to:
+  /// **'Top level'**
+  String get tag_top_level;
+
+  /// No description provided for @tag_nested_empty.
+  ///
+  /// In en, this message translates to:
+  /// **'No nested tags yet'**
+  String get tag_nested_empty;
+
+  /// No description provided for @settings_help.
+  ///
+  /// In en, this message translates to:
+  /// **'Need help?'**
+  String get settings_help;
+
+  /// No description provided for @help_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Need help?'**
+  String get help_title;
+
+  /// No description provided for @help_subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Short guides to get the most out of Wumbi.'**
+  String get help_subtitle;
+
+  /// No description provided for @help_tags_title.
+  ///
+  /// In en, this message translates to:
+  /// **'How to use tags?'**
+  String get help_tags_title;
+
+  /// No description provided for @help_tags_subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Labels, nested tags and the map'**
+  String get help_tags_subtitle;
+
+  /// No description provided for @help_tags_intro.
+  ///
+  /// In en, this message translates to:
+  /// **'Tags are short labels like #coffee that you add to transactions. A transaction can carry several tags, so you can look at your money from any angle — not only by wallet.'**
+  String get help_tags_intro;
+
+  /// No description provided for @help_tags_add_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a tag'**
+  String get help_tags_add_title;
+
+  /// No description provided for @help_tags_add_body.
+  ///
+  /// In en, this message translates to:
+  /// **'When you enter a transaction, type a name in the tags field, then pick a suggestion or create a new one. Tags have no spaces — write coffee-shop or coffee_shop. Upper and lower case give the same tag.'**
+  String get help_tags_add_body;
+
+  /// No description provided for @help_tags_nested_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Nested tags'**
+  String get help_tags_nested_title;
+
+  /// No description provided for @help_tags_nested_body.
+  ///
+  /// In en, this message translates to:
+  /// **'Use a slash / to put a tag inside another one, like folders: food/coffee and food/groceries both live inside food. The parent tag is created for you.'**
+  String get help_tags_nested_body;
+
+  /// No description provided for @help_tags_parent_title.
+  ///
+  /// In en, this message translates to:
+  /// **'A parent includes its nested tags'**
+  String get help_tags_parent_title;
+
+  /// No description provided for @help_tags_parent_body.
+  ///
+  /// In en, this message translates to:
+  /// **'Opening #food shows every transaction tagged #food, #food/coffee or #food/groceries. Totals, filters and budgets on a parent count its nested tags too. A transaction with both tags is counted only once.'**
+  String get help_tags_parent_body;
+
+  /// No description provided for @help_tags_multi_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Several tags on one transaction'**
+  String get help_tags_multi_title;
+
+  /// No description provided for @help_tags_multi_body.
+  ///
+  /// In en, this message translates to:
+  /// **'A dinner on holiday can be #travel and #food/restaurant at the same time. It then counts in both, and the two tags get linked on the map.'**
+  String get help_tags_multi_body;
+
+  /// No description provided for @help_tags_manage_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Create, rename, move'**
+  String get help_tags_manage_title;
+
+  /// No description provided for @help_tags_manage_body.
+  ///
+  /// In en, this message translates to:
+  /// **'On the Tags page, tap + to create a tag and pick a parent to nest it. Open a tag to rename it, move it under another parent, add a nested tag or delete it. Renaming a parent renames its nested tags; renaming into an existing tag merges the two.'**
+  String get help_tags_manage_body;
+
+  /// No description provided for @help_tags_map_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Read the map'**
+  String get help_tags_map_title;
+
+  /// No description provided for @help_tags_map_body.
+  ///
+  /// In en, this message translates to:
+  /// **'Every circle is a tag: the bigger it is, the more money it moved. Its ring shows the share of spending and income. Solid lines join a parent to its nested tags, faint lines join tags used on the same transaction. Tap a circle to see its numbers.'**
+  String get help_tags_map_body;
+
+  /// No description provided for @help_tags_tips_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Tips'**
+  String get help_tags_tips_title;
+
+  /// No description provided for @help_tags_tip1.
+  ///
+  /// In en, this message translates to:
+  /// **'Start broad — food, home, transport — and nest only when you want more detail.'**
+  String get help_tags_tip1;
+
+  /// No description provided for @help_tags_tip2.
+  ///
+  /// In en, this message translates to:
+  /// **'Use tags for what cuts across wallets: #vacation, #gifts, #car.'**
+  String get help_tags_tip2;
+
+  /// No description provided for @help_tags_tip3.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep names short; two or three levels are plenty.'**
+  String get help_tags_tip3;
+
+  /// No description provided for @help_tags_example.
+  ///
+  /// In en, this message translates to:
+  /// **'Example'**
+  String get help_tags_example;
+
+  /// No description provided for @help_tags_example_total.
+  ///
+  /// In en, this message translates to:
+  /// **'Total for #food'**
+  String get help_tags_example_total;
+
+  /// No description provided for @help_tags_ex_parent.
+  ///
+  /// In en, this message translates to:
+  /// **'food'**
+  String get help_tags_ex_parent;
+
+  /// No description provided for @help_tags_ex_child1.
+  ///
+  /// In en, this message translates to:
+  /// **'coffee'**
+  String get help_tags_ex_child1;
+
+  /// No description provided for @help_tags_ex_child2.
+  ///
+  /// In en, this message translates to:
+  /// **'groceries'**
+  String get help_tags_ex_child2;
+
+  /// No description provided for @help_tags_ex_travel.
+  ///
+  /// In en, this message translates to:
+  /// **'travel'**
+  String get help_tags_ex_travel;
+
+  /// No description provided for @help_tags_ex_restaurant.
+  ///
+  /// In en, this message translates to:
+  /// **'restaurant'**
+  String get help_tags_ex_restaurant;
+
   /// No description provided for @l10nSubscriptions.
   ///
   /// In en, this message translates to:
@@ -1788,6 +2160,30 @@ abstract class AppLocalizations {
   /// **'This item no longer exists.'**
   String get error_not_found;
 
+  /// No description provided for @debt_error_owes_you_only.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} owes you only {amount}'**
+  String debt_error_owes_you_only(String name, String amount);
+
+  /// No description provided for @debt_error_you_owe_only.
+  ///
+  /// In en, this message translates to:
+  /// **'You owe {name} only {amount}'**
+  String debt_error_you_owe_only(String name, String amount);
+
+  /// No description provided for @person_error_has_debts.
+  ///
+  /// In en, this message translates to:
+  /// **'Settle or delete this person\'s debts first.'**
+  String get person_error_has_debts;
+
+  /// No description provided for @debt_error_closed.
+  ///
+  /// In en, this message translates to:
+  /// **'This debt is already settled.'**
+  String get debt_error_closed;
+
   /// No description provided for @error_tag_name.
   ///
   /// In en, this message translates to:
@@ -1811,6 +2207,1205 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Reset app'**
   String get error_reset_app;
+
+  /// No description provided for @dashboard_budgets.
+  ///
+  /// In en, this message translates to:
+  /// **'Budgets'**
+  String get dashboard_budgets;
+
+  /// No description provided for @budget_new.
+  ///
+  /// In en, this message translates to:
+  /// **'New Budget'**
+  String get budget_new;
+
+  /// No description provided for @budget_empty_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Set a spending limit for a wallet or a #tag'**
+  String get budget_empty_hint;
+
+  /// No description provided for @budgets_all.
+  ///
+  /// In en, this message translates to:
+  /// **'All budgets'**
+  String get budgets_all;
+
+  /// No description provided for @budgets_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Budgets'**
+  String get budgets_title;
+
+  /// No description provided for @budget_left.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} left'**
+  String budget_left(String amount);
+
+  /// No description provided for @budget_over.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} over'**
+  String budget_over(String amount);
+
+  /// No description provided for @budget_starts.
+  ///
+  /// In en, this message translates to:
+  /// **'Starts {date}'**
+  String budget_starts(String date);
+
+  /// No description provided for @budget_ended.
+  ///
+  /// In en, this message translates to:
+  /// **'Ended'**
+  String get budget_ended;
+
+  /// No description provided for @budget_per_day.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount}/day'**
+  String budget_per_day(String amount);
+
+  /// No description provided for @budget_spent_of.
+  ///
+  /// In en, this message translates to:
+  /// **'Spent {spent} of {limit}'**
+  String budget_spent_of(String spent, String limit);
+
+  /// No description provided for @budget_this_week.
+  ///
+  /// In en, this message translates to:
+  /// **'This week'**
+  String get budget_this_week;
+
+  /// No description provided for @budget_set_limit.
+  ///
+  /// In en, this message translates to:
+  /// **'Set a spending limit'**
+  String get budget_set_limit;
+
+  /// No description provided for @budget_toast_suffix.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}: {amount} left'**
+  String budget_toast_suffix(String name, String amount);
+
+  /// No description provided for @budget_toast_suffix_over.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}: {amount} over'**
+  String budget_toast_suffix_over(String name, String amount);
+
+  /// No description provided for @budget_all_spending.
+  ///
+  /// In en, this message translates to:
+  /// **'All spending'**
+  String get budget_all_spending;
+
+  /// No description provided for @budget_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get budget_name;
+
+  /// No description provided for @budget_name_placeholder.
+  ///
+  /// In en, this message translates to:
+  /// **'name'**
+  String get budget_name_placeholder;
+
+  /// No description provided for @budget_what_counts.
+  ///
+  /// In en, this message translates to:
+  /// **'What counts'**
+  String get budget_what_counts;
+
+  /// No description provided for @budget_wallets.
+  ///
+  /// In en, this message translates to:
+  /// **'Wallets'**
+  String get budget_wallets;
+
+  /// No description provided for @budget_all_wallets.
+  ///
+  /// In en, this message translates to:
+  /// **'All wallets'**
+  String get budget_all_wallets;
+
+  /// No description provided for @budget_tags.
+  ///
+  /// In en, this message translates to:
+  /// **'Tags'**
+  String get budget_tags;
+
+  /// No description provided for @budget_any_tag.
+  ///
+  /// In en, this message translates to:
+  /// **'Any tag'**
+  String get budget_any_tag;
+
+  /// No description provided for @budget_scope_all.
+  ///
+  /// In en, this message translates to:
+  /// **'Counts every expense.'**
+  String get budget_scope_all;
+
+  /// No description provided for @budget_scope_wallets.
+  ///
+  /// In en, this message translates to:
+  /// **'Counts expenses from {wallets}.'**
+  String budget_scope_wallets(String wallets);
+
+  /// No description provided for @budget_scope_tags.
+  ///
+  /// In en, this message translates to:
+  /// **'Counts expenses tagged {tags}.'**
+  String budget_scope_tags(String tags);
+
+  /// No description provided for @budget_scope_both.
+  ///
+  /// In en, this message translates to:
+  /// **'Counts expenses from {wallets} tagged {tags}.'**
+  String budget_scope_both(String wallets, String tags);
+
+  /// No description provided for @budget_scope_or.
+  ///
+  /// In en, this message translates to:
+  /// **'or'**
+  String get budget_scope_or;
+
+  /// No description provided for @budget_period_section.
+  ///
+  /// In en, this message translates to:
+  /// **'Period'**
+  String get budget_period_section;
+
+  /// No description provided for @budget_repeats.
+  ///
+  /// In en, this message translates to:
+  /// **'Repeats'**
+  String get budget_repeats;
+
+  /// No description provided for @budget_period_weekly.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly'**
+  String get budget_period_weekly;
+
+  /// No description provided for @budget_period_monthly.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly'**
+  String get budget_period_monthly;
+
+  /// No description provided for @budget_period_yearly.
+  ///
+  /// In en, this message translates to:
+  /// **'Yearly'**
+  String get budget_period_yearly;
+
+  /// No description provided for @budget_period_custom.
+  ///
+  /// In en, this message translates to:
+  /// **'One-time'**
+  String get budget_period_custom;
+
+  /// No description provided for @budget_starts_on.
+  ///
+  /// In en, this message translates to:
+  /// **'Starts on'**
+  String get budget_starts_on;
+
+  /// No description provided for @budget_first_day.
+  ///
+  /// In en, this message translates to:
+  /// **'First day'**
+  String get budget_first_day;
+
+  /// No description provided for @budget_last_day.
+  ///
+  /// In en, this message translates to:
+  /// **'Last day'**
+  String get budget_last_day;
+
+  /// No description provided for @budget_day_of_month.
+  ///
+  /// In en, this message translates to:
+  /// **'Day {day}'**
+  String budget_day_of_month(int day);
+
+  /// No description provided for @budget_start_day_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Start day'**
+  String get budget_start_day_title;
+
+  /// No description provided for @budget_start_day_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Short months start on their last day.'**
+  String get budget_start_day_hint;
+
+  /// No description provided for @budget_start_weekday_title.
+  ///
+  /// In en, this message translates to:
+  /// **'First day of the week'**
+  String get budget_start_weekday_title;
+
+  /// No description provided for @budget_carry_over.
+  ///
+  /// In en, this message translates to:
+  /// **'Carry over'**
+  String get budget_carry_over;
+
+  /// No description provided for @budget_rollover_none.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t carry over'**
+  String get budget_rollover_none;
+
+  /// No description provided for @budget_rollover_surplus.
+  ///
+  /// In en, this message translates to:
+  /// **'Carry what\'s left'**
+  String get budget_rollover_surplus;
+
+  /// No description provided for @budget_rollover_both.
+  ///
+  /// In en, this message translates to:
+  /// **'Carry what\'s left and overspending'**
+  String get budget_rollover_both;
+
+  /// No description provided for @budget_count_planned.
+  ///
+  /// In en, this message translates to:
+  /// **'Count planned'**
+  String get budget_count_planned;
+
+  /// No description provided for @budget_count_planned_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Include upcoming and subscriptions'**
+  String get budget_count_planned_hint;
+
+  /// No description provided for @budget_count_planned_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Upcoming payments and subscriptions count against the limit before they\'re paid.'**
+  String get budget_count_planned_desc;
+
+  /// No description provided for @budget_suggested_months.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggested: {amount} · avg. of last 3 months'**
+  String budget_suggested_months(String amount);
+
+  /// No description provided for @budget_suggested_weeks.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggested: {amount} · avg. of last 3 weeks'**
+  String budget_suggested_weeks(String amount);
+
+  /// No description provided for @budget_suggested_years.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggested: {amount} · avg. of last 3 years'**
+  String budget_suggested_years(String amount);
+
+  /// No description provided for @budget_deleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Budget deleted'**
+  String get budget_deleted;
+
+  /// No description provided for @budget_delete_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete {name}?'**
+  String budget_delete_title(String name);
+
+  /// No description provided for @budget_delete_message.
+  ///
+  /// In en, this message translates to:
+  /// **'Your transactions stay as they are.'**
+  String get budget_delete_message;
+
+  /// No description provided for @budget_error_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Name up to 40 characters'**
+  String get budget_error_name;
+
+  /// No description provided for @budget_error_dates.
+  ///
+  /// In en, this message translates to:
+  /// **'The last day must come after the first'**
+  String get budget_error_dates;
+
+  /// No description provided for @budget_left_caption.
+  ///
+  /// In en, this message translates to:
+  /// **'left'**
+  String get budget_left_caption;
+
+  /// No description provided for @budget_over_caption.
+  ///
+  /// In en, this message translates to:
+  /// **'over'**
+  String get budget_over_caption;
+
+  /// No description provided for @budget_under_caption.
+  ///
+  /// In en, this message translates to:
+  /// **'under'**
+  String get budget_under_caption;
+
+  /// No description provided for @budget_spent.
+  ///
+  /// In en, this message translates to:
+  /// **'Spent {amount}'**
+  String budget_spent(String amount);
+
+  /// No description provided for @budget_planned.
+  ///
+  /// In en, this message translates to:
+  /// **'Planned {amount}'**
+  String budget_planned(String amount);
+
+  /// No description provided for @budget_limit.
+  ///
+  /// In en, this message translates to:
+  /// **'Limit {amount}'**
+  String budget_limit(String amount);
+
+  /// No description provided for @budget_carried.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} carried'**
+  String budget_carried(String amount);
+
+  /// No description provided for @budget_on_track.
+  ///
+  /// In en, this message translates to:
+  /// **'On track'**
+  String get budget_on_track;
+
+  /// No description provided for @budget_ahead_of_pace.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} ahead of pace'**
+  String budget_ahead_of_pace(String amount);
+
+  /// No description provided for @budget_faster_than_planned.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} faster than planned'**
+  String budget_faster_than_planned(String amount);
+
+  /// No description provided for @budget_forecast.
+  ///
+  /// In en, this message translates to:
+  /// **'forecast {amount}'**
+  String budget_forecast(String amount);
+
+  /// No description provided for @budget_no_spending.
+  ///
+  /// In en, this message translates to:
+  /// **'No spending yet this period'**
+  String get budget_no_spending;
+
+  /// No description provided for @budgets_active.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get budgets_active;
+
+  /// No description provided for @budgets_upcoming.
+  ///
+  /// In en, this message translates to:
+  /// **'Upcoming'**
+  String get budgets_upcoming;
+
+  /// No description provided for @budgets_empty_title.
+  ///
+  /// In en, this message translates to:
+  /// **'No budgets yet'**
+  String get budgets_empty_title;
+
+  /// No description provided for @budgets_empty_subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Set a limit and watch what\'s left'**
+  String get budgets_empty_subtitle;
+
+  /// No description provided for @budgets_more_count.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{+1 more budget} other{+{count} more budgets}}'**
+  String budgets_more_count(int count);
+
+  /// No description provided for @budget_per_day_for.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount}/day for {count, plural, =1{1 day} other{{count} days}}'**
+  String budget_per_day_for(String amount, int count);
+
+  /// No description provided for @budget_subscriptions_planned.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 subscription} other{{count} subscriptions}} · {amount}'**
+  String budget_subscriptions_planned(int count, String amount);
+
+  /// No description provided for @budgets_finished.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, other{Finished ({count})}}'**
+  String budgets_finished(int count);
+
+  /// No description provided for @wallet_deleted_removed_budgets.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 budget removed} other{{count} budgets removed}}'**
+  String wallet_deleted_removed_budgets(int count);
+
+  /// No description provided for @debts_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Debts'**
+  String get debts_title;
+
+  /// No description provided for @debts_owed_to_me.
+  ///
+  /// In en, this message translates to:
+  /// **'Owed to me'**
+  String get debts_owed_to_me;
+
+  /// No description provided for @debts_i_owe.
+  ///
+  /// In en, this message translates to:
+  /// **'I owe'**
+  String get debts_i_owe;
+
+  /// No description provided for @debts_empty_owed_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Nobody owes you'**
+  String get debts_empty_owed_title;
+
+  /// No description provided for @debts_empty_owe_title.
+  ///
+  /// In en, this message translates to:
+  /// **'You owe nobody'**
+  String get debts_empty_owe_title;
+
+  /// No description provided for @debts_empty_subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a person on the transaction screen when you lend money'**
+  String get debts_empty_subtitle;
+
+  /// No description provided for @debt_new.
+  ///
+  /// In en, this message translates to:
+  /// **'New debt'**
+  String get debt_new;
+
+  /// No description provided for @debts_all.
+  ///
+  /// In en, this message translates to:
+  /// **'All debts'**
+  String get debts_all;
+
+  /// No description provided for @debts_empty_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep track of money you lent or borrowed'**
+  String get debts_empty_hint;
+
+  /// No description provided for @dashboard_reorder_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Hold to reorder'**
+  String get dashboard_reorder_hint;
+
+  /// No description provided for @dashboard_budgets_over.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} over limit'**
+  String dashboard_budgets_over(int count);
+
+  /// No description provided for @dashboard_budgets_at_risk.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} at risk'**
+  String dashboard_budgets_at_risk(int count);
+
+  /// No description provided for @dashboard_budgets_on_track.
+  ///
+  /// In en, this message translates to:
+  /// **'All on track'**
+  String get dashboard_budgets_on_track;
+
+  /// No description provided for @dashboard_debts_to_receive.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} to receive'**
+  String dashboard_debts_to_receive(String amount);
+
+  /// No description provided for @dashboard_debts_to_pay.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} to pay back'**
+  String dashboard_debts_to_pay(String amount);
+
+  /// No description provided for @dashboard_new.
+  ///
+  /// In en, this message translates to:
+  /// **'New'**
+  String get dashboard_new;
+
+  /// No description provided for @debt_they_owe_me.
+  ///
+  /// In en, this message translates to:
+  /// **'They owe me'**
+  String get debt_they_owe_me;
+
+  /// No description provided for @debt_i_owe_them.
+  ///
+  /// In en, this message translates to:
+  /// **'I owe them'**
+  String get debt_i_owe_them;
+
+  /// No description provided for @debt_person.
+  ///
+  /// In en, this message translates to:
+  /// **'Person'**
+  String get debt_person;
+
+  /// No description provided for @debt_person_chip.
+  ///
+  /// In en, this message translates to:
+  /// **'Person'**
+  String get debt_person_chip;
+
+  /// No description provided for @debt_person_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Person'**
+  String get debt_person_title;
+
+  /// No description provided for @debt_person_search.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get debt_person_search;
+
+  /// No description provided for @debt_person_empty.
+  ///
+  /// In en, this message translates to:
+  /// **'No people yet — type a name'**
+  String get debt_person_empty;
+
+  /// No description provided for @debt_person_none.
+  ///
+  /// In en, this message translates to:
+  /// **'No person'**
+  String get debt_person_none;
+
+  /// No description provided for @debt_choose.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose'**
+  String get debt_choose;
+
+  /// No description provided for @debt_amount.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount'**
+  String get debt_amount;
+
+  /// No description provided for @debt_note_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Note (optional)'**
+  String get debt_note_hint;
+
+  /// No description provided for @debt_note_placeholder.
+  ///
+  /// In en, this message translates to:
+  /// **'note'**
+  String get debt_note_placeholder;
+
+  /// No description provided for @debt_due_date.
+  ///
+  /// In en, this message translates to:
+  /// **'Due date'**
+  String get debt_due_date;
+
+  /// No description provided for @debt_due_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Due date'**
+  String get debt_due_title;
+
+  /// No description provided for @debt_add_due.
+  ///
+  /// In en, this message translates to:
+  /// **'Due date'**
+  String get debt_add_due;
+
+  /// No description provided for @debt_due_change.
+  ///
+  /// In en, this message translates to:
+  /// **'Change date'**
+  String get debt_due_change;
+
+  /// No description provided for @debt_due_remove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove due date'**
+  String get debt_due_remove;
+
+  /// No description provided for @debt_none.
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get debt_none;
+
+  /// No description provided for @debt_money_moved.
+  ///
+  /// In en, this message translates to:
+  /// **'Money moved'**
+  String get debt_money_moved;
+
+  /// No description provided for @debt_not_in_wallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Not in a wallet'**
+  String get debt_not_in_wallet;
+
+  /// No description provided for @debt_error_person.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a person'**
+  String get debt_error_person;
+
+  /// No description provided for @debt_gave.
+  ///
+  /// In en, this message translates to:
+  /// **'Gave'**
+  String get debt_gave;
+
+  /// No description provided for @debt_got.
+  ///
+  /// In en, this message translates to:
+  /// **'Got'**
+  String get debt_got;
+
+  /// No description provided for @debt_badge_loan.
+  ///
+  /// In en, this message translates to:
+  /// **'Loan'**
+  String get debt_badge_loan;
+
+  /// No description provided for @debt_badge_return.
+  ///
+  /// In en, this message translates to:
+  /// **'Return'**
+  String get debt_badge_return;
+
+  /// No description provided for @debt_overdue.
+  ///
+  /// In en, this message translates to:
+  /// **'overdue'**
+  String get debt_overdue;
+
+  /// No description provided for @debt_settled_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Settled'**
+  String get debt_settled_label;
+
+  /// No description provided for @debt_forgiven_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgiven'**
+  String get debt_forgiven_label;
+
+  /// No description provided for @debt_returned_in_full.
+  ///
+  /// In en, this message translates to:
+  /// **'Returned in full'**
+  String get debt_returned_in_full;
+
+  /// No description provided for @debt_paid_in_full.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid in full'**
+  String get debt_paid_in_full;
+
+  /// No description provided for @debt_part.
+  ///
+  /// In en, this message translates to:
+  /// **'Part'**
+  String get debt_part;
+
+  /// No description provided for @debt_forgive.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgive'**
+  String get debt_forgive;
+
+  /// No description provided for @debt_remind.
+  ///
+  /// In en, this message translates to:
+  /// **'Remind'**
+  String get debt_remind;
+
+  /// No description provided for @debt_history.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get debt_history;
+
+  /// No description provided for @debt_edit_note.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit note'**
+  String get debt_edit_note;
+
+  /// No description provided for @debt_rename_person.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename person'**
+  String get debt_rename_person;
+
+  /// No description provided for @debt_delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete debt'**
+  String get debt_delete;
+
+  /// No description provided for @debt_delete_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this debt?'**
+  String get debt_delete_title;
+
+  /// No description provided for @debt_deleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Debt deleted'**
+  String get debt_deleted;
+
+  /// No description provided for @debt_payment_deleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment deleted'**
+  String get debt_payment_deleted;
+
+  /// No description provided for @debt_return_deleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Return deleted'**
+  String get debt_return_deleted;
+
+  /// No description provided for @debt_due.
+  ///
+  /// In en, this message translates to:
+  /// **'due {date}'**
+  String debt_due(String date);
+
+  /// No description provided for @debt_left.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} left'**
+  String debt_left(String amount);
+
+  /// No description provided for @debt_left_of.
+  ///
+  /// In en, this message translates to:
+  /// **'left of {amount}'**
+  String debt_left_of(String amount);
+
+  /// No description provided for @debt_of.
+  ///
+  /// In en, this message translates to:
+  /// **'of {amount}'**
+  String debt_of(String amount);
+
+  /// No description provided for @debt_to_wallet.
+  ///
+  /// In en, this message translates to:
+  /// **'to {wallet}'**
+  String debt_to_wallet(String wallet);
+
+  /// No description provided for @debt_from_wallet.
+  ///
+  /// In en, this message translates to:
+  /// **'from {wallet}'**
+  String debt_from_wallet(String wallet);
+
+  /// No description provided for @debt_owes_you.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} owes you {amount}'**
+  String debt_owes_you(String name, String amount);
+
+  /// No description provided for @debt_you_owe.
+  ///
+  /// In en, this message translates to:
+  /// **'You owe {name} {amount}'**
+  String debt_you_owe(String name, String amount);
+
+  /// No description provided for @debt_overall.
+  ///
+  /// In en, this message translates to:
+  /// **'Overall: {text}'**
+  String debt_overall(String text);
+
+  /// No description provided for @debt_overall_both.
+  ///
+  /// In en, this message translates to:
+  /// **'Overall: {name} owes you {owed} · you owe {owe}'**
+  String debt_overall_both(String name, String owed, String owe);
+
+  /// No description provided for @debt_hint_owes_you.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} owes you {amount} · GOT counts as a return'**
+  String debt_hint_owes_you(String name, String amount);
+
+  /// No description provided for @debt_hint_you_owe.
+  ///
+  /// In en, this message translates to:
+  /// **'You owe {name} {amount} · GAVE counts as paying back'**
+  String debt_hint_you_owe(String name, String amount);
+
+  /// No description provided for @debt_hint_both.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} owes you {owed} · you owe {owe}'**
+  String debt_hint_both(String name, String owed, String owe);
+
+  /// No description provided for @debt_hint_none.
+  ///
+  /// In en, this message translates to:
+  /// **'No open debts with {name} · GAVE lends, GOT borrows'**
+  String debt_hint_none(String name);
+
+  /// No description provided for @debt_person_add.
+  ///
+  /// In en, this message translates to:
+  /// **'Add “{name}”'**
+  String debt_person_add(String name);
+
+  /// No description provided for @debt_picker_owes_you.
+  ///
+  /// In en, this message translates to:
+  /// **'owes you {amount}'**
+  String debt_picker_owes_you(String amount);
+
+  /// No description provided for @debt_picker_you_owe.
+  ///
+  /// In en, this message translates to:
+  /// **'you owe {amount}'**
+  String debt_picker_you_owe(String amount);
+
+  /// No description provided for @debt_title_lent_to.
+  ///
+  /// In en, this message translates to:
+  /// **'Lent to {name}'**
+  String debt_title_lent_to(String name);
+
+  /// No description provided for @debt_title_borrowed_from.
+  ///
+  /// In en, this message translates to:
+  /// **'Borrowed from {name}'**
+  String debt_title_borrowed_from(String name);
+
+  /// No description provided for @debt_title_paid_back_by.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} paid back'**
+  String debt_title_paid_back_by(String name);
+
+  /// No description provided for @debt_title_paid_back_to.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid back {name}'**
+  String debt_title_paid_back_to(String name);
+
+  /// No description provided for @debt_toast_lent.
+  ///
+  /// In en, this message translates to:
+  /// **'Lent {amount} to {name}'**
+  String debt_toast_lent(String amount, String name);
+
+  /// No description provided for @debt_toast_borrowed.
+  ///
+  /// In en, this message translates to:
+  /// **'Borrowed {amount} from {name}'**
+  String debt_toast_borrowed(String amount, String name);
+
+  /// No description provided for @debt_toast_returned.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} returned {amount} · {left} left'**
+  String debt_toast_returned(String name, String amount, String left);
+
+  /// No description provided for @debt_toast_returned_settled.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} returned {amount} · all settled'**
+  String debt_toast_returned_settled(String name, String amount);
+
+  /// No description provided for @debt_toast_paid_back.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid back {amount} to {name} · {left} left'**
+  String debt_toast_paid_back(String amount, String name, String left);
+
+  /// No description provided for @debt_toast_paid_back_settled.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid back {amount} to {name} · all settled'**
+  String debt_toast_paid_back_settled(String amount, String name);
+
+  /// No description provided for @debt_forgive_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgive {name}?'**
+  String debt_forgive_title(String name);
+
+  /// No description provided for @debt_forgive_message.
+  ///
+  /// In en, this message translates to:
+  /// **'The remaining {amount} will be written off. No money moves.'**
+  String debt_forgive_message(String amount);
+
+  /// No description provided for @debt_forgiven_toast.
+  ///
+  /// In en, this message translates to:
+  /// **'Debt forgiven · {name}'**
+  String debt_forgiven_toast(String name);
+
+  /// No description provided for @debt_remind_message.
+  ///
+  /// In en, this message translates to:
+  /// **'Hi {name}! Just a reminder about {amount} for {note} ({date}). Thanks!'**
+  String debt_remind_message(
+    String name,
+    String amount,
+    String note,
+    String date,
+  );
+
+  /// No description provided for @debt_remind_message_no_note.
+  ///
+  /// In en, this message translates to:
+  /// **'Hi {name}! Just a reminder about {amount} ({date}). Thanks!'**
+  String debt_remind_message_no_note(String name, String amount, String date);
+
+  /// No description provided for @debt_history_lent.
+  ///
+  /// In en, this message translates to:
+  /// **'Lent {amount}'**
+  String debt_history_lent(String amount);
+
+  /// No description provided for @debt_history_lent_from.
+  ///
+  /// In en, this message translates to:
+  /// **'Lent {amount} from {wallet}'**
+  String debt_history_lent_from(String amount, String wallet);
+
+  /// No description provided for @debt_history_borrowed.
+  ///
+  /// In en, this message translates to:
+  /// **'Borrowed {amount}'**
+  String debt_history_borrowed(String amount);
+
+  /// No description provided for @debt_history_borrowed_into.
+  ///
+  /// In en, this message translates to:
+  /// **'Borrowed {amount} into {wallet}'**
+  String debt_history_borrowed_into(String amount, String wallet);
+
+  /// No description provided for @debt_history_returned.
+  ///
+  /// In en, this message translates to:
+  /// **'Returned {amount}'**
+  String debt_history_returned(String amount);
+
+  /// No description provided for @debt_history_returned_to.
+  ///
+  /// In en, this message translates to:
+  /// **'Returned {amount} → {wallet}'**
+  String debt_history_returned_to(String amount, String wallet);
+
+  /// No description provided for @debt_history_paid.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid back {amount}'**
+  String debt_history_paid(String amount);
+
+  /// No description provided for @debt_history_paid_from.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid back {amount} from {wallet}'**
+  String debt_history_paid_from(String amount, String wallet);
+
+  /// No description provided for @debt_history_forgiven.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgave {amount}'**
+  String debt_history_forgiven(String amount);
+
+  /// No description provided for @debts_overdue_count.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} overdue'**
+  String debts_overdue_count(int count);
+
+  /// No description provided for @debts_count.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 debt} other{{count} debts}}'**
+  String debts_count(int count);
+
+  /// No description provided for @debts_people_count.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No one} =1{1 person} other{{count} people}}'**
+  String debts_people_count(int count);
+
+  /// No description provided for @debts_settled.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, other{Settled ({count})}}'**
+  String debts_settled(int count);
+
+  /// No description provided for @debt_cascade_deleted.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{Loan deleted} =1{Loan deleted with 1 return} other{Loan deleted with {count} returns}}'**
+  String debt_cascade_deleted(int count);
+
+  /// No description provided for @debt_delete_message.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 wallet transaction will be deleted too.} other{{count} wallet transactions will be deleted too.}}'**
+  String debt_delete_message(int count);
+
+  /// No description provided for @subscriptions_new.
+  ///
+  /// In en, this message translates to:
+  /// **'New Subscription'**
+  String get subscriptions_new;
+
+  /// No description provided for @subscriptions_active_count.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} active'**
+  String subscriptions_active_count(int count);
+
+  /// No description provided for @subscriptions_paused_count.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} paused'**
+  String subscriptions_paused_count(int count);
+
+  /// No description provided for @wallet_budgets_empty_subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Set a spending limit to keep this wallet in check.'**
+  String get wallet_budgets_empty_subtitle;
+
+  /// No description provided for @wallet_include_in_total.
+  ///
+  /// In en, this message translates to:
+  /// **'Count in total balance'**
+  String get wallet_include_in_total;
+
+  /// No description provided for @wallet_include_in_total_on.
+  ///
+  /// In en, this message translates to:
+  /// **'This wallet\'s balance is added to the total on the Dashboard.'**
+  String get wallet_include_in_total_on;
+
+  /// No description provided for @wallet_include_in_total_off.
+  ///
+  /// In en, this message translates to:
+  /// **'Left out of the Dashboard total — handy for savings, shared or tracking-only wallets.'**
+  String get wallet_include_in_total_off;
+
+  /// No description provided for @dashboard_wallets_excluded.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 not counted} other{{count} not counted}}'**
+  String dashboard_wallets_excluded(int count);
+
+  /// No description provided for @budget_rollover_none_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Every period starts fresh with the same limit. Leftovers and overspending don\'t move on.'**
+  String get budget_rollover_none_desc;
+
+  /// No description provided for @budget_rollover_surplus_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'What you didn\'t spend is added to the next period\'s limit.'**
+  String get budget_rollover_surplus_desc;
+
+  /// No description provided for @budget_rollover_both_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Leftovers raise the next period\'s limit, overspending lowers it.'**
+  String get budget_rollover_both_desc;
+
+  /// No description provided for @budget_used_percent.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent}% used'**
+  String budget_used_percent(int percent);
+
+  /// No description provided for @budget_stat_spent.
+  ///
+  /// In en, this message translates to:
+  /// **'Spent'**
+  String get budget_stat_spent;
+
+  /// No description provided for @budget_stat_limit.
+  ///
+  /// In en, this message translates to:
+  /// **'Limit'**
+  String get budget_stat_limit;
+
+  /// No description provided for @budget_stat_planned.
+  ///
+  /// In en, this message translates to:
+  /// **'Planned'**
+  String get budget_stat_planned;
+
+  /// No description provided for @budget_stat_per_day.
+  ///
+  /// In en, this message translates to:
+  /// **'Per day'**
+  String get budget_stat_per_day;
+
+  /// No description provided for @budget_stat_forecast.
+  ///
+  /// In en, this message translates to:
+  /// **'Forecast'**
+  String get budget_stat_forecast;
+
+  /// No description provided for @budget_days_left.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 day left} other{{count} days left}}'**
+  String budget_days_left(int count);
 
   /// No description provided for @l10nStopLineDontTouch.
   ///

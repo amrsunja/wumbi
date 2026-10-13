@@ -9,13 +9,15 @@ import '../../../core/utils/constants/constants.dart';
 import '../../../core/utils/extensions/build_context_extensions.dart';
 import '../../../core/utils/typedefs.dart';
 import '../data/models/tag_stats.dart';
+import '../data/models/tag_tree.dart';
 import 'tags_notifier.dart';
+import 'widgets/tag_create_sheet.dart';
 import 'widgets/tag_graph_view.dart';
-import 'widgets/tags_view_toggle.dart';
+import 'widgets/tag_visuals.dart';
 
 enum _TagsView { list, map }
 
-/// Tags hub (`/tags`): ranked list with search, or the co-occurrence map.
+/// Tags hub (`/tags`): nested tag cards with search, or the money map.
 @RoutePage()
 class TagsPage extends HookConsumerWidget {
   const TagsPage({super.key});
@@ -28,6 +30,9 @@ class TagsPage extends HookConsumerWidget {
     final view = useState(_TagsView.list);
 
     void openTag(TagStats tag) => context.router.push(TagDetailsRoute(tagId: tag.id));
+    Future<void> create() => createTagFlow(context, ref);
+
+    final hasTags = state.stats.value?.isNotEmpty ?? false;
 
     return Stack(
       children: [
@@ -39,11 +44,29 @@ class TagsPage extends HookConsumerWidget {
             title: l10n.tags_title,
             transparent: true,
             backTap: () => context.router.maybePop(),
+            // Not `UIIcon`: it mirrors icons in Arabic, and a mirrored "?"
+            // reads wrong.
+            action: Semantics(
+              button: true,
+              label: l10n.tags_help,
+              child: UITap(
+                onTap: () => context.router.push(const TagsHelpRoute()),
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: UIIconToken.toIcon(
+                    UIIconToken.icons.general.helpCircle,
+                    size: 22,
+                    color: colors.contentColor,
+                  ),
+                ),
+              ),
+            ),
           ),
+          floatingActionButton: view.value == _TagsView.list && hasTags ? UiFab(onTap: create, label: l10n.tags_new) : null,
           body: Column(
             children: [
               const UISpace.vert(4),
-              TagsViewToggle(
+              UiSegmentedToggle(
                 labels: [l10n.tags_view_list, l10n.tags_view_graph],
                 selectedIndex: view.value == _TagsView.list ? 0 : 1,
                 onChanged: (i) => view.value = i == 0 ? _TagsView.list : _TagsView.map,
@@ -51,8 +74,13 @@ class TagsPage extends HookConsumerWidget {
               const UISpace.vert(8),
               Expanded(
                 child: switch (view.value) {
-                  _TagsView.list => _TagList(stats: state.stats, onTap: openTag),
-                  _TagsView.map => _TagMap(graph: state.graph, onTap: openTag),
+                  _TagsView.list => _TagList(
+                      stats: state.stats,
+                      tree: state.tree,
+                      onTap: openTag,
+                      onCreate: create,
+                    ),
+                  _TagsView.map => _TagMap(graph: state.graph, onOpen: openTag),
                 },
               ),
             ],
@@ -66,102 +94,166 @@ class TagsPage extends HookConsumerWidget {
 // --------------------------------------------------------------------- list
 
 class _TagList extends HookWidget {
-  const _TagList({required this.stats, required this.onTap});
+  const _TagList({required this.stats, required this.tree, required this.onTap, required this.onCreate});
 
   final AsyncValue<List<TagStats>> stats;
+  final List<TagTreeNode> tree;
   final ValueChanged<TagStats> onTap;
+  final VoidCallback onCreate;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final query = useState('');
+    final collapsed = useState<Set<String>>(const {});
     final all = stats.value;
 
-    final Widget body;
+    void toggle(String id) {
+      final next = Set<String>.of(collapsed.value);
+      if (!next.remove(id)) next.add(id);
+      collapsed.value = next;
+    }
+
     if (all == null) {
-      body = const Padding(
+      return const Padding(
         padding: EdgeInsets.fromLTRB(kListHorzPadding, 24, kListHorzPadding, 0),
         child: UiSkeletonList(rows: 6),
       );
-    } else if (all.isEmpty) {
-      body = UiEmptyState(
+    }
+    if (all.isEmpty) {
+      return UiEmptyState(
         image: AppAssets.images.wumbiOo.path,
         title: l10n.tags_empty_title,
         subtitle: l10n.tags_empty_subtitle,
+        action: SizedBox(
+          width: 200,
+          child: UiPrimaryButton(label: l10n.tags_new, onTap: onCreate),
+        ),
       );
+    }
+
+    final q = query.value.trim().toLowerCase().replaceFirst('#', '');
+    final Widget body;
+    if (q.isNotEmpty) {
+      // Search: flat list, full paths, every level that matches.
+      final rows = all.where((t) => t.tag.normalizedName.contains(q)).toList();
+      body = rows.isEmpty
+          ? Padding(
+              padding: const EdgeInsets.all(32),
+              child: Text(l10n.tags_search_no_results, textAlign: TextAlign.center, style: context.typo.inter.hint),
+            )
+          : _scroll([
+              for (final t in rows) _TagRow(stats: t, depth: 0, showPath: true, onTap: () => onTap(t)),
+            ]);
     } else {
-      final q = query.value.trim().toLowerCase().replaceFirst('#', '');
-      final rows = q.isEmpty ? all : all.where((t) => t.name.toLowerCase().contains(q)).toList();
-      if (rows.isEmpty) {
-        body = Padding(
-          padding: const EdgeInsets.all(32),
-          child: Text(
-            l10n.tags_search_no_results,
-            textAlign: TextAlign.center,
-            style: context.typo.inter.hint,
+      body = _scroll([
+        for (final node in TagTree.visible(tree, collapsed.value))
+          _TagRow(
+            stats: node.stats,
+            depth: node.depth,
+            nestedCount: node.descendantCount,
+            collapsed: collapsed.value.contains(node.id),
+            onToggle: node.hasChildren ? () => toggle(node.id) : null,
+            onTap: () => onTap(node.stats),
           ),
-        );
-      } else {
-        body = ListView.separated(
-          padding: const EdgeInsets.fromLTRB(kListHorzPadding, 4, kListHorzPadding, 96),
-          itemCount: rows.length,
-          separatorBuilder: (_, _) => const UIDivider(),
-          itemBuilder: (context, index) {
-            final t = rows[index];
-            return _TagRow(stats: t, onTap: () => onTap(t));
-          },
-        );
-      }
+      ]);
     }
 
     return Column(
       children: [
-        if (all != null && all.isNotEmpty)
-          Padding(
-            padding: const EdgeInsets.fromLTRB(kPageHorzPadding, 8, kPageHorzPadding, 8),
-            child: UIInputField(
-              hintText: l10n.tags_search_placeholder,
-              textCapitalization: TextCapitalization.none,
-              textInputAction: TextInputAction.search,
-              onChanged: (v) => query.value = v,
-            ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(kPageHorzPadding, 8, kPageHorzPadding, 8),
+          child: UIInputField(
+            hintText: l10n.tags_search_placeholder,
+            textCapitalization: TextCapitalization.none,
+            textInputAction: TextInputAction.search,
+            onChanged: (v) => query.value = v,
           ),
+        ),
         Expanded(child: body),
       ],
     );
   }
+
+  /// Smoke edges like the dashboard tabs: rows dissolve under the search
+  /// field instead of being cut.
+  Widget _scroll(List<Widget> rows) {
+    return UIScrollEdgeFade(
+      child: ListView.separated(
+        physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+        padding: const EdgeInsets.fromLTRB(kListHorzPadding, 4, kListHorzPadding, 110),
+        itemCount: rows.length,
+        separatorBuilder: (_, _) => const UIDivider(),
+        itemBuilder: (_, i) => rows[i],
+      ),
+    );
+  }
 }
 
+/// Same anatomy as a transaction row: name + caption on the left, amounts
+/// on the right. Nested tags are indented under their parent.
 class _TagRow extends StatelessWidget {
-  const _TagRow({required this.stats, required this.onTap});
+  const _TagRow({
+    required this.stats,
+    required this.depth,
+    required this.onTap,
+    this.nestedCount = 0,
+    this.collapsed = false,
+    this.onToggle,
+    this.showPath = false,
+  });
 
   final TagStats stats;
+  final int depth;
   final VoidCallback onTap;
+  final int nestedCount;
+  final bool collapsed;
+
+  /// Null = no nested tags (no chevron).
+  final VoidCallback? onToggle;
+
+  /// Search results: full `food/coffee` path instead of the last level.
+  final bool showPath;
+
+  static const double _indent = 20;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final colors = context.colors;
     final typo = context.typo.inter;
-    final hasExpense = stats.expense.minor > 0;
-    final hasIncome = stats.income.minor > 0;
+    final isRoot = depth == 0;
 
     return UITap(
       onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 14),
+        padding: EdgeInsetsDirectional.only(start: (depth - 1).clamp(0, 8) * _indent, top: 14, bottom: 14),
         child: Row(
           children: [
+            if (!isRoot) ...[
+              _Elbow(color: colors.secondContentColor),
+              const UISpace.horz(8),
+            ],
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 spacing: 3,
                 children: [
-                  Text(
-                    '#${stats.name}',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: typo.rowTitle,
+                  Row(
+                    children: [
+                      Flexible(
+                        child: TagPathText(
+                          path: stats.tag.displayName,
+                          showParents: showPath,
+                          style: isRoot ? typo.rowTitle : typo.listTitle,
+                        ),
+                      ),
+                      if (nestedCount > 0) ...[
+                        const UISpace.horz(6),
+                        TagCountPill(label: l10n.tags_nested_count(nestedCount)),
+                      ],
+                    ],
                   ),
                   Text(
                     l10n.tags_usage(stats.transactionCount),
@@ -173,24 +265,19 @@ class _TagRow extends StatelessWidget {
               ),
             ),
             const UISpace.horz(12),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              spacing: 2,
-              children: [
-                // Spent on the main line; an income-only tag shows the
-                // earned amount there instead of a meaningless "-0.00".
-                if (hasExpense || !hasIncome)
-                  Text(
-                    '-${stats.expense.format()}',
-                    style: typo.rowTitle.copyWith(color: colors.expenseColor),
+            TagAmounts(stats: stats, compact: !isRoot),
+            if (onToggle != null)
+              UITap(
+                onTap: onToggle,
+                child: Padding(
+                  padding: const EdgeInsetsDirectional.fromSTEB(10, 10, 0, 10),
+                  child: AnimatedRotation(
+                    turns: collapsed ? -0.25 : 0,
+                    duration: const Duration(milliseconds: 180),
+                    child: UIIcon(UIIconToken.icons.arrows.chevronDown, size: 18, color: colors.secondContentColor),
                   ),
-                if (hasIncome)
-                  Text(
-                    '+${stats.income.format()}',
-                    style: (hasExpense ? typo.captionBold : typo.rowTitle).copyWith(color: UIColorToken.blue),
-                  ),
-              ],
-            ),
+                ),
+              ),
           ],
         ),
       ),
@@ -198,13 +285,53 @@ class _TagRow extends StatelessWidget {
   }
 }
 
+/// `└` connector in front of a nested tag.
+class _Elbow extends StatelessWidget {
+  const _Elbow({required this.color});
+
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 12,
+      height: 24,
+      child: CustomPaint(painter: _ElbowPainter(color.withValues(alpha: 0.7))),
+    );
+  }
+}
+
+class _ElbowPainter extends CustomPainter {
+  _ElbowPainter(this.color);
+
+  final Color color;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.6
+      ..strokeCap = StrokeCap.round;
+    final path = Path()
+      ..moveTo(1, 0)
+      ..lineTo(1, size.height / 2 - 4)
+      ..quadraticBezierTo(1, size.height / 2, 5, size.height / 2)
+      ..lineTo(size.width, size.height / 2);
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(_ElbowPainter old) => old.color != color;
+}
+
 // ---------------------------------------------------------------------- map
 
 class _TagMap extends StatelessWidget {
-  const _TagMap({required this.graph, required this.onTap});
+  const _TagMap({required this.graph, required this.onOpen});
 
   final AsyncValue<TagGraphData> graph;
-  final ValueChanged<TagStats> onTap;
+  final ValueChanged<TagStats> onOpen;
 
   @override
   Widget build(BuildContext context) {
@@ -223,23 +350,6 @@ class _TagMap extends StatelessWidget {
         subtitle: l10n.tags_graph_empty,
       );
     }
-
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(kListHorzPadding, 4, kListHorzPadding, 8),
-          child: Text(
-            l10n.tags_graph_hint,
-            textAlign: TextAlign.center,
-            style: context.typo.inter.caption,
-          ),
-        ),
-        Expanded(
-          child: ClipRect(
-            child: TagGraphView(data: data, onNodeTap: onTap),
-          ),
-        ),
-      ],
-    );
+    return TagGraphView(data: data, onOpen: onOpen);
   }
 }

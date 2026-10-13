@@ -30,9 +30,11 @@ export 'src/components/buttons/ui_primary_button.dart';
 export 'src/components/buttons/ui_text_button.dart';
 export 'src/components/buttons/ui_chip.dart';
 export 'src/components/badges/ui_circle_color_badge.dart';
+export 'src/components/badges/ui_tag_chips.dart';
 export 'src/components/backgrounds/ui_ambient_background.dart';
 export 'src/components/amounts/ui_amount_text.dart';
 export 'src/components/feedback/ui_toast.dart';
+export 'src/components/feedback/ui_form_hint.dart';
 export 'src/components/cards/ui_wallet_card.dart';
 export 'src/components/cards/ui_transaction_card.dart';
 export 'src/components/menus/ui_wallet_info_menu.dart';
@@ -47,6 +49,11 @@ export 'src/components/states/ui_empty_state.dart';
 export 'src/components/states/ui_skeleton_list.dart';
 export 'src/components/ui_progress_dots.dart';
 export 'src/components/ui_progress_line.dart';
+export 'src/components/ui_segmented_toggle.dart';
+export 'src/components/budget/ui_budget_bar.dart';
+export 'src/components/budget/ui_budget_ring.dart';
+export 'src/components/budget/ui_budget_row.dart';
+export 'src/components/budget/ui_debt_row.dart';
 export 'src/components/animations/ui_animations.dart';
 
 //--------------------- TOKENS ---------------------

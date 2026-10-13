@@ -62,6 +62,15 @@ class SubscriptionsNotifier extends AsyncNotifier<List<RecurringRuleModel>> {
   }
 }
 
+/// Tag names per rule (`ruleId → names`) for the subscription rows' chips.
+/// Follows [subscriptionsProvider], so it refreshes after every write.
+final subscriptionTagsProvider = FutureProvider.autoDispose<Map<String, List<String>>>((ref) async {
+  final rules = ref.watch(subscriptionsProvider.select((s) => s.value));
+  if (rules == null || rules.isEmpty) return const {};
+  final result = await ref.read(transactionRepositoryProvider).tagsOfRules(rules.map((r) => r.id).toList());
+  return result.tryGetSuccess() ?? const {};
+});
+
 /// Active, non-deleted rules — the dashboard "N subscriptions" pill.
 final activeSubscriptionCountProvider = Provider.autoDispose<int>((ref) {
   final rules = ref.watch(subscriptionsProvider).value ?? const <RecurringRuleModel>[];

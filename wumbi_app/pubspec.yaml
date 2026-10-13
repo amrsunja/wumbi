@@ -60,6 +60,7 @@ dependencies:
   currency_converter: ^3.0.0
   uuid: ^4.6.0
   sqflite_common_ffi: ^2.4.2+1
+  share_plus: ^13.3.1
 
 
 dev_dependencies:

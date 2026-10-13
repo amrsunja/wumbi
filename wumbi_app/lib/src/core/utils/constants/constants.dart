@@ -22,9 +22,23 @@ const double kNumpadHorzPadding = 28;
 const int kMaxIntegerDigits = 12;
 const int kMaxDescriptionLength = 80;
 const int kMaxTagsPerTransaction = 10;
-const int kMaxTagLength = 30;
+/// Whole path for nested tags (`home/utilities/electricity`).
+const int kMaxTagLength = 48;
 const int kMaxWalletNameLength = 40;
 const int kTransactionsPageSize = 50;
+
+/// Budgets & debts limits (spec B&D §4.1, §6.6).
+const int kMaxBudgetNameLength = 40;
+const int kMaxBudgetTags = 10;
+const int kMaxPersonNameLength = 40;
+const int kMaxDebtDescriptionLength = 80;
+
+/// Rollover looks back at most this many periods (older carry is ignored).
+const int kBudgetRolloverLookback = 12;
+
+/// Budget "planned" projection cap per subscription rule (a daily rule in a
+/// yearly budget), mirroring `RecurringEngine.maxPerRule`.
+const int kMaxPlannedOccurrencesPerRule = 400;
 
 /// Hero tags shared between pages.
 const String kHeroFab = 'hero-fab-transaction';

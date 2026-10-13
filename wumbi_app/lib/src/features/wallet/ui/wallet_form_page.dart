@@ -44,12 +44,15 @@ class WalletFormPage extends ConsumerWidget {
         destructive: true,
       );
       if (!ok) return;
-      final paused = await notifier.delete();
-      if (paused == null || !context.mounted) return;
+      final outcome = await notifier.delete();
+      if (outcome == null || !context.mounted) return;
       AppVibrations.heavy();
-      ref.read(appEventProvider).send(
-            ShowInfoMessageEvent(paused > 0 ? l10n.wallet_deleted_paused_rules(paused) : l10n.wallet_deleted),
-          );
+      final paused = outcome.pausedRules;
+      var message = paused > 0 ? l10n.wallet_deleted_paused_rules(paused) : l10n.wallet_deleted;
+      if (outcome.removedBudgets > 0) {
+        message = '$message · ${l10n.wallet_deleted_removed_budgets(outcome.removedBudgets)}';
+      }
+      ref.read(appEventProvider).send(ShowInfoMessageEvent(message));
       // Pop twice (form + details) back to the Dashboard.
       context.router.popUntilRouteWithName(DashboardRoute.name);
     }

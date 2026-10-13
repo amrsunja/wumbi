@@ -4,7 +4,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 
 /// Mascot peeking in from the right edge; slides in 400 ms (easeOutBack) once.
 class UIWumbiLooksFromRight extends StatelessWidget {
-  const UIWumbiLooksFromRight({super.key, this.height = 64, this.animate = true});
+  const UIWumbiLooksFromRight({super.key, this.height = 45, this.animate = true});
 
   final double height;
   final bool animate;

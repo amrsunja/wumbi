@@ -57,6 +57,7 @@ class _DatePickerBodyState extends State<_DatePickerBody> {
             spacing: 12,
             children: [
               Expanded(
+                flex: 2,
                 child: UiTextButton(
                   label: l10n.common_today,
                   style: UiTextButtonStyle.secondary,
@@ -65,7 +66,7 @@ class _DatePickerBodyState extends State<_DatePickerBody> {
                 ),
               ),
               Expanded(
-                flex: 2,
+                flex: 3,
                 child: UiPrimaryButton(
                   label: l10n.common_confirm,
                   onTap: () => Navigator.of(context).pop(_selected),

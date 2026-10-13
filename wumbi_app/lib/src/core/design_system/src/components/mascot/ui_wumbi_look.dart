@@ -5,7 +5,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 /// Front-facing mascot illustration. Used as a page decoration (wallet
 /// details, top-right); drops in 400 ms (easeOutBack) once.
 class UIWumbiLook extends StatelessWidget {
-  const UIWumbiLook({super.key, this.height = 64, this.animate = true});
+  const UIWumbiLook({super.key, this.height = 45, this.animate = true});
 
   final double height;
   final bool animate;

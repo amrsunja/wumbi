@@ -222,6 +222,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get wallet_has_transactions => 'Has transactions';
 
   @override
+  String get wallet_tab_transactions => 'Transactions';
+
+  @override
+  String get wallet_tab_budgets => 'Budgets';
+
+  @override
+  String get wallet_tab_subscriptions => 'Subscriptions';
+
+  @override
+  String get wallet_budgets_empty => 'No spending limits for this wallet yet';
+
+  @override
   String get wallet_pick_another_primary => 'Pick another wallet as primary';
 
   @override
@@ -702,6 +714,233 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tag_wallet_deleted => '(deleted)';
 
   @override
+  String get tags_new => 'New tag';
+
+  @override
+  String get tags_create => 'Create tag';
+
+  @override
+  String tags_created(String name) {
+    return '#$name created';
+  }
+
+  @override
+  String tags_exists(String name) {
+    return '#$name already exists';
+  }
+
+  @override
+  String get tags_parent => 'Parent tag';
+
+  @override
+  String get tags_parent_none => 'No parent';
+
+  @override
+  String get tags_name_hint => 'e.g. coffee';
+
+  @override
+  String get tags_create_tip =>
+      'Tip: type food/coffee to nest a tag in one go.';
+
+  @override
+  String tags_nested_count(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count nested',
+      one: '1 nested',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get tags_help => 'How to use tags?';
+
+  @override
+  String get tags_graph_mode_all => 'All';
+
+  @override
+  String get tags_graph_mode_spending => 'Spending';
+
+  @override
+  String get tags_graph_mode_income => 'Income';
+
+  @override
+  String get tags_graph_legend_size => 'Bigger = more money';
+
+  @override
+  String get tags_graph_legend_nested => 'Nested';
+
+  @override
+  String get tags_graph_legend_together => 'Used together';
+
+  @override
+  String get tags_graph_tap_hint => 'Tap a circle to see its numbers';
+
+  @override
+  String get tags_graph_open => 'Open';
+
+  @override
+  String tags_graph_linked(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Linked to $count tags',
+      one: 'Linked to 1 tag',
+      zero: 'No links yet',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get tag_move => 'Move';
+
+  @override
+  String tag_move_title(String name) {
+    return 'Move #$name';
+  }
+
+  @override
+  String get tag_moved => 'Tag moved';
+
+  @override
+  String get tag_add_nested => 'Add nested tag';
+
+  @override
+  String get tag_nested_tags => 'Nested tags';
+
+  @override
+  String tag_includes_nested(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Includes $count nested tags',
+      one: 'Includes 1 nested tag',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String tag_delete_nested_message(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'It and its $count nested tags will be removed from every transaction. The transactions themselves stay.',
+      one:
+          'It and its nested tag will be removed from every transaction. The transactions themselves stay.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get tag_rename_nested_hint =>
+      'Nested tags are renamed too. Use / to move it under another tag.';
+
+  @override
+  String get tag_top_level => 'Top level';
+
+  @override
+  String get tag_nested_empty => 'No nested tags yet';
+
+  @override
+  String get settings_help => 'Need help?';
+
+  @override
+  String get help_title => 'Need help?';
+
+  @override
+  String get help_subtitle => 'Short guides to get the most out of Wumbi.';
+
+  @override
+  String get help_tags_title => 'How to use tags?';
+
+  @override
+  String get help_tags_subtitle => 'Labels, nested tags and the map';
+
+  @override
+  String get help_tags_intro =>
+      'Tags are short labels like #coffee that you add to transactions. A transaction can carry several tags, so you can look at your money from any angle — not only by wallet.';
+
+  @override
+  String get help_tags_add_title => 'Add a tag';
+
+  @override
+  String get help_tags_add_body =>
+      'When you enter a transaction, type a name in the tags field, then pick a suggestion or create a new one. Tags have no spaces — write coffee-shop or coffee_shop. Upper and lower case give the same tag.';
+
+  @override
+  String get help_tags_nested_title => 'Nested tags';
+
+  @override
+  String get help_tags_nested_body =>
+      'Use a slash / to put a tag inside another one, like folders: food/coffee and food/groceries both live inside food. The parent tag is created for you.';
+
+  @override
+  String get help_tags_parent_title => 'A parent includes its nested tags';
+
+  @override
+  String get help_tags_parent_body =>
+      'Opening #food shows every transaction tagged #food, #food/coffee or #food/groceries. Totals, filters and budgets on a parent count its nested tags too. A transaction with both tags is counted only once.';
+
+  @override
+  String get help_tags_multi_title => 'Several tags on one transaction';
+
+  @override
+  String get help_tags_multi_body =>
+      'A dinner on holiday can be #travel and #food/restaurant at the same time. It then counts in both, and the two tags get linked on the map.';
+
+  @override
+  String get help_tags_manage_title => 'Create, rename, move';
+
+  @override
+  String get help_tags_manage_body =>
+      'On the Tags page, tap + to create a tag and pick a parent to nest it. Open a tag to rename it, move it under another parent, add a nested tag or delete it. Renaming a parent renames its nested tags; renaming into an existing tag merges the two.';
+
+  @override
+  String get help_tags_map_title => 'Read the map';
+
+  @override
+  String get help_tags_map_body =>
+      'Every circle is a tag: the bigger it is, the more money it moved. Its ring shows the share of spending and income. Solid lines join a parent to its nested tags, faint lines join tags used on the same transaction. Tap a circle to see its numbers.';
+
+  @override
+  String get help_tags_tips_title => 'Tips';
+
+  @override
+  String get help_tags_tip1 =>
+      'Start broad — food, home, transport — and nest only when you want more detail.';
+
+  @override
+  String get help_tags_tip2 =>
+      'Use tags for what cuts across wallets: #vacation, #gifts, #car.';
+
+  @override
+  String get help_tags_tip3 =>
+      'Keep names short; two or three levels are plenty.';
+
+  @override
+  String get help_tags_example => 'Example';
+
+  @override
+  String get help_tags_example_total => 'Total for #food';
+
+  @override
+  String get help_tags_ex_parent => 'food';
+
+  @override
+  String get help_tags_ex_child1 => 'coffee';
+
+  @override
+  String get help_tags_ex_child2 => 'groceries';
+
+  @override
+  String get help_tags_ex_travel => 'travel';
+
+  @override
+  String get help_tags_ex_restaurant => 'restaurant';
+
+  @override
   String get l10nSubscriptions =>
       '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ SUBSCRIPTIONS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
 
@@ -1014,6 +1253,23 @@ class AppLocalizationsEn extends AppLocalizations {
   String get error_not_found => 'This item no longer exists.';
 
   @override
+  String debt_error_owes_you_only(String name, String amount) {
+    return '$name owes you only $amount';
+  }
+
+  @override
+  String debt_error_you_owe_only(String name, String amount) {
+    return 'You owe $name only $amount';
+  }
+
+  @override
+  String get person_error_has_debts =>
+      'Settle or delete this person\'s debts first.';
+
+  @override
+  String get debt_error_closed => 'This debt is already settled.';
+
+  @override
   String get error_tag_name => 'Enter a tag name (up to 30 characters).';
 
   @override
@@ -1025,6 +1281,854 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get error_reset_app => 'Reset app';
+
+  @override
+  String get dashboard_budgets => 'Budgets';
+
+  @override
+  String get budget_new => 'New Budget';
+
+  @override
+  String get budget_empty_hint => 'Set a spending limit for a wallet or a #tag';
+
+  @override
+  String get budgets_all => 'All budgets';
+
+  @override
+  String get budgets_title => 'Budgets';
+
+  @override
+  String budget_left(String amount) {
+    return '$amount left';
+  }
+
+  @override
+  String budget_over(String amount) {
+    return '$amount over';
+  }
+
+  @override
+  String budget_starts(String date) {
+    return 'Starts $date';
+  }
+
+  @override
+  String get budget_ended => 'Ended';
+
+  @override
+  String budget_per_day(String amount) {
+    return '$amount/day';
+  }
+
+  @override
+  String budget_spent_of(String spent, String limit) {
+    return 'Spent $spent of $limit';
+  }
+
+  @override
+  String get budget_this_week => 'This week';
+
+  @override
+  String get budget_set_limit => 'Set a spending limit';
+
+  @override
+  String budget_toast_suffix(String name, String amount) {
+    return '$name: $amount left';
+  }
+
+  @override
+  String budget_toast_suffix_over(String name, String amount) {
+    return '$name: $amount over';
+  }
+
+  @override
+  String get budget_all_spending => 'All spending';
+
+  @override
+  String get budget_name => 'Name';
+
+  @override
+  String get budget_name_placeholder => 'name';
+
+  @override
+  String get budget_what_counts => 'What counts';
+
+  @override
+  String get budget_wallets => 'Wallets';
+
+  @override
+  String get budget_all_wallets => 'All wallets';
+
+  @override
+  String get budget_tags => 'Tags';
+
+  @override
+  String get budget_any_tag => 'Any tag';
+
+  @override
+  String get budget_scope_all => 'Counts every expense.';
+
+  @override
+  String budget_scope_wallets(String wallets) {
+    return 'Counts expenses from $wallets.';
+  }
+
+  @override
+  String budget_scope_tags(String tags) {
+    return 'Counts expenses tagged $tags.';
+  }
+
+  @override
+  String budget_scope_both(String wallets, String tags) {
+    return 'Counts expenses from $wallets tagged $tags.';
+  }
+
+  @override
+  String get budget_scope_or => 'or';
+
+  @override
+  String get budget_period_section => 'Period';
+
+  @override
+  String get budget_repeats => 'Repeats';
+
+  @override
+  String get budget_period_weekly => 'Weekly';
+
+  @override
+  String get budget_period_monthly => 'Monthly';
+
+  @override
+  String get budget_period_yearly => 'Yearly';
+
+  @override
+  String get budget_period_custom => 'One-time';
+
+  @override
+  String get budget_starts_on => 'Starts on';
+
+  @override
+  String get budget_first_day => 'First day';
+
+  @override
+  String get budget_last_day => 'Last day';
+
+  @override
+  String budget_day_of_month(int day) {
+    return 'Day $day';
+  }
+
+  @override
+  String get budget_start_day_title => 'Start day';
+
+  @override
+  String get budget_start_day_hint => 'Short months start on their last day.';
+
+  @override
+  String get budget_start_weekday_title => 'First day of the week';
+
+  @override
+  String get budget_carry_over => 'Carry over';
+
+  @override
+  String get budget_rollover_none => 'Don\'t carry over';
+
+  @override
+  String get budget_rollover_surplus => 'Carry what\'s left';
+
+  @override
+  String get budget_rollover_both => 'Carry what\'s left and overspending';
+
+  @override
+  String get budget_count_planned => 'Count planned';
+
+  @override
+  String get budget_count_planned_hint => 'Include upcoming and subscriptions';
+
+  @override
+  String get budget_count_planned_desc =>
+      'Upcoming payments and subscriptions count against the limit before they\'re paid.';
+
+  @override
+  String budget_suggested_months(String amount) {
+    return 'Suggested: $amount · avg. of last 3 months';
+  }
+
+  @override
+  String budget_suggested_weeks(String amount) {
+    return 'Suggested: $amount · avg. of last 3 weeks';
+  }
+
+  @override
+  String budget_suggested_years(String amount) {
+    return 'Suggested: $amount · avg. of last 3 years';
+  }
+
+  @override
+  String get budget_deleted => 'Budget deleted';
+
+  @override
+  String budget_delete_title(String name) {
+    return 'Delete $name?';
+  }
+
+  @override
+  String get budget_delete_message => 'Your transactions stay as they are.';
+
+  @override
+  String get budget_error_name => 'Name up to 40 characters';
+
+  @override
+  String get budget_error_dates => 'The last day must come after the first';
+
+  @override
+  String get budget_left_caption => 'left';
+
+  @override
+  String get budget_over_caption => 'over';
+
+  @override
+  String get budget_under_caption => 'under';
+
+  @override
+  String budget_spent(String amount) {
+    return 'Spent $amount';
+  }
+
+  @override
+  String budget_planned(String amount) {
+    return 'Planned $amount';
+  }
+
+  @override
+  String budget_limit(String amount) {
+    return 'Limit $amount';
+  }
+
+  @override
+  String budget_carried(String amount) {
+    return '$amount carried';
+  }
+
+  @override
+  String get budget_on_track => 'On track';
+
+  @override
+  String budget_ahead_of_pace(String amount) {
+    return '$amount ahead of pace';
+  }
+
+  @override
+  String budget_faster_than_planned(String amount) {
+    return '$amount faster than planned';
+  }
+
+  @override
+  String budget_forecast(String amount) {
+    return 'forecast $amount';
+  }
+
+  @override
+  String get budget_no_spending => 'No spending yet this period';
+
+  @override
+  String get budgets_active => 'Active';
+
+  @override
+  String get budgets_upcoming => 'Upcoming';
+
+  @override
+  String get budgets_empty_title => 'No budgets yet';
+
+  @override
+  String get budgets_empty_subtitle => 'Set a limit and watch what\'s left';
+
+  @override
+  String budgets_more_count(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '+$count more budgets',
+      one: '+1 more budget',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String budget_per_day_for(String amount, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count days',
+      one: '1 day',
+    );
+    return '$amount/day for $_temp0';
+  }
+
+  @override
+  String budget_subscriptions_planned(int count, String amount) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count subscriptions',
+      one: '1 subscription',
+    );
+    return '$_temp0 · $amount';
+  }
+
+  @override
+  String budgets_finished(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Finished ($count)',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String wallet_deleted_removed_budgets(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count budgets removed',
+      one: '1 budget removed',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get debts_title => 'Debts';
+
+  @override
+  String get debts_owed_to_me => 'Owed to me';
+
+  @override
+  String get debts_i_owe => 'I owe';
+
+  @override
+  String get debts_empty_owed_title => 'Nobody owes you';
+
+  @override
+  String get debts_empty_owe_title => 'You owe nobody';
+
+  @override
+  String get debts_empty_subtitle =>
+      'Pick a person on the transaction screen when you lend money';
+
+  @override
+  String get debt_new => 'New debt';
+
+  @override
+  String get debts_all => 'All debts';
+
+  @override
+  String get debts_empty_hint => 'Keep track of money you lent or borrowed';
+
+  @override
+  String get dashboard_reorder_hint => 'Hold to reorder';
+
+  @override
+  String dashboard_budgets_over(int count) {
+    return '$count over limit';
+  }
+
+  @override
+  String dashboard_budgets_at_risk(int count) {
+    return '$count at risk';
+  }
+
+  @override
+  String get dashboard_budgets_on_track => 'All on track';
+
+  @override
+  String dashboard_debts_to_receive(String amount) {
+    return '$amount to receive';
+  }
+
+  @override
+  String dashboard_debts_to_pay(String amount) {
+    return '$amount to pay back';
+  }
+
+  @override
+  String get dashboard_new => 'New';
+
+  @override
+  String get debt_they_owe_me => 'They owe me';
+
+  @override
+  String get debt_i_owe_them => 'I owe them';
+
+  @override
+  String get debt_person => 'Person';
+
+  @override
+  String get debt_person_chip => 'Person';
+
+  @override
+  String get debt_person_title => 'Person';
+
+  @override
+  String get debt_person_search => 'Name';
+
+  @override
+  String get debt_person_empty => 'No people yet — type a name';
+
+  @override
+  String get debt_person_none => 'No person';
+
+  @override
+  String get debt_choose => 'Choose';
+
+  @override
+  String get debt_amount => 'Amount';
+
+  @override
+  String get debt_note_hint => 'Note (optional)';
+
+  @override
+  String get debt_note_placeholder => 'note';
+
+  @override
+  String get debt_due_date => 'Due date';
+
+  @override
+  String get debt_due_title => 'Due date';
+
+  @override
+  String get debt_add_due => 'Due date';
+
+  @override
+  String get debt_due_change => 'Change date';
+
+  @override
+  String get debt_due_remove => 'Remove due date';
+
+  @override
+  String get debt_none => 'None';
+
+  @override
+  String get debt_money_moved => 'Money moved';
+
+  @override
+  String get debt_not_in_wallet => 'Not in a wallet';
+
+  @override
+  String get debt_error_person => 'Choose a person';
+
+  @override
+  String get debt_gave => 'Gave';
+
+  @override
+  String get debt_got => 'Got';
+
+  @override
+  String get debt_badge_loan => 'Loan';
+
+  @override
+  String get debt_badge_return => 'Return';
+
+  @override
+  String get debt_overdue => 'overdue';
+
+  @override
+  String get debt_settled_label => 'Settled';
+
+  @override
+  String get debt_forgiven_label => 'Forgiven';
+
+  @override
+  String get debt_returned_in_full => 'Returned in full';
+
+  @override
+  String get debt_paid_in_full => 'Paid in full';
+
+  @override
+  String get debt_part => 'Part';
+
+  @override
+  String get debt_forgive => 'Forgive';
+
+  @override
+  String get debt_remind => 'Remind';
+
+  @override
+  String get debt_history => 'History';
+
+  @override
+  String get debt_edit_note => 'Edit note';
+
+  @override
+  String get debt_rename_person => 'Rename person';
+
+  @override
+  String get debt_delete => 'Delete debt';
+
+  @override
+  String get debt_delete_title => 'Delete this debt?';
+
+  @override
+  String get debt_deleted => 'Debt deleted';
+
+  @override
+  String get debt_payment_deleted => 'Payment deleted';
+
+  @override
+  String get debt_return_deleted => 'Return deleted';
+
+  @override
+  String debt_due(String date) {
+    return 'due $date';
+  }
+
+  @override
+  String debt_left(String amount) {
+    return '$amount left';
+  }
+
+  @override
+  String debt_left_of(String amount) {
+    return 'left of $amount';
+  }
+
+  @override
+  String debt_of(String amount) {
+    return 'of $amount';
+  }
+
+  @override
+  String debt_to_wallet(String wallet) {
+    return 'to $wallet';
+  }
+
+  @override
+  String debt_from_wallet(String wallet) {
+    return 'from $wallet';
+  }
+
+  @override
+  String debt_owes_you(String name, String amount) {
+    return '$name owes you $amount';
+  }
+
+  @override
+  String debt_you_owe(String name, String amount) {
+    return 'You owe $name $amount';
+  }
+
+  @override
+  String debt_overall(String text) {
+    return 'Overall: $text';
+  }
+
+  @override
+  String debt_overall_both(String name, String owed, String owe) {
+    return 'Overall: $name owes you $owed · you owe $owe';
+  }
+
+  @override
+  String debt_hint_owes_you(String name, String amount) {
+    return '$name owes you $amount · GOT counts as a return';
+  }
+
+  @override
+  String debt_hint_you_owe(String name, String amount) {
+    return 'You owe $name $amount · GAVE counts as paying back';
+  }
+
+  @override
+  String debt_hint_both(String name, String owed, String owe) {
+    return '$name owes you $owed · you owe $owe';
+  }
+
+  @override
+  String debt_hint_none(String name) {
+    return 'No open debts with $name · GAVE lends, GOT borrows';
+  }
+
+  @override
+  String debt_person_add(String name) {
+    return 'Add “$name”';
+  }
+
+  @override
+  String debt_picker_owes_you(String amount) {
+    return 'owes you $amount';
+  }
+
+  @override
+  String debt_picker_you_owe(String amount) {
+    return 'you owe $amount';
+  }
+
+  @override
+  String debt_title_lent_to(String name) {
+    return 'Lent to $name';
+  }
+
+  @override
+  String debt_title_borrowed_from(String name) {
+    return 'Borrowed from $name';
+  }
+
+  @override
+  String debt_title_paid_back_by(String name) {
+    return '$name paid back';
+  }
+
+  @override
+  String debt_title_paid_back_to(String name) {
+    return 'Paid back $name';
+  }
+
+  @override
+  String debt_toast_lent(String amount, String name) {
+    return 'Lent $amount to $name';
+  }
+
+  @override
+  String debt_toast_borrowed(String amount, String name) {
+    return 'Borrowed $amount from $name';
+  }
+
+  @override
+  String debt_toast_returned(String name, String amount, String left) {
+    return '$name returned $amount · $left left';
+  }
+
+  @override
+  String debt_toast_returned_settled(String name, String amount) {
+    return '$name returned $amount · all settled';
+  }
+
+  @override
+  String debt_toast_paid_back(String amount, String name, String left) {
+    return 'Paid back $amount to $name · $left left';
+  }
+
+  @override
+  String debt_toast_paid_back_settled(String amount, String name) {
+    return 'Paid back $amount to $name · all settled';
+  }
+
+  @override
+  String debt_forgive_title(String name) {
+    return 'Forgive $name?';
+  }
+
+  @override
+  String debt_forgive_message(String amount) {
+    return 'The remaining $amount will be written off. No money moves.';
+  }
+
+  @override
+  String debt_forgiven_toast(String name) {
+    return 'Debt forgiven · $name';
+  }
+
+  @override
+  String debt_remind_message(
+    String name,
+    String amount,
+    String note,
+    String date,
+  ) {
+    return 'Hi $name! Just a reminder about $amount for $note ($date). Thanks!';
+  }
+
+  @override
+  String debt_remind_message_no_note(String name, String amount, String date) {
+    return 'Hi $name! Just a reminder about $amount ($date). Thanks!';
+  }
+
+  @override
+  String debt_history_lent(String amount) {
+    return 'Lent $amount';
+  }
+
+  @override
+  String debt_history_lent_from(String amount, String wallet) {
+    return 'Lent $amount from $wallet';
+  }
+
+  @override
+  String debt_history_borrowed(String amount) {
+    return 'Borrowed $amount';
+  }
+
+  @override
+  String debt_history_borrowed_into(String amount, String wallet) {
+    return 'Borrowed $amount into $wallet';
+  }
+
+  @override
+  String debt_history_returned(String amount) {
+    return 'Returned $amount';
+  }
+
+  @override
+  String debt_history_returned_to(String amount, String wallet) {
+    return 'Returned $amount → $wallet';
+  }
+
+  @override
+  String debt_history_paid(String amount) {
+    return 'Paid back $amount';
+  }
+
+  @override
+  String debt_history_paid_from(String amount, String wallet) {
+    return 'Paid back $amount from $wallet';
+  }
+
+  @override
+  String debt_history_forgiven(String amount) {
+    return 'Forgave $amount';
+  }
+
+  @override
+  String debts_overdue_count(int count) {
+    return '$count overdue';
+  }
+
+  @override
+  String debts_count(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count debts',
+      one: '1 debt',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String debts_people_count(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count people',
+      one: '1 person',
+      zero: 'No one',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String debts_settled(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Settled ($count)',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String debt_cascade_deleted(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Loan deleted with $count returns',
+      one: 'Loan deleted with 1 return',
+      zero: 'Loan deleted',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String debt_delete_message(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count wallet transactions will be deleted too.',
+      one: '1 wallet transaction will be deleted too.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get subscriptions_new => 'New Subscription';
+
+  @override
+  String subscriptions_active_count(int count) {
+    return '$count active';
+  }
+
+  @override
+  String subscriptions_paused_count(int count) {
+    return '$count paused';
+  }
+
+  @override
+  String get wallet_budgets_empty_subtitle =>
+      'Set a spending limit to keep this wallet in check.';
+
+  @override
+  String get wallet_include_in_total => 'Count in total balance';
+
+  @override
+  String get wallet_include_in_total_on =>
+      'This wallet\'s balance is added to the total on the Dashboard.';
+
+  @override
+  String get wallet_include_in_total_off =>
+      'Left out of the Dashboard total — handy for savings, shared or tracking-only wallets.';
+
+  @override
+  String dashboard_wallets_excluded(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count not counted',
+      one: '1 not counted',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get budget_rollover_none_desc =>
+      'Every period starts fresh with the same limit. Leftovers and overspending don\'t move on.';
+
+  @override
+  String get budget_rollover_surplus_desc =>
+      'What you didn\'t spend is added to the next period\'s limit.';
+
+  @override
+  String get budget_rollover_both_desc =>
+      'Leftovers raise the next period\'s limit, overspending lowers it.';
+
+  @override
+  String budget_used_percent(int percent) {
+    return '$percent% used';
+  }
+
+  @override
+  String get budget_stat_spent => 'Spent';
+
+  @override
+  String get budget_stat_limit => 'Limit';
+
+  @override
+  String get budget_stat_planned => 'Planned';
+
+  @override
+  String get budget_stat_per_day => 'Per day';
+
+  @override
+  String get budget_stat_forecast => 'Forecast';
+
+  @override
+  String budget_days_left(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count days left',
+      one: '1 day left',
+    );
+    return '$_temp0';
+  }
 
   @override
   String get l10nStopLineDontTouch =>

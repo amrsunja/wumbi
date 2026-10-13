@@ -96,8 +96,11 @@ class $AssetsImagesGen {
   const $AssetsImagesGen();
 
   /// File path: assets/images/app_logo.png
-  AssetGenImage get appLogo =>
+  AssetGenImage get appLogoPng =>
       const AssetGenImage('assets/images/app_logo.png');
+
+  /// File path: assets/images/app_logo.svg
+  String get appLogoSvg => 'assets/images/app_logo.svg';
 
   /// File path: assets/images/splash.gif
   AssetGenImage get splash => const AssetGenImage('assets/images/splash.gif');
@@ -127,8 +130,9 @@ class $AssetsImagesGen {
       const AssetGenImage('assets/images/wumbi_take_money.png');
 
   /// List of all assets
-  List<AssetGenImage> get values => [
-    appLogo,
+  List<dynamic> get values => [
+    appLogoPng,
+    appLogoSvg,
     splash,
     wumbiHello,
     wumbiLook,

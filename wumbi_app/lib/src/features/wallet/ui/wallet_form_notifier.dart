@@ -28,6 +28,9 @@ abstract class WalletFormState with _$WalletFormState {
     @Default('') String initialBalanceInput,
     required CurrencyType currency,
     @Default(false) bool isPrimary,
+
+    /// Counted in the Dashboard total.
+    @Default(true) bool includeInTotal,
     @Default(WalletColor.blue) WalletColor color,
 
     /// [A3] currency locked once the wallet has transactions.
@@ -104,6 +107,7 @@ class WalletFormNotifier extends Notifier<WalletFormState> {
           initialBalanceInput: w.initialBalanceMinor == 0 ? '' : w.initialBalance.toPlainString(),
           currency: w.currency,
           isPrimary: w.isPrimary,
+          includeInTotal: w.includeInTotal,
           color: w.color,
           currencyLocked: locked.tryGetSuccess() ?? false,
           isPrimaryLocked: w.isPrimary || wallets.length <= 1,
@@ -140,6 +144,8 @@ class WalletFormNotifier extends Notifier<WalletFormState> {
     return true;
   }
 
+  void setIncludeInTotal(bool value) => state = state.copyWith(includeInTotal: value);
+
   void setColor(WalletColor c) => state = state.copyWith(color: c);
 
   WalletDraft _draft() => WalletDraft(
@@ -148,6 +154,7 @@ class WalletFormNotifier extends Notifier<WalletFormState> {
         initialBalanceMinor: state.initialBalance.minor,
         color: state.color,
         isPrimary: state.isPrimary,
+        includeInTotal: state.includeInTotal,
       );
 
   /// Returns the saved wallet, or null on failure.
@@ -171,16 +178,17 @@ class WalletFormNotifier extends Notifier<WalletFormState> {
     return saved;
   }
 
-  /// Returns the number of paused rules, or null on failure.
-  Future<int?> delete() async {
+  /// Returns what the delete cascaded to (paused rules, removed budgets), or
+  /// null on failure.
+  Future<WalletDeleteOutcome?> delete() async {
     final id = args.walletId;
     if (id == null) return null;
     state = state.copyWith(isSaving: true);
     final result = await _repo.softDelete(id);
     if (!ref.mounted) return null;
-    int? paused;
-    result.when((outcome) => paused = outcome.pausedRules, (error) => _events.send(ShowErrorEvent(error)));
+    WalletDeleteOutcome? outcome;
+    result.when((o) => outcome = o, (error) => _events.send(ShowErrorEvent(error)));
     state = state.copyWith(isSaving: false);
-    return paused;
+    return outcome;
   }
 }

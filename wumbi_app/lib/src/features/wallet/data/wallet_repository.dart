@@ -9,6 +9,7 @@ import '../../../core/utils/constants/constants.dart';
 import '../../../core/utils/extensions/date_time_extensions.dart';
 import '../../../core/utils/id_generator.dart';
 import '../../../core/utils/typedefs.dart';
+import '../../budget/data/budget_local_datasource.dart';
 import 'models/wallet_model.dart';
 import 'wallet_local_datasource.dart';
 
@@ -21,23 +22,30 @@ final walletRepositoryProvider = Provider<WalletRepository>(
 
 /// Result of a wallet soft delete (for the snackbar text).
 class WalletDeleteOutcome {
-  const WalletDeleteOutcome({required this.pausedRules});
+  const WalletDeleteOutcome({required this.pausedRules, this.removedBudgets = 0});
   final int pausedRules;
+
+  /// Budgets scoped only to this wallet, deleted with it (spec B&D §4.4).
+  final int removedBudgets;
 }
 
 /// Invariants (spec 5.10):
 /// - exactly one primary among non-deleted wallets;
 /// - currency locked once the wallet has transactions ([A3]);
-/// - soft delete cascades to income/expense transactions and pauses rules.
+/// - soft delete cascades to income/expense transactions and pauses rules,
+///   removes the wallet from budget scopes and deletes budgets left with no
+///   wallet. Debts are untouched: an obligation does not vanish with a wallet.
 class WalletRepository {
   WalletRepository({
     required this.sqlite,
     required this.onWrite,
     this.datasource = const WalletLocalDatasource(),
+    this.budgets = const BudgetLocalDatasource(),
   });
 
   final SQLiteServices sqlite;
   final WalletLocalDatasource datasource;
+  final BudgetLocalDatasource budgets;
 
   /// Bumps `dbRevisionProvider`.
   final void Function() onWrite;
@@ -79,6 +87,7 @@ class WalletRepository {
             initialBalanceMinor: draft.initialBalanceMinor,
             color: draft.color,
             isPrimary: isPrimary,
+            includeInTotal: draft.includeInTotal,
             sortOrder: await datasource.nextSortOrder(txn),
             createdAt: now,
             updatedAt: now,
@@ -112,6 +121,7 @@ class WalletRepository {
             initialBalanceMinor: draft.initialBalanceMinor,
             color: draft.color,
             isPrimary: isPrimary,
+            includeInTotal: draft.includeInTotal,
             updatedAt: now,
           );
           await datasource.update(txn, updated);
@@ -151,12 +161,16 @@ class WalletRepository {
       Failure.exceptionsCatcher(() async {
         final now = nowMs();
         var paused = 0;
+        var removedBudgets = 0;
         await sqlite.db.transaction((txn) async {
           paused = await datasource.softDelete(txn, id, now);
           await datasource.promotePrimaryIfNeeded(txn, now);
+          // A budget must never silently widen to "all wallets".
+          final scoped = await budgets.unlinkWallet(txn, id);
+          removedBudgets = await budgets.softDeleteWithoutWallets(txn, scoped, now);
         });
         onWrite();
-        return WalletDeleteOutcome(pausedRules: paused);
+        return WalletDeleteOutcome(pausedRules: paused, removedBudgets: removedBudgets);
       });
 
   void _validate(WalletDraft draft) {

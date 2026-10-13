@@ -190,30 +190,53 @@ class _UIDialog extends StatelessWidget {
               ),
             ],
             const UISpace.vert(20),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                for (final a in actions)
-                  UITap(
-                    onTap: a.onTap,
-                    child: Container(
-                      alignment: Alignment.center,
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      child: Text(
-                        a.label,
-                        style: typo.rowTitle.copyWith(
-                          color: a.destructive
-                              ? UIColorToken.neg500
-                              : a.primary
-                                  ? UIColorToken.blue
-                                  : colors.secondContentColor,
-                        ),
-                      ),
-                    ),
-                  ),
-              ],
-            ),
+            // Two actions (cancel / confirm) sit side by side, each taking
+            // half the width; three or more stack so long labels never wrap.
+            if (actions.length <= 2)
+              Row(
+                spacing: 8,
+                children: [
+                  for (final a in actions) Expanded(child: _UIDialogButton(action: a)),
+                ],
+              )
+            else
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  for (final a in actions) _UIDialogButton(action: a),
+                ],
+              ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _UIDialogButton extends StatelessWidget {
+  const _UIDialogButton({required this.action});
+
+  final UIDialogAction action;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = AppTheme.of(context);
+    final a = action;
+    final color = a.destructive
+        ? UIColorToken.neg500
+        : a.primary
+            ? UIColorToken.blue
+            : theme.colors.secondContentColor;
+    return UITap(
+      onTap: a.onTap,
+      child: Container(
+        alignment: Alignment.center,
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+        child: Text(
+          a.label,
+          maxLines: 2,
+          textAlign: TextAlign.center,
+          style: theme.typo.inter.rowTitle.copyWith(color: color),
         ),
       ),
     );

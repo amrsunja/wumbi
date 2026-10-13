@@ -1,8 +1,11 @@
 import 'package:sqflite_sqlcipher/sqflite.dart';
 
 import '../../../core/local/database/sqlite/sqlite_config.dart';
+import '../../../core/utils/enums/debt_role.dart';
 import '../../../core/utils/enums/transaction_status.dart';
+import '../../../core/utils/enums/transaction_type.dart';
 import '../../../core/utils/extensions/date_time_extensions.dart';
+import '../../tag/data/tag_sql.dart';
 import 'models/transaction_filter.dart';
 import 'models/transaction_model.dart';
 
@@ -45,6 +48,41 @@ class TransactionLocalDatasource {
   Future<void> restore(DatabaseExecutor db, String id, int now) => db.update(
         _t,
         {SQLiteConfig.deletedAt: null, SQLiteConfig.updatedAt: now},
+        where: '${SQLiteConfig.id} = ?',
+        whereArgs: [id],
+      );
+
+  /// Cascade delete (debts): stamps [now] on the rows of [ids] that are still
+  /// live. Rows already deleted (e.g. with their wallet) keep their own
+  /// `deleted_at`, so an undo of this cascade never resurrects them. Returns
+  /// the number of rows deleted.
+  Future<int> softDeleteMany(DatabaseExecutor db, Iterable<String> ids, int now) async {
+    final list = ids.toSet().toList();
+    if (list.isEmpty) return 0;
+    final ph = List.filled(list.length, '?').join(',');
+    return db.rawUpdate(
+      'UPDATE $_t SET ${SQLiteConfig.deletedAt} = ?, ${SQLiteConfig.updatedAt} = ? '
+      'WHERE ${SQLiteConfig.id} IN ($ph) AND ${SQLiteConfig.deletedAt} IS NULL',
+      [now, now, ...list],
+    );
+  }
+
+  /// Undo of a cascade: restores only the rows of [ids] stamped [deletedAt].
+  Future<int> restoreWhereDeletedAt(DatabaseExecutor db, Iterable<String> ids, int deletedAt, int now) async {
+    final list = ids.toSet().toList();
+    if (list.isEmpty) return 0;
+    final ph = List.filled(list.length, '?').join(',');
+    return db.rawUpdate(
+      'UPDATE $_t SET ${SQLiteConfig.deletedAt} = NULL, ${SQLiteConfig.updatedAt} = ? '
+      'WHERE ${SQLiteConfig.id} IN ($ph) AND ${SQLiteConfig.deletedAt} = ?',
+      [now, ...list, deletedAt],
+    );
+  }
+
+  /// Marks a freshly inserted row as debt money (same SQLite transaction).
+  Future<void> setDebtRole(DatabaseExecutor db, String id, DebtRole role, int now) => db.update(
+        _t,
+        {SQLiteConfig.txDebtRole: role.dbValue, SQLiteConfig.updatedAt: now},
         where: '${SQLiteConfig.id} = ?',
         whereArgs: [id],
       );
@@ -133,7 +171,8 @@ class TransactionLocalDatasource {
 
   // ----------------------------------------------------------------- by tag
 
-  /// Every non-deleted transaction carrying [tagId], newest first, with both
+  /// Every non-deleted transaction carrying [tagId] or a tag nested inside it
+  /// (each row once), newest first, with both
   /// counterpart names and the owning wallet's name (for the tag page).
   Future<List<TransactionRow>> pageForTag(
     DatabaseExecutor db,
@@ -146,15 +185,61 @@ class TransactionLocalDatasource {
              ow.${SQLiteConfig.walletName} AS wallet_name,
              fw.${SQLiteConfig.walletName} AS from_wallet_name, fw.${SQLiteConfig.deletedAt} AS from_wallet_deleted,
              tw.${SQLiteConfig.walletName} AS to_wallet_name,   tw.${SQLiteConfig.deletedAt} AS to_wallet_deleted
-      FROM $_tt tt
-      JOIN $_t t ON t.${SQLiteConfig.id} = tt.${SQLiteConfig.ttTransactionId}
+      FROM $_t t
       LEFT JOIN $_w ow ON ow.${SQLiteConfig.id} = t.${SQLiteConfig.txWalletId}
       LEFT JOIN $_w fw ON fw.${SQLiteConfig.id} = t.${SQLiteConfig.txFromWalletId}
       LEFT JOIN $_w tw ON tw.${SQLiteConfig.id} = t.${SQLiteConfig.txToWalletId}
-      WHERE tt.${SQLiteConfig.ttTagId} = ?1 AND t.${SQLiteConfig.deletedAt} IS NULL
+      WHERE t.${SQLiteConfig.deletedAt} IS NULL
+        AND EXISTS (SELECT 1 FROM $_tt tt WHERE tt.${SQLiteConfig.ttTransactionId} = t.${SQLiteConfig.id}
+                    AND tt.${SQLiteConfig.ttTagId} IN (${TagSql.expandIds('?1')}))
       ORDER BY t.${SQLiteConfig.txDate} DESC, t.${SQLiteConfig.createdAt} DESC
       LIMIT ?2 OFFSET ?3
     ''', [tagId, limit, offset]);
+    return rows.map(_rowFromMap).toList();
+  }
+
+  // ----------------------------------------------------------------- budget
+
+  /// Expenses counted by a budget scope in `[start, end)`: posted and
+  /// upcoming, never transfers or debt money. Empty [walletIds] / [tagIds] =
+  /// no filter on that axis; tags match with ANY (a row appears once).
+  /// Upcoming rows first, then newest first; with the owning wallet's name.
+  Future<List<TransactionRow>> pageForScope(
+    DatabaseExecutor db, {
+    required Set<String> walletIds,
+    required Set<String> tagIds,
+    required DateTime start,
+    required DateTime end,
+    required int limit,
+    required int offset,
+  }) async {
+    final args = <Object?>[start.epochMs, end.epochMs];
+    final scope = StringBuffer();
+    if (walletIds.isNotEmpty) {
+      args.addAll(walletIds);
+      scope.write(' AND t.${SQLiteConfig.txWalletId} IN (${List.filled(walletIds.length, '?').join(',')})');
+    }
+    if (tagIds.isNotEmpty) {
+      args.addAll(tagIds);
+      scope.write(
+        ' AND EXISTS (SELECT 1 FROM $_tt x WHERE x.${SQLiteConfig.ttTransactionId} = t.${SQLiteConfig.id} '
+        'AND x.${SQLiteConfig.ttTagId} IN (${TagSql.expandIds(List.filled(tagIds.length, '?').join(','))}))',
+      );
+    }
+    args.addAll([limit, offset]);
+    final rows = await db.rawQuery('''
+      SELECT t.*, ow.${SQLiteConfig.walletName} AS wallet_name
+      FROM $_t t
+      LEFT JOIN $_w ow ON ow.${SQLiteConfig.id} = t.${SQLiteConfig.txWalletId}
+      WHERE t.${SQLiteConfig.deletedAt} IS NULL
+        AND t.${SQLiteConfig.txType} = '${TransactionType.expense.dbValue}'
+        AND t.${SQLiteConfig.txDebtRole} IS NULL
+        AND t.${SQLiteConfig.txDate} >= ? AND t.${SQLiteConfig.txDate} < ?
+        $scope
+      ORDER BY (t.${SQLiteConfig.txStatus} = '${TransactionStatus.upcoming.dbValue}') DESC,
+               t.${SQLiteConfig.txDate} DESC, t.${SQLiteConfig.createdAt} DESC
+      LIMIT ? OFFSET ?
+    ''', args);
     return rows.map(_rowFromMap).toList();
   }
 
@@ -246,7 +331,7 @@ class TransactionLocalDatasource {
       }).join(',');
       where.write(
         ' AND EXISTS (SELECT 1 FROM $_tt x WHERE x.${SQLiteConfig.ttTransactionId} = t.${SQLiteConfig.id} '
-        'AND x.${SQLiteConfig.ttTagId} IN ($ph))',
+        'AND x.${SQLiteConfig.ttTagId} IN (${TagSql.expandIds(ph)}))',
       );
     }
     if (filter.upcomingOnly) {

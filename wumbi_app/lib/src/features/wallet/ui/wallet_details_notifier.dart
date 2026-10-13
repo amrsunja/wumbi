@@ -151,8 +151,14 @@ class WalletDetailsNotifier extends Notifier<WalletDetailsState> {
 
   // ----------------------------------------------------------------- writes
 
-  /// Swipe-to-delete: soft delete immediately, offer undo for 4 s.
-  Future<void> deleteTransaction(TransactionRow row, {required String message, required String undoLabel}) async {
+  /// Swipe-to-delete: soft delete immediately, offer undo for 4 s. [message]
+  /// gets how many other rows the debt cascade removed ("Loan deleted with
+  /// 2 returns").
+  Future<void> deleteTransaction(
+    TransactionRow row, {
+    required String Function(int cascaded) message,
+    required String undoLabel,
+  }) async {
     final current = state.transactions.value ?? const <TransactionRow>[];
     // Optimistic removal so the row animates out before the DB round-trip.
     state = state.copyWith(transactions: AsyncValue.data(current.where((r) => r.id != row.id).toList()));
@@ -160,8 +166,8 @@ class WalletDetailsNotifier extends Notifier<WalletDetailsState> {
     final result = await _transactions.softDelete(row.id);
     if (!ref.mounted) return;
     result.when(
-      (_) => ref.read(appEventProvider).send(
-            ShowUndoEvent(message, actionLabel: undoLabel, onUndo: () => _transactions.restore(row.id)),
+      (cascaded) => ref.read(appEventProvider).send(
+            ShowUndoEvent(message(cascaded), actionLabel: undoLabel, onUndo: () => _transactions.restore(row.id)),
           ),
       (error) {
         state = state.copyWith(transactions: AsyncValue.data(current));

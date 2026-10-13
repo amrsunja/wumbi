@@ -14,6 +14,7 @@ class DashboardData {
   const DashboardData({
     required this.total,
     required this.walletCount,
+    this.excludedCount = 0,
     required this.wallets,
     required this.unconvertible,
     required this.ratesStale,
@@ -24,6 +25,12 @@ class DashboardData {
 
   /// [A5] all non-deleted wallets.
   final int walletCount;
+
+  /// Wallets switched out of the total ("Count in total balance" off).
+  final int excludedCount;
+
+  /// Wallets whose balance makes up [total].
+  int get countedWallets => walletCount - excludedCount;
   final List<WalletSummary> wallets;
 
   /// Currencies excluded from the total because no rate is cached.
@@ -48,7 +55,12 @@ class DashboardRepo {
     var stale = false;
     final rates = <CurrencyType, FxRate?>{};
 
+    var excluded = 0;
     for (final w in wallets) {
+      if (!w.includeInTotal) {
+        excluded++;
+        continue;
+      }
       if (w.currency == base) {
         total += w.balance.minor;
         continue;
@@ -67,6 +79,7 @@ class DashboardRepo {
     return DashboardData(
       total: Money(total, base),
       walletCount: wallets.length,
+      excludedCount: excluded,
       wallets: wallets,
       unconvertible: unconvertible.toList(),
       ratesStale: stale,

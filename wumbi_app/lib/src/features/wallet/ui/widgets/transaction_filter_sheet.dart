@@ -6,8 +6,7 @@ import '../../../../core/design_system/app_ui.dart';
 import '../../../../core/utils/enums/transaction_type.dart';
 import '../../../../core/utils/extensions/build_context_extensions.dart';
 import '../../../../core/utils/extensions/date_time_extensions.dart';
-import '../../../tag/data/models/tag_model.dart';
-import '../../../tag/data/tag_repository.dart';
+import '../../../tag/ui/widgets/tag_chip_selector.dart';
 import '../../../transaction/data/models/transaction_filter.dart';
 import '../../../transaction/ui/widgets/date_picker_sheet.dart';
 
@@ -79,12 +78,6 @@ class _FilterBody extends HookConsumerWidget {
 
     final filter = useState<TransactionFilter>(initial);
     final preset = useState<_DatePreset>(_DatePreset.of(initial, DateTime.now()));
-
-    final tagsFuture = useMemoized(() => ref.read(tagRepositoryProvider).listAll());
-    final tagsSnapshot = useFuture(tagsFuture);
-    final List<TagModel>? tags = tagsSnapshot.hasData
-        ? tagsSnapshot.data!.when((list) => list, (_) => const <TagModel>[])
-        : null;
 
     void toggleType(TransactionType type) {
       final next = Set<TransactionType>.of(filter.value.types);
@@ -181,7 +174,7 @@ class _FilterBody extends HookConsumerWidget {
                   runSpacing: 8,
                   children: [
                     for (final p in _DatePreset.values)
-                      _SelectChip(
+                      SelectChip(
                         label: presetLabel(p),
                         selected: preset.value == p,
                         onTap: () => selectPreset(p),
@@ -207,23 +200,11 @@ class _FilterBody extends HookConsumerWidget {
 
                 // ---- Tags ----
                 UiSectionLabel(text: l10n.wallet_filter_tags, padding: sectionPadding),
-                if (tags == null)
-                  const SizedBox(height: 28)
-                else if (tags.isEmpty)
-                  Text(l10n.wallet_filter_no_tags, style: typo.hint)
-                else
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: [
-                      for (final tag in tags)
-                        _SelectChip(
-                          label: '#${tag.displayName}',
-                          selected: f.tagIds.contains(tag.id),
-                          onTap: () => toggleTag(tag.id),
-                        ),
-                    ],
-                  ),
+                TagChipSelector(
+                  selected: f.tagIds,
+                  onToggle: (tag) => toggleTag(tag.id),
+                  emptyText: l10n.wallet_filter_no_tags,
+                ),
 
                 // ---- Upcoming only ----
                 const UISpace.vert(20),
@@ -265,38 +246,6 @@ class _FilterBody extends HookConsumerWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-/// Selectable pill (date presets, tags): blue 12 % fill + blue text when
-/// selected, outlined and muted otherwise — same look as the card's tag pills.
-class _SelectChip extends StatelessWidget {
-  const _SelectChip({required this.label, required this.selected, required this.onTap});
-
-  final String label;
-  final bool selected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = context.colors;
-    return UITap(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 150),
-        curve: Curves.easeOut,
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
-        decoration: BoxDecoration(
-          color: selected ? UIColorToken.blue.withValues(alpha: 0.12) : Colors.transparent,
-          border: Border.all(color: selected ? Colors.transparent : colors.dividerColor),
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Text(
-          label,
-          style: context.typo.inter.chip.copyWith(color: selected ? UIColorToken.blue : colors.secondContentColor),
-        ),
-      ),
     );
   }
 }

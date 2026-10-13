@@ -1,5 +1,7 @@
 import 'package:flutter/painting.dart';
 
+import '../data/tag_normalizer.dart';
+
 /// Splash palette for tags — vivid, flat swatches. Deliberately wider than
 /// `UIColorToken` so neighbouring bubbles never read as the same colour, and
 /// deliberately not `WalletColor` (that rainbow repeats too soon).
@@ -36,5 +38,23 @@ abstract class TagPalette {
       h = ((h << 5) + h + c) & 0x7fffffff;
     }
     return colors[h % colors.length];
+  }
+
+  /// Family colour for nested tags: every tag inside `food` shares `food`'s
+  /// hue, a notch lighter per level, so a family reads as one group in the
+  /// list, the map and the progress pie.
+  static Color forTag(String normalizedName) {
+    final parts = TagNormalizer.segments(normalizedName);
+    final base = of(parts.isEmpty ? normalizedName : parts.first);
+    return shade(base, parts.length <= 1 ? 0 : parts.length - 1);
+  }
+
+  /// [base] lightened by [depth] levels (0 = unchanged).
+  static Color shade(Color base, int depth) {
+    if (depth <= 0) return base;
+    final hsl = HSLColor.fromColor(base);
+    final lightness = (hsl.lightness + 0.09 * depth).clamp(0.0, 0.82).toDouble();
+    final saturation = (hsl.saturation - 0.06 * depth).clamp(0.25, 1.0).toDouble();
+    return hsl.withLightness(lightness).withSaturation(saturation).toColor();
   }
 }

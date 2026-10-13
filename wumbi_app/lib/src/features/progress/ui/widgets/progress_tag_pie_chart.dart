@@ -131,7 +131,7 @@ class ProgressTagPieChart extends HookWidget {
   /// Casper carries the two non-tag buckets: readable on both themes
   /// without borrowing a swatch a real tag could also get.
   static Color colorOf(TagSlice slice) => switch (slice.kind) {
-        TagSliceKind.tag => TagPalette.of(slice.normalizedName),
+        TagSliceKind.tag => TagPalette.forTag(slice.normalizedName),
         TagSliceKind.untagged => UIColorToken.casper,
         TagSliceKind.other => UIColorToken.casper.withValues(alpha: 0.5),
       };

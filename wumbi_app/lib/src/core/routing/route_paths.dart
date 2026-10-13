@@ -21,9 +21,22 @@ abstract class RoutePaths {
   /// Recurring rules ("subscriptions"); optional `walletId` narrows the list.
   static const subscriptions = '/subscriptions';
 
+  /// Budgets (optional `walletId` narrows the list), one budget, the form.
+  static const budgets = '/budgets';
+  static const budgetDetails = '/budgets/:id';
+  static const budgetForm = '/budget/form';
+
+  /// Personal debts with people.
+  static const debts = '/debts';
+  static const newDebt = '/debts/new';
+
   static const settings = '/settings';
   static const baseCurrencySettings = '/settings/currency';
   static const aboutProject = '/settings/about';
 
   static const appLangSettings = '/settings/language';
+
+  /// "Need help?" — list of guides; each guide is a nested page.
+  static const help = '/settings/help';
+  static const tagsHelp = '/settings/help/tags';
 }

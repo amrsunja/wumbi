@@ -4,12 +4,13 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../core/design_system/app_ui.dart';
-import '../../../core/routing/app_router.dart';
 import '../../../core/utils/constants/constants.dart';
 import '../../../core/utils/enums/transaction_type.dart';
 import '../../../core/utils/extensions/build_context_extensions.dart';
 import '../../../core/utils/extensions/date_time_extensions.dart';
 import '../../../core/utils/typedefs.dart';
+import '../../debt/ui/debt_labels.dart';
+import '../../debt/ui/debt_rows.dart';
 import '../../transaction/data/models/transaction_model.dart';
 import 'search_notifier.dart';
 
@@ -183,6 +184,7 @@ class _ResultTile extends StatelessWidget {
 
     final UiTransactionDirection direction;
     String title = t.description;
+    if (title.isEmpty) title = DebtLabels.rowTitle(l10n, row) ?? '';
     String? walletName;
     switch (t.type) {
       case TransactionType.income:
@@ -213,10 +215,8 @@ class _ResultTile extends StatelessWidget {
       secondaryText: walletName,
       tags: row.tags,
       upcoming: t.isUpcoming,
-      badge: t.isUpcoming ? l10n.transaction_upcoming_badge : null,
-      onTap: () => context.router.push(
-        TransactionRoute(transactionId: row.id, walletId: viewedWalletId),
-      ),
+      badge: t.isUpcoming ? l10n.transaction_upcoming_badge : DebtLabels.rowBadge(l10n, row),
+      onTap: () => openTransactionRow(context, row, walletId: viewedWalletId),
     );
   }
 }

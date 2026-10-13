@@ -24,17 +24,17 @@ class UiIconTextButton extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
         child: Row(
           mainAxisSize: MainAxisSize.min,
-          spacing: 6,
+          spacing: 4,
           children: [
-            if (icon != null) UIIcon(icon!, color: color, size: 14),
             Text(
               title,
-              style: AppTheme.of(context).typo.inter.bold.copyWith(
-                color: color,
+              style: AppTheme.of(context).typo.inter.medium.copyWith(
+                color: color.withValues(alpha: 1),
                 letterSpacing: -0.35,
-                fontSize: 14,
+                fontSize: 13,
               ),
             ),
+            if (icon != null) UIIcon(icon!, color: color.withValues(alpha: 1), size: 14),
           ],
         ),
       ),

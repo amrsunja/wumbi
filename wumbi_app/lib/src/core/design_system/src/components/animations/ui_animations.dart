@@ -18,6 +18,11 @@ abstract class UIAnim {
   /// PageView transitions inside a flow (onboarding).
   static const Duration page = Duration(milliseconds: 380);
 
+  /// One row of a [UIStaggerScope] list cascade, and the gap between rows.
+  /// Kept short: a tab switch must feel instant.
+  static const Duration listItem = Duration(milliseconds: 340);
+  static const Duration listStagger = Duration(milliseconds: 40);
+
   // Curves --------------------------------------------------------------------
   static const Curve easeOut = Curves.easeOutCubic;
   static const Curve emphasized = Curves.easeOutQuart;
@@ -263,4 +268,181 @@ extension UIAnimX on Widget {
     bool fade = true,
   }) =>
       UIElasticScaleIn(delay: delay, duration: duration, begin: begin, fade: fade, child: this);
+}
+
+/// One-shot cascade for a (lazily built) list: every [UIStaggerItem] below
+/// fades in and rises [UIStaggerItem.offset] px, [interval] after the
+/// previous one. Only the first [maxStaggered] rows are delayed (the rest are
+/// off-screen anyway), so the whole reveal stays under
+/// `itemDuration + interval × maxStaggered`. Rows built after the cascade
+/// (scrolled into view, inserted later) simply show. Give the scope a new key
+/// to replay it.
+class UIStaggerScope extends StatefulWidget {
+  const UIStaggerScope({
+    super.key,
+    required this.child,
+    this.itemDuration = UIAnim.listItem,
+    this.interval = UIAnim.listStagger,
+    this.maxStaggered = 8,
+  });
+
+  final Widget child;
+  final Duration itemDuration;
+  final Duration interval;
+  final int maxStaggered;
+
+  @override
+  State<UIStaggerScope> createState() => _UIStaggerScopeState();
+}
+
+class _UIStaggerScopeState extends State<UIStaggerScope> with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: widget.itemDuration + widget.interval * widget.maxStaggered,
+    )..forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => _UIStaggerData(
+        controller: _controller,
+        itemDuration: widget.itemDuration,
+        interval: widget.interval,
+        maxStaggered: widget.maxStaggered,
+        child: widget.child,
+      );
+}
+
+class _UIStaggerData extends InheritedWidget {
+  const _UIStaggerData({
+    required this.controller,
+    required this.itemDuration,
+    required this.interval,
+    required this.maxStaggered,
+    required super.child,
+  });
+
+  final AnimationController controller;
+  final Duration itemDuration;
+  final Duration interval;
+  final int maxStaggered;
+
+  /// Row [index]'s slice of the shared controller.
+  Animation<double> slice(int index) {
+    final total = controller.duration!.inMicroseconds;
+    final start = (interval * index.clamp(0, maxStaggered)).inMicroseconds / total;
+    final end = (start + itemDuration.inMicroseconds / total).clamp(0.0, 1.0);
+    return controller.drive(CurveTween(curve: Interval(start, end, curve: UIAnim.easeOut)));
+  }
+
+  @override
+  bool updateShouldNotify(_UIStaggerData old) => controller != old.controller;
+}
+
+/// A row of a [UIStaggerScope] cascade; [index] is its position in the list.
+/// Outside a scope (e.g. a reorder drag proxy in the overlay) it is a no-op.
+class UIStaggerItem extends StatelessWidget {
+  const UIStaggerItem({super.key, required this.index, required this.child, this.offset = 14});
+
+  final int index;
+  final Widget child;
+
+  /// Rise distance in logical px.
+  final double offset;
+
+  @override
+  Widget build(BuildContext context) {
+    final scope = context.getInheritedWidgetOfExactType<_UIStaggerData>();
+    if (scope == null) return child;
+    // A completed controller yields 1 for every slice: same widget tree, no
+    // state loss, nothing to animate.
+    final t = scope.slice(index);
+    return FadeTransition(
+      opacity: t,
+      child: AnimatedBuilder(
+        animation: t,
+        builder: (context, child) => Transform.translate(offset: Offset(0, (1 - t.value) * offset), child: child),
+        child: child,
+      ),
+    );
+  }
+}
+
+/// "Smoke" edges for a vertical scrollable: content dissolves under the top
+/// (and bottom) edge instead of being cut by pinned chrome. Each fade grows
+/// with how far the list can still scroll that way, so a list at rest is
+/// never faded.
+class UIScrollEdgeFade extends StatefulWidget {
+  const UIScrollEdgeFade({super.key, required this.child, this.top = 32, this.bottom = 32});
+
+  /// Wraps a scrollable (it listens to its depth-0 notifications).
+  final Widget child;
+  final double top;
+  final double bottom;
+
+  @override
+  State<UIScrollEdgeFade> createState() => _UIScrollEdgeFadeState();
+}
+
+class _UIScrollEdgeFadeState extends State<UIScrollEdgeFade> {
+  final _fade = ValueNotifier<(double, double)>((0, 0));
+
+  @override
+  void dispose() {
+    _fade.dispose();
+    super.dispose();
+  }
+
+  bool _onNotification(Notification n) {
+    final ScrollMetrics m;
+    if (n is ScrollNotification && n.depth == 0) {
+      m = n.metrics;
+    } else if (n is ScrollMetricsNotification && n.depth == 0) {
+      m = n.metrics;
+    } else {
+      return false;
+    }
+    if (m.axis != Axis.vertical || !m.hasContentDimensions) return false;
+    _fade.value = (
+      (m.pixels - m.minScrollExtent).clamp(0.0, widget.top),
+      (m.maxScrollExtent - m.pixels).clamp(0.0, widget.bottom),
+    );
+    return false;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return NotificationListener<Notification>(
+      onNotification: _onNotification,
+      child: ValueListenableBuilder<(double, double)>(
+        valueListenable: _fade,
+        child: widget.child,
+        builder: (context, fade, child) => ShaderMask(
+          blendMode: BlendMode.dstIn,
+          shaderCallback: (rect) {
+            final h = rect.height <= 0 ? 1.0 : rect.height;
+            final top = (fade.$1 / h).clamp(0.0, 0.5);
+            final bottom = (1 - fade.$2 / h).clamp(0.5, 1.0);
+            return LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: const [Color(0x00000000), Color(0xFF000000), Color(0xFF000000), Color(0x00000000)],
+              stops: [0, top, bottom, 1],
+            ).createShader(rect);
+          },
+          child: child,
+        ),
+      ),
+    );
+  }
 }

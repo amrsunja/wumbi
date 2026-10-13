@@ -1,6 +1,8 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../../features/budget/ui/budgets_provider.dart';
 import '../../../features/dashboard/ui/dashboard_notifier.dart';
+import '../../../features/debt/ui/debts_provider.dart';
 import '../../../features/wallet/ui/wallets_provider.dart';
 
 /// Riverpod 3 pauses a provider as soon as every listener is paused — and a
@@ -12,7 +14,12 @@ import '../../../features/wallet/ui/wallets_provider.dart';
 ///
 /// Subscribing from the root widget (always visible) keeps these providers
 /// active so every write is reflected immediately, wherever it comes from.
+/// Budgets and debts are here too: the Dashboard tabs only build the active
+/// list, and an auto-disposed source would otherwise re-query the DB on
+/// every tab switch.
 void keepAppStateAlive(WidgetRef ref) {
   ref.listen(walletsProvider, (_, __) {});
   ref.listen(dashboardProvider, (_, __) {});
+  ref.listen(budgetsProvider, (_, __) {});
+  ref.listen(debtsOverviewProvider, (_, __) {});
 }

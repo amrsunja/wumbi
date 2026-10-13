@@ -6,6 +6,7 @@ import '../../../core/utils/id_generator.dart';
 import 'models/tag_model.dart';
 import 'models/tag_stats.dart';
 import 'tag_normalizer.dart';
+import 'tag_sql.dart';
 
 /// Raw queries for tags and the two link tables.
 class TagLocalDatasource {
@@ -16,6 +17,7 @@ class TagLocalDatasource {
   static const _rrt = SQLiteConfig.recurringRuleTagsTable;
   static const _tx = SQLiteConfig.transactionsTable;
   static const _w = SQLiteConfig.walletsTable;
+  static const _bt = SQLiteConfig.budgetTagsTable;
 
   Future<TagModel?> byId(DatabaseExecutor db, String id) async {
     final rows = await db.query(_tags, where: '${SQLiteConfig.id} = ?', whereArgs: [id], limit: 1);
@@ -44,26 +46,51 @@ class TagLocalDatasource {
     return rows.map(TagModel.fromRow).toList();
   }
 
+  /// Live tags nested (at any depth) inside the tag whose normalized name is
+  /// [normalized], shallowest first.
+  Future<List<TagModel>> descendants(DatabaseExecutor db, String normalized) async {
+    final rows = await db.rawQuery(
+      'SELECT * FROM $_tags WHERE ${SQLiteConfig.deletedAt} IS NULL '
+      // SQLite measures the prefix itself: `length` counts characters,
+      // Dart's String.length UTF-16 units (emoji would never match).
+      "AND substr(${SQLiteConfig.tagNormalizedName}, 1, length(?1) + 1) = ?1 || '${TagNormalizer.separator}' "
+      'ORDER BY length(${SQLiteConfig.tagNormalizedName})',
+      [normalized],
+    );
+    return rows.map(TagModel.fromRow).toList();
+  }
+
   // ------------------------------------------------------------------ stats
 
   /// Per tag × currency × type sums over posted, non-deleted income/expense
-  /// transactions (transfers are wallet-internal and excluded). Currency
+  /// transactions (transfers are wallet-internal and excluded, debt money is
+  /// neither income nor spending). Currency
   /// conversion into the base currency happens in the repository.
+  ///
+  /// Nested tags roll up (Obsidian semantics): `food` sums every transaction
+  /// tagged `food` or anything inside it, each transaction counted once even
+  /// when it carries both `food` and `food/coffee`.
   Future<List<TagCurrencySum>> sumsByTag(DatabaseExecutor db, {String? tagId}) async {
     final rows = await db.rawQuery('''
-      SELECT tt.${SQLiteConfig.ttTagId} AS tag_id,
+      SELECT x.pid AS tag_id,
              t.${SQLiteConfig.txCurrency} AS currency,
              t.${SQLiteConfig.txType} AS type,
              SUM(t.${SQLiteConfig.txAmountMinor}) AS total,
              COUNT(*) AS n
-      FROM $_tt tt
-      JOIN $_tx t ON t.${SQLiteConfig.id} = tt.${SQLiteConfig.ttTransactionId}
-      JOIN $_tags g ON g.${SQLiteConfig.id} = tt.${SQLiteConfig.ttTagId} AND g.${SQLiteConfig.deletedAt} IS NULL
+      FROM (
+        SELECT DISTINCT p.${SQLiteConfig.id} AS pid, tt.${SQLiteConfig.ttTransactionId} AS txid
+        FROM $_tags p
+        JOIN $_tags c ON c.${SQLiteConfig.deletedAt} IS NULL AND ${TagSql.selfOrDescendant('c', 'p')}
+        JOIN $_tt tt ON tt.${SQLiteConfig.ttTagId} = c.${SQLiteConfig.id}
+        WHERE p.${SQLiteConfig.deletedAt} IS NULL
+          ${tagId == null ? '' : 'AND p.${SQLiteConfig.id} = ?'}
+      ) x
+      JOIN $_tx t ON t.${SQLiteConfig.id} = x.txid
       WHERE t.${SQLiteConfig.deletedAt} IS NULL
         AND t.${SQLiteConfig.txStatus} = '${TransactionStatus.posted.dbValue}'
+        AND t.${SQLiteConfig.txDebtRole} IS NULL
         AND t.${SQLiteConfig.txType} IN ('income','expense')
-        ${tagId == null ? '' : 'AND tt.${SQLiteConfig.ttTagId} = ?'}
-      GROUP BY tt.${SQLiteConfig.ttTagId}, t.${SQLiteConfig.txCurrency}, t.${SQLiteConfig.txType}
+      GROUP BY x.pid, t.${SQLiteConfig.txCurrency}, t.${SQLiteConfig.txType}
     ''', tagId == null ? const [] : [tagId]);
     return rows
         .map(
@@ -78,8 +105,9 @@ class TagLocalDatasource {
         .toList();
   }
 
-  /// Wallets touched by a tag with per-wallet sums in the wallet's own
-  /// currency (tag detail page). Transfers count on both sides.
+  /// Wallets touched by a tag (nested tags included) with per-wallet sums in
+  /// the wallet's own currency (tag detail page). Transfers count on both
+  /// sides; debt money is left out like in every tag aggregate.
   Future<List<TagWalletSum>> walletsOfTag(DatabaseExecutor db, String tagId) async {
     final rows = await db.rawQuery('''
       SELECT w.${SQLiteConfig.id} AS wallet_id,
@@ -94,12 +122,15 @@ class TagLocalDatasource {
                       WHEN t.${SQLiteConfig.txType} = 'transfer' AND t.${SQLiteConfig.txFromWalletId} = w.${SQLiteConfig.id} THEN t.${SQLiteConfig.txFromAmountMinor}
                       ELSE 0 END) AS out_minor,
              COUNT(*) AS n
-      FROM $_tt tt
-      JOIN $_tx t ON t.${SQLiteConfig.id} = tt.${SQLiteConfig.ttTransactionId}
+      FROM (
+        SELECT DISTINCT tt.${SQLiteConfig.ttTransactionId} AS txid FROM $_tt tt
+        WHERE tt.${SQLiteConfig.ttTagId} IN (${TagSql.expandIds('?')})
+      ) x
+      JOIN $_tx t ON t.${SQLiteConfig.id} = x.txid
       JOIN $_w w ON w.${SQLiteConfig.id} IN (t.${SQLiteConfig.txWalletId}, t.${SQLiteConfig.txFromWalletId}, t.${SQLiteConfig.txToWalletId})
-      WHERE tt.${SQLiteConfig.ttTagId} = ?
-        AND t.${SQLiteConfig.deletedAt} IS NULL
+      WHERE t.${SQLiteConfig.deletedAt} IS NULL
         AND t.${SQLiteConfig.txStatus} = '${TransactionStatus.posted.dbValue}'
+        AND t.${SQLiteConfig.txDebtRole} IS NULL
       GROUP BY w.${SQLiteConfig.id}
       ORDER BY n DESC
     ''', [tagId]);
@@ -128,6 +159,7 @@ class TagLocalDatasource {
       JOIN $_tt b ON b.${SQLiteConfig.ttTransactionId} = a.${SQLiteConfig.ttTransactionId}
                  AND a.${SQLiteConfig.ttTagId} < b.${SQLiteConfig.ttTagId}
       JOIN $_tx t ON t.${SQLiteConfig.id} = a.${SQLiteConfig.ttTransactionId} AND t.${SQLiteConfig.deletedAt} IS NULL
+                 AND t.${SQLiteConfig.txDebtRole} IS NULL
       JOIN $_tags ga ON ga.${SQLiteConfig.id} = a.${SQLiteConfig.ttTagId} AND ga.${SQLiteConfig.deletedAt} IS NULL
       JOIN $_tags gb ON gb.${SQLiteConfig.id} = b.${SQLiteConfig.ttTagId} AND gb.${SQLiteConfig.deletedAt} IS NULL
       GROUP BY a.${SQLiteConfig.ttTagId}, b.${SQLiteConfig.ttTagId}
@@ -151,7 +183,8 @@ class TagLocalDatasource {
       );
 
   /// Move every link from [fromId] to [intoId] (skipping rows that would
-  /// duplicate), then soft-delete [fromId]. Returns links moved.
+  /// duplicate) — transactions, rules and budget scopes — then soft-delete
+  /// [fromId]. Returns transaction links moved.
   Future<int> mergeInto(DatabaseExecutor db, String fromId, String intoId, int now) async {
     final movedTx = await db.rawUpdate(
       'UPDATE OR IGNORE $_tt SET ${SQLiteConfig.ttTagId} = ? WHERE ${SQLiteConfig.ttTagId} = ?',
@@ -163,15 +196,22 @@ class TagLocalDatasource {
       [intoId, fromId],
     );
     await db.delete(_rrt, where: '${SQLiteConfig.rrtTagId} = ?', whereArgs: [fromId]);
+    await db.rawUpdate(
+      'UPDATE OR IGNORE $_bt SET ${SQLiteConfig.btTagId} = ? WHERE ${SQLiteConfig.btTagId} = ?',
+      [intoId, fromId],
+    );
+    await db.delete(_bt, where: '${SQLiteConfig.btTagId} = ?', whereArgs: [fromId]);
     await recountUsage(db, intoId, now);
     await softDelete(db, fromId, now);
     return movedTx;
   }
 
-  /// Soft delete a tag and drop every link to it.
+  /// Soft delete a tag and drop every link to it (budget scopes included —
+  /// the repository then deletes budgets left with no tag).
   Future<void> softDelete(DatabaseExecutor db, String id, int now) async {
     await db.delete(_tt, where: '${SQLiteConfig.ttTagId} = ?', whereArgs: [id]);
     await db.delete(_rrt, where: '${SQLiteConfig.rrtTagId} = ?', whereArgs: [id]);
+    await db.delete(_bt, where: '${SQLiteConfig.btTagId} = ?', whereArgs: [id]);
     await db.update(
       _tags,
       {SQLiteConfig.deletedAt: now, SQLiteConfig.tagUsageCount: 0, SQLiteConfig.updatedAt: now},
@@ -191,8 +231,37 @@ class TagLocalDatasource {
       WHERE ${SQLiteConfig.id} = ?1
     ''', [id, now]);
 
-  /// B9 — find-or-create by normalized name.
+  /// B9 — find-or-create by normalized name. A nested name (`food/coffee`)
+  /// also creates its missing parents (`food`), like Obsidian where a parent
+  /// tag exists as soon as one of its children does.
   Future<TagModel> findOrCreate(DatabaseExecutor db, String rawName, int now) async {
+    final display = TagNormalizer.display(rawName);
+    for (final ancestor in TagNormalizer.ancestors(display)) {
+      await _findOrInsert(db, ancestor, now);
+    }
+    return _findOrInsert(db, display, now);
+  }
+
+  /// Inserts the missing parents of every live nested tag (tags typed before
+  /// nesting existed, or a parent deleted on another device). Returns how
+  /// many rows were created.
+  Future<int> createMissingAncestors(DatabaseExecutor db, int now) async {
+    final tags = await listAll(db);
+    final known = {for (final t in tags) t.normalizedName};
+    var created = 0;
+    for (final tag in tags) {
+      // Clean first: names stored before nesting may hold `/x` or `a//b`.
+      for (final ancestor in TagNormalizer.ancestors(TagNormalizer.display(tag.displayName))) {
+        final normalized = TagNormalizer.normalize(ancestor);
+        if (normalized.isEmpty || !known.add(normalized)) continue;
+        await _findOrInsert(db, ancestor, now);
+        created++;
+      }
+    }
+    return created;
+  }
+
+  Future<TagModel> _findOrInsert(DatabaseExecutor db, String rawName, int now) async {
     final normalized = TagNormalizer.normalize(rawName);
     final rows = await db.query(
       _tags,
@@ -290,6 +359,23 @@ class TagLocalDatasource {
     return rows.map(TagModel.fromRow).toList();
   }
 
+  /// Tags for a set of rules: `ruleId → display names` (link order).
+  Future<Map<String, List<String>>> tagsOfRules(DatabaseExecutor db, List<String> ids) async {
+    if (ids.isEmpty) return const {};
+    final placeholders = List.filled(ids.length, '?').join(',');
+    final rows = await db.rawQuery('''
+      SELECT rt.${SQLiteConfig.rrtRuleId} AS rule, g.${SQLiteConfig.tagDisplayName} AS name
+      FROM $_rrt rt JOIN $_tags g ON g.${SQLiteConfig.id} = rt.${SQLiteConfig.rrtTagId}
+      WHERE rt.${SQLiteConfig.rrtRuleId} IN ($placeholders) AND g.${SQLiteConfig.deletedAt} IS NULL
+      ORDER BY rt.${SQLiteConfig.createdAt}
+    ''', ids);
+    final out = <String, List<String>>{};
+    for (final r in rows) {
+      out.putIfAbsent(r['rule'] as String, () => []).add(r['name'] as String);
+    }
+    return out;
+  }
+
   Future<List<String>> tagIdsOfRule(DatabaseExecutor db, String ruleId) async {
     final rows = await db.query(
       _rrt,
@@ -305,7 +391,9 @@ class TagLocalDatasource {
   /// usage then recency.
   Future<List<TagModel>> suggest(DatabaseExecutor db, String query, {int limit = 6}) async {
     final normalized = TagNormalizer.normalize(query);
-    final alive = '${SQLiteConfig.deletedAt} IS NULL AND ${SQLiteConfig.tagUsageCount} > 0';
+    // Unused tags are suggested too (created from the tags page, or parents
+    // of nested tags); usage ranking keeps them after the busy ones.
+    final alive = '${SQLiteConfig.deletedAt} IS NULL';
     final rank = '${SQLiteConfig.tagUsageCount} DESC, ${SQLiteConfig.tagLastUsedAt} DESC';
     if (normalized.isEmpty) {
       final rows = await db.query(_tags, where: alive, orderBy: rank, limit: limit);

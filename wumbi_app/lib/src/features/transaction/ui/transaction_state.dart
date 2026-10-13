@@ -21,26 +21,39 @@ enum RateStatus { none, loading, ok, stale, error }
 
 /// Route arguments: `walletId` (preselect), `transactionId` (edit mode) or
 /// `ruleId` (subscription edit mode — the recurring rule itself).
+///
+/// Create mode presets: [repeat] ("+ New Subscription" → monthly) and [tags]
+/// (budget details FAB → the budget's tags). They are restored after every
+/// commit, so a run of entries keeps the context the screen was opened in.
 class TransactionArgs {
-  const TransactionArgs({this.walletId, this.transactionId, this.ruleId});
+  const TransactionArgs({this.walletId, this.transactionId, this.ruleId, this.repeat, this.tags});
 
   final String? walletId;
   final String? transactionId;
   final String? ruleId;
+  final RepeatFrequency? repeat;
+  final List<String>? tags;
 
   bool get isEdit => transactionId != null;
 
   bool get isRuleEdit => ruleId != null;
+
+  /// Create-mode preset values (ignored in both edit modes).
+  RepeatFrequency get presetRepeat => repeat ?? RepeatFrequency.never;
+  List<String> get presetTags => tags ?? const [];
 
   @override
   bool operator ==(Object other) =>
       other is TransactionArgs &&
       other.walletId == walletId &&
       other.transactionId == transactionId &&
-      other.ruleId == ruleId;
+      other.ruleId == ruleId &&
+      other.repeat == repeat &&
+      const ListEquality<String>().equals(other.tags, tags);
 
   @override
-  int get hashCode => Object.hash(walletId, transactionId, ruleId);
+  int get hashCode =>
+      Object.hash(walletId, transactionId, ruleId, repeat, tags == null ? null : Object.hashAll(tags!));
 }
 
 /// Read-only counterpart line in transfer edit mode ("→ Checking +$50.00").
@@ -98,7 +111,21 @@ abstract class TransactionState with _$TransactionState {
     /// Edit mode baseline (for [isDirty]).
     @Default('') String initialAmountInput,
     @Default([]) List<String> initialTags,
+
+    /// Person chip (create mode, spec B&D §8.1): GAVE / GOT link the money to
+    /// a debt. [personId] is null for a new name created on save.
+    String? personId,
+    String? personName,
+
+    /// Bumped to shake the amount after a refused commit (over-repayment).
+    @Default(0) int shakeSignal,
   }) = _TransactionState;
+
+  /// A person is selected: the bottom bar is GAVE / GOT.
+  bool get hasPerson => personName != null;
+
+  /// [A4]: no person while repeating or future-dated (and vice versa).
+  bool get personLocked => !hasPerson && (!repeat.isNever || willBeUpcoming);
 
   /// Both edit flavours (a stored transaction, or a recurring rule).
   bool get isEdit => mode != TransactionMode.create;

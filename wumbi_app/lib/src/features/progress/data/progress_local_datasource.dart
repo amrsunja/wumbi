@@ -17,7 +17,8 @@ class ProgressLocalDatasource {
 
   /// Sums of posted income / expense rows per bucket × currency × type.
   /// Transfers move money inside the user's own wallets, so they are excluded
-  /// (same rule as the tags hub).
+  /// (same rule as the tags hub), and so is debt money (`debt_role`): a loan
+  /// is neither spending nor income.
   ///
   /// [boundaries] holds `bucketCount + 1` local period edges, oldest first.
   /// [walletId] narrows to a single wallet; null aggregates every wallet.
@@ -60,6 +61,7 @@ class ProgressLocalDatasource {
       FROM $_t t
       WHERE t.${SQLiteConfig.deletedAt} IS NULL
         AND t.${SQLiteConfig.txStatus} = '${TransactionStatus.posted.dbValue}'
+        AND t.${SQLiteConfig.txDebtRole} IS NULL
         AND t.${SQLiteConfig.txType} IN ('income','expense')
         AND t.${SQLiteConfig.txDate} >= ?
         AND t.${SQLiteConfig.txDate} < ?
@@ -106,6 +108,7 @@ class ProgressLocalDatasource {
                         AND g.${SQLiteConfig.deletedAt} IS NULL
       WHERE t.${SQLiteConfig.deletedAt} IS NULL
         AND t.${SQLiteConfig.txStatus} = '${TransactionStatus.posted.dbValue}'
+        AND t.${SQLiteConfig.txDebtRole} IS NULL
         AND t.${SQLiteConfig.txType} = 'expense'
         AND t.${SQLiteConfig.txDate} >= ?
         AND t.${SQLiteConfig.txDate} < ?

@@ -221,6 +221,18 @@ class AppLocalizationsTr extends AppLocalizations {
   String get wallet_has_transactions => 'İşlemleri var';
 
   @override
+  String get wallet_tab_transactions => 'İşlemler';
+
+  @override
+  String get wallet_tab_budgets => 'Bütçeler';
+
+  @override
+  String get wallet_tab_subscriptions => 'Abonelikler';
+
+  @override
+  String get wallet_budgets_empty => 'Bu cüzdan için henüz harcama limiti yok';
+
+  @override
   String get wallet_pick_another_primary =>
       'Ana cüzdan olarak başka bir cüzdan seç';
 
@@ -697,6 +709,229 @@ class AppLocalizationsTr extends AppLocalizations {
   String get tag_wallet_deleted => '(silindi)';
 
   @override
+  String get tags_new => 'Yeni etiket';
+
+  @override
+  String get tags_create => 'Etiket oluştur';
+
+  @override
+  String tags_created(String name) {
+    return '#$name oluşturuldu';
+  }
+
+  @override
+  String tags_exists(String name) {
+    return '#$name zaten var';
+  }
+
+  @override
+  String get tags_parent => 'Üst etiket';
+
+  @override
+  String get tags_parent_none => 'Yok';
+
+  @override
+  String get tags_name_hint => 'ör. kahve';
+
+  @override
+  String get tags_create_tip =>
+      'İpucu: bir etiketi hemen iç içe koymak için yemek/kahve yazın.';
+
+  @override
+  String tags_nested_count(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count alt',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get tags_help => 'Etiketler nasıl kullanılır?';
+
+  @override
+  String get tags_graph_mode_all => 'Tümü';
+
+  @override
+  String get tags_graph_mode_spending => 'Harcama';
+
+  @override
+  String get tags_graph_mode_income => 'Gelir';
+
+  @override
+  String get tags_graph_legend_size => 'Büyük = daha çok para';
+
+  @override
+  String get tags_graph_legend_nested => 'Alt etiket';
+
+  @override
+  String get tags_graph_legend_together => 'Birlikte kullanılan';
+
+  @override
+  String get tags_graph_tap_hint => 'Rakamları görmek için bir daireye dokunun';
+
+  @override
+  String get tags_graph_open => 'Aç';
+
+  @override
+  String tags_graph_linked(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count etikete bağlı',
+      zero: 'Henüz bağlantı yok',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get tag_move => 'Taşı';
+
+  @override
+  String tag_move_title(String name) {
+    return '#$name etiketini taşı';
+  }
+
+  @override
+  String get tag_moved => 'Etiket taşındı';
+
+  @override
+  String get tag_add_nested => 'Alt etiket ekle';
+
+  @override
+  String get tag_nested_tags => 'Alt etiketler';
+
+  @override
+  String tag_includes_nested(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count alt etiket içerir',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String tag_delete_nested_message(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'Bu etiket ve $count alt etiketi tüm işlemlerden kaldırılacak. İşlemlerin kendisi kalır.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get tag_rename_nested_hint =>
+      'Alt etiketler de yeniden adlandırılır. Başka bir etiketin altına taşımak için / kullanın.';
+
+  @override
+  String get tag_top_level => 'En üst düzey';
+
+  @override
+  String get tag_nested_empty => 'Henüz alt etiket yok';
+
+  @override
+  String get settings_help => 'Yardım mı lazım?';
+
+  @override
+  String get help_title => 'Yardım mı lazım?';
+
+  @override
+  String get help_subtitle =>
+      'Wumbi\'den en iyi şekilde yararlanmak için kısa rehberler.';
+
+  @override
+  String get help_tags_title => 'Etiketler nasıl kullanılır?';
+
+  @override
+  String get help_tags_subtitle => 'Etiketler, alt etiketler ve harita';
+
+  @override
+  String get help_tags_intro =>
+      'Etiketler, işlemlerinize eklediğiniz #kahve gibi kısa adlardır. Bir işlemde birden çok etiket olabilir; böylece paranıza yalnızca cüzdan bazında değil, her açıdan bakabilirsiniz.';
+
+  @override
+  String get help_tags_add_title => 'Etiket ekleme';
+
+  @override
+  String get help_tags_add_body =>
+      'Bir işlem girerken etiket alanına bir ad yazın, ardından bir öneri seçin ya da yenisini oluşturun. Etiketlerde boşluk olmaz — coffee-shop veya coffee_shop yazın. Büyük ve küçük harf aynı etiketi verir.';
+
+  @override
+  String get help_tags_nested_title => 'Alt etiketler';
+
+  @override
+  String get help_tags_nested_body =>
+      'Bir etiketi klasör gibi başka birinin içine koymak için eğik çizgi / kullanın: yemek/kahve ve yemek/market ikisi de yemek içindedir. Üst etiket sizin için oluşturulur.';
+
+  @override
+  String get help_tags_parent_title => 'Üst etiket, alt etiketlerini kapsar';
+
+  @override
+  String get help_tags_parent_body =>
+      '#yemek açıldığında #yemek, #yemek/kahve veya #yemek/market etiketli tüm işlemler görünür. Bir üst etiketin toplamları, filtreleri ve bütçeleri alt etiketlerini de sayar. İki etiketi birden taşıyan bir işlem yalnızca bir kez sayılır.';
+
+  @override
+  String get help_tags_multi_title => 'Bir işlemde birden çok etiket';
+
+  @override
+  String get help_tags_multi_body =>
+      'Tatildeki bir akşam yemeği aynı anda hem #seyahat hem #yemek/restoran olabilir. O zaman ikisinde de sayılır ve iki etiket haritada birbirine bağlanır.';
+
+  @override
+  String get help_tags_manage_title => 'Oluştur, yeniden adlandır, taşı';
+
+  @override
+  String get help_tags_manage_body =>
+      'Etiketler sayfasında etiket oluşturmak için + simgesine dokunun ve iç içe koymak için bir üst etiket seçin. Bir etiketi açarak yeniden adlandırabilir, başka bir üst etiketin altına taşıyabilir, alt etiket ekleyebilir veya silebilirsiniz. Üst etiketi yeniden adlandırmak alt etiketlerini de yeniden adlandırır; var olan bir etiketin adını vermek ikisini birleştirir.';
+
+  @override
+  String get help_tags_map_title => 'Haritayı okuma';
+
+  @override
+  String get help_tags_map_body =>
+      'Her daire bir etikettir: ne kadar büyükse o kadar çok para hareket etmiştir. Halkası harcama ve gelirin payını gösterir. Düz çizgiler üst etiketi alt etiketlerine, soluk çizgiler aynı işlemde kullanılan etiketleri birbirine bağlar. Rakamları görmek için bir daireye dokunun.';
+
+  @override
+  String get help_tags_tips_title => 'İpuçları';
+
+  @override
+  String get help_tags_tip1 =>
+      'Geniş başlayın — yemek, ev, ulaşım — ve yalnızca daha fazla ayrıntı istediğinizde iç içe koyun.';
+
+  @override
+  String get help_tags_tip2 =>
+      'Cüzdanlar arasında kesişen şeyler için etiket kullanın: #tatil, #hediyeler, #araba.';
+
+  @override
+  String get help_tags_tip3 =>
+      'Adları kısa tutun; iki ya da üç düzey yeterlidir.';
+
+  @override
+  String get help_tags_example => 'Örnek';
+
+  @override
+  String get help_tags_example_total => '#yemek toplamı';
+
+  @override
+  String get help_tags_ex_parent => 'yemek';
+
+  @override
+  String get help_tags_ex_child1 => 'kahve';
+
+  @override
+  String get help_tags_ex_child2 => 'market';
+
+  @override
+  String get help_tags_ex_travel => 'seyahat';
+
+  @override
+  String get help_tags_ex_restaurant => 'restoran';
+
+  @override
   String get l10nSubscriptions =>
       '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ SUBSCRIPTIONS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
 
@@ -1006,6 +1241,23 @@ class AppLocalizationsTr extends AppLocalizations {
   String get error_not_found => 'Bu öğe artık yok.';
 
   @override
+  String debt_error_owes_you_only(String name, String amount) {
+    return '$name size yalnızca $amount borçlu';
+  }
+
+  @override
+  String debt_error_you_owe_only(String name, String amount) {
+    return '$name kişisine yalnızca $amount borçlusunuz';
+  }
+
+  @override
+  String get person_error_has_debts =>
+      'Önce bu kişinin borçlarını kapatın veya silin.';
+
+  @override
+  String get debt_error_closed => 'Bu borç zaten kapatıldı.';
+
+  @override
   String get error_tag_name => 'Bir etiket adı gir (en fazla 30 karakter).';
 
   @override
@@ -1017,6 +1269,841 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get error_reset_app => 'Uygulamayı sıfırla';
+
+  @override
+  String get dashboard_budgets => 'Bütçeler';
+
+  @override
+  String get budget_new => 'Yeni bütçe';
+
+  @override
+  String get budget_empty_hint =>
+      'Bir cüzdan veya #etiket için harcama limiti belirleyin';
+
+  @override
+  String get budgets_all => 'Tüm bütçeler';
+
+  @override
+  String get budgets_title => 'Bütçeler';
+
+  @override
+  String budget_left(String amount) {
+    return '$amount kaldı';
+  }
+
+  @override
+  String budget_over(String amount) {
+    return '$amount aşıldı';
+  }
+
+  @override
+  String budget_starts(String date) {
+    return '$date tarihinde başlar';
+  }
+
+  @override
+  String get budget_ended => 'Bitti';
+
+  @override
+  String budget_per_day(String amount) {
+    return '$amount/gün';
+  }
+
+  @override
+  String budget_spent_of(String spent, String limit) {
+    return '$limit bütçenin $spent kadarı harcandı';
+  }
+
+  @override
+  String get budget_this_week => 'Bu hafta';
+
+  @override
+  String get budget_set_limit => 'Harcama limiti belirle';
+
+  @override
+  String budget_toast_suffix(String name, String amount) {
+    return '$name: $amount kaldı';
+  }
+
+  @override
+  String budget_toast_suffix_over(String name, String amount) {
+    return '$name: $amount aşıldı';
+  }
+
+  @override
+  String get budget_all_spending => 'Tüm harcamalar';
+
+  @override
+  String get budget_name => 'Ad';
+
+  @override
+  String get budget_name_placeholder => 'ad';
+
+  @override
+  String get budget_what_counts => 'Neler sayılır';
+
+  @override
+  String get budget_wallets => 'Cüzdanlar';
+
+  @override
+  String get budget_all_wallets => 'Tüm cüzdanlar';
+
+  @override
+  String get budget_tags => 'Etiketler';
+
+  @override
+  String get budget_any_tag => 'Herhangi bir etiket';
+
+  @override
+  String get budget_scope_all => 'Tüm harcamaları sayar.';
+
+  @override
+  String budget_scope_wallets(String wallets) {
+    return '$wallets cüzdanındaki harcamaları sayar.';
+  }
+
+  @override
+  String budget_scope_tags(String tags) {
+    return '$tags etiketli harcamaları sayar.';
+  }
+
+  @override
+  String budget_scope_both(String wallets, String tags) {
+    return '$wallets cüzdanındaki $tags etiketli harcamaları sayar.';
+  }
+
+  @override
+  String get budget_scope_or => 'veya';
+
+  @override
+  String get budget_period_section => 'Dönem';
+
+  @override
+  String get budget_repeats => 'Tekrar';
+
+  @override
+  String get budget_period_weekly => 'Haftalık';
+
+  @override
+  String get budget_period_monthly => 'Aylık';
+
+  @override
+  String get budget_period_yearly => 'Yıllık';
+
+  @override
+  String get budget_period_custom => 'Tek seferlik';
+
+  @override
+  String get budget_starts_on => 'Başlangıç';
+
+  @override
+  String get budget_first_day => 'İlk gün';
+
+  @override
+  String get budget_last_day => 'Son gün';
+
+  @override
+  String budget_day_of_month(int day) {
+    return 'Ayın $day. günü';
+  }
+
+  @override
+  String get budget_start_day_title => 'Başlangıç günü';
+
+  @override
+  String get budget_start_day_hint => 'Kısa aylarda son günde başlar.';
+
+  @override
+  String get budget_start_weekday_title => 'Haftanın ilk günü';
+
+  @override
+  String get budget_carry_over => 'Devretme';
+
+  @override
+  String get budget_rollover_none => 'Devretme';
+
+  @override
+  String get budget_rollover_surplus => 'Kalanı devret';
+
+  @override
+  String get budget_rollover_both => 'Kalanı ve aşımı devret';
+
+  @override
+  String get budget_count_planned => 'Planlananı say';
+
+  @override
+  String get budget_count_planned_hint => 'Yaklaşanlar ve abonelikler dahil';
+
+  @override
+  String get budget_count_planned_desc =>
+      'Yaklaşan ödemeler ve abonelikler, ödenmeden önce limitten düşer.';
+
+  @override
+  String budget_suggested_months(String amount) {
+    return 'Öneri: $amount · son 3 ay ort.';
+  }
+
+  @override
+  String budget_suggested_weeks(String amount) {
+    return 'Öneri: $amount · son 3 hafta ort.';
+  }
+
+  @override
+  String budget_suggested_years(String amount) {
+    return 'Öneri: $amount · son 3 yıl ort.';
+  }
+
+  @override
+  String get budget_deleted => 'Bütçe silindi';
+
+  @override
+  String budget_delete_title(String name) {
+    return '$name silinsin mi?';
+  }
+
+  @override
+  String get budget_delete_message => 'İşlemleriniz olduğu gibi kalır.';
+
+  @override
+  String get budget_error_name => 'Ad en fazla 40 karakter';
+
+  @override
+  String get budget_error_dates => 'Son gün ilk günden sonra olmalı';
+
+  @override
+  String get budget_left_caption => 'kaldı';
+
+  @override
+  String get budget_over_caption => 'aşıldı';
+
+  @override
+  String get budget_under_caption => 'altında';
+
+  @override
+  String budget_spent(String amount) {
+    return 'Harcanan $amount';
+  }
+
+  @override
+  String budget_planned(String amount) {
+    return 'Planlanan $amount';
+  }
+
+  @override
+  String budget_limit(String amount) {
+    return 'Limit $amount';
+  }
+
+  @override
+  String budget_carried(String amount) {
+    return '$amount devredildi';
+  }
+
+  @override
+  String get budget_on_track => 'Planlandığı gibi';
+
+  @override
+  String budget_ahead_of_pace(String amount) {
+    return 'plandan $amount geride';
+  }
+
+  @override
+  String budget_faster_than_planned(String amount) {
+    return 'plandan $amount hızlı';
+  }
+
+  @override
+  String budget_forecast(String amount) {
+    return 'tahmin $amount';
+  }
+
+  @override
+  String get budget_no_spending => 'Bu dönemde henüz harcama yok';
+
+  @override
+  String get budgets_active => 'Etkin';
+
+  @override
+  String get budgets_upcoming => 'Yaklaşan';
+
+  @override
+  String get budgets_empty_title => 'Henüz bütçe yok';
+
+  @override
+  String get budgets_empty_subtitle =>
+      'Bir limit belirleyin, kalanı takip edin';
+
+  @override
+  String budgets_more_count(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '+$count bütçe daha',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String budget_per_day_for(String amount, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count gün',
+    );
+    return '$_temp0 boyunca $amount/gün';
+  }
+
+  @override
+  String budget_subscriptions_planned(int count, String amount) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count abonelik',
+    );
+    return '$_temp0 · $amount';
+  }
+
+  @override
+  String budgets_finished(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Biten ($count)',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String wallet_deleted_removed_budgets(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count bütçe kaldırıldı',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get debts_title => 'Borçlar';
+
+  @override
+  String get debts_owed_to_me => 'Bana borçlu';
+
+  @override
+  String get debts_i_owe => 'Borcum';
+
+  @override
+  String get debts_empty_owed_title => 'Kimse size borçlu değil';
+
+  @override
+  String get debts_empty_owe_title => 'Kimseye borcunuz yok';
+
+  @override
+  String get debts_empty_subtitle =>
+      'Borç verirken işlem ekranında bir kişi seçin';
+
+  @override
+  String get debt_new => 'Yeni borç';
+
+  @override
+  String get debts_all => 'Tüm borçlar';
+
+  @override
+  String get debts_empty_hint => 'Verdiğin ve aldığın borçları takip et';
+
+  @override
+  String get dashboard_reorder_hint => 'Sıralamak için basılı tut';
+
+  @override
+  String dashboard_budgets_over(int count) {
+    return 'limit aşan: $count';
+  }
+
+  @override
+  String dashboard_budgets_at_risk(int count) {
+    return 'riskte: $count';
+  }
+
+  @override
+  String get dashboard_budgets_on_track => 'Hepsi yolunda';
+
+  @override
+  String dashboard_debts_to_receive(String amount) {
+    return 'alacak $amount';
+  }
+
+  @override
+  String dashboard_debts_to_pay(String amount) {
+    return 'borç $amount';
+  }
+
+  @override
+  String get dashboard_new => 'Yeni';
+
+  @override
+  String get debt_they_owe_me => 'Bana borçlu';
+
+  @override
+  String get debt_i_owe_them => 'Ben borçluyum';
+
+  @override
+  String get debt_person => 'Kişi';
+
+  @override
+  String get debt_person_chip => 'Kişi';
+
+  @override
+  String get debt_person_title => 'Kişi';
+
+  @override
+  String get debt_person_search => 'Ad';
+
+  @override
+  String get debt_person_empty => 'Henüz kimse yok — bir ad yazın';
+
+  @override
+  String get debt_person_none => 'Kişi yok';
+
+  @override
+  String get debt_choose => 'Seç';
+
+  @override
+  String get debt_amount => 'Tutar';
+
+  @override
+  String get debt_note_hint => 'Not (isteğe bağlı)';
+
+  @override
+  String get debt_note_placeholder => 'not';
+
+  @override
+  String get debt_due_date => 'Vade';
+
+  @override
+  String get debt_due_title => 'Vade';
+
+  @override
+  String get debt_add_due => 'Vade';
+
+  @override
+  String get debt_due_change => 'Tarihi değiştir';
+
+  @override
+  String get debt_due_remove => 'Vadeyi kaldır';
+
+  @override
+  String get debt_none => 'Yok';
+
+  @override
+  String get debt_money_moved => 'Para hareketi';
+
+  @override
+  String get debt_not_in_wallet => 'Cüzdan dışında';
+
+  @override
+  String get debt_error_person => 'Bir kişi seçin';
+
+  @override
+  String get debt_gave => 'Verdim';
+
+  @override
+  String get debt_got => 'Aldım';
+
+  @override
+  String get debt_badge_loan => 'Borç';
+
+  @override
+  String get debt_badge_return => 'İade';
+
+  @override
+  String get debt_overdue => 'gecikmiş';
+
+  @override
+  String get debt_settled_label => 'Kapandı';
+
+  @override
+  String get debt_forgiven_label => 'Affedildi';
+
+  @override
+  String get debt_returned_in_full => 'Tamamı iade edildi';
+
+  @override
+  String get debt_paid_in_full => 'Tamamı ödendi';
+
+  @override
+  String get debt_part => 'Kısmi';
+
+  @override
+  String get debt_forgive => 'Affet';
+
+  @override
+  String get debt_remind => 'Hatırlat';
+
+  @override
+  String get debt_history => 'Geçmiş';
+
+  @override
+  String get debt_edit_note => 'Notu düzenle';
+
+  @override
+  String get debt_rename_person => 'Kişiyi yeniden adlandır';
+
+  @override
+  String get debt_delete => 'Borcu sil';
+
+  @override
+  String get debt_delete_title => 'Bu borç silinsin mi?';
+
+  @override
+  String get debt_deleted => 'Borç silindi';
+
+  @override
+  String get debt_payment_deleted => 'Ödeme silindi';
+
+  @override
+  String get debt_return_deleted => 'İade silindi';
+
+  @override
+  String debt_due(String date) {
+    return 'vade $date';
+  }
+
+  @override
+  String debt_left(String amount) {
+    return '$amount kaldı';
+  }
+
+  @override
+  String debt_left_of(String amount) {
+    return '$amount içinden kalan';
+  }
+
+  @override
+  String debt_of(String amount) {
+    return '$amount içinden';
+  }
+
+  @override
+  String debt_to_wallet(String wallet) {
+    return '$wallet cüzdanına';
+  }
+
+  @override
+  String debt_from_wallet(String wallet) {
+    return '$wallet cüzdanından';
+  }
+
+  @override
+  String debt_owes_you(String name, String amount) {
+    return '$name size $amount borçlu';
+  }
+
+  @override
+  String debt_you_owe(String name, String amount) {
+    return '$name kişisine $amount borçlusunuz';
+  }
+
+  @override
+  String debt_overall(String text) {
+    return 'Toplamda: $text';
+  }
+
+  @override
+  String debt_overall_both(String name, String owed, String owe) {
+    return 'Toplamda: $name size $owed borçlu · siz $owe borçlusunuz';
+  }
+
+  @override
+  String debt_hint_owes_you(String name, String amount) {
+    return '$name size $amount borçlu · \"Aldım\" iade sayılır';
+  }
+
+  @override
+  String debt_hint_you_owe(String name, String amount) {
+    return '$name kişisine $amount borçlusunuz · \"Verdim\" geri ödeme sayılır';
+  }
+
+  @override
+  String debt_hint_both(String name, String owed, String owe) {
+    return '$name size $owed borçlu · siz $owe borçlusunuz';
+  }
+
+  @override
+  String debt_hint_none(String name) {
+    return '$name ile açık borç yok · \"Verdim\" borç verir, \"Aldım\" borç alır';
+  }
+
+  @override
+  String debt_person_add(String name) {
+    return '\"$name\" ekle';
+  }
+
+  @override
+  String debt_picker_owes_you(String amount) {
+    return 'size $amount borçlu';
+  }
+
+  @override
+  String debt_picker_you_owe(String amount) {
+    return 'siz $amount borçlusunuz';
+  }
+
+  @override
+  String debt_title_lent_to(String name) {
+    return '$name kişisine borç verildi';
+  }
+
+  @override
+  String debt_title_borrowed_from(String name) {
+    return '$name kişisinden borç alındı';
+  }
+
+  @override
+  String debt_title_paid_back_by(String name) {
+    return '$name geri ödedi';
+  }
+
+  @override
+  String debt_title_paid_back_to(String name) {
+    return '$name kişisine geri ödendi';
+  }
+
+  @override
+  String debt_toast_lent(String amount, String name) {
+    return '$name kişisine $amount borç verildi';
+  }
+
+  @override
+  String debt_toast_borrowed(String amount, String name) {
+    return '$name kişisinden $amount borç alındı';
+  }
+
+  @override
+  String debt_toast_returned(String name, String amount, String left) {
+    return '$name $amount geri ödedi · $left kaldı';
+  }
+
+  @override
+  String debt_toast_returned_settled(String name, String amount) {
+    return '$name $amount geri ödedi · hepsi kapandı';
+  }
+
+  @override
+  String debt_toast_paid_back(String amount, String name, String left) {
+    return '$name kişisine $amount geri ödendi · $left kaldı';
+  }
+
+  @override
+  String debt_toast_paid_back_settled(String amount, String name) {
+    return '$name kişisine $amount geri ödendi · hepsi kapandı';
+  }
+
+  @override
+  String debt_forgive_title(String name) {
+    return '$name affedilsin mi?';
+  }
+
+  @override
+  String debt_forgive_message(String amount) {
+    return 'Kalan $amount silinecek. Para hareketi olmaz.';
+  }
+
+  @override
+  String debt_forgiven_toast(String name) {
+    return 'Borç affedildi · $name';
+  }
+
+  @override
+  String debt_remind_message(
+    String name,
+    String amount,
+    String note,
+    String date,
+  ) {
+    return 'Merhaba $name! $note için $amount ($date) hatırlatması. Teşekkürler!';
+  }
+
+  @override
+  String debt_remind_message_no_note(String name, String amount, String date) {
+    return 'Merhaba $name! $amount ($date) hatırlatması. Teşekkürler!';
+  }
+
+  @override
+  String debt_history_lent(String amount) {
+    return '$amount borç verildi';
+  }
+
+  @override
+  String debt_history_lent_from(String amount, String wallet) {
+    return '$wallet cüzdanından $amount borç verildi';
+  }
+
+  @override
+  String debt_history_borrowed(String amount) {
+    return '$amount borç alındı';
+  }
+
+  @override
+  String debt_history_borrowed_into(String amount, String wallet) {
+    return '$wallet cüzdanına $amount borç alındı';
+  }
+
+  @override
+  String debt_history_returned(String amount) {
+    return '$amount iade edildi';
+  }
+
+  @override
+  String debt_history_returned_to(String amount, String wallet) {
+    return '$amount iade → $wallet';
+  }
+
+  @override
+  String debt_history_paid(String amount) {
+    return '$amount geri ödendi';
+  }
+
+  @override
+  String debt_history_paid_from(String amount, String wallet) {
+    return '$wallet cüzdanından $amount geri ödendi';
+  }
+
+  @override
+  String debt_history_forgiven(String amount) {
+    return '$amount affedildi';
+  }
+
+  @override
+  String debts_overdue_count(int count) {
+    return '$count gecikmiş';
+  }
+
+  @override
+  String debts_count(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count borç',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String debts_people_count(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count kişi',
+      zero: 'Kimse',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String debts_settled(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Kapananlar ($count)',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String debt_cascade_deleted(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Borç $count iadeyle birlikte silindi',
+      zero: 'Borç silindi',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String debt_delete_message(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count cüzdan işlemi de silinecek.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get subscriptions_new => 'Yeni Abonelik';
+
+  @override
+  String subscriptions_active_count(int count) {
+    return '$count aktif';
+  }
+
+  @override
+  String subscriptions_paused_count(int count) {
+    return '$count duraklatıldı';
+  }
+
+  @override
+  String get wallet_budgets_empty_subtitle =>
+      'Bu cüzdanı kontrol altında tutmak için bir harcama limiti belirle.';
+
+  @override
+  String get wallet_include_in_total => 'Toplam bakiyeye dahil et';
+
+  @override
+  String get wallet_include_in_total_on =>
+      'Bu cüzdanın bakiyesi ana ekrandaki toplama eklenir.';
+
+  @override
+  String get wallet_include_in_total_off =>
+      'Ana ekrandaki toplama dahil değil — birikim, ortak veya yalnızca takip cüzdanları için kullanışlı.';
+
+  @override
+  String dashboard_wallets_excluded(int count) {
+    return '$count hariç';
+  }
+
+  @override
+  String get budget_rollover_none_desc =>
+      'Her dönem aynı limitle sıfırdan başlar. Kalan ve aşım devredilmez.';
+
+  @override
+  String get budget_rollover_surplus_desc =>
+      'Harcamadığın tutar bir sonraki dönemin limitine eklenir.';
+
+  @override
+  String get budget_rollover_both_desc =>
+      'Kalan bir sonraki limiti artırır, aşım ise düşürür.';
+
+  @override
+  String budget_used_percent(int percent) {
+    return '%$percent kullanıldı';
+  }
+
+  @override
+  String get budget_stat_spent => 'Harcanan';
+
+  @override
+  String get budget_stat_limit => 'Limit';
+
+  @override
+  String get budget_stat_planned => 'Planlanan';
+
+  @override
+  String get budget_stat_per_day => 'Günlük';
+
+  @override
+  String get budget_stat_forecast => 'Tahmin';
+
+  @override
+  String budget_days_left(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count gün kaldı',
+    );
+    return '$_temp0';
+  }
 
   @override
   String get l10nStopLineDontTouch =>

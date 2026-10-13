@@ -117,24 +117,7 @@ class UiTransactionCard extends StatelessWidget {
                   if (tags.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.only(top: 3),
-                      child: Wrap(
-                        spacing: 6,
-                        runSpacing: 4,
-                        children: [
-                          for (final t in tags)
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
-                              decoration: BoxDecoration(
-                                color: UIColorToken.blue.withValues(alpha: 0.10),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Text(
-                                '#$t',
-                                style: typo.semiBold.copyWith(fontSize: 10, color: UIColorToken.blue),
-                              ),
-                            ),
-                        ],
-                      ),
+                      child: UiTagChips(tags: tags),
                     ),
                 ],
               ),

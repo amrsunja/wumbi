@@ -222,6 +222,19 @@ class AppLocalizationsDe extends AppLocalizations {
   String get wallet_has_transactions => 'Hat Transaktionen';
 
   @override
+  String get wallet_tab_transactions => 'Transaktionen';
+
+  @override
+  String get wallet_tab_budgets => 'Budgets';
+
+  @override
+  String get wallet_tab_subscriptions => 'Abos';
+
+  @override
+  String get wallet_budgets_empty =>
+      'Noch keine Ausgabenlimits für diese Wallet';
+
+  @override
   String get wallet_pick_another_primary => 'Wähle ein anderes Hauptkonto';
 
   @override
@@ -703,6 +716,236 @@ class AppLocalizationsDe extends AppLocalizations {
   String get tag_wallet_deleted => '(gelöscht)';
 
   @override
+  String get tags_new => 'Neuer Tag';
+
+  @override
+  String get tags_create => 'Tag erstellen';
+
+  @override
+  String tags_created(String name) {
+    return '#$name erstellt';
+  }
+
+  @override
+  String tags_exists(String name) {
+    return '#$name gibt es schon';
+  }
+
+  @override
+  String get tags_parent => 'Übergeordneter Tag';
+
+  @override
+  String get tags_parent_none => 'Keiner';
+
+  @override
+  String get tags_name_hint => 'z. B. kaffee';
+
+  @override
+  String get tags_create_tip =>
+      'Tipp: Tippe essen/kaffee, um einen Tag direkt zu verschachteln.';
+
+  @override
+  String tags_nested_count(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count verschachtelt',
+      one: '1 verschachtelt',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get tags_help => 'Wie nutze ich Tags?';
+
+  @override
+  String get tags_graph_mode_all => 'Alle';
+
+  @override
+  String get tags_graph_mode_spending => 'Ausgaben';
+
+  @override
+  String get tags_graph_mode_income => 'Einnahmen';
+
+  @override
+  String get tags_graph_legend_size => 'Größer = mehr Geld';
+
+  @override
+  String get tags_graph_legend_nested => 'Verschachtelt';
+
+  @override
+  String get tags_graph_legend_together => 'Zusammen genutzt';
+
+  @override
+  String get tags_graph_tap_hint =>
+      'Tippe auf einen Kreis, um seine Zahlen zu sehen';
+
+  @override
+  String get tags_graph_open => 'Öffnen';
+
+  @override
+  String tags_graph_linked(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Mit $count Tags verbunden',
+      one: 'Mit 1 Tag verbunden',
+      zero: 'Noch keine Verbindungen',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get tag_move => 'Verschieben';
+
+  @override
+  String tag_move_title(String name) {
+    return '#$name verschieben';
+  }
+
+  @override
+  String get tag_moved => 'Tag verschoben';
+
+  @override
+  String get tag_add_nested => 'Verschachtelten Tag hinzufügen';
+
+  @override
+  String get tag_nested_tags => 'Verschachtelte Tags';
+
+  @override
+  String tag_includes_nested(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Enthält $count verschachtelte Tags',
+      one: 'Enthält 1 verschachtelten Tag',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String tag_delete_nested_message(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'Er und seine $count verschachtelten Tags werden aus allen Transaktionen entfernt. Die Transaktionen selbst bleiben.',
+      one:
+          'Er und sein verschachtelter Tag werden aus allen Transaktionen entfernt. Die Transaktionen selbst bleiben.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get tag_rename_nested_hint =>
+      'Verschachtelte Tags werden mit umbenannt. Mit / verschiebst du ihn unter einen anderen Tag.';
+
+  @override
+  String get tag_top_level => 'Oberste Ebene';
+
+  @override
+  String get tag_nested_empty => 'Noch keine verschachtelten Tags';
+
+  @override
+  String get settings_help => 'Hilfe nötig?';
+
+  @override
+  String get help_title => 'Hilfe nötig?';
+
+  @override
+  String get help_subtitle =>
+      'Kurze Anleitungen, damit du das Beste aus Wumbi holst.';
+
+  @override
+  String get help_tags_title => 'Wie nutze ich Tags?';
+
+  @override
+  String get help_tags_subtitle => 'Labels, verschachtelte Tags und die Karte';
+
+  @override
+  String get help_tags_intro =>
+      'Tags sind kurze Labels wie #kaffee, die du deinen Transaktionen gibst. Eine Transaktion kann mehrere Tags tragen – so siehst du dein Geld aus jedem Blickwinkel, nicht nur pro Wallet.';
+
+  @override
+  String get help_tags_add_title => 'Einen Tag hinzufügen';
+
+  @override
+  String get help_tags_add_body =>
+      'Beim Erfassen einer Transaktion tippst du einen Namen ins Tag-Feld und wählst einen Vorschlag oder legst einen neuen an. Tags haben keine Leerzeichen – schreib coffee-shop oder coffee_shop. Groß- und Kleinschreibung ergeben denselben Tag.';
+
+  @override
+  String get help_tags_nested_title => 'Verschachtelte Tags';
+
+  @override
+  String get help_tags_nested_body =>
+      'Mit einem Schrägstrich / legst du einen Tag in einen anderen, wie Ordner: essen/kaffee und essen/einkauf liegen beide in essen. Der übergeordnete Tag wird automatisch angelegt.';
+
+  @override
+  String get help_tags_parent_title =>
+      'Ein übergeordneter Tag enthält seine verschachtelten Tags';
+
+  @override
+  String get help_tags_parent_body =>
+      '#essen zeigt alle Transaktionen mit #essen, #essen/kaffee oder #essen/einkauf. Summen, Filter und Budgets eines übergeordneten Tags zählen seine verschachtelten Tags mit. Eine Transaktion mit beiden Tags zählt nur einmal.';
+
+  @override
+  String get help_tags_multi_title => 'Mehrere Tags an einer Transaktion';
+
+  @override
+  String get help_tags_multi_body =>
+      'Ein Abendessen im Urlaub kann gleichzeitig #reise und #essen/restaurant sein. Es zählt dann in beiden, und die zwei Tags werden auf der Karte verbunden.';
+
+  @override
+  String get help_tags_manage_title => 'Erstellen, umbenennen, verschieben';
+
+  @override
+  String get help_tags_manage_body =>
+      'Tippe auf der Tags-Seite auf +, um einen Tag zu erstellen, und wähle einen übergeordneten Tag, um ihn zu verschachteln. Öffne einen Tag, um ihn umzubenennen, unter einen anderen Tag zu verschieben, einen verschachtelten Tag hinzuzufügen oder ihn zu löschen. Benennst du einen übergeordneten Tag um, folgen seine verschachtelten Tags; benennst du ihn wie einen bestehenden Tag, werden beide zusammengeführt.';
+
+  @override
+  String get help_tags_map_title => 'Die Karte lesen';
+
+  @override
+  String get help_tags_map_body =>
+      'Jeder Kreis ist ein Tag: Je größer, desto mehr Geld ist geflossen. Sein Ring zeigt den Anteil von Ausgaben und Einnahmen. Durchgezogene Linien verbinden einen übergeordneten Tag mit seinen verschachtelten Tags, zarte Linien verbinden Tags derselben Transaktion. Tippe auf einen Kreis, um seine Zahlen zu sehen.';
+
+  @override
+  String get help_tags_tips_title => 'Tipps';
+
+  @override
+  String get help_tags_tip1 =>
+      'Fang breit an – essen, wohnen, verkehr – und verschachtele nur, wenn du mehr Details willst.';
+
+  @override
+  String get help_tags_tip2 =>
+      'Nutze Tags für alles, was quer durch deine Wallets geht: #urlaub, #geschenke, #auto.';
+
+  @override
+  String get help_tags_tip3 =>
+      'Halte Namen kurz; zwei oder drei Ebenen reichen.';
+
+  @override
+  String get help_tags_example => 'Beispiel';
+
+  @override
+  String get help_tags_example_total => 'Summe für #essen';
+
+  @override
+  String get help_tags_ex_parent => 'essen';
+
+  @override
+  String get help_tags_ex_child1 => 'kaffee';
+
+  @override
+  String get help_tags_ex_child2 => 'einkauf';
+
+  @override
+  String get help_tags_ex_travel => 'reise';
+
+  @override
+  String get help_tags_ex_restaurant => 'restaurant';
+
+  @override
   String get l10nSubscriptions =>
       '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ SUBSCRIPTIONS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
 
@@ -1016,6 +1259,23 @@ class AppLocalizationsDe extends AppLocalizations {
   String get error_not_found => 'Dieser Eintrag existiert nicht mehr.';
 
   @override
+  String debt_error_owes_you_only(String name, String amount) {
+    return '$name schuldet dir nur $amount';
+  }
+
+  @override
+  String debt_error_you_owe_only(String name, String amount) {
+    return 'Du schuldest $name nur $amount';
+  }
+
+  @override
+  String get person_error_has_debts =>
+      'Begleiche oder lösche zuerst die Schulden dieser Person.';
+
+  @override
+  String get debt_error_closed => 'Diese Schuld ist bereits beglichen.';
+
+  @override
   String get error_tag_name => 'Gib einen Tag-Namen ein (max. 30 Zeichen).';
 
   @override
@@ -1027,6 +1287,851 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get error_reset_app => 'App zurücksetzen';
+
+  @override
+  String get dashboard_budgets => 'Budgets';
+
+  @override
+  String get budget_new => 'Neues Budget';
+
+  @override
+  String get budget_empty_hint =>
+      'Lege ein Ausgabenlimit für ein Wallet oder einen #Tag fest';
+
+  @override
+  String get budgets_all => 'Alle Budgets';
+
+  @override
+  String get budgets_title => 'Budgets';
+
+  @override
+  String budget_left(String amount) {
+    return '$amount übrig';
+  }
+
+  @override
+  String budget_over(String amount) {
+    return '$amount drüber';
+  }
+
+  @override
+  String budget_starts(String date) {
+    return 'Beginnt am $date';
+  }
+
+  @override
+  String get budget_ended => 'Beendet';
+
+  @override
+  String budget_per_day(String amount) {
+    return '$amount/Tag';
+  }
+
+  @override
+  String budget_spent_of(String spent, String limit) {
+    return '$spent von $limit ausgegeben';
+  }
+
+  @override
+  String get budget_this_week => 'Diese Woche';
+
+  @override
+  String get budget_set_limit => 'Ausgabenlimit festlegen';
+
+  @override
+  String budget_toast_suffix(String name, String amount) {
+    return '$name: $amount übrig';
+  }
+
+  @override
+  String budget_toast_suffix_over(String name, String amount) {
+    return '$name: $amount drüber';
+  }
+
+  @override
+  String get budget_all_spending => 'Alle Ausgaben';
+
+  @override
+  String get budget_name => 'Name';
+
+  @override
+  String get budget_name_placeholder => 'Name';
+
+  @override
+  String get budget_what_counts => 'Was zählt';
+
+  @override
+  String get budget_wallets => 'Wallets';
+
+  @override
+  String get budget_all_wallets => 'Alle Wallets';
+
+  @override
+  String get budget_tags => 'Tags';
+
+  @override
+  String get budget_any_tag => 'Beliebiger Tag';
+
+  @override
+  String get budget_scope_all => 'Zählt jede Ausgabe.';
+
+  @override
+  String budget_scope_wallets(String wallets) {
+    return 'Zählt Ausgaben aus $wallets.';
+  }
+
+  @override
+  String budget_scope_tags(String tags) {
+    return 'Zählt Ausgaben mit $tags.';
+  }
+
+  @override
+  String budget_scope_both(String wallets, String tags) {
+    return 'Zählt Ausgaben aus $wallets mit $tags.';
+  }
+
+  @override
+  String get budget_scope_or => 'oder';
+
+  @override
+  String get budget_period_section => 'Zeitraum';
+
+  @override
+  String get budget_repeats => 'Wiederholung';
+
+  @override
+  String get budget_period_weekly => 'Wöchentlich';
+
+  @override
+  String get budget_period_monthly => 'Monatlich';
+
+  @override
+  String get budget_period_yearly => 'Jährlich';
+
+  @override
+  String get budget_period_custom => 'Einmalig';
+
+  @override
+  String get budget_starts_on => 'Beginnt am';
+
+  @override
+  String get budget_first_day => 'Erster Tag';
+
+  @override
+  String get budget_last_day => 'Letzter Tag';
+
+  @override
+  String budget_day_of_month(int day) {
+    return 'Am $day.';
+  }
+
+  @override
+  String get budget_start_day_title => 'Starttag';
+
+  @override
+  String get budget_start_day_hint => 'Kürzere Monate beginnen am letzten Tag.';
+
+  @override
+  String get budget_start_weekday_title => 'Erster Wochentag';
+
+  @override
+  String get budget_carry_over => 'Übertrag';
+
+  @override
+  String get budget_rollover_none => 'Nicht übertragen';
+
+  @override
+  String get budget_rollover_surplus => 'Rest übertragen';
+
+  @override
+  String get budget_rollover_both => 'Rest und Überziehung übertragen';
+
+  @override
+  String get budget_count_planned => 'Geplantes zählen';
+
+  @override
+  String get budget_count_planned_hint => 'Inklusive Anstehendem und Abos';
+
+  @override
+  String get budget_count_planned_desc =>
+      'Geplante Zahlungen und Abos zählen schon vor der Zahlung zum Limit.';
+
+  @override
+  String budget_suggested_months(String amount) {
+    return 'Vorschlag: $amount · Ø der letzten 3 Monate';
+  }
+
+  @override
+  String budget_suggested_weeks(String amount) {
+    return 'Vorschlag: $amount · Ø der letzten 3 Wochen';
+  }
+
+  @override
+  String budget_suggested_years(String amount) {
+    return 'Vorschlag: $amount · Ø der letzten 3 Jahre';
+  }
+
+  @override
+  String get budget_deleted => 'Budget gelöscht';
+
+  @override
+  String budget_delete_title(String name) {
+    return '$name löschen?';
+  }
+
+  @override
+  String get budget_delete_message => 'Deine Buchungen bleiben unverändert.';
+
+  @override
+  String get budget_error_name => 'Name bis 40 Zeichen';
+
+  @override
+  String get budget_error_dates => 'Der letzte Tag muss nach dem ersten liegen';
+
+  @override
+  String get budget_left_caption => 'übrig';
+
+  @override
+  String get budget_over_caption => 'drüber';
+
+  @override
+  String get budget_under_caption => 'darunter';
+
+  @override
+  String budget_spent(String amount) {
+    return 'Ausgegeben $amount';
+  }
+
+  @override
+  String budget_planned(String amount) {
+    return 'Geplant $amount';
+  }
+
+  @override
+  String budget_limit(String amount) {
+    return 'Limit $amount';
+  }
+
+  @override
+  String budget_carried(String amount) {
+    return '$amount übertragen';
+  }
+
+  @override
+  String get budget_on_track => 'Im Plan';
+
+  @override
+  String budget_ahead_of_pace(String amount) {
+    return '$amount unter Plan';
+  }
+
+  @override
+  String budget_faster_than_planned(String amount) {
+    return '$amount schneller als geplant';
+  }
+
+  @override
+  String budget_forecast(String amount) {
+    return 'Prognose $amount';
+  }
+
+  @override
+  String get budget_no_spending => 'In diesem Zeitraum noch keine Ausgaben';
+
+  @override
+  String get budgets_active => 'Aktiv';
+
+  @override
+  String get budgets_upcoming => 'Anstehend';
+
+  @override
+  String get budgets_empty_title => 'Noch keine Budgets';
+
+  @override
+  String get budgets_empty_subtitle =>
+      'Lege ein Limit fest und behalte den Rest im Blick';
+
+  @override
+  String budgets_more_count(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '+$count weitere Budgets',
+      one: '+1 weiteres Budget',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String budget_per_day_for(String amount, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Tage',
+      one: '1 Tag',
+    );
+    return '$amount/Tag für $_temp0';
+  }
+
+  @override
+  String budget_subscriptions_planned(int count, String amount) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Abos',
+      one: '1 Abo',
+    );
+    return '$_temp0 · $amount';
+  }
+
+  @override
+  String budgets_finished(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Beendet ($count)',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String wallet_deleted_removed_budgets(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Budgets entfernt',
+      one: '1 Budget entfernt',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get debts_title => 'Schulden';
+
+  @override
+  String get debts_owed_to_me => 'Mir geschuldet';
+
+  @override
+  String get debts_i_owe => 'Ich schulde';
+
+  @override
+  String get debts_empty_owed_title => 'Niemand schuldet dir etwas';
+
+  @override
+  String get debts_empty_owe_title => 'Du schuldest niemandem etwas';
+
+  @override
+  String get debts_empty_subtitle =>
+      'Wähle beim Verleihen eine Person auf dem Buchungsbildschirm';
+
+  @override
+  String get debt_new => 'Neue Schuld';
+
+  @override
+  String get debts_all => 'Alle Schulden';
+
+  @override
+  String get debts_empty_hint =>
+      'Behalte im Blick, was du verliehen oder geliehen hast';
+
+  @override
+  String get dashboard_reorder_hint => 'Halten zum Sortieren';
+
+  @override
+  String dashboard_budgets_over(int count) {
+    return '$count überschritten';
+  }
+
+  @override
+  String dashboard_budgets_at_risk(int count) {
+    return '$count gefährdet';
+  }
+
+  @override
+  String get dashboard_budgets_on_track => 'Alles im Rahmen';
+
+  @override
+  String dashboard_debts_to_receive(String amount) {
+    return '$amount zu bekommen';
+  }
+
+  @override
+  String dashboard_debts_to_pay(String amount) {
+    return '$amount zurückzuzahlen';
+  }
+
+  @override
+  String get dashboard_new => 'Neu';
+
+  @override
+  String get debt_they_owe_me => 'Mir geschuldet';
+
+  @override
+  String get debt_i_owe_them => 'Ich schulde';
+
+  @override
+  String get debt_person => 'Person';
+
+  @override
+  String get debt_person_chip => 'Person';
+
+  @override
+  String get debt_person_title => 'Person';
+
+  @override
+  String get debt_person_search => 'Name';
+
+  @override
+  String get debt_person_empty => 'Noch niemand — gib einen Namen ein';
+
+  @override
+  String get debt_person_none => 'Keine Person';
+
+  @override
+  String get debt_choose => 'Wählen';
+
+  @override
+  String get debt_amount => 'Betrag';
+
+  @override
+  String get debt_note_hint => 'Notiz (optional)';
+
+  @override
+  String get debt_note_placeholder => 'Notiz';
+
+  @override
+  String get debt_due_date => 'Fällig am';
+
+  @override
+  String get debt_due_title => 'Fälligkeit';
+
+  @override
+  String get debt_add_due => 'Fällig';
+
+  @override
+  String get debt_due_change => 'Datum ändern';
+
+  @override
+  String get debt_due_remove => 'Fälligkeit entfernen';
+
+  @override
+  String get debt_none => 'Keine';
+
+  @override
+  String get debt_money_moved => 'Geldbewegung';
+
+  @override
+  String get debt_not_in_wallet => 'Nicht über ein Wallet';
+
+  @override
+  String get debt_error_person => 'Wähle eine Person';
+
+  @override
+  String get debt_gave => 'Gegeben';
+
+  @override
+  String get debt_got => 'Erhalten';
+
+  @override
+  String get debt_badge_loan => 'Darlehen';
+
+  @override
+  String get debt_badge_return => 'Rückzahlung';
+
+  @override
+  String get debt_overdue => 'überfällig';
+
+  @override
+  String get debt_settled_label => 'Beglichen';
+
+  @override
+  String get debt_forgiven_label => 'Erlassen';
+
+  @override
+  String get debt_returned_in_full => 'Vollständig zurück';
+
+  @override
+  String get debt_paid_in_full => 'Vollständig bezahlt';
+
+  @override
+  String get debt_part => 'Teilweise';
+
+  @override
+  String get debt_forgive => 'Erlassen';
+
+  @override
+  String get debt_remind => 'Erinnern';
+
+  @override
+  String get debt_history => 'Verlauf';
+
+  @override
+  String get debt_edit_note => 'Notiz bearbeiten';
+
+  @override
+  String get debt_rename_person => 'Person umbenennen';
+
+  @override
+  String get debt_delete => 'Schuld löschen';
+
+  @override
+  String get debt_delete_title => 'Diese Schuld löschen?';
+
+  @override
+  String get debt_deleted => 'Schuld gelöscht';
+
+  @override
+  String get debt_payment_deleted => 'Zahlung gelöscht';
+
+  @override
+  String get debt_return_deleted => 'Rückzahlung gelöscht';
+
+  @override
+  String debt_due(String date) {
+    return 'fällig $date';
+  }
+
+  @override
+  String debt_left(String amount) {
+    return '$amount offen';
+  }
+
+  @override
+  String debt_left_of(String amount) {
+    return 'offen von $amount';
+  }
+
+  @override
+  String debt_of(String amount) {
+    return 'von $amount';
+  }
+
+  @override
+  String debt_to_wallet(String wallet) {
+    return 'auf $wallet';
+  }
+
+  @override
+  String debt_from_wallet(String wallet) {
+    return 'von $wallet';
+  }
+
+  @override
+  String debt_owes_you(String name, String amount) {
+    return '$name schuldet dir $amount';
+  }
+
+  @override
+  String debt_you_owe(String name, String amount) {
+    return 'Du schuldest $name $amount';
+  }
+
+  @override
+  String debt_overall(String text) {
+    return 'Insgesamt: $text';
+  }
+
+  @override
+  String debt_overall_both(String name, String owed, String owe) {
+    return 'Insgesamt: $name schuldet dir $owed · du schuldest $owe';
+  }
+
+  @override
+  String debt_hint_owes_you(String name, String amount) {
+    return '$name schuldet dir $amount · „Erhalten“ zählt als Rückzahlung';
+  }
+
+  @override
+  String debt_hint_you_owe(String name, String amount) {
+    return 'Du schuldest $name $amount · „Gegeben“ zählt als Rückzahlung';
+  }
+
+  @override
+  String debt_hint_both(String name, String owed, String owe) {
+    return '$name schuldet dir $owed · du schuldest $owe';
+  }
+
+  @override
+  String debt_hint_none(String name) {
+    return 'Keine offenen Schulden mit $name · „Gegeben“ leiht, „Erhalten“ borgt';
+  }
+
+  @override
+  String debt_person_add(String name) {
+    return '„$name“ hinzufügen';
+  }
+
+  @override
+  String debt_picker_owes_you(String amount) {
+    return 'schuldet dir $amount';
+  }
+
+  @override
+  String debt_picker_you_owe(String amount) {
+    return 'du schuldest $amount';
+  }
+
+  @override
+  String debt_title_lent_to(String name) {
+    return 'An $name verliehen';
+  }
+
+  @override
+  String debt_title_borrowed_from(String name) {
+    return 'Von $name geliehen';
+  }
+
+  @override
+  String debt_title_paid_back_by(String name) {
+    return '$name hat zurückgezahlt';
+  }
+
+  @override
+  String debt_title_paid_back_to(String name) {
+    return '$name zurückgezahlt';
+  }
+
+  @override
+  String debt_toast_lent(String amount, String name) {
+    return '$amount an $name verliehen';
+  }
+
+  @override
+  String debt_toast_borrowed(String amount, String name) {
+    return '$amount von $name geliehen';
+  }
+
+  @override
+  String debt_toast_returned(String name, String amount, String left) {
+    return '$name hat $amount zurückgezahlt · $left offen';
+  }
+
+  @override
+  String debt_toast_returned_settled(String name, String amount) {
+    return '$name hat $amount zurückgezahlt · alles beglichen';
+  }
+
+  @override
+  String debt_toast_paid_back(String amount, String name, String left) {
+    return '$amount an $name zurückgezahlt · $left offen';
+  }
+
+  @override
+  String debt_toast_paid_back_settled(String amount, String name) {
+    return '$amount an $name zurückgezahlt · alles beglichen';
+  }
+
+  @override
+  String debt_forgive_title(String name) {
+    return '$name die Schuld erlassen?';
+  }
+
+  @override
+  String debt_forgive_message(String amount) {
+    return 'Die restlichen $amount werden erlassen. Kein Geld fließt.';
+  }
+
+  @override
+  String debt_forgiven_toast(String name) {
+    return 'Schuld erlassen · $name';
+  }
+
+  @override
+  String debt_remind_message(
+    String name,
+    String amount,
+    String note,
+    String date,
+  ) {
+    return 'Hallo $name! Kurze Erinnerung an $amount für $note ($date). Danke!';
+  }
+
+  @override
+  String debt_remind_message_no_note(String name, String amount, String date) {
+    return 'Hallo $name! Kurze Erinnerung an $amount ($date). Danke!';
+  }
+
+  @override
+  String debt_history_lent(String amount) {
+    return '$amount verliehen';
+  }
+
+  @override
+  String debt_history_lent_from(String amount, String wallet) {
+    return '$amount von $wallet verliehen';
+  }
+
+  @override
+  String debt_history_borrowed(String amount) {
+    return '$amount geliehen';
+  }
+
+  @override
+  String debt_history_borrowed_into(String amount, String wallet) {
+    return '$amount auf $wallet geliehen';
+  }
+
+  @override
+  String debt_history_returned(String amount) {
+    return '$amount zurückerhalten';
+  }
+
+  @override
+  String debt_history_returned_to(String amount, String wallet) {
+    return '$amount zurück → $wallet';
+  }
+
+  @override
+  String debt_history_paid(String amount) {
+    return '$amount zurückgezahlt';
+  }
+
+  @override
+  String debt_history_paid_from(String amount, String wallet) {
+    return '$amount von $wallet zurückgezahlt';
+  }
+
+  @override
+  String debt_history_forgiven(String amount) {
+    return '$amount erlassen';
+  }
+
+  @override
+  String debts_overdue_count(int count) {
+    return '$count überfällig';
+  }
+
+  @override
+  String debts_count(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Schulden',
+      one: '1 Schuld',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String debts_people_count(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Personen',
+      one: '1 Person',
+      zero: 'Niemand',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String debts_settled(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Beglichen ($count)',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String debt_cascade_deleted(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Darlehen mit $count Rückzahlungen gelöscht',
+      one: 'Darlehen mit 1 Rückzahlung gelöscht',
+      zero: 'Darlehen gelöscht',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String debt_delete_message(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Buchungen werden ebenfalls gelöscht.',
+      one: '1 Buchung wird ebenfalls gelöscht.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get subscriptions_new => 'Neues Abo';
+
+  @override
+  String subscriptions_active_count(int count) {
+    return '$count aktiv';
+  }
+
+  @override
+  String subscriptions_paused_count(int count) {
+    return '$count pausiert';
+  }
+
+  @override
+  String get wallet_budgets_empty_subtitle =>
+      'Lege ein Ausgabenlimit fest, um dieses Konto im Griff zu behalten.';
+
+  @override
+  String get wallet_include_in_total => 'Im Gesamtsaldo berücksichtigen';
+
+  @override
+  String get wallet_include_in_total_on =>
+      'Der Saldo dieses Kontos zählt zur Gesamtsumme auf der Startseite.';
+
+  @override
+  String get wallet_include_in_total_off =>
+      'Nicht in der Gesamtsumme auf der Startseite – praktisch für Ersparnisse, geteilte oder reine Tracking-Konten.';
+
+  @override
+  String dashboard_wallets_excluded(int count) {
+    return '$count nicht gezählt';
+  }
+
+  @override
+  String get budget_rollover_none_desc =>
+      'Jeder Zeitraum beginnt neu mit demselben Limit. Rest und Überziehung werden nicht übernommen.';
+
+  @override
+  String get budget_rollover_surplus_desc =>
+      'Was du nicht ausgegeben hast, kommt zum Limit des nächsten Zeitraums hinzu.';
+
+  @override
+  String get budget_rollover_both_desc =>
+      'Ein Rest erhöht das nächste Limit, eine Überziehung senkt es.';
+
+  @override
+  String budget_used_percent(int percent) {
+    return '$percent % verbraucht';
+  }
+
+  @override
+  String get budget_stat_spent => 'Ausgegeben';
+
+  @override
+  String get budget_stat_limit => 'Limit';
+
+  @override
+  String get budget_stat_planned => 'Geplant';
+
+  @override
+  String get budget_stat_per_day => 'Pro Tag';
+
+  @override
+  String get budget_stat_forecast => 'Prognose';
+
+  @override
+  String budget_days_left(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'noch $count Tage',
+      one: 'noch 1 Tag',
+    );
+    return '$_temp0';
+  }
 
   @override
   String get l10nStopLineDontTouch =>
