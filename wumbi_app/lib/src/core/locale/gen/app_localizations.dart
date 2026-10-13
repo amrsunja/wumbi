@@ -2769,37 +2769,37 @@ abstract class AppLocalizations {
   /// No description provided for @debt_person.
   ///
   /// In en, this message translates to:
-  /// **'Person'**
+  /// **'Who'**
   String get debt_person;
 
   /// No description provided for @debt_person_chip.
   ///
   /// In en, this message translates to:
-  /// **'Person'**
+  /// **'Who'**
   String get debt_person_chip;
 
   /// No description provided for @debt_person_title.
   ///
   /// In en, this message translates to:
-  /// **'Person'**
+  /// **'Who\'s it with?'**
   String get debt_person_title;
 
   /// No description provided for @debt_person_search.
   ///
   /// In en, this message translates to:
-  /// **'Name'**
+  /// **'Name — person, bank, shop…'**
   String get debt_person_search;
 
   /// No description provided for @debt_person_empty.
   ///
   /// In en, this message translates to:
-  /// **'No people yet — type a name'**
+  /// **'No one yet — type a name'**
   String get debt_person_empty;
 
   /// No description provided for @debt_person_none.
   ///
   /// In en, this message translates to:
-  /// **'No person'**
+  /// **'No one'**
   String get debt_person_none;
 
   /// No description provided for @debt_choose.
@@ -2877,7 +2877,7 @@ abstract class AppLocalizations {
   /// No description provided for @debt_error_person.
   ///
   /// In en, this message translates to:
-  /// **'Choose a person'**
+  /// **'Choose who it\'s with'**
   String get debt_error_person;
 
   /// No description provided for @debt_gave.
@@ -2967,7 +2967,7 @@ abstract class AppLocalizations {
   /// No description provided for @debt_rename_person.
   ///
   /// In en, this message translates to:
-  /// **'Rename person'**
+  /// **'Rename'**
   String get debt_rename_person;
 
   /// No description provided for @debt_delete.
@@ -3260,7 +3260,7 @@ abstract class AppLocalizations {
   /// No description provided for @debts_count.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =1{1 debt} other{{count} debts}}'**
+  /// **'{count, plural, =1{1 Debt} other{{count} Debts}}'**
   String debts_count(int count);
 
   /// No description provided for @debts_people_count.
@@ -3489,13 +3489,23 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'{name} still owes you {left} of the {total} you lent on {date}.'**
-  String debt_story_lent_open(String name, String left, String total, String date);
+  String debt_story_lent_open(
+    String name,
+    String left,
+    String total,
+    String date,
+  );
 
   /// No description provided for @debt_story_borrowed_open.
   ///
   /// In en, this message translates to:
   /// **'You still owe {name} {left} of the {total} you borrowed on {date}.'**
-  String debt_story_borrowed_open(String name, String left, String total, String date);
+  String debt_story_borrowed_open(
+    String name,
+    String left,
+    String total,
+    String date,
+  );
 
   /// No description provided for @debt_story_lent_settled.
   ///
@@ -3608,7 +3618,7 @@ abstract class AppLocalizations {
   /// No description provided for @transfer_debt_lend_someone.
   ///
   /// In en, this message translates to:
-  /// **'Lend to someone…'**
+  /// **'Lend to…'**
   String get transfer_debt_lend_someone;
 
   /// No description provided for @transfer_debt_lend_to.
@@ -3640,6 +3650,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{wallet} −{amount} → lent to {name}'**
   String transfer_debt_summary_lend(String wallet, String amount, String name);
+
+  /// No description provided for @debt_wallet_title_in.
+  ///
+  /// In en, this message translates to:
+  /// **'Where did the money land?'**
+  String get debt_wallet_title_in;
+
+  /// No description provided for @debt_wallet_title_out.
+  ///
+  /// In en, this message translates to:
+  /// **'Where did you pay from?'**
+  String get debt_wallet_title_out;
+
+  /// No description provided for @debt_wallet_explain_in.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} paid you back {amount}. Which wallet did it go into? We\'ll add it there. If it was cash you don\'t keep track of, pick “Not in a wallet”.'**
+  String debt_wallet_explain_in(String name, String amount);
+
+  /// No description provided for @debt_wallet_explain_out.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re paying {name} back {amount}. Which wallet is it coming from? We\'ll take it out of that one. If you paid in cash you don\'t keep track of, pick “Not in a wallet”.'**
+  String debt_wallet_explain_out(String name, String amount);
+
+  /// No description provided for @debt_wallet_only_debt.
+  ///
+  /// In en, this message translates to:
+  /// **'No wallet changes, only the debt'**
+  String get debt_wallet_only_debt;
+
+  /// No description provided for @debt_wallet_confirm_in.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to {wallet}'**
+  String debt_wallet_confirm_in(String wallet);
+
+  /// No description provided for @debt_wallet_confirm_out.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay from {wallet}'**
+  String debt_wallet_confirm_out(String wallet);
+
+  /// No description provided for @debt_wallet_confirm_none.
+  ///
+  /// In en, this message translates to:
+  /// **'Save without a wallet'**
+  String get debt_wallet_confirm_none;
 
   /// No description provided for @l10nStopLineDontTouch.
   ///

@@ -5,6 +5,7 @@ import '../../../../core/money/amount_input.dart';
 import '../../../../core/money/currency_type.dart';
 import '../../../../core/utils/app_vibrations.dart';
 import '../../../../core/utils/extensions/build_context_extensions.dart';
+import 'amount_entry_display.dart';
 
 /// Numpad in a bottom sheet (wallet initial balance). Resolves with the raw
 /// amount string, or null when dismissed.
@@ -50,7 +51,6 @@ class _AmountNumpadState extends State<_AmountNumpad> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final display = '${_negative ? '-' : ''}${widget.currency.symbol} ${AmountInput.display(_value)}';
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
@@ -58,13 +58,7 @@ class _AmountNumpadState extends State<_AmountNumpad> {
         mainAxisSize: MainAxisSize.min,
         children: [
           const UISpace.vert(8),
-          FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Text(
-              display,
-              style: context.typo.montserrat.formAmount,
-            ),
-          ),
+          AmountEntryDisplay(input: _value, prefix: '${_negative ? '-' : ''}${widget.currency.symbol} '),
           if (widget.allowNegative)
             UITap(
               onTap: () => setState(() => _negative = !_negative),

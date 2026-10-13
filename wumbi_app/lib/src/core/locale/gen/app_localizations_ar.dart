@@ -1694,22 +1694,22 @@ class AppLocalizationsAr extends AppLocalizations {
   String get debt_i_owe_them => 'أنا مدين';
 
   @override
-  String get debt_person => 'الشخص';
+  String get debt_person => 'مع من';
 
   @override
-  String get debt_person_chip => 'شخص';
+  String get debt_person_chip => 'مع من';
 
   @override
-  String get debt_person_title => 'الشخص';
+  String get debt_person_title => 'مع من؟';
 
   @override
-  String get debt_person_search => 'الاسم';
+  String get debt_person_search => 'الاسم — شخص، بنك، متجر…';
 
   @override
   String get debt_person_empty => 'لا أحد بعد — اكتب اسمًا';
 
   @override
-  String get debt_person_none => 'بلا شخص';
+  String get debt_person_none => 'لا أحد';
 
   @override
   String get debt_choose => 'اختر';
@@ -1748,7 +1748,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get debt_not_in_wallet => 'خارج المحافظ';
 
   @override
-  String get debt_error_person => 'اختر شخصًا';
+  String get debt_error_person => 'اختر مع من';
 
   @override
   String get debt_gave => 'أعطيت';
@@ -1793,7 +1793,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get debt_edit_note => 'تعديل الملاحظة';
 
   @override
-  String get debt_rename_person => 'إعادة تسمية الشخص';
+  String get debt_rename_person => 'إعادة تسمية';
 
   @override
   String get debt_delete => 'حذف الدين';
@@ -2232,12 +2232,22 @@ class AppLocalizationsAr extends AppLocalizations {
   String get budget_row_starts => 'يبدأ في';
 
   @override
-  String debt_story_lent_open(String name, String left, String total, String date) {
+  String debt_story_lent_open(
+    String name,
+    String left,
+    String total,
+    String date,
+  ) {
     return 'لا يزال $name مدينًا لك بـ $left من أصل $total أقرضته في $date.';
   }
 
   @override
-  String debt_story_borrowed_open(String name, String left, String total, String date) {
+  String debt_story_borrowed_open(
+    String name,
+    String left,
+    String total,
+    String date,
+  ) {
     return 'لا تزال مدينًا لـ $name بـ $left من أصل $total اقترضته في $date.';
   }
 
@@ -2302,7 +2312,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get transfer_debt_lend => 'إقراض';
 
   @override
-  String get transfer_debt_lend_someone => 'إقراض شخص…';
+  String get transfer_debt_lend_someone => 'إقراض…';
 
   @override
   String transfer_debt_lend_to(String name) {
@@ -2315,10 +2325,15 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get transfer_debt_locked => 'لا يمكن للدين أن يتكرر أو يكون بتاريخ مستقبلي';
+  String get transfer_debt_locked =>
+      'لا يمكن للدين أن يتكرر أو يكون بتاريخ مستقبلي';
 
   @override
-  String transfer_debt_summary_repay(String wallet, String amount, String name) {
+  String transfer_debt_summary_repay(
+    String wallet,
+    String amount,
+    String name,
+  ) {
     return '$wallet −$amount → سداد لـ $name';
   }
 
@@ -2326,6 +2341,38 @@ class AppLocalizationsAr extends AppLocalizations {
   String transfer_debt_summary_lend(String wallet, String amount, String name) {
     return '$wallet −$amount → إقراض $name';
   }
+
+  @override
+  String get debt_wallet_title_in => 'أين وصل المال؟';
+
+  @override
+  String get debt_wallet_title_out => 'من أين دفعت؟';
+
+  @override
+  String debt_wallet_explain_in(String name, String amount) {
+    return 'أعاد لك $name مبلغ $amount. إلى أي محفظة دخل المال؟ سنضيفه إليها. إن كان نقدًا لا تتابعه، اختر «خارج المحافظ».';
+  }
+
+  @override
+  String debt_wallet_explain_out(String name, String amount) {
+    return 'أنت تسدد لـ $name مبلغ $amount. من أي محفظة يخرج المال؟ سنخصمه منها. إن دفعت نقدًا لا تتابعه، اختر «خارج المحافظ».';
+  }
+
+  @override
+  String get debt_wallet_only_debt => 'لا تتغير أي محفظة، الدين فقط';
+
+  @override
+  String debt_wallet_confirm_in(String wallet) {
+    return 'إضافة إلى $wallet';
+  }
+
+  @override
+  String debt_wallet_confirm_out(String wallet) {
+    return 'الدفع من $wallet';
+  }
+
+  @override
+  String get debt_wallet_confirm_none => 'حفظ بدون محفظة';
 
   @override
   String get l10nStopLineDontTouch =>

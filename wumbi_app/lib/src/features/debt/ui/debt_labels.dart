@@ -11,7 +11,7 @@ import '../data/models/debt_model.dart';
 import '../data/models/person_model.dart';
 
 /// Every user-visible debt string is built here, once, so the Transaction
-/// screen, the Debt sheet, the Debts page and the transaction lists agree.
+/// screen, Debt Details, the Debts page and the transaction lists agree.
 abstract class DebtLabels {
   /// One side of a balance: the exact amount when a single currency is open,
   /// else the base total (≈ when some currency could not be converted).

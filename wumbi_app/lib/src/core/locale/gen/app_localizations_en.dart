@@ -1653,22 +1653,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get debt_i_owe_them => 'I owe them';
 
   @override
-  String get debt_person => 'Person';
+  String get debt_person => 'Who';
 
   @override
-  String get debt_person_chip => 'Person';
+  String get debt_person_chip => 'Who';
 
   @override
-  String get debt_person_title => 'Person';
+  String get debt_person_title => 'Who\'s it with?';
 
   @override
-  String get debt_person_search => 'Name';
+  String get debt_person_search => 'Name — person, bank, shop…';
 
   @override
-  String get debt_person_empty => 'No people yet — type a name';
+  String get debt_person_empty => 'No one yet — type a name';
 
   @override
-  String get debt_person_none => 'No person';
+  String get debt_person_none => 'No one';
 
   @override
   String get debt_choose => 'Choose';
@@ -1707,7 +1707,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get debt_not_in_wallet => 'Not in a wallet';
 
   @override
-  String get debt_error_person => 'Choose a person';
+  String get debt_error_person => 'Choose who it\'s with';
 
   @override
   String get debt_gave => 'Gave';
@@ -1752,7 +1752,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get debt_edit_note => 'Edit note';
 
   @override
-  String get debt_rename_person => 'Rename person';
+  String get debt_rename_person => 'Rename';
 
   @override
   String get debt_delete => 'Delete debt';
@@ -1989,8 +1989,8 @@ class AppLocalizationsEn extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count debts',
-      one: '1 debt',
+      other: '$count Debts',
+      one: '1 Debt',
     );
     return '$_temp0';
   }
@@ -2193,12 +2193,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get budget_row_starts => 'Starts on';
 
   @override
-  String debt_story_lent_open(String name, String left, String total, String date) {
+  String debt_story_lent_open(
+    String name,
+    String left,
+    String total,
+    String date,
+  ) {
     return '$name still owes you $left of the $total you lent on $date.';
   }
 
   @override
-  String debt_story_borrowed_open(String name, String left, String total, String date) {
+  String debt_story_borrowed_open(
+    String name,
+    String left,
+    String total,
+    String date,
+  ) {
     return 'You still owe $name $left of the $total you borrowed on $date.';
   }
 
@@ -2263,7 +2273,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get transfer_debt_lend => 'Lend';
 
   @override
-  String get transfer_debt_lend_someone => 'Lend to someone…';
+  String get transfer_debt_lend_someone => 'Lend to…';
 
   @override
   String transfer_debt_lend_to(String name) {
@@ -2276,10 +2286,15 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get transfer_debt_locked => 'A debt can’t repeat or be dated in the future';
+  String get transfer_debt_locked =>
+      'A debt can’t repeat or be dated in the future';
 
   @override
-  String transfer_debt_summary_repay(String wallet, String amount, String name) {
+  String transfer_debt_summary_repay(
+    String wallet,
+    String amount,
+    String name,
+  ) {
     return '$wallet −$amount → pays back $name';
   }
 
@@ -2287,6 +2302,38 @@ class AppLocalizationsEn extends AppLocalizations {
   String transfer_debt_summary_lend(String wallet, String amount, String name) {
     return '$wallet −$amount → lent to $name';
   }
+
+  @override
+  String get debt_wallet_title_in => 'Where did the money land?';
+
+  @override
+  String get debt_wallet_title_out => 'Where did you pay from?';
+
+  @override
+  String debt_wallet_explain_in(String name, String amount) {
+    return '$name paid you back $amount. Which wallet did it go into? We\'ll add it there. If it was cash you don\'t keep track of, pick “Not in a wallet”.';
+  }
+
+  @override
+  String debt_wallet_explain_out(String name, String amount) {
+    return 'You\'re paying $name back $amount. Which wallet is it coming from? We\'ll take it out of that one. If you paid in cash you don\'t keep track of, pick “Not in a wallet”.';
+  }
+
+  @override
+  String get debt_wallet_only_debt => 'No wallet changes, only the debt';
+
+  @override
+  String debt_wallet_confirm_in(String wallet) {
+    return 'Add to $wallet';
+  }
+
+  @override
+  String debt_wallet_confirm_out(String wallet) {
+    return 'Pay from $wallet';
+  }
+
+  @override
+  String get debt_wallet_confirm_none => 'Save without a wallet';
 
   @override
   String get l10nStopLineDontTouch =>

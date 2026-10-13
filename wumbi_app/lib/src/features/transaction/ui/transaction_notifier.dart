@@ -507,13 +507,15 @@ class TransactionNotifier extends Notifier<TransactionState> {
   // ---------------------------------------------------------------- commit
 
   /// D4 — one-tap INCOME / EXPENSE: save, stay open, clear the amount.
-  Future<bool> commit(TransactionType type) async {
+  /// [debt] links the row to a debt explicitly (Transfer → Debts: pay back
+  /// one debt or lend); otherwise a picked person lets the repository decide
+  /// "new debt" vs "repayment" (GAVE / GOT, §7.2).
+  Future<bool> commit(TransactionType type, {DebtIntent? debt}) async {
     if (!_guardCommit()) return false;
     final wallet = state.wallet!;
     final amount = state.walletMoney!;
     final personName = state.personName;
-    // GAVE / GOT: the repository decides "new debt" vs "repayment" (§7.2).
-    final debt = personName == null
+    debt ??= personName == null
         ? null
         : DebtIntent.auto(person: personRefOf(personId: state.personId, name: personName));
     final draft = type == TransactionType.income

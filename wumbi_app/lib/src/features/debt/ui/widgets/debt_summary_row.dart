@@ -1,14 +1,17 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/design_system/app_ui.dart';
+import '../../../../core/routing/app_router.dart';
+import '../../../../core/utils/constants/constants.dart';
 import '../../../../core/utils/enums/debt_direction.dart';
 import '../../../../core/utils/extensions/build_context_extensions.dart';
 import '../../../../core/utils/extensions/date_time_extensions.dart';
 import '../../data/models/debt_model.dart';
 import '../debt_labels.dart';
-import 'debt_sheet.dart';
 
-/// [UiDebtRow] fed from a [DebtSummary]; taps open the Debt sheet.
+/// [UiDebtRow] fed from a [DebtSummary]; taps open the debt details (name /
+/// bar heroes; the row's summary seeds the page so they have a target).
 /// [showSide] prefixes the caption with "Owed to me" / "I owe" (lists mixing
 /// both sides: the Dashboard).
 class DebtSummaryRow extends StatelessWidget {
@@ -34,7 +37,9 @@ class DebtSummaryRow extends StatelessWidget {
       alert: s.overdue ? l10n.debt_overdue : null,
       paidRatio: s.paidRatio,
       dimmed: !s.isOpen,
-      onTap: () => DebtSheet.show(context, debtId: s.debt.id),
+      titleHeroTag: heroDebtName(s.debt.id),
+      barHeroTag: heroDebtProgress(s.debt.id),
+      onTap: () => context.router.push(DebtDetailsRoute(debtId: s.debt.id, seed: s)),
     );
   }
 }

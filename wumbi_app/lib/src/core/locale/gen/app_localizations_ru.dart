@@ -1689,22 +1689,22 @@ class AppLocalizationsRu extends AppLocalizations {
   String get debt_i_owe_them => 'Я должен';
 
   @override
-  String get debt_person => 'Человек';
+  String get debt_person => 'Кто';
 
   @override
-  String get debt_person_chip => 'Человек';
+  String get debt_person_chip => 'Кто';
 
   @override
-  String get debt_person_title => 'Человек';
+  String get debt_person_title => 'С кем?';
 
   @override
-  String get debt_person_search => 'Имя';
+  String get debt_person_search => 'Имя — человек, банк, магазин…';
 
   @override
   String get debt_person_empty => 'Пока никого — введите имя';
 
   @override
-  String get debt_person_none => 'Без человека';
+  String get debt_person_none => 'Никто';
 
   @override
   String get debt_choose => 'Выбрать';
@@ -1743,7 +1743,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get debt_not_in_wallet => 'Не через кошелёк';
 
   @override
-  String get debt_error_person => 'Выберите человека';
+  String get debt_error_person => 'Выберите, с кем';
 
   @override
   String get debt_gave => 'Дал';
@@ -2235,12 +2235,22 @@ class AppLocalizationsRu extends AppLocalizations {
   String get budget_row_starts => 'Начало';
 
   @override
-  String debt_story_lent_open(String name, String left, String total, String date) {
+  String debt_story_lent_open(
+    String name,
+    String left,
+    String total,
+    String date,
+  ) {
     return '$name ещё должен вам $left из $total, которые вы дали в долг $date.';
   }
 
   @override
-  String debt_story_borrowed_open(String name, String left, String total, String date) {
+  String debt_story_borrowed_open(
+    String name,
+    String left,
+    String total,
+    String date,
+  ) {
     return 'Вы ещё должны $name $left из $total, взятых в долг $date.';
   }
 
@@ -2305,7 +2315,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get transfer_debt_lend => 'Дать в долг';
 
   @override
-  String get transfer_debt_lend_someone => 'Дать в долг кому-то…';
+  String get transfer_debt_lend_someone => 'Дать в долг…';
 
   @override
   String transfer_debt_lend_to(String name) {
@@ -2318,10 +2328,15 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get transfer_debt_locked => 'Долг не может повторяться или иметь будущую дату';
+  String get transfer_debt_locked =>
+      'Долг не может повторяться или иметь будущую дату';
 
   @override
-  String transfer_debt_summary_repay(String wallet, String amount, String name) {
+  String transfer_debt_summary_repay(
+    String wallet,
+    String amount,
+    String name,
+  ) {
     return '$wallet −$amount → возврат долга: $name';
   }
 
@@ -2329,6 +2344,38 @@ class AppLocalizationsRu extends AppLocalizations {
   String transfer_debt_summary_lend(String wallet, String amount, String name) {
     return '$wallet −$amount → в долг: $name';
   }
+
+  @override
+  String get debt_wallet_title_in => 'Куда пришли деньги?';
+
+  @override
+  String get debt_wallet_title_out => 'Откуда вы заплатили?';
+
+  @override
+  String debt_wallet_explain_in(String name, String amount) {
+    return '$name вернул вам $amount. В какой кошелёк пришли деньги? Мы добавим их туда. Если это наличные, которые вы не учитываете, выберите «Не через кошелёк».';
+  }
+
+  @override
+  String debt_wallet_explain_out(String name, String amount) {
+    return 'Вы возвращаете $name $amount. Из какого кошелька платите? Мы спишем деньги с него. Если платили наличными, которые не учитываете, выберите «Не через кошелёк».';
+  }
+
+  @override
+  String get debt_wallet_only_debt => 'Кошельки не меняются, только долг';
+
+  @override
+  String debt_wallet_confirm_in(String wallet) {
+    return 'Зачислить в $wallet';
+  }
+
+  @override
+  String debt_wallet_confirm_out(String wallet) {
+    return 'Оплатить из $wallet';
+  }
+
+  @override
+  String get debt_wallet_confirm_none => 'Сохранить без кошелька';
 
   @override
   String get l10nStopLineDontTouch =>

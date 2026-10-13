@@ -799,12 +799,12 @@
   "dashboard_new": "New",
   "debt_they_owe_me": "They owe me",
   "debt_i_owe_them": "I owe them",
-  "debt_person": "Person",
-  "debt_person_chip": "Person",
-  "debt_person_title": "Person",
-  "debt_person_search": "Name",
-  "debt_person_empty": "No people yet — type a name",
-  "debt_person_none": "No person",
+  "debt_person": "Who",
+  "debt_person_chip": "Who",
+  "debt_person_title": "Who's it with?",
+  "debt_person_search": "Name — person, bank, shop…",
+  "debt_person_empty": "No one yet — type a name",
+  "debt_person_none": "No one",
   "debt_choose": "Choose",
   "debt_amount": "Amount",
   "debt_note_hint": "Note (optional)",
@@ -817,7 +817,7 @@
   "debt_none": "None",
   "debt_money_moved": "Money moved",
   "debt_not_in_wallet": "Not in a wallet",
-  "debt_error_person": "Choose a person",
+  "debt_error_person": "Choose who it's with",
   "debt_gave": "Gave",
   "debt_got": "Got",
   "debt_badge_loan": "Loan",
@@ -832,7 +832,7 @@
   "debt_remind": "Remind",
   "debt_history": "History",
   "debt_edit_note": "Edit note",
-  "debt_rename_person": "Rename person",
+  "debt_rename_person": "Rename",
   "debt_delete": "Delete debt",
   "debt_delete_title": "Delete this debt?",
   "debt_deleted": "Debt deleted",
@@ -1115,7 +1115,7 @@
       "count": {"type": "int"}
     }
   },
-  "debts_count": "{count, plural, =1{1 debt} other{{count} debts}}",
+  "debts_count": "{count, plural, =1{1 Debt} other{{count} Debts}}",
   "@debts_count": {
     "placeholders": {
       "count": {"type": "int"}
@@ -1249,7 +1249,7 @@
   "debts_settled_empty": "No settled debts yet",
   "transfer_debt_pay_back": "Pay back",
   "transfer_debt_lend": "Lend",
-  "transfer_debt_lend_someone": "Lend to someone…",
+  "transfer_debt_lend_someone": "Lend to…",
   "transfer_debt_lend_to": "Lend to {name}",
   "@transfer_debt_lend_to": {
     "placeholders": {"name": {"type": "String"}}
@@ -1267,5 +1267,25 @@
   "@transfer_debt_summary_lend": {
     "placeholders": {"wallet": {"type": "String"}, "amount": {"type": "String"}, "name": {"type": "String"}}
   },
+  "debt_wallet_title_in": "Where did the money land?",
+  "debt_wallet_title_out": "Where did you pay from?",
+  "debt_wallet_explain_in": "{name} paid you back {amount}. Which wallet did it go into? We'll add it there. If it was cash you don't keep track of, pick “Not in a wallet”.",
+  "@debt_wallet_explain_in": {
+    "placeholders": {"name": {"type": "String"}, "amount": {"type": "String"}}
+  },
+  "debt_wallet_explain_out": "You're paying {name} back {amount}. Which wallet is it coming from? We'll take it out of that one. If you paid in cash you don't keep track of, pick “Not in a wallet”.",
+  "@debt_wallet_explain_out": {
+    "placeholders": {"name": {"type": "String"}, "amount": {"type": "String"}}
+  },
+  "debt_wallet_only_debt": "No wallet changes, only the debt",
+  "debt_wallet_confirm_in": "Add to {wallet}",
+  "@debt_wallet_confirm_in": {
+    "placeholders": {"wallet": {"type": "String"}}
+  },
+  "debt_wallet_confirm_out": "Pay from {wallet}",
+  "@debt_wallet_confirm_out": {
+    "placeholders": {"wallet": {"type": "String"}}
+  },
+  "debt_wallet_confirm_none": "Save without a wallet",
   "l10nStopLineDontTouch": "☠☠☠☠☠☠☠☠☠☠☠☠☠ Don't touch this line ☠☠☠☠☠☠☠☠☠☠☠☠☠"
 }

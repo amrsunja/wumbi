@@ -67,7 +67,7 @@ final personBalanceProvider = FutureProvider.autoDispose.family<PersonBalance, S
   return result.when((b) => b, (error) => throw error);
 });
 
-/// Debt sheet model (closed debts too).
+/// Debt Details model (closed debts too).
 final debtDetailsProvider = FutureProvider.autoDispose.family<DebtDetails, String>((ref, debtId) async {
   ref.watch(dbRevisionProvider);
   final base = ref.watch(baseCurrencyProvider);

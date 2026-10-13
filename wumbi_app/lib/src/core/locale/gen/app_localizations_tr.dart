@@ -1639,22 +1639,22 @@ class AppLocalizationsTr extends AppLocalizations {
   String get debt_i_owe_them => 'Ben borçluyum';
 
   @override
-  String get debt_person => 'Kişi';
+  String get debt_person => 'Kim';
 
   @override
-  String get debt_person_chip => 'Kişi';
+  String get debt_person_chip => 'Kim';
 
   @override
-  String get debt_person_title => 'Kişi';
+  String get debt_person_title => 'Kiminle?';
 
   @override
-  String get debt_person_search => 'Ad';
+  String get debt_person_search => 'Ad — kişi, banka, mağaza…';
 
   @override
   String get debt_person_empty => 'Henüz kimse yok — bir ad yazın';
 
   @override
-  String get debt_person_none => 'Kişi yok';
+  String get debt_person_none => 'Kimse';
 
   @override
   String get debt_choose => 'Seç';
@@ -1693,7 +1693,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get debt_not_in_wallet => 'Cüzdan dışında';
 
   @override
-  String get debt_error_person => 'Bir kişi seçin';
+  String get debt_error_person => 'Kiminle olduğunu seçin';
 
   @override
   String get debt_gave => 'Verdim';
@@ -1738,7 +1738,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get debt_edit_note => 'Notu düzenle';
 
   @override
-  String get debt_rename_person => 'Kişiyi yeniden adlandır';
+  String get debt_rename_person => 'Yeniden adlandır';
 
   @override
   String get debt_delete => 'Borcu sil';
@@ -2168,12 +2168,22 @@ class AppLocalizationsTr extends AppLocalizations {
   String get budget_row_starts => 'Başlangıç';
 
   @override
-  String debt_story_lent_open(String name, String left, String total, String date) {
+  String debt_story_lent_open(
+    String name,
+    String left,
+    String total,
+    String date,
+  ) {
     return '$name, $date tarihinde verdiğiniz $total tutarın $left kısmını hâlâ borçlu.';
   }
 
   @override
-  String debt_story_borrowed_open(String name, String left, String total, String date) {
+  String debt_story_borrowed_open(
+    String name,
+    String left,
+    String total,
+    String date,
+  ) {
     return '$date tarihinde ödünç aldığınız $total tutarın $left kısmını $name kişisine hâlâ borçlusunuz.';
   }
 
@@ -2238,7 +2248,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get transfer_debt_lend => 'Borç ver';
 
   @override
-  String get transfer_debt_lend_someone => 'Birine borç ver…';
+  String get transfer_debt_lend_someone => 'Borç ver…';
 
   @override
   String transfer_debt_lend_to(String name) {
@@ -2251,10 +2261,15 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get transfer_debt_locked => 'Borç tekrarlanamaz veya ileri tarihli olamaz';
+  String get transfer_debt_locked =>
+      'Borç tekrarlanamaz veya ileri tarihli olamaz';
 
   @override
-  String transfer_debt_summary_repay(String wallet, String amount, String name) {
+  String transfer_debt_summary_repay(
+    String wallet,
+    String amount,
+    String name,
+  ) {
     return '$wallet −$amount → $name borcu ödenir';
   }
 
@@ -2262,6 +2277,38 @@ class AppLocalizationsTr extends AppLocalizations {
   String transfer_debt_summary_lend(String wallet, String amount, String name) {
     return '$wallet −$amount → $name kişisine borç';
   }
+
+  @override
+  String get debt_wallet_title_in => 'Para nereye geldi?';
+
+  @override
+  String get debt_wallet_title_out => 'Nereden ödediniz?';
+
+  @override
+  String debt_wallet_explain_in(String name, String amount) {
+    return '$name size $amount geri ödedi. Para hangi cüzdana girdi? Oraya ekleyelim. Takip etmediğiniz nakitse “Cüzdan dışında”yı seçin.';
+  }
+
+  @override
+  String debt_wallet_explain_out(String name, String amount) {
+    return '$name kişisine $amount geri ödüyorsunuz. Para hangi cüzdandan çıkıyor? Oradan düşelim. Takip etmediğiniz nakitle ödediyseniz “Cüzdan dışında”yı seçin.';
+  }
+
+  @override
+  String get debt_wallet_only_debt => 'Cüzdan değişmez, yalnızca borç';
+
+  @override
+  String debt_wallet_confirm_in(String wallet) {
+    return '$wallet cüzdanına ekle';
+  }
+
+  @override
+  String debt_wallet_confirm_out(String wallet) {
+    return '$wallet cüzdanından öde';
+  }
+
+  @override
+  String get debt_wallet_confirm_none => 'Cüzdansız kaydet';
 
   @override
   String get l10nStopLineDontTouch =>

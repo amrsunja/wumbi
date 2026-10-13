@@ -5,9 +5,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../core/design_system/app_ui.dart';
-import '../../../core/money/amount_input.dart';
 import '../../../core/money/money.dart';
-import '../../../core/routing/app_router.dart';
 import '../../../core/utils/app_vibrations.dart';
 import '../../../core/utils/constants/constants.dart';
 import '../../../core/utils/enums/repeat_frequency.dart';
@@ -19,6 +17,7 @@ import '../../wallet/ui/widgets/currency_picker_sheet.dart';
 import '../../wallet/ui/widgets/wallet_picker_sheet.dart';
 import 'transaction_notifier.dart';
 import 'transaction_state.dart';
+import 'widgets/amount_entry_display.dart';
 import 'widgets/date_picker_sheet.dart';
 import 'widgets/repeat_labels.dart';
 import 'widgets/repeat_picker_sheet.dart';
@@ -109,22 +108,11 @@ class TransactionPage extends HookConsumerWidget {
       await notifier.commit(type);
     }
 
+    // Wallets | Debts sheet: another wallet, pay back a debt or lend. With a
+    // single wallet the sheet opens on Debts (Wallets offers a new wallet).
     Future<void> onTapTransfer() async {
       descriptionFocus.unfocus();
       tagsFocus.unfocus();
-      if (state.wallets.length < 2) {
-        final choice = await UIAlertDialog.choose(
-          context,
-          title: l10n.transaction_need_second_wallet_title,
-          message: l10n.transaction_need_second_wallet_message,
-          actions: [
-            UIDialogAction(label: l10n.common_cancel),
-            UIDialogAction(label: l10n.dashboard_new_wallet, primary: true),
-          ],
-        );
-        if (choice == 1 && context.mounted) context.router.push(WalletFormRoute());
-        return;
-      }
       if (!state.canCommit) {
         shakeAmount();
         notifier.validateForCommit();
@@ -135,9 +123,17 @@ class TransactionPage extends HookConsumerWidget {
         source: state.wallet!,
         sent: state.walletMoney!,
         wallets: state.wallets,
+        // [A4]: a debt never repeats and is never upcoming.
+        debtsAllowed: state.repeat.isNever && !state.willBeUpcoming,
       );
-      if (choice == null) return;
-      await notifier.transfer(target: choice.target, received: choice.received, rate: choice.rate);
+      switch (choice) {
+        case TransferChoice(:final target, :final received, :final rate):
+          await notifier.transfer(target: target, received: received, rate: rate);
+        case DebtTransferChoice(:final intent):
+          await notifier.commit(TransactionType.expense, debt: intent);
+        case null:
+          return;
+      }
     }
 
     Future<void> pickCurrency() async {
@@ -294,15 +290,7 @@ class TransactionPage extends HookConsumerWidget {
               const UISpace.vert(12),
 
               // Amount.
-              FittedBox(
-                fit: BoxFit.scaleDown,
-                child: UiAmountText(
-                  text: AmountInput.display(state.amountInput),
-                  style: typo.montserrat.input.copyWith(
-                    color: state.amountInput.isEmpty ? colors.secondContentColor : null,
-                  ),
-                ),
-              )
+              AmountEntryDisplay(input: state.amountInput)
                   .animate(controller: shakeController, autoPlay: false)
                   .shakeX(hz: 10, amount: 6, duration: 300.ms),
               const UISpace.vert(4),

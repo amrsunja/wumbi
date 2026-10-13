@@ -44,6 +44,20 @@ class DashboardPage extends ConsumerWidget {
     final hasWallets = data != null && !data.isEmpty;
     final showMascot = ref.watch(showMascotProvider);
 
+    // Recompute the derived providers shared by the header pills, the tab
+    // summary and the tab pages here, before any of them builds. One flushed
+    // lazily inside a child's build (e.g. `_Header` watching the debts
+    // count) notifies a sibling mid-build ("setState() called during build",
+    // e.g. right after saving a budget or a debt); flushed here, every
+    // listener is a descendant, which Flutter allows. `select` keeps this
+    // page from rebuilding on their changes.
+    ref
+      ..watch(dashboardBudgetsProvider.select(_ignore))
+      ..watch(debtsOverviewProvider.select(_ignore))
+      ..watch(dashboardDebtsProvider.select(_ignore))
+      ..watch(openDebtsBadgeProvider.select(_ignore))
+      ..watch(activeSubscriptionCountProvider.select(_ignore));
+
     return Stack(
       children: [
         Positioned.fill(child: ColoredBox(color: colors.bgColor)),
@@ -138,20 +152,27 @@ class _Header extends ConsumerWidget {
         ),
         if (!d.isEmpty) ...[
           const UISpace.vert(12),
-          _HeaderLinks(subscriptionCount: ref.watch(activeSubscriptionCountProvider)),
+          _HeaderLinks(
+            subscriptionCount: ref.watch(activeSubscriptionCountProvider),
+            hasDebts: ref.watch(dashboardDebtsProvider.select((debts) => debts?.hasAny ?? false)),
+            openDebtCount: ref.watch(openDebtsBadgeProvider.select((b) => b.count)),
+          ),
         ],
       ],
     );
   }
 }
 
-/// Small outlined pills under the total: Search, Progress, "# Tags" and
-/// "N Subscriptions" (only with an active rule). Debts moved to their own
-/// tab (overdue dot on the tab label).
+/// Small outlined pills under the total: Search, Progress, "# Tags",
+/// "N Subscriptions" (only with an active rule) and "N debts" (open ones;
+/// plain "Debts" once all are settled, so the settled history stays one tap
+/// away — the Debts tab shows only open ones; overdue dot on its label).
 class _HeaderLinks extends StatelessWidget {
-  const _HeaderLinks({required this.subscriptionCount});
+  const _HeaderLinks({required this.subscriptionCount, required this.hasDebts, required this.openDebtCount});
 
   final int subscriptionCount;
+  final bool hasDebts;
+  final int openDebtCount;
 
   @override
   Widget build(BuildContext context) {
@@ -181,6 +202,12 @@ class _HeaderLinks extends StatelessWidget {
             icon: UIIconToken.icons.mediaDevices.repeat01,
             label: l10n.subscriptions_count(subscriptionCount),
             onTap: () => context.router.push(SubscriptionsRoute()),
+          ),
+        if (hasDebts)
+          _HeaderPill(
+            icon: UIIconToken.icons.financeEcommerce.coinsHand,
+            label: openDebtCount > 0 ? l10n.debts_count(openDebtCount) : l10n.debts_title,
+            onTap: () => context.router.push(const DebtsRoute()),
           ),
       ],
     );
@@ -283,17 +310,6 @@ class _MoneyTabs extends HookConsumerWidget {
     final tab = _MoneyTab.values[index.value];
     final overdue = ref.watch(openDebtsBadgeProvider.select((b) => b.overdueCount > 0));
 
-    // Recompute the providers the summary line and the pages share here,
-    // before either child builds. A derived provider flushed lazily inside
-    // `_TabSummary.build` notifies its sibling page mid-build ("setState()
-    // called during build", e.g. right after saving a budget); flushed here,
-    // both listeners are descendants, which Flutter allows. `select` keeps
-    // this widget from rebuilding on their changes.
-    ref
-      ..watch(dashboardProvider.select(_ignore))
-      ..watch(dashboardBudgetsProvider.select(_ignore))
-      ..watch(debtsOverviewProvider.select(_ignore))
-      ..watch(dashboardDebtsProvider.select(_ignore));
 
     void select(int i) {
       if (i == index.value) return;
@@ -641,8 +657,8 @@ class _BudgetsTab extends ConsumerWidget {
   }
 }
 
-/// Open debts of both sides, overdue first; "All debts ›" opens the Debts
-/// page (per-side totals, settled ones).
+/// Open debts of both sides, overdue first. The Debts page (per-side
+/// totals, settled ones) is the "Debts" header pill.
 class _DebtsTab extends ConsumerWidget {
   const _DebtsTab();
 
@@ -658,7 +674,6 @@ class _DebtsTab extends ConsumerWidget {
           children: [
             if (data.open.isEmpty) _Hint(text: l10n.debts_empty_hint, onTap: () => context.router.push(const NewDebtRoute())),
             for (final s in data.open) DebtSummaryRow(key: ValueKey('debt-${s.debt.id}'), summary: s, showSide: true),
-            if (data.hasAny) _AllLink(label: l10n.debts_all, onTap: () => context.router.push(const DebtsRoute())),
           ],
         ),
       ],

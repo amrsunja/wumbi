@@ -37,7 +37,7 @@ abstract class DebtSheetState with _$DebtSheetState {
 final debtSheetProvider =
     NotifierProvider.autoDispose.family<DebtSheetNotifier, DebtSheetState, String>(DebtSheetNotifier.new);
 
-/// Actions of the Debt sheet (spec B&D §8.4). Money that moves goes through
+/// Actions of the Debt Details page (spec B&D §8.4). Money that moves goes through
 /// `TransactionRepository.create` with `DebtIntent.repay`, so the wallet row
 /// and the payment are one write; settlements outside wallets and
 /// forgiveness go through `DebtRepository.addPayment`.
