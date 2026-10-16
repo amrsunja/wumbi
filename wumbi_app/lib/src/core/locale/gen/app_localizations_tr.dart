@@ -1029,25 +1029,10 @@ class AppLocalizationsTr extends AppLocalizations {
   String get progress_income => 'Gelir';
 
   @override
-  String get progress_expense => 'Gider';
-
-  @override
-  String get progress_net => 'Net';
-
-  @override
-  String get progress_vs_last_month => 'geçen aya göre';
-
-  @override
-  String get progress_vs_last_year => 'geçen yıla göre';
-
-  @override
   String get progress_all_wallets => 'Tüm cüzdanlar';
 
   @override
   String get progress_scope_title => 'Verileri göster';
-
-  @override
-  String get progress_chart_title => 'Gelir vs Gider';
 
   @override
   String progress_not_included(String codes) {
@@ -1058,16 +1043,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get progress_empty_title => 'Henüz analiz edilecek bir şey yok';
 
   @override
-  String get progress_trend_title => 'Seyir';
-
-  @override
-  String get progress_tags_title => 'Etikete göre gider';
-
-  @override
   String get progress_untagged => 'Etiketsiz';
-
-  @override
-  String get progress_other_tags => 'Diğer';
 
   @override
   String get progress_no_expenses => 'Bu dönemde gider yok';
@@ -1075,6 +1051,207 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get progress_empty_subtitle =>
       'Birkaç işlem ekleyin, ilerlemeniz burada görünsün.';
+
+  @override
+  String get progress_spent => 'Harcanan';
+
+  @override
+  String get progress_spending => 'Harcamalar';
+
+  @override
+  String get progress_saved => 'Biriken';
+
+  @override
+  String get progress_overspent => 'Aşım';
+
+  @override
+  String progress_vs(String label) {
+    return '$label ile';
+  }
+
+  @override
+  String progress_kept_share(int percent) {
+    return 'Gelirinizin %$percent kadarını biriktirdiniz';
+  }
+
+  @override
+  String progress_overspent_by(String amount) {
+    return 'Kazandığınızdan $amount fazla harcadınız';
+  }
+
+  @override
+  String progress_nothing_in(String period) {
+    return '$period döneminde işlem yok';
+  }
+
+  @override
+  String get progress_compare_title => 'Karşılaştır';
+
+  @override
+  String get progress_baseline_previous_month => 'Önceki ay';
+
+  @override
+  String get progress_baseline_previous_year => 'Önceki yıl';
+
+  @override
+  String get progress_baseline_last_year => 'Geçen yılın aynı ayı';
+
+  @override
+  String progress_baseline_average_months(int count) {
+    return 'Son $count ayın ortalaması';
+  }
+
+  @override
+  String progress_baseline_average_years(int count) {
+    return 'Son $count yılın ortalaması';
+  }
+
+  @override
+  String get progress_baseline_pick_month => 'Bir ay seçin';
+
+  @override
+  String get progress_baseline_pick_year => 'Bir yıl seçin';
+
+  @override
+  String progress_average_months(int count) {
+    return '$count aylık ortalama';
+  }
+
+  @override
+  String progress_average_years(int count) {
+    return '$count yıllık ortalama';
+  }
+
+  @override
+  String get progress_pace_title => 'Harcama temposu';
+
+  @override
+  String progress_pace_less(String amount, String baseline) {
+    return 'Şu ana kadar $baseline dönemine göre $amount daha az';
+  }
+
+  @override
+  String progress_pace_more(String amount, String baseline) {
+    return 'Şu ana kadar $baseline dönemine göre $amount daha fazla';
+  }
+
+  @override
+  String progress_pace_same(String baseline) {
+    return '$baseline ile aynı tempo';
+  }
+
+  @override
+  String progress_total_less(String amount, String baseline) {
+    return '$baseline dönemine göre $amount daha az';
+  }
+
+  @override
+  String progress_total_more(String amount, String baseline) {
+    return '$baseline dönemine göre $amount daha fazla';
+  }
+
+  @override
+  String progress_total_same(String baseline) {
+    return '$baseline ile hemen hemen aynı';
+  }
+
+  @override
+  String progress_forecast_month(String amount) {
+    return 'Bu tempoyla ay sonunda ≈ $amount';
+  }
+
+  @override
+  String progress_forecast_year(String amount) {
+    return 'Bu tempoyla yıl sonunda ≈ $amount';
+  }
+
+  @override
+  String progress_day(int day) {
+    return '$day. gün';
+  }
+
+  @override
+  String get progress_changes_title => 'Neler değişti';
+
+  @override
+  String progress_now_was(String now, String was) {
+    return 'şimdi $now · önce $was';
+  }
+
+  @override
+  String get progress_new => 'Yeni';
+
+  @override
+  String get progress_breakdown_title => 'Etikete göre';
+
+  @override
+  String get progress_no_income => 'Bu dönemde gelir yok';
+
+  @override
+  String progress_show_all(int count) {
+    return 'Tümünü göster ($count)';
+  }
+
+  @override
+  String get progress_show_less => 'Daha az göster';
+
+  @override
+  String get progress_overlap_hint =>
+      'Birden fazla gruptan etiket taşıyan bir işlem her grupta sayılır.';
+
+  @override
+  String get progress_habits_title => 'Alışkanlıklar';
+
+  @override
+  String get progress_daily_average => 'Günlük ortalama';
+
+  @override
+  String get progress_biggest_expense => 'En büyük harcama';
+
+  @override
+  String get progress_recurring => 'Düzenli ödemeler';
+
+  @override
+  String progress_recurring_share(int percent) {
+    return 'Harcamalarınızın %$percent kadarı';
+  }
+
+  @override
+  String get progress_average_expense => 'Ortalama harcama';
+
+  @override
+  String progress_peak_weekday(String weekday) {
+    return 'En çok harcadığınız gün: $weekday';
+  }
+
+  @override
+  String get progress_weekday_hint =>
+      'Haftanın günlerine göre ortalama harcama';
+
+  @override
+  String progress_history_months(int count) {
+    return 'Son $count ay';
+  }
+
+  @override
+  String progress_history_years(int count) {
+    return 'Son $count yıl';
+  }
+
+  @override
+  String progress_average_per_month(String amount) {
+    return 'Ayda ortalama $amount';
+  }
+
+  @override
+  String progress_average_per_year(String amount) {
+    return 'Yılda ortalama $amount';
+  }
+
+  @override
+  String progress_to_date_hint(String baseline) {
+    return '$baseline döneminin aynı günleriyle karşılaştırıldı';
+  }
 
   @override
   String get l10nCurrency =>

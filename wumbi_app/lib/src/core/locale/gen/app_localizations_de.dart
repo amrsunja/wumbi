@@ -1045,25 +1045,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get progress_income => 'Einnahme';
 
   @override
-  String get progress_expense => 'Ausgabe';
-
-  @override
-  String get progress_net => 'Netto';
-
-  @override
-  String get progress_vs_last_month => 'ggü. letztem Monat';
-
-  @override
-  String get progress_vs_last_year => 'ggü. letztem Jahr';
-
-  @override
   String get progress_all_wallets => 'Alle Konten';
 
   @override
   String get progress_scope_title => 'Daten anzeigen für';
-
-  @override
-  String get progress_chart_title => 'Einnahmen vs Ausgaben';
 
   @override
   String progress_not_included(String codes) {
@@ -1074,16 +1059,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get progress_empty_title => 'Noch nichts auszuwerten';
 
   @override
-  String get progress_trend_title => 'Verlauf';
-
-  @override
-  String get progress_tags_title => 'Ausgaben nach Tag';
-
-  @override
   String get progress_untagged => 'Ohne Tag';
-
-  @override
-  String get progress_other_tags => 'Sonstige';
 
   @override
   String get progress_no_expenses => 'Keine Ausgaben in diesem Zeitraum';
@@ -1091,6 +1067,207 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get progress_empty_subtitle =>
       'Füge ein paar Transaktionen hinzu und dein Fortschritt erscheint hier.';
+
+  @override
+  String get progress_spent => 'Ausgegeben';
+
+  @override
+  String get progress_spending => 'Ausgaben';
+
+  @override
+  String get progress_saved => 'Gespart';
+
+  @override
+  String get progress_overspent => 'Überzogen';
+
+  @override
+  String progress_vs(String label) {
+    return 'ggü. $label';
+  }
+
+  @override
+  String progress_kept_share(int percent) {
+    return 'Du hast $percent % deiner Einnahmen behalten';
+  }
+
+  @override
+  String progress_overspent_by(String amount) {
+    return 'Du hast $amount mehr ausgegeben als eingenommen';
+  }
+
+  @override
+  String progress_nothing_in(String period) {
+    return 'Keine Transaktionen im $period';
+  }
+
+  @override
+  String get progress_compare_title => 'Vergleichen mit';
+
+  @override
+  String get progress_baseline_previous_month => 'Vormonat';
+
+  @override
+  String get progress_baseline_previous_year => 'Vorjahr';
+
+  @override
+  String get progress_baseline_last_year => 'Gleicher Monat im Vorjahr';
+
+  @override
+  String progress_baseline_average_months(int count) {
+    return 'Durchschnitt der letzten $count Monate';
+  }
+
+  @override
+  String progress_baseline_average_years(int count) {
+    return 'Durchschnitt der letzten $count Jahre';
+  }
+
+  @override
+  String get progress_baseline_pick_month => 'Monat wählen';
+
+  @override
+  String get progress_baseline_pick_year => 'Jahr wählen';
+
+  @override
+  String progress_average_months(int count) {
+    return 'Ø $count Monate';
+  }
+
+  @override
+  String progress_average_years(int count) {
+    return 'Ø $count Jahre';
+  }
+
+  @override
+  String get progress_pace_title => 'Ausgabentempo';
+
+  @override
+  String progress_pace_less(String amount, String baseline) {
+    return '$amount weniger als $baseline zu diesem Zeitpunkt';
+  }
+
+  @override
+  String progress_pace_more(String amount, String baseline) {
+    return '$amount mehr als $baseline zu diesem Zeitpunkt';
+  }
+
+  @override
+  String progress_pace_same(String baseline) {
+    return 'Gleiches Tempo wie $baseline';
+  }
+
+  @override
+  String progress_total_less(String amount, String baseline) {
+    return '$amount weniger als $baseline';
+  }
+
+  @override
+  String progress_total_more(String amount, String baseline) {
+    return '$amount mehr als $baseline';
+  }
+
+  @override
+  String progress_total_same(String baseline) {
+    return 'Etwa gleich wie $baseline';
+  }
+
+  @override
+  String progress_forecast_month(String amount) {
+    return 'Bei diesem Tempo ≈ $amount bis Monatsende';
+  }
+
+  @override
+  String progress_forecast_year(String amount) {
+    return 'Bei diesem Tempo ≈ $amount bis Jahresende';
+  }
+
+  @override
+  String progress_day(int day) {
+    return 'Tag $day';
+  }
+
+  @override
+  String get progress_changes_title => 'Was sich geändert hat';
+
+  @override
+  String progress_now_was(String now, String was) {
+    return 'jetzt $now · vorher $was';
+  }
+
+  @override
+  String get progress_new => 'Neu';
+
+  @override
+  String get progress_breakdown_title => 'Nach Tag';
+
+  @override
+  String get progress_no_income => 'Keine Einnahmen in diesem Zeitraum';
+
+  @override
+  String progress_show_all(int count) {
+    return 'Alle anzeigen ($count)';
+  }
+
+  @override
+  String get progress_show_less => 'Weniger anzeigen';
+
+  @override
+  String get progress_overlap_hint =>
+      'Eine Transaktion mit Tags aus mehreren Gruppen zählt in jeder.';
+
+  @override
+  String get progress_habits_title => 'Gewohnheiten';
+
+  @override
+  String get progress_daily_average => 'Tagesdurchschnitt';
+
+  @override
+  String get progress_biggest_expense => 'Größte Ausgabe';
+
+  @override
+  String get progress_recurring => 'Wiederkehrende Zahlungen';
+
+  @override
+  String progress_recurring_share(int percent) {
+    return '$percent % deiner Ausgaben';
+  }
+
+  @override
+  String get progress_average_expense => 'Durchschnittliche Ausgabe';
+
+  @override
+  String progress_peak_weekday(String weekday) {
+    return 'Am meisten gibst du am $weekday aus';
+  }
+
+  @override
+  String get progress_weekday_hint =>
+      'Durchschnittliche Ausgaben pro Wochentag';
+
+  @override
+  String progress_history_months(int count) {
+    return 'Letzte $count Monate';
+  }
+
+  @override
+  String progress_history_years(int count) {
+    return 'Letzte $count Jahre';
+  }
+
+  @override
+  String progress_average_per_month(String amount) {
+    return 'Durchschnittlich $amount pro Monat';
+  }
+
+  @override
+  String progress_average_per_year(String amount) {
+    return 'Durchschnittlich $amount pro Jahr';
+  }
+
+  @override
+  String progress_to_date_hint(String baseline) {
+    return 'Verglichen mit denselben Tagen: $baseline';
+  }
 
   @override
   String get l10nCurrency =>

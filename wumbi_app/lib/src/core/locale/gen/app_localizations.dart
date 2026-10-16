@@ -1770,30 +1770,6 @@ abstract class AppLocalizations {
   /// **'Income'**
   String get progress_income;
 
-  /// No description provided for @progress_expense.
-  ///
-  /// In en, this message translates to:
-  /// **'Expense'**
-  String get progress_expense;
-
-  /// No description provided for @progress_net.
-  ///
-  /// In en, this message translates to:
-  /// **'Net'**
-  String get progress_net;
-
-  /// No description provided for @progress_vs_last_month.
-  ///
-  /// In en, this message translates to:
-  /// **'vs last month'**
-  String get progress_vs_last_month;
-
-  /// No description provided for @progress_vs_last_year.
-  ///
-  /// In en, this message translates to:
-  /// **'vs last year'**
-  String get progress_vs_last_year;
-
   /// No description provided for @progress_all_wallets.
   ///
   /// In en, this message translates to:
@@ -1805,12 +1781,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Show data for'**
   String get progress_scope_title;
-
-  /// No description provided for @progress_chart_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Income vs Expense'**
-  String get progress_chart_title;
 
   /// No description provided for @progress_not_included.
   ///
@@ -1824,29 +1794,11 @@ abstract class AppLocalizations {
   /// **'Nothing to analyse yet'**
   String get progress_empty_title;
 
-  /// No description provided for @progress_trend_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Trend'**
-  String get progress_trend_title;
-
-  /// No description provided for @progress_tags_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Spending by tag'**
-  String get progress_tags_title;
-
   /// No description provided for @progress_untagged.
   ///
   /// In en, this message translates to:
   /// **'Untagged'**
   String get progress_untagged;
-
-  /// No description provided for @progress_other_tags.
-  ///
-  /// In en, this message translates to:
-  /// **'Other'**
-  String get progress_other_tags;
 
   /// No description provided for @progress_no_expenses.
   ///
@@ -1859,6 +1811,300 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Add a few transactions and your progress shows up here.'**
   String get progress_empty_subtitle;
+
+  /// No description provided for @progress_spent.
+  ///
+  /// In en, this message translates to:
+  /// **'Spent'**
+  String get progress_spent;
+
+  /// No description provided for @progress_spending.
+  ///
+  /// In en, this message translates to:
+  /// **'Spending'**
+  String get progress_spending;
+
+  /// No description provided for @progress_saved.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved'**
+  String get progress_saved;
+
+  /// No description provided for @progress_overspent.
+  ///
+  /// In en, this message translates to:
+  /// **'Overspent'**
+  String get progress_overspent;
+
+  /// No description provided for @progress_vs.
+  ///
+  /// In en, this message translates to:
+  /// **'vs {label}'**
+  String progress_vs(String label);
+
+  /// No description provided for @progress_kept_share.
+  ///
+  /// In en, this message translates to:
+  /// **'You kept {percent}% of what you earned'**
+  String progress_kept_share(int percent);
+
+  /// No description provided for @progress_overspent_by.
+  ///
+  /// In en, this message translates to:
+  /// **'You spent {amount} more than you earned'**
+  String progress_overspent_by(String amount);
+
+  /// No description provided for @progress_nothing_in.
+  ///
+  /// In en, this message translates to:
+  /// **'No transactions in {period}'**
+  String progress_nothing_in(String period);
+
+  /// No description provided for @progress_compare_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Compare with'**
+  String get progress_compare_title;
+
+  /// No description provided for @progress_baseline_previous_month.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous month'**
+  String get progress_baseline_previous_month;
+
+  /// No description provided for @progress_baseline_previous_year.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous year'**
+  String get progress_baseline_previous_year;
+
+  /// No description provided for @progress_baseline_last_year.
+  ///
+  /// In en, this message translates to:
+  /// **'Same month last year'**
+  String get progress_baseline_last_year;
+
+  /// No description provided for @progress_baseline_average_months.
+  ///
+  /// In en, this message translates to:
+  /// **'Average of the last {count} months'**
+  String progress_baseline_average_months(int count);
+
+  /// No description provided for @progress_baseline_average_years.
+  ///
+  /// In en, this message translates to:
+  /// **'Average of the last {count} years'**
+  String progress_baseline_average_years(int count);
+
+  /// No description provided for @progress_baseline_pick_month.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a month'**
+  String get progress_baseline_pick_month;
+
+  /// No description provided for @progress_baseline_pick_year.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a year'**
+  String get progress_baseline_pick_year;
+
+  /// No description provided for @progress_average_months.
+  ///
+  /// In en, this message translates to:
+  /// **'the {count}-month average'**
+  String progress_average_months(int count);
+
+  /// No description provided for @progress_average_years.
+  ///
+  /// In en, this message translates to:
+  /// **'the {count}-year average'**
+  String progress_average_years(int count);
+
+  /// No description provided for @progress_pace_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Spending pace'**
+  String get progress_pace_title;
+
+  /// No description provided for @progress_pace_less.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} less than {baseline} at this point'**
+  String progress_pace_less(String amount, String baseline);
+
+  /// No description provided for @progress_pace_more.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} more than {baseline} at this point'**
+  String progress_pace_more(String amount, String baseline);
+
+  /// No description provided for @progress_pace_same.
+  ///
+  /// In en, this message translates to:
+  /// **'Same pace as {baseline}'**
+  String progress_pace_same(String baseline);
+
+  /// No description provided for @progress_total_less.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} less than {baseline}'**
+  String progress_total_less(String amount, String baseline);
+
+  /// No description provided for @progress_total_more.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} more than {baseline}'**
+  String progress_total_more(String amount, String baseline);
+
+  /// No description provided for @progress_total_same.
+  ///
+  /// In en, this message translates to:
+  /// **'About the same as {baseline}'**
+  String progress_total_same(String baseline);
+
+  /// No description provided for @progress_forecast_month.
+  ///
+  /// In en, this message translates to:
+  /// **'At this pace ≈ {amount} by the end of the month'**
+  String progress_forecast_month(String amount);
+
+  /// No description provided for @progress_forecast_year.
+  ///
+  /// In en, this message translates to:
+  /// **'At this pace ≈ {amount} by the end of the year'**
+  String progress_forecast_year(String amount);
+
+  /// No description provided for @progress_day.
+  ///
+  /// In en, this message translates to:
+  /// **'Day {day}'**
+  String progress_day(int day);
+
+  /// No description provided for @progress_changes_title.
+  ///
+  /// In en, this message translates to:
+  /// **'What changed'**
+  String get progress_changes_title;
+
+  /// No description provided for @progress_now_was.
+  ///
+  /// In en, this message translates to:
+  /// **'{now} now · was {was}'**
+  String progress_now_was(String now, String was);
+
+  /// No description provided for @progress_new.
+  ///
+  /// In en, this message translates to:
+  /// **'New'**
+  String get progress_new;
+
+  /// No description provided for @progress_breakdown_title.
+  ///
+  /// In en, this message translates to:
+  /// **'By tag'**
+  String get progress_breakdown_title;
+
+  /// No description provided for @progress_no_income.
+  ///
+  /// In en, this message translates to:
+  /// **'No income in this period'**
+  String get progress_no_income;
+
+  /// No description provided for @progress_show_all.
+  ///
+  /// In en, this message translates to:
+  /// **'Show all ({count})'**
+  String progress_show_all(int count);
+
+  /// No description provided for @progress_show_less.
+  ///
+  /// In en, this message translates to:
+  /// **'Show less'**
+  String get progress_show_less;
+
+  /// No description provided for @progress_overlap_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'A transaction with tags from several families counts in each.'**
+  String get progress_overlap_hint;
+
+  /// No description provided for @progress_habits_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Habits'**
+  String get progress_habits_title;
+
+  /// No description provided for @progress_daily_average.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily average'**
+  String get progress_daily_average;
+
+  /// No description provided for @progress_biggest_expense.
+  ///
+  /// In en, this message translates to:
+  /// **'Biggest expense'**
+  String get progress_biggest_expense;
+
+  /// No description provided for @progress_recurring.
+  ///
+  /// In en, this message translates to:
+  /// **'Recurring payments'**
+  String get progress_recurring;
+
+  /// No description provided for @progress_recurring_share.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent}% of your spending'**
+  String progress_recurring_share(int percent);
+
+  /// No description provided for @progress_average_expense.
+  ///
+  /// In en, this message translates to:
+  /// **'Average expense'**
+  String get progress_average_expense;
+
+  /// No description provided for @progress_peak_weekday.
+  ///
+  /// In en, this message translates to:
+  /// **'You spend the most on {weekday}'**
+  String progress_peak_weekday(String weekday);
+
+  /// No description provided for @progress_weekday_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Average spending per day of the week'**
+  String get progress_weekday_hint;
+
+  /// No description provided for @progress_history_months.
+  ///
+  /// In en, this message translates to:
+  /// **'Last {count} months'**
+  String progress_history_months(int count);
+
+  /// No description provided for @progress_history_years.
+  ///
+  /// In en, this message translates to:
+  /// **'Last {count} years'**
+  String progress_history_years(int count);
+
+  /// No description provided for @progress_average_per_month.
+  ///
+  /// In en, this message translates to:
+  /// **'Average {amount} per month'**
+  String progress_average_per_month(String amount);
+
+  /// No description provided for @progress_average_per_year.
+  ///
+  /// In en, this message translates to:
+  /// **'Average {amount} per year'**
+  String progress_average_per_year(String amount);
+
+  /// No description provided for @progress_to_date_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Compared with the same days of {baseline}'**
+  String progress_to_date_hint(String baseline);
 
   /// No description provided for @l10nCurrency.
   ///

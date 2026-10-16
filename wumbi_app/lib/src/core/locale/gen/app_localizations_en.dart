@@ -1040,25 +1040,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get progress_income => 'Income';
 
   @override
-  String get progress_expense => 'Expense';
-
-  @override
-  String get progress_net => 'Net';
-
-  @override
-  String get progress_vs_last_month => 'vs last month';
-
-  @override
-  String get progress_vs_last_year => 'vs last year';
-
-  @override
   String get progress_all_wallets => 'All wallets';
 
   @override
   String get progress_scope_title => 'Show data for';
-
-  @override
-  String get progress_chart_title => 'Income vs Expense';
 
   @override
   String progress_not_included(String codes) {
@@ -1069,16 +1054,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get progress_empty_title => 'Nothing to analyse yet';
 
   @override
-  String get progress_trend_title => 'Trend';
-
-  @override
-  String get progress_tags_title => 'Spending by tag';
-
-  @override
   String get progress_untagged => 'Untagged';
-
-  @override
-  String get progress_other_tags => 'Other';
 
   @override
   String get progress_no_expenses => 'No spending in this period';
@@ -1086,6 +1062,206 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get progress_empty_subtitle =>
       'Add a few transactions and your progress shows up here.';
+
+  @override
+  String get progress_spent => 'Spent';
+
+  @override
+  String get progress_spending => 'Spending';
+
+  @override
+  String get progress_saved => 'Saved';
+
+  @override
+  String get progress_overspent => 'Overspent';
+
+  @override
+  String progress_vs(String label) {
+    return 'vs $label';
+  }
+
+  @override
+  String progress_kept_share(int percent) {
+    return 'You kept $percent% of what you earned';
+  }
+
+  @override
+  String progress_overspent_by(String amount) {
+    return 'You spent $amount more than you earned';
+  }
+
+  @override
+  String progress_nothing_in(String period) {
+    return 'No transactions in $period';
+  }
+
+  @override
+  String get progress_compare_title => 'Compare with';
+
+  @override
+  String get progress_baseline_previous_month => 'Previous month';
+
+  @override
+  String get progress_baseline_previous_year => 'Previous year';
+
+  @override
+  String get progress_baseline_last_year => 'Same month last year';
+
+  @override
+  String progress_baseline_average_months(int count) {
+    return 'Average of the last $count months';
+  }
+
+  @override
+  String progress_baseline_average_years(int count) {
+    return 'Average of the last $count years';
+  }
+
+  @override
+  String get progress_baseline_pick_month => 'Pick a month';
+
+  @override
+  String get progress_baseline_pick_year => 'Pick a year';
+
+  @override
+  String progress_average_months(int count) {
+    return 'the $count-month average';
+  }
+
+  @override
+  String progress_average_years(int count) {
+    return 'the $count-year average';
+  }
+
+  @override
+  String get progress_pace_title => 'Spending pace';
+
+  @override
+  String progress_pace_less(String amount, String baseline) {
+    return '$amount less than $baseline at this point';
+  }
+
+  @override
+  String progress_pace_more(String amount, String baseline) {
+    return '$amount more than $baseline at this point';
+  }
+
+  @override
+  String progress_pace_same(String baseline) {
+    return 'Same pace as $baseline';
+  }
+
+  @override
+  String progress_total_less(String amount, String baseline) {
+    return '$amount less than $baseline';
+  }
+
+  @override
+  String progress_total_more(String amount, String baseline) {
+    return '$amount more than $baseline';
+  }
+
+  @override
+  String progress_total_same(String baseline) {
+    return 'About the same as $baseline';
+  }
+
+  @override
+  String progress_forecast_month(String amount) {
+    return 'At this pace ≈ $amount by the end of the month';
+  }
+
+  @override
+  String progress_forecast_year(String amount) {
+    return 'At this pace ≈ $amount by the end of the year';
+  }
+
+  @override
+  String progress_day(int day) {
+    return 'Day $day';
+  }
+
+  @override
+  String get progress_changes_title => 'What changed';
+
+  @override
+  String progress_now_was(String now, String was) {
+    return '$now now · was $was';
+  }
+
+  @override
+  String get progress_new => 'New';
+
+  @override
+  String get progress_breakdown_title => 'By tag';
+
+  @override
+  String get progress_no_income => 'No income in this period';
+
+  @override
+  String progress_show_all(int count) {
+    return 'Show all ($count)';
+  }
+
+  @override
+  String get progress_show_less => 'Show less';
+
+  @override
+  String get progress_overlap_hint =>
+      'A transaction with tags from several families counts in each.';
+
+  @override
+  String get progress_habits_title => 'Habits';
+
+  @override
+  String get progress_daily_average => 'Daily average';
+
+  @override
+  String get progress_biggest_expense => 'Biggest expense';
+
+  @override
+  String get progress_recurring => 'Recurring payments';
+
+  @override
+  String progress_recurring_share(int percent) {
+    return '$percent% of your spending';
+  }
+
+  @override
+  String get progress_average_expense => 'Average expense';
+
+  @override
+  String progress_peak_weekday(String weekday) {
+    return 'You spend the most on $weekday';
+  }
+
+  @override
+  String get progress_weekday_hint => 'Average spending per day of the week';
+
+  @override
+  String progress_history_months(int count) {
+    return 'Last $count months';
+  }
+
+  @override
+  String progress_history_years(int count) {
+    return 'Last $count years';
+  }
+
+  @override
+  String progress_average_per_month(String amount) {
+    return 'Average $amount per month';
+  }
+
+  @override
+  String progress_average_per_year(String amount) {
+    return 'Average $amount per year';
+  }
+
+  @override
+  String progress_to_date_hint(String baseline) {
+    return 'Compared with the same days of $baseline';
+  }
 
   @override
   String get l10nCurrency =>

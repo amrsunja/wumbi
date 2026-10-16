@@ -443,13 +443,8 @@
   "progress_month": "Month",
   "progress_year": "Year",
   "progress_income": "Income",
-  "progress_expense": "Expense",
-  "progress_net": "Net",
-  "progress_vs_last_month": "vs last month",
-  "progress_vs_last_year": "vs last year",
   "progress_all_wallets": "All wallets",
   "progress_scope_title": "Show data for",
-  "progress_chart_title": "Income vs Expense",
   "progress_not_included": "{codes} not included",
   "@progress_not_included": {
     "placeholders": {
@@ -457,12 +452,193 @@
     }
   },
   "progress_empty_title": "Nothing to analyse yet",
-  "progress_trend_title": "Trend",
-  "progress_tags_title": "Spending by tag",
   "progress_untagged": "Untagged",
-  "progress_other_tags": "Other",
   "progress_no_expenses": "No spending in this period",
   "progress_empty_subtitle": "Add a few transactions and your progress shows up here.",
+  "progress_spent": "Spent",
+  "progress_spending": "Spending",
+  "progress_saved": "Saved",
+  "progress_overspent": "Overspent",
+  "progress_vs": "vs {label}",
+  "@progress_vs": {
+    "placeholders": {
+      "label": {"type": "String"}
+    }
+  },
+  "progress_kept_share": "You kept {percent}% of what you earned",
+  "@progress_kept_share": {
+    "placeholders": {
+      "percent": {"type": "int"}
+    }
+  },
+  "progress_overspent_by": "You spent {amount} more than you earned",
+  "@progress_overspent_by": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "progress_nothing_in": "No transactions in {period}",
+  "@progress_nothing_in": {
+    "placeholders": {
+      "period": {"type": "String"}
+    }
+  },
+  "progress_compare_title": "Compare with",
+  "progress_baseline_previous_month": "Previous month",
+  "progress_baseline_previous_year": "Previous year",
+  "progress_baseline_last_year": "Same month last year",
+  "progress_baseline_average_months": "Average of the last {count} months",
+  "@progress_baseline_average_months": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "progress_baseline_average_years": "Average of the last {count} years",
+  "@progress_baseline_average_years": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "progress_baseline_pick_month": "Pick a month",
+  "progress_baseline_pick_year": "Pick a year",
+  "progress_average_months": "the {count}-month average",
+  "@progress_average_months": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "progress_average_years": "the {count}-year average",
+  "@progress_average_years": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "progress_pace_title": "Spending pace",
+  "progress_pace_less": "{amount} less than {baseline} at this point",
+  "@progress_pace_less": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "baseline": {"type": "String"}
+    }
+  },
+  "progress_pace_more": "{amount} more than {baseline} at this point",
+  "@progress_pace_more": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "baseline": {"type": "String"}
+    }
+  },
+  "progress_pace_same": "Same pace as {baseline}",
+  "@progress_pace_same": {
+    "placeholders": {
+      "baseline": {"type": "String"}
+    }
+  },
+  "progress_total_less": "{amount} less than {baseline}",
+  "@progress_total_less": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "baseline": {"type": "String"}
+    }
+  },
+  "progress_total_more": "{amount} more than {baseline}",
+  "@progress_total_more": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "baseline": {"type": "String"}
+    }
+  },
+  "progress_total_same": "About the same as {baseline}",
+  "@progress_total_same": {
+    "placeholders": {
+      "baseline": {"type": "String"}
+    }
+  },
+  "progress_forecast_month": "At this pace ≈ {amount} by the end of the month",
+  "@progress_forecast_month": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "progress_forecast_year": "At this pace ≈ {amount} by the end of the year",
+  "@progress_forecast_year": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "progress_day": "Day {day}",
+  "@progress_day": {
+    "placeholders": {
+      "day": {"type": "int"}
+    }
+  },
+  "progress_changes_title": "What changed",
+  "progress_now_was": "{now} now · was {was}",
+  "@progress_now_was": {
+    "placeholders": {
+      "now": {"type": "String"},
+      "was": {"type": "String"}
+    }
+  },
+  "progress_new": "New",
+  "progress_breakdown_title": "By tag",
+  "progress_no_income": "No income in this period",
+  "progress_show_all": "Show all ({count})",
+  "@progress_show_all": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "progress_show_less": "Show less",
+  "progress_overlap_hint": "A transaction with tags from several families counts in each.",
+  "progress_habits_title": "Habits",
+  "progress_daily_average": "Daily average",
+  "progress_biggest_expense": "Biggest expense",
+  "progress_recurring": "Recurring payments",
+  "progress_recurring_share": "{percent}% of your spending",
+  "@progress_recurring_share": {
+    "placeholders": {
+      "percent": {"type": "int"}
+    }
+  },
+  "progress_average_expense": "Average expense",
+  "progress_peak_weekday": "You spend the most on {weekday}",
+  "@progress_peak_weekday": {
+    "placeholders": {
+      "weekday": {"type": "String"}
+    }
+  },
+  "progress_weekday_hint": "Average spending per day of the week",
+  "progress_history_months": "Last {count} months",
+  "@progress_history_months": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "progress_history_years": "Last {count} years",
+  "@progress_history_years": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "progress_average_per_month": "Average {amount} per month",
+  "@progress_average_per_month": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "progress_average_per_year": "Average {amount} per year",
+  "@progress_average_per_year": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "progress_to_date_hint": "Compared with the same days of {baseline}",
+  "@progress_to_date_hint": {
+    "placeholders": {
+      "baseline": {"type": "String"}
+    }
+  },
   "l10nCurrency": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ CURRENCY ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
   "currency_pick_title": "Currency",
   "currency_no_results": "No currency matches",

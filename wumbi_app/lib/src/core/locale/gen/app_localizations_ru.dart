@@ -1069,25 +1069,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get progress_income => 'Доход';
 
   @override
-  String get progress_expense => 'Расход';
-
-  @override
-  String get progress_net => 'Итого';
-
-  @override
-  String get progress_vs_last_month => 'к прошлому месяцу';
-
-  @override
-  String get progress_vs_last_year => 'к прошлому году';
-
-  @override
   String get progress_all_wallets => 'Все кошельки';
 
   @override
   String get progress_scope_title => 'Показать данные по';
-
-  @override
-  String get progress_chart_title => 'Доходы и расходы';
 
   @override
   String progress_not_included(String codes) {
@@ -1098,16 +1083,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get progress_empty_title => 'Пока нечего анализировать';
 
   @override
-  String get progress_trend_title => 'Динамика';
-
-  @override
-  String get progress_tags_title => 'Расходы по тегам';
-
-  @override
   String get progress_untagged => 'Без тега';
-
-  @override
-  String get progress_other_tags => 'Прочее';
 
   @override
   String get progress_no_expenses => 'В этом периоде расходов нет';
@@ -1115,6 +1091,206 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get progress_empty_subtitle =>
       'Добавьте несколько операций — и здесь появится ваш прогресс.';
+
+  @override
+  String get progress_spent => 'Потрачено';
+
+  @override
+  String get progress_spending => 'Расходы';
+
+  @override
+  String get progress_saved => 'Сэкономлено';
+
+  @override
+  String get progress_overspent => 'Перерасход';
+
+  @override
+  String progress_vs(String label) {
+    return 'против: $label';
+  }
+
+  @override
+  String progress_kept_share(int percent) {
+    return 'Вы сохранили $percent% дохода';
+  }
+
+  @override
+  String progress_overspent_by(String amount) {
+    return 'Вы потратили на $amount больше, чем заработали';
+  }
+
+  @override
+  String progress_nothing_in(String period) {
+    return 'Нет операций: $period';
+  }
+
+  @override
+  String get progress_compare_title => 'Сравнить с';
+
+  @override
+  String get progress_baseline_previous_month => 'Прошлый месяц';
+
+  @override
+  String get progress_baseline_previous_year => 'Прошлый год';
+
+  @override
+  String get progress_baseline_last_year => 'Тот же месяц год назад';
+
+  @override
+  String progress_baseline_average_months(int count) {
+    return 'Среднее за последние $count месяца';
+  }
+
+  @override
+  String progress_baseline_average_years(int count) {
+    return 'Среднее за последние $count года';
+  }
+
+  @override
+  String get progress_baseline_pick_month => 'Выбрать месяц';
+
+  @override
+  String get progress_baseline_pick_year => 'Выбрать год';
+
+  @override
+  String progress_average_months(int count) {
+    return 'среднее за $count месяца';
+  }
+
+  @override
+  String progress_average_years(int count) {
+    return 'среднее за $count года';
+  }
+
+  @override
+  String get progress_pace_title => 'Темп расходов';
+
+  @override
+  String progress_pace_less(String amount, String baseline) {
+    return 'На $amount меньше, чем $baseline, на этот момент';
+  }
+
+  @override
+  String progress_pace_more(String amount, String baseline) {
+    return 'На $amount больше, чем $baseline, на этот момент';
+  }
+
+  @override
+  String progress_pace_same(String baseline) {
+    return 'Тот же темп, что и $baseline';
+  }
+
+  @override
+  String progress_total_less(String amount, String baseline) {
+    return 'На $amount меньше, чем $baseline';
+  }
+
+  @override
+  String progress_total_more(String amount, String baseline) {
+    return 'На $amount больше, чем $baseline';
+  }
+
+  @override
+  String progress_total_same(String baseline) {
+    return 'Примерно как $baseline';
+  }
+
+  @override
+  String progress_forecast_month(String amount) {
+    return 'При таком темпе ≈ $amount к концу месяца';
+  }
+
+  @override
+  String progress_forecast_year(String amount) {
+    return 'При таком темпе ≈ $amount к концу года';
+  }
+
+  @override
+  String progress_day(int day) {
+    return 'День $day';
+  }
+
+  @override
+  String get progress_changes_title => 'Что изменилось';
+
+  @override
+  String progress_now_was(String now, String was) {
+    return 'сейчас $now · было $was';
+  }
+
+  @override
+  String get progress_new => 'Новое';
+
+  @override
+  String get progress_breakdown_title => 'По тегам';
+
+  @override
+  String get progress_no_income => 'В этом периоде доходов нет';
+
+  @override
+  String progress_show_all(int count) {
+    return 'Показать все ($count)';
+  }
+
+  @override
+  String get progress_show_less => 'Свернуть';
+
+  @override
+  String get progress_overlap_hint =>
+      'Операция с тегами из нескольких групп учитывается в каждой.';
+
+  @override
+  String get progress_habits_title => 'Привычки';
+
+  @override
+  String get progress_daily_average => 'В среднем за день';
+
+  @override
+  String get progress_biggest_expense => 'Самая крупная трата';
+
+  @override
+  String get progress_recurring => 'Регулярные платежи';
+
+  @override
+  String progress_recurring_share(int percent) {
+    return '$percent% ваших расходов';
+  }
+
+  @override
+  String get progress_average_expense => 'Средняя трата';
+
+  @override
+  String progress_peak_weekday(String weekday) {
+    return 'Самый затратный день — $weekday';
+  }
+
+  @override
+  String get progress_weekday_hint => 'Средние расходы по дням недели';
+
+  @override
+  String progress_history_months(int count) {
+    return 'Последние $count месяцев';
+  }
+
+  @override
+  String progress_history_years(int count) {
+    return 'Последние $count лет';
+  }
+
+  @override
+  String progress_average_per_month(String amount) {
+    return 'В среднем $amount в месяц';
+  }
+
+  @override
+  String progress_average_per_year(String amount) {
+    return 'В среднем $amount в год';
+  }
+
+  @override
+  String progress_to_date_hint(String baseline) {
+    return 'Сравнение с теми же днями: $baseline';
+  }
 
   @override
   String get l10nCurrency =>

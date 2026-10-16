@@ -396,13 +396,15 @@ void main() {
 
       final progress = (await ProgressRepository(sqlite: sqlite).load(
         granularity: ProgressGranularity.month,
+        viewed: DateTime(2026, 3),
+        baseline: const ProgressBaseline.previous(),
         target: _usd,
         now: DateTime(2026, 3, 15),
       ))
           .getOrThrow();
       expect(progress.current.expense.minor, 1000);
       expect(progress.current.income.minor, 0);
-      expect(progress.expenseByTag.single.amount.minor, 1000);
+      expect(progress.spending.roots.single.amount.minor, 1000);
 
       final food = (await sqlite.db.query('tags', where: "normalized_name = 'food'")).single['id']! as String;
       final stats = (await tags.statsOf(food, _usd)).getOrThrow();

@@ -1085,25 +1085,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get progress_income => 'دخل';
 
   @override
-  String get progress_expense => 'مصروف';
-
-  @override
-  String get progress_net => 'الصافي';
-
-  @override
-  String get progress_vs_last_month => 'مقارنة بالشهر الماضي';
-
-  @override
-  String get progress_vs_last_year => 'مقارنة بالسنة الماضية';
-
-  @override
   String get progress_all_wallets => 'كل المحافظ';
 
   @override
   String get progress_scope_title => 'عرض البيانات لـ';
-
-  @override
-  String get progress_chart_title => 'الدخل مقابل المصروف';
 
   @override
   String progress_not_included(String codes) {
@@ -1114,22 +1099,213 @@ class AppLocalizationsAr extends AppLocalizations {
   String get progress_empty_title => 'لا يوجد ما يمكن تحليله بعد';
 
   @override
-  String get progress_trend_title => 'الاتجاه';
-
-  @override
-  String get progress_tags_title => 'المصروف حسب الوسم';
-
-  @override
   String get progress_untagged => 'بدون وسم';
-
-  @override
-  String get progress_other_tags => 'أخرى';
 
   @override
   String get progress_no_expenses => 'لا توجد مصروفات في هذه الفترة';
 
   @override
   String get progress_empty_subtitle => 'أضف بعض المعاملات وسيظهر تقدمك هنا.';
+
+  @override
+  String get progress_spent => 'المصروف';
+
+  @override
+  String get progress_spending => 'المصروفات';
+
+  @override
+  String get progress_saved => 'المدّخر';
+
+  @override
+  String get progress_overspent => 'تجاوز';
+
+  @override
+  String progress_vs(String label) {
+    return 'مقارنة بـ $label';
+  }
+
+  @override
+  String progress_kept_share(int percent) {
+    return 'احتفظت بـ $percent% من دخلك';
+  }
+
+  @override
+  String progress_overspent_by(String amount) {
+    return 'أنفقت $amount أكثر مما كسبت';
+  }
+
+  @override
+  String progress_nothing_in(String period) {
+    return 'لا توجد معاملات في $period';
+  }
+
+  @override
+  String get progress_compare_title => 'قارن مع';
+
+  @override
+  String get progress_baseline_previous_month => 'الشهر السابق';
+
+  @override
+  String get progress_baseline_previous_year => 'السنة السابقة';
+
+  @override
+  String get progress_baseline_last_year => 'نفس الشهر من العام الماضي';
+
+  @override
+  String progress_baseline_average_months(int count) {
+    return 'متوسط آخر $count أشهر';
+  }
+
+  @override
+  String progress_baseline_average_years(int count) {
+    return 'متوسط آخر $count سنوات';
+  }
+
+  @override
+  String get progress_baseline_pick_month => 'اختر شهرًا';
+
+  @override
+  String get progress_baseline_pick_year => 'اختر سنة';
+
+  @override
+  String progress_average_months(int count) {
+    return 'متوسط $count أشهر';
+  }
+
+  @override
+  String progress_average_years(int count) {
+    return 'متوسط $count سنوات';
+  }
+
+  @override
+  String get progress_pace_title => 'وتيرة الإنفاق';
+
+  @override
+  String progress_pace_less(String amount, String baseline) {
+    return '$amount أقل من $baseline حتى الآن';
+  }
+
+  @override
+  String progress_pace_more(String amount, String baseline) {
+    return '$amount أكثر من $baseline حتى الآن';
+  }
+
+  @override
+  String progress_pace_same(String baseline) {
+    return 'نفس وتيرة $baseline';
+  }
+
+  @override
+  String progress_total_less(String amount, String baseline) {
+    return '$amount أقل من $baseline';
+  }
+
+  @override
+  String progress_total_more(String amount, String baseline) {
+    return '$amount أكثر من $baseline';
+  }
+
+  @override
+  String progress_total_same(String baseline) {
+    return 'تقريبًا مثل $baseline';
+  }
+
+  @override
+  String progress_forecast_month(String amount) {
+    return 'بهذه الوتيرة ≈ $amount بنهاية الشهر';
+  }
+
+  @override
+  String progress_forecast_year(String amount) {
+    return 'بهذه الوتيرة ≈ $amount بنهاية السنة';
+  }
+
+  @override
+  String progress_day(int day) {
+    return 'اليوم $day';
+  }
+
+  @override
+  String get progress_changes_title => 'ما الذي تغيّر';
+
+  @override
+  String progress_now_was(String now, String was) {
+    return 'الآن $now · كان $was';
+  }
+
+  @override
+  String get progress_new => 'جديد';
+
+  @override
+  String get progress_breakdown_title => 'حسب الوسم';
+
+  @override
+  String get progress_no_income => 'لا يوجد دخل في هذه الفترة';
+
+  @override
+  String progress_show_all(int count) {
+    return 'عرض الكل ($count)';
+  }
+
+  @override
+  String get progress_show_less => 'عرض أقل';
+
+  @override
+  String get progress_overlap_hint =>
+      'تُحتسب المعاملة التي تحمل وسومًا من عدة مجموعات في كل منها.';
+
+  @override
+  String get progress_habits_title => 'العادات';
+
+  @override
+  String get progress_daily_average => 'المتوسط اليومي';
+
+  @override
+  String get progress_biggest_expense => 'أكبر مصروف';
+
+  @override
+  String get progress_recurring => 'المدفوعات المتكررة';
+
+  @override
+  String progress_recurring_share(int percent) {
+    return '$percent% من مصروفاتك';
+  }
+
+  @override
+  String get progress_average_expense => 'متوسط المصروف';
+
+  @override
+  String progress_peak_weekday(String weekday) {
+    return 'أكثر يوم تنفق فيه: $weekday';
+  }
+
+  @override
+  String get progress_weekday_hint => 'متوسط الإنفاق حسب أيام الأسبوع';
+
+  @override
+  String progress_history_months(int count) {
+    return 'آخر $count شهرًا';
+  }
+
+  @override
+  String progress_history_years(int count) {
+    return 'آخر $count سنوات';
+  }
+
+  @override
+  String progress_average_per_month(String amount) {
+    return 'بمتوسط $amount شهريًا';
+  }
+
+  @override
+  String progress_average_per_year(String amount) {
+    return 'بمتوسط $amount سنويًا';
+  }
+
+  @override
+  String progress_to_date_hint(String baseline) {
+    return 'مقارنة بالأيام نفسها من $baseline';
+  }
 
   @override
   String get l10nCurrency =>
