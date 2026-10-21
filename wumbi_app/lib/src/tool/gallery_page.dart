@@ -69,7 +69,8 @@ class GalleryPage extends StatelessWidget {
           const UiBudgetRow(
             title: 'Groceries',
             trailing: '€230.00 left',
-            caption: 'October · €14.00/day',
+            subtitle: 'Spent €170 of €400 · October',
+            subtitleEmphasis: '€170',
             spentRatio: 0.42,
             plannedRatio: 0.15,
             color: UIColorToken.blue,
@@ -78,7 +79,7 @@ class GalleryPage extends StatelessWidget {
             title: '#cafe',
             trailing: '€12.00 over',
             trailingColor: UIColorToken.neg500,
-            caption: 'This week',
+            subtitle: 'This week',
             spentRatio: 1.1,
             color: UIColorToken.neg500,
           ),

@@ -1076,6 +1076,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get progress_title => 'التقدم';
 
   @override
+  String get progress_by_day => 'يومًا بيوم';
+
+  @override
+  String get progress_by_month => 'شهرًا بشهر';
+
+  @override
+  String get progress_other => 'أخرى';
+
+  @override
   String get progress_month => 'شهر';
 
   @override
@@ -1842,6 +1851,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get debt_new => 'دين جديد';
 
   @override
+  String get debt_edit_title => 'تعديل الدين';
+
+  @override
   String get debts_all => 'كل الديون';
 
   @override
@@ -2549,6 +2561,15 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get debt_wallet_confirm_none => 'حفظ بدون محفظة';
+
+  @override
+  String get debt_history_swipe_hint => 'اسحب الدفعة لليسار لحذفها';
+
+  @override
+  String get debt_form_person => 'شخص';
+
+  @override
+  String get debt_form_wallet => 'المحفظة';
 
   @override
   String get l10nStopLineDontTouch =>

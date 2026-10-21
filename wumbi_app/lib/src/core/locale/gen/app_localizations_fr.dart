@@ -1038,6 +1038,15 @@ class AppLocalizationsFr extends AppLocalizations {
   String get progress_title => 'Progression';
 
   @override
+  String get progress_by_day => 'Jour par jour';
+
+  @override
+  String get progress_by_month => 'Mois par mois';
+
+  @override
+  String get progress_other => 'Autres';
+
+  @override
   String get progress_month => 'Mois';
 
   @override
@@ -1488,7 +1497,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String budget_over(String amount) {
-    return '$amount de dépassement';
+    return '$amount en trop';
   }
 
   @override
@@ -1810,6 +1819,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get debt_new => 'Nouvelle dette';
+
+  @override
+  String get debt_edit_title => 'Modifier la dette';
 
   @override
   String get debts_all => 'Toutes les dettes';
@@ -2529,6 +2541,16 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get debt_wallet_confirm_none => 'Enregistrer sans portefeuille';
+
+  @override
+  String get debt_history_swipe_hint =>
+      'Glissez un paiement vers la gauche pour le supprimer';
+
+  @override
+  String get debt_form_person => 'Personne';
+
+  @override
+  String get debt_form_wallet => 'Portefeuille';
 
   @override
   String get l10nStopLineDontTouch =>

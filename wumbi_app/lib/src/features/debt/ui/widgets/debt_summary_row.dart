@@ -10,8 +10,8 @@ import '../../../../core/utils/extensions/date_time_extensions.dart';
 import '../../data/models/debt_model.dart';
 import '../debt_labels.dart';
 
-/// [UiDebtRow] fed from a [DebtSummary]; taps open the debt details (name /
-/// bar heroes; the row's summary seeds the page so they have a target).
+/// [UiDebtRow] fed from a [DebtSummary]; taps open the debt details (the
+/// name hero; the row's summary seeds the page so it has a target).
 /// [showSide] prefixes the caption with "Owed to me" / "I owe" (lists mixing
 /// both sides: the Dashboard).
 class DebtSummaryRow extends StatelessWidget {
@@ -30,15 +30,17 @@ class DebtSummaryRow extends StatelessWidget {
       if (s.debt.description.isNotEmpty) s.debt.description,
       if (due != null && s.isOpen && !s.overdue) l10n.debt_due(due.formatShortDate()),
     ].join(' · ');
+    final tone = s.debt.direction == DebtDirection.lent ? UIColorToken.blue : context.colors.expenseColor;
     return UiDebtRow(
       title: s.person.name,
       trailing: DebtLabels.remaining(l10n, s),
       caption: caption,
       alert: s.overdue ? l10n.debt_overdue : null,
-      paidRatio: s.paidRatio,
       dimmed: !s.isOpen,
+      // Income blue: someone owes you. Expense colour: you owe someone.
+      dotColor: tone,
+      trailingColor: tone,
       titleHeroTag: heroDebtName(s.debt.id),
-      barHeroTag: heroDebtProgress(s.debt.id),
       onTap: () => context.router.push(DebtDetailsRoute(debtId: s.debt.id, seed: s)),
     );
   }

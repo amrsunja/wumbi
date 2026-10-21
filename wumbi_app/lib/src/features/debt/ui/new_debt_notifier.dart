@@ -113,6 +113,44 @@ class NewDebtNotifier extends Notifier<NewDebtState> {
 
   void setWallet(WalletSummary? w) => state = state.copyWith(wallet: w);
 
+  /// Edit mode: seed the editable fields from the stored debt.
+  void seedFromDebt(DebtDetails d) {
+    if (!ref.mounted) return;
+    final debt = d.summary.debt;
+    state = state.copyWith(
+      direction: debt.direction,
+      personId: debt.personId,
+      personName: d.summary.person.name,
+      currency: debt.currency,
+      note: debt.description,
+      dueDate: debt.dueDate,
+      error: null,
+    );
+  }
+
+  void setPersonName(String name) => state = state.copyWith(personName: name);
+
+  /// Edit mode save (note and due date). True when the page should close.
+  Future<bool> saveEdit(String debtId) async {
+    if (state.isSaving) return false;
+    state = state.copyWith(isSaving: true, error: null);
+    final result = await ref.read(debtRepositoryProvider).update(
+          debtId,
+          description: state.note.trim(),
+          dueDate: state.dueDate,
+          clearDueDate: state.dueDate == null,
+        );
+    if (!ref.mounted) return false;
+    state = state.copyWith(isSaving: false);
+    final failure = result.tryGetError();
+    if (failure != null) {
+      _events.send(ShowErrorEvent(failure));
+      return false;
+    }
+    AppVibrations.medium();
+    return true;
+  }
+
   /// One-tap commit from the page's action buttons: [direction] is the
   /// button that was pressed. Returns true when the page should close.
   Future<bool> commit(DebtDirection direction) {

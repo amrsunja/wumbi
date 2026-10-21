@@ -433,6 +433,9 @@
 
   "l10nProgress": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ PROGRESS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
   "progress_title": "Прогресс",
+  "progress_by_day": "По дням",
+  "progress_by_month": "По месяцам",
+  "progress_other": "Другое",
   "progress_month": "Месяц",
   "progress_year": "Год",
   "progress_income": "Доход",
@@ -657,6 +660,7 @@
   "debts_empty_owe_title": "Вы никому не должны",
   "debts_empty_subtitle": "Нажмите «Новый долг» или «Перевод → Долги» на экране операции",
   "debt_new": "Новый долг",
+  "debt_edit_title": "Изменить долг",
   "debts_all": "Все долги",
   "debts_empty_hint": "Отслеживайте, кому вы одолжили и у кого заняли",
   "dashboard_reorder_hint": "Удерживайте, чтобы переставить",
@@ -820,5 +824,8 @@
   "debt_wallet_confirm_in": "Зачислить в {wallet}",
   "debt_wallet_confirm_out": "Оплатить из {wallet}",
   "debt_wallet_confirm_none": "Сохранить без кошелька",
+  "debt_history_swipe_hint": "Смахните платёж влево, чтобы удалить его",
+  "debt_form_person": "Человек",
+  "debt_form_wallet": "Кошелёк",
   "l10nStopLineDontTouch": "☠☠☠☠☠☠☠☠☠☠☠☠☠ Don't touch this line ☠☠☠☠☠☠☠☠☠☠☠☠☠"
 }

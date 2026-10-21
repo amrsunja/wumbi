@@ -108,8 +108,7 @@ class TransactionPage extends HookConsumerWidget {
       await notifier.commit(type);
     }
 
-    // Wallets | Debts sheet: another wallet, pay back a debt or lend. With a
-    // single wallet the sheet opens on Debts (Wallets offers a new wallet).
+    // Pick another wallet to transfer to.
     Future<void> onTapTransfer() async {
       descriptionFocus.unfocus();
       tagsFocus.unfocus();
@@ -123,14 +122,10 @@ class TransactionPage extends HookConsumerWidget {
         source: state.wallet!,
         sent: state.walletMoney!,
         wallets: state.wallets,
-        // [A4]: a debt never repeats and is never upcoming.
-        debtsAllowed: state.repeat.isNever && !state.willBeUpcoming,
       );
       switch (choice) {
         case TransferChoice(:final target, :final received, :final rate):
           await notifier.transfer(target: target, received: received, rate: rate);
-        case DebtTransferChoice(:final intent):
-          await notifier.commit(TransactionType.expense, debt: intent);
         case null:
           return;
       }
@@ -540,14 +535,14 @@ class _UpcomingHint extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   spacing: 4,
                   children: [
-                    UIIcon(UIIconToken.icons.time.clock, size: 12, color: UIColorToken.blue),
+                    UIIcon(UIIconToken.icons.time.clock, size: 12, color: UIColorToken.casper),
                     Flexible(
                       child: Text(
                         l10n.transaction_upcoming_hint(date.formatMediumDate()),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.center,
-                        style: typo.inter.caption.copyWith(color: UIColorToken.blue),
+                        style: typo.inter.caption.copyWith(color: UIColorToken.casper),
                       ),
                     ),
                   ],

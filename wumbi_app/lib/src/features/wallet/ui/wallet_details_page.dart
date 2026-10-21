@@ -34,7 +34,7 @@ import 'widgets/transaction_sort_sheet.dart';
 import 'widgets/wallet_picker_sheet.dart';
 
 /// Room under each tab list so the last row clears the FAB.
-const double _kListBottomInset = 96;
+const double _kListBottomInset = 126;
 
 enum _WalletTab { transactions, budgets, subscriptions }
 
@@ -377,69 +377,64 @@ class _BudgetsTab extends ConsumerWidget {
     final budgets = ref.watch(_walletScopedBudgetsProvider(walletId));
     final parts = <(String, Color?)>[?BudgetLabels.summary(l10n, budgets ?? const [])];
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        _TabHeader(
-          summary: parts.isEmpty
-              ? null
-              : Text.rich(
-                  TextSpan(
-                    children: [
-                      for (var i = 0; i < parts.length; i++) ...[
-                        if (i > 0) const TextSpan(text: '  ·  '),
-                        TextSpan(
-                          text: parts[i].$1.toUpperCase(),
-                          style: parts[i].$2 == null ? null : TextStyle(color: parts[i].$2),
-                        ),
+    return _TabScroll(
+      ready: budgets != null,
+      bottomInset: budgets != null && budgets.isNotEmpty,
+      slivers: [
+        SliverToBoxAdapter(
+          child: _TabHeader(
+            summary: parts.isEmpty
+                ? null
+                : Text.rich(
+                    TextSpan(
+                      children: [
+                        for (var i = 0; i < parts.length; i++) ...[
+                          if (i > 0) const TextSpan(text: '  ·  '),
+                          TextSpan(
+                            text: parts[i].$1.toUpperCase(),
+                            style: parts[i].$2 == null ? null : TextStyle(color: parts[i].$2),
+                          ),
+                        ],
                       ],
-                    ],
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: context.typo.inter.sectionLabel,
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: context.typo.inter.sectionLabel,
-                ),
-          action: UiIconTextButton(
-            icon: UIIconToken.icons.general.plusCircle,
-            title: l10n.budget_set_limit,
-            color: UIColorToken.blue,
-            onTap: () => context.router.push(BudgetFormRoute(walletId: walletId)),
+            action: UiIconTextButton(
+              icon: UIIconToken.icons.general.plusCircle,
+              title: l10n.budget_set_limit,
+              color: UIColorToken.blue,
+              onTap: () => context.router.push(BudgetFormRoute(walletId: walletId)),
+            ),
           ),
         ),
-        Expanded(
-          child: budgets == null
-              ? const _TabSkeleton()
-              : _TabScroll(
-                  ready: true,
-                  bottomInset: budgets.isNotEmpty,
-                  slivers: [
-                    if (budgets.isEmpty)
-                      SliverFillRemaining(
-                        hasScrollBody: false,
-                        child: UIStaggerItem(
-                          index: 0,
-                          child: UiEmptyState(
-                            image: AppAssets.images.wumbiOo.path,
-                            title: l10n.wallet_budgets_empty,
-                            subtitle: l10n.wallet_budgets_empty_subtitle,
-                          ),
-                        ),
-                      )
-                    else
-                      SliverPadding(
-                        padding: const EdgeInsets.symmetric(horizontal: kListHorzPadding),
-                        sliver: SliverList.builder(
-                          itemCount: budgets.length,
-                          itemBuilder: (context, i) => UIStaggerItem(
-                            key: ValueKey('budget-${budgets[i].budget.id}'),
-                            index: i,
-                            child: BudgetProgressRow(progress: budgets[i]),
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
-        ),
+        if (budgets == null)
+          const SliverToBoxAdapter(child: _TabSkeleton())
+        else if (budgets.isEmpty)
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: UIStaggerItem(
+              index: 0,
+              child: UiEmptyState(
+                image: AppAssets.images.wumbiOo.path,
+                title: l10n.wallet_budgets_empty,
+                subtitle: l10n.wallet_budgets_empty_subtitle,
+              ),
+            ),
+          )
+        else
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: kListHorzPadding),
+            sliver: SliverList.builder(
+              itemCount: budgets.length,
+              itemBuilder: (context, i) => UIStaggerItem(
+                key: ValueKey('budget-${budgets[i].budget.id}'),
+                index: i,
+                child: BudgetProgressRow(progress: budgets[i]),
+              ),
+            ),
+          ),
       ],
     );
   }
@@ -461,78 +456,73 @@ class _SubscriptionsTab extends ConsumerWidget {
     final monthly = ref.watch(monthlySubscriptionTotalProvider(walletId)).value;
     final tagsByRule = ref.watch(subscriptionTagsProvider).value ?? const <String, List<String>>{};
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        _TabHeader(
-          action: UiIconTextButton(
-            icon: UIIconToken.icons.general.plusCircle,
-            title: l10n.subscriptions_new,
-            color: UIColorToken.blue,
-            onTap: () => context.router.push(TransactionRoute(walletId: walletId, repeat: RepeatFrequency.monthly)),
-          ),
-          summary: monthly == null || monthly.isZero
-              ? null
-              : Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 6),
-                  child: Text(
-                    l10n.subscriptions_monthly_total(monthly.format()).toUpperCase(),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: context.typo.inter.sectionLabel,
+    return _TabScroll(
+      ready: rules != null,
+      bottomInset: rules != null && rules.isNotEmpty,
+      slivers: [
+        SliverToBoxAdapter(
+          child: _TabHeader(
+            action: UiIconTextButton(
+              icon: UIIconToken.icons.general.plusCircle,
+              title: l10n.subscriptions_new,
+              color: UIColorToken.blue,
+              onTap: () => context.router.push(TransactionRoute(walletId: walletId, repeat: RepeatFrequency.monthly)),
+            ),
+            summary: monthly == null || monthly.isZero
+                ? null
+                : Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 6),
+                    child: Text(
+                      l10n.subscriptions_monthly_total(monthly.format()).toUpperCase(),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: context.typo.inter.sectionLabel,
+                    ),
                   ),
-                ),
+          ),
         ),
-        Expanded(
-          child: rules == null
-              ? const _TabSkeleton()
-              : _TabScroll(
-                  ready: true,
-                  bottomInset: rules.isNotEmpty,
-                  slivers: [
-                    if (rules.isEmpty)
-                      SliverFillRemaining(
-                        hasScrollBody: false,
-                        child: UIStaggerItem(
-                          index: 0,
-                          child: UiEmptyState(
-                            image: AppAssets.images.wumbiOo.path,
-                            title: l10n.subscriptions_empty_title,
-                            subtitle: l10n.subscriptions_empty_subtitle,
-                          ),
-                        ),
-                      )
-                    else
-                      SliverPadding(
-                        padding: const EdgeInsets.symmetric(horizontal: kListHorzPadding),
-                        sliver: SliverList.builder(
-                          itemCount: rules.length,
-                          itemBuilder: (context, i) {
-                            final r = rules[i];
-                            return UIStaggerItem(
-                              key: ValueKey('rule-${r.id}'),
-                              index: i,
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  SubscriptionRow(
-                                    rule: r,
-                                    walletsById: walletsById,
-                                    tags: tagsByRule[r.id] ?? const [],
-                                    showWallet: false,
-                                    onTap: () => context.router.push(TransactionRoute(ruleId: r.id)),
-                                    onToggle: (v) => ref.read(subscriptionsProvider.notifier).setActive(r.id, v),
-                                  ),
-                                  if (i + 1 < rules.length) const UIDivider(),
-                                ],
-                              ),
-                            );
-                          },
-                        ),
+        if (rules == null)
+          const SliverToBoxAdapter(child: _TabSkeleton())
+        else if (rules.isEmpty)
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: UIStaggerItem(
+              index: 0,
+              child: UiEmptyState(
+                image: AppAssets.images.wumbiOo.path,
+                title: l10n.subscriptions_empty_title,
+                subtitle: l10n.subscriptions_empty_subtitle,
+              ),
+            ),
+          )
+        else
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: kListHorzPadding),
+            sliver: SliverList.builder(
+              itemCount: rules.length,
+              itemBuilder: (context, i) {
+                final r = rules[i];
+                return UIStaggerItem(
+                  key: ValueKey('rule-${r.id}'),
+                  index: i,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SubscriptionRow(
+                        rule: r,
+                        walletsById: walletsById,
+                        tags: tagsByRule[r.id] ?? const [],
+                        showWallet: false,
+                        onTap: () => context.router.push(TransactionRoute(ruleId: r.id)),
+                        onToggle: (v) => ref.read(subscriptionsProvider.notifier).setActive(r.id, v),
                       ),
-                  ],
-                ),
-        ),
+                      if (i + 1 < rules.length) const UIDivider(),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
       ],
     );
   }

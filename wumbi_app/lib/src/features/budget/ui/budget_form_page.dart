@@ -8,6 +8,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../core/design_system/app_ui.dart';
 import '../../../core/money/amount_input.dart';
+import '../../../core/money/money.dart';
 import '../../../core/routing/app_router.dart';
 import '../../../core/utils/app_vibrations.dart';
 import '../../../core/utils/constants/constants.dart';
@@ -18,6 +19,7 @@ import '../../../core/utils/extensions/date_time_extensions.dart';
 import '../../../core/utils/state_management/app_events.dart';
 import '../../../core/utils/state_management/single_events.dart';
 import '../../settings/ui/state_management/settings_provider.dart';
+import '../../transaction/ui/widgets/amount_numpad_sheet.dart';
 import '../../transaction/ui/widgets/date_picker_sheet.dart';
 import '../../wallet/data/models/wallet_model.dart';
 import '../../wallet/ui/wallets_provider.dart';
@@ -38,9 +40,10 @@ enum BudgetFormSheet {
   static BudgetFormSheet? parse(String? name) => values.asNameMap()[name];
 }
 
-/// Create / edit a budget (spec B&D §6.6). Same anatomy as the Transaction
-/// screen: currency | wallets header, big limit on an on-page numpad, name +
-/// #tags (keyboard tag bar), then period chips and a "what counts" hint.
+/// Create / edit a budget (spec B&D §6.6). Same anatomy as Create/Edit
+/// Wallet: big name, tappable limit, #tags, then plain label → value rows
+/// (Currency · Wallets · Repeats · Starts on · Carry over), the Count planned
+/// switch, a "what counts" hint and a Delete | Save bar.
 @RoutePage()
 class BudgetFormPage extends HookConsumerWidget {
   const BudgetFormPage({
@@ -236,12 +239,10 @@ class BudgetFormPage extends HookConsumerWidget {
       );
     }
 
-    // Header right side: "All wallets" / the wallet / "Card, Cash".
+    // Wallets row: "All wallets" / the wallet / "Card, Cash".
     final walletLabel = selectedWallets.isEmpty
         ? l10n.budget_all_wallets
         : selectedWallets.map((w) => w.name).join(', ');
-    final walletColor =
-        selectedWallets.length == 1 ? selectedWallets.single.color.color : colors.secondContentColor;
 
     final startLabel = switch (state.period) {
       BudgetPeriodType.monthly => l10n.budget_day_of_month(state.monthDay),
@@ -250,9 +251,22 @@ class BudgetFormPage extends HookConsumerWidget {
       BudgetPeriodType.custom => state.customStart.formatMediumDate(),
     };
 
+    Future<void> editLimit() async {
+      unfocusAll();
+      final raw = await AmountNumpadSheet.show(
+        context,
+        title: l10n.budget_stat_limit,
+        currency: state.currency,
+        initial: state.limitInput,
+      );
+      if (raw != null) notifier.setLimitInput(raw);
+    }
+
+    final limitText = state.limitInput.isEmpty
+        ? Money.zero(state.currency).format(withSymbol: false)
+        : AmountInput.display(state.limitInput);
+
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: colors.isDark ? colors.bgColor : UIColorToken.cararra,
       appBar: UIAppbar(
         title: state.isEdit ? l10n.budget_edit_title : l10n.budget_new,
         backTap: () => context.router.maybePop(),
@@ -263,196 +277,199 @@ class BudgetFormPage extends HookConsumerWidget {
         onTap: unfocusAll,
         child: SafeArea(
           top: false,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: kPageHorzPadding),
-            child: Column(
-              children: [
-                // Header: budget currency | wallets in scope.
-                UiWalletInfoMenu(
-                  name: walletLabel,
-                  color: walletColor,
-                  currencyType: state.currency,
-                  onSelectCurrency: pickCurrency,
-                  onSelectWallet: wallets.isEmpty ? null : pickWallets,
-                ),
-                const UISpace.vert(12),
+          child: Column(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(horizontal: kPageHorzPadding),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const UISpace.vert(24),
 
-                // Limit.
-                FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: UiAmountText(
-                    text: AmountInput.display(state.limitInput),
-                    style: typo.montserrat.input.copyWith(
-                      color: state.limitInput.isEmpty ? colors.secondContentColor : null,
-                    ),
-                  ),
-                )
-                    .animate(controller: shakeController, autoPlay: false)
-                    .shakeX(hz: 10, amount: 6, duration: 300.ms),
-                const UISpace.vert(4),
+                      // Name: empty → the auto name (shown as the hint) is saved.
+                      UIInputField(
+                        controller: nameController,
+                        focusNode: nameFocus,
+                        style: UIInputFieldStyle.borderless,
+                        centered: true,
+                        hintText: notifier.autoName(),
+                        maxLength: kMaxBudgetNameLength,
+                        textCapitalization: TextCapitalization.sentences,
+                        keyboardType: TextInputType.text,
+                        textInputAction: TextInputAction.next,
+                        textStyle: typo.inter.display,
+                        hintStyle: typo.inter.display.copyWith(color: colors.secondContentColor),
+                        onChanged: notifier.setName,
+                        onSubmitted: (_) => tagsFocus.requestFocus(),
+                      ),
+                      const UISpace.vert(12),
 
-                // Suggested limit (create mode, never auto-filled).
-                SizedBox(
-                  height: 24,
-                  child: AnimatedSwitcher(
-                    duration: 200.ms,
-                    child: state.suggestion == null || state.isEdit
-                        ? const SizedBox.shrink()
-                        : _SuggestionChip(
-                            key: ValueKey(state.suggestion),
-                            label: _suggestionLabel(context, state),
-                            onTap: notifier.applySuggestion,
-                          ),
-                  ),
-                ),
-                const UISpace.vert(8),
-
-                // Name.
-                UIInputField(
-                  controller: nameController,
-                  focusNode: nameFocus,
-                  style: UIInputFieldStyle.borderless,
-                  centered: true,
-                  // Empty name → the auto name is saved; the hint says so.
-                  hintText: l10n.budget_name_hint(notifier.autoName()),
-                  maxLength: kMaxBudgetNameLength,
-                  keyboardType: TextInputType.text,
-                  textInputAction: TextInputAction.next,
-                  textStyle: typo.inter.bodyMedium,
-                  onChanged: notifier.setName,
-                  onSubmitted: (_) => tagsFocus.requestFocus(),
-                ),
-                const UISpace.vert(4),
-
-                // Tags: pick from the keyboard bar or type a new one.
-                UiTagInput(
-                  key: ValueKey('budget-tags-${state.existing?.id ?? 'new'}'),
-                  tags: state.tags,
-                  focusNode: tagsFocus,
-                  hintText: l10n.transaction_tags_placeholder,
-                  maxTags: kMaxBudgetTags,
-                  maxTagLength: kMaxTagLength,
-                  suggestions: notifier.suggestTags,
-                  suggestionsStyle: UiTagSuggestionsStyle.keyboardBar,
-                  onChanged: notifier.setTags,
-                  onLimitReached: notifier.onTagLimitReached,
-                  onSubmitted: unfocusAll,
-                ),
-                const Spacer(),
-
-                // Validation message.
-                AnimatedSwitcher(
-                  duration: 200.ms,
-                  child: state.error == null
-                      ? const SizedBox(height: 16)
-                      : SizedBox(
-                          height: 16,
-                          child: Text(
-                            state.error!,
-                            key: ValueKey(state.error),
-                            style: typo.inter.caption.copyWith(color: UIColorToken.neg500),
+                      // Limit: tap → numpad sheet.
+                      UITap(
+                        onTap: editLimit,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.baseline,
+                            textBaseline: TextBaseline.alphabetic,
+                            spacing: 10,
+                            children: [
+                              Text(
+                                state.currency.symbol,
+                                style: typo.inter.display.copyWith(color: colors.secondContentColor),
+                              ),
+                              Flexible(
+                                child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Text(
+                                    limitText,
+                                    style: typo.montserrat.formAmount.copyWith(
+                                      color: state.limitInput.isEmpty ? colors.secondContentColor : null,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                ),
-                const UISpace.vert(4),
+                      )
+                          .animate(controller: shakeController, autoPlay: false)
+                          .shakeX(hz: 10, amount: 6, duration: 300.ms),
 
-                // Period chips.
-                LayoutBuilder(
-                  builder: (context, constraints) => SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    physics: const BouncingScrollPhysics(),
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(minWidth: constraints.maxWidth),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        spacing: 10,
-                        children: [
-                          UiChip(
-                            icon: UIIconToken.icons.mediaDevices.repeat01,
-                            label: BudgetLabels.periodType(l10n, state.period),
-                            highlighted: true,
-                            onTap: pickPeriod,
-                          ),
-                          UiChip(
-                            icon: UIIconToken.icons.time.calendar,
-                            label: startLabel,
-                            onTap: pickStart,
-                          ),
-                          if (state.period.isCustom)
-                            UiChip(
-                              label: '→ ${state.customEnd.formatMediumDate()}',
-                              onTap: pickCustomEnd,
-                            ),
-                          UiChip(
-                            label: BudgetLabels.countPlanned(l10n, state.includePlanned),
-                            highlighted: state.includePlanned,
-                            onTap: pickCountPlanned,
-                          ),
-                          if (!state.period.isCustom)
-                            UiChip(
-                              label: BudgetLabels.rollover(l10n, state.rollover),
-                              highlighted: state.rollover != RolloverMode.none,
-                              onTap: pickRollover,
-                            ),
-                        ],
+                      // Suggested limit (create mode, never auto-filled).
+                      AnimatedSize(
+                        duration: 200.ms,
+                        alignment: Alignment.topCenter,
+                        child: state.suggestion == null || state.isEdit
+                            ? const SizedBox(width: double.infinity)
+                            : Padding(
+                                padding: const EdgeInsets.only(top: 4),
+                                child: Center(
+                                  child: _SuggestionChip(
+                                    key: ValueKey(state.suggestion),
+                                    label: _suggestionLabel(context, state),
+                                    onTap: notifier.applySuggestion,
+                                  ),
+                                ),
+                              ),
                       ),
-                    ),
-                  ),
-                ),
+                      const UISpace.vert(12),
 
-                // What this budget actually counts, in words.
-                UiFormHint(
-                  icon: UIIconToken.icons.general.infoCircle,
-                  text: _scopeSentence(context, state, selectedWallets),
-                ),
-                const UISpace.vert(12),
+                      // Tags: pick from the keyboard bar or type a new one.
+                      UiTagInput(
+                        key: ValueKey('budget-tags-${state.existing?.id ?? 'new'}'),
+                        tags: state.tags,
+                        focusNode: tagsFocus,
+                        hintText: l10n.transaction_tags_placeholder,
+                        maxTags: kMaxBudgetTags,
+                        maxTagLength: kMaxTagLength,
+                        suggestions: notifier.suggestTags,
+                        suggestionsStyle: UiTagSuggestionsStyle.keyboardBar,
+                        onChanged: notifier.setTags,
+                        onLimitReached: notifier.onTagLimitReached,
+                        onSubmitted: unfocusAll,
+                      ),
+                      const UISpace.vert(40),
 
-                // Numpad.
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: kNumpadHorzPadding),
-                  child: UiNumpad(
-                    dotEnabled: state.currency.scale > 0,
-                    onDigit: notifier.onDigit,
-                    onDot: notifier.onDot,
-                    onBackspace: notifier.onBackspace,
-                    onClear: notifier.onClear,
-                  ),
-                ),
-                const UISpace.vert(12),
-
-                // Bottom bar: Delete (edit) / Cancel (create) · Save.
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: kPageHorzPadding),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      if (state.isEdit)
-                        UiTextButton(
-                          label: l10n.common_delete,
-                          style: UiTextButtonStyle.secondary,
-                          enabled: !state.isSaving && !state.isLoading,
-                          onTap: delete,
+                      UiFormRow(
+                        label: l10n.wallet_currency,
+                        value: '${state.currency.code} (${state.currency.symbol})',
+                        onTap: pickCurrency,
+                      ),
+                      UiFormRow(
+                        label: l10n.budget_wallets,
+                        value: walletLabel,
+                        muted: selectedWallets.isEmpty,
+                        onTap: wallets.isEmpty ? null : pickWallets,
+                      ),
+                      UiFormRow(
+                        label: l10n.budget_repeats,
+                        value: BudgetLabels.periodType(l10n, state.period),
+                        onTap: pickPeriod,
+                      ),
+                      UiFormRow(
+                        label: state.period.isCustom ? l10n.budget_first_day : l10n.budget_starts_on,
+                        value: startLabel,
+                        onTap: pickStart,
+                      ),
+                      if (state.period.isCustom)
+                        UiFormRow(
+                          label: l10n.budget_last_day,
+                          value: state.customEnd.formatMediumDate(),
+                          onTap: pickCustomEnd,
                         )
                       else
-                        UiTextButton(
-                          label: l10n.common_cancel,
-                          style: UiTextButtonStyle.secondary,
-                          enabled: !state.isSaving,
-                          onTap: () => context.router.maybePop(),
+                        UiFormRow(
+                          label: l10n.budget_carry_over,
+                          value: BudgetLabels.rollover(l10n, state.rollover),
+                          muted: state.rollover == RolloverMode.none,
+                          onTap: pickRollover,
                         ),
-                      UiTextButton(
-                        label: l10n.common_save,
-                        // Stays tappable without a limit so the tap can shake.
-                        enabled: !state.isSaving && !state.isLoading,
-                        onTap: save,
+                      UiToggleRow(
+                        title: l10n.budget_count_planned,
+                        description: BudgetLabels.countPlannedDescription(l10n, state.includePlanned),
+                        value: state.includePlanned,
+                        onChanged: (v) {
+                          AppVibrations.selection();
+                          notifier.setIncludePlanned(v);
+                        },
+                      ),
+                      const UISpace.vert(16),
+
+                      // What this budget actually counts, in words.
+                      UiFormHint(
+                        icon: UIIconToken.icons.general.infoCircle,
+                        text: _scopeSentence(context, state, selectedWallets),
+                      ),
+
+                      // Validation message.
+                      AnimatedSwitcher(
+                        duration: 200.ms,
+                        child: state.error == null
+                            ? const SizedBox(height: 24)
+                            : Padding(
+                                key: ValueKey(state.error),
+                                padding: const EdgeInsets.only(top: 8),
+                                child: Text(
+                                  state.error!,
+                                  textAlign: TextAlign.center,
+                                  style: typo.inter.caption.copyWith(color: UIColorToken.neg500),
+                                ),
+                              ),
                       ),
                     ],
                   ),
                 ),
-                const UISpace.vert(8),
-              ],
-            ),
+              ),
+
+              // Bottom bar: Delete (edit) · Save.
+              Padding(
+                // Tight bar, inset like the Transaction edit bar (page + bar padding).
+                padding: const EdgeInsets.fromLTRB(kPageHorzPadding * 2, 0, kPageHorzPadding * 2, 4),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    if (state.isEdit)
+                      UiTextButton(
+                        label: l10n.common_delete,
+                        style: UiTextButtonStyle.secondary,
+                        enabled: !state.isSaving && !state.isLoading,
+                        onTap: delete,
+                      )
+                    else
+                      const UISpace.horz(1),
+                    UiTextButton(
+                      label: l10n.common_save,
+                      // Stays tappable without a limit so the tap can shake.
+                      enabled: !state.isSaving && !state.isLoading,
+                      onTap: save,
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
       ),

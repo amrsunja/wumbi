@@ -56,6 +56,7 @@ class AppRouter extends RootStackRouter {
         AutoRoute(path: RoutePaths.budgetForm, page: BudgetFormRoute.page),
         AutoRoute(path: RoutePaths.debts, page: DebtsRoute.page),
         AutoRoute(path: RoutePaths.newDebt, page: NewDebtRoute.page),
+        AutoRoute(path: RoutePaths.debtTransaction, page: DebtTransactionRoute.page),
         AutoRoute(path: RoutePaths.debtDetails, page: DebtDetailsRoute.page),
         AutoRoute(path: RoutePaths.settings, page: SettingsRoute.page),
         AutoRoute(path: RoutePaths.baseCurrencySettings, page: BaseCurrencyRoute.page),

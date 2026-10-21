@@ -13,20 +13,17 @@ import 'budgets_provider.dart';
 /// Every user-visible budget string and colour is derived here, once, so the
 /// Dashboard, Wallet Details, Budgets and details pages never disagree.
 abstract class BudgetLabels {
-  /// Bar / accent colour per status (spec B&D §5.5).
-  static Color statusColor(BudgetStatus s, UIColorToken colors) => switch (s) {
-        BudgetStatus.ok => UIColorToken.blue,
-        BudgetStatus.atRisk => UIColorToken.buttercup,
-        BudgetStatus.over => UIColorToken.neg500,
-        BudgetStatus.notStarted || BudgetStatus.finished => colors.secondContentColor,
-      };
-
-  /// Trailing label colour: only at-risk / over stand out.
-  static Color? trailingColor(BudgetStatus s) => switch (s) {
-        BudgetStatus.atRisk => UIColorToken.buttercup,
-        BudgetStatus.over => UIColorToken.neg500,
-        _ => null,
-      };
+  /// Bar / ring / accent colour (spec B&D §5.5): red once spending is over
+  /// the limit (also for an ended period that went over), the expense colour
+  /// (black / white in dark) while running, muted before the start and after
+  /// a period that stayed within.
+  static Color statusColor(BudgetProgress p, UIColorToken colors) {
+    if (p.status != BudgetStatus.notStarted && p.remaining.isNegative) return UIColorToken.neg500;
+    return switch (p.status) {
+      BudgetStatus.ok || BudgetStatus.atRisk || BudgetStatus.over => colors.expenseColor,
+      BudgetStatus.notStarted || BudgetStatus.finished => colors.secondContentColor,
+    };
+  }
 
   /// "€230 left" / "€12 over" / "Starts Nov 1" / "Ended".
   static String trailing(AppLocale l10n, BudgetProgress p) => switch (p.status) {
@@ -61,18 +58,20 @@ abstract class BudgetLabels {
     return '${p.start.formatShortDate()} – ${last.formatShortDate()}';
   }
 
-  /// Row caption: period · per day · ≈ (incomplete conversion). With
-  /// [spentOf] (Wallet Details) it starts with "Spent X of Y" so the number
-  /// is never mistaken for the wallet balance.
-  static String caption(AppLocale l10n, BudgetProgress p, {bool spentOf = false}) {
-    final perDay = p.perDay;
-    return [
-      if (spentOf) l10n.budget_spent_of(p.spent.format(), p.limit.format()),
-      period(l10n, p.budget, p.period, isCurrent: p.isCurrent),
-      if (perDay != null) l10n.budget_per_day(perDay.format()),
-      if (p.incomplete) '≈',
-    ].join(' · ');
+  /// Row second line: "€170 / €400" (spent / limit), prefixed with ≈ when some
+  /// currency could not be converted. Not-started budgets show the period only.
+  static String rowSubtitle(AppLocale l10n, BudgetProgress p) {
+    if (p.status == BudgetStatus.notStarted) {
+      final showPeriod = !(p.budget.period == BudgetPeriodType.monthly && p.period.start.day == 1);
+      return showPeriod ? period(l10n, p.budget, p.period, isCurrent: p.isCurrent) : range(p.period);
+    }
+    final amounts = '${p.spent.format()} / ${p.limit.format()}';
+    return p.incomplete ? '≈ $amounts' : amounts;
   }
+
+  /// Amount colour: red once over the limit, the expense colour otherwise.
+  static Color trailingColor(BudgetStatus s, UIColorToken colors) =>
+      s == BudgetStatus.over ? UIColorToken.neg500 : colors.expenseColor;
 
   static String periodType(AppLocale l10n, BudgetPeriodType t) => switch (t) {
         BudgetPeriodType.weekly => l10n.budget_period_weekly,

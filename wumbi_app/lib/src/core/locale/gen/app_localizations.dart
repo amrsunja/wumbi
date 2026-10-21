@@ -1752,6 +1752,24 @@ abstract class AppLocalizations {
   /// **'Progress'**
   String get progress_title;
 
+  /// No description provided for @progress_by_day.
+  ///
+  /// In en, this message translates to:
+  /// **'Day by day'**
+  String get progress_by_day;
+
+  /// No description provided for @progress_by_month.
+  ///
+  /// In en, this message translates to:
+  /// **'Month by month'**
+  String get progress_by_month;
+
+  /// No description provided for @progress_other.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get progress_other;
+
   /// No description provided for @progress_month.
   ///
   /// In en, this message translates to:
@@ -2964,6 +2982,12 @@ abstract class AppLocalizations {
   /// **'New debt'**
   String get debt_new;
 
+  /// No description provided for @debt_edit_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit debt'**
+  String get debt_edit_title;
+
   /// No description provided for @debts_all.
   ///
   /// In en, this message translates to:
@@ -3944,6 +3968,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Save without a wallet'**
   String get debt_wallet_confirm_none;
+
+  /// No description provided for @debt_history_swipe_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Swipe a payment left to delete it'**
+  String get debt_history_swipe_hint;
+
+  /// No description provided for @debt_form_person.
+  ///
+  /// In en, this message translates to:
+  /// **'Person'**
+  String get debt_form_person;
+
+  /// No description provided for @debt_form_wallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Wallet'**
+  String get debt_form_wallet;
 
   /// No description provided for @l10nStopLineDontTouch.
   ///

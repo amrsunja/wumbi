@@ -75,7 +75,7 @@ class SettingsNotifier extends Notifier<SettingsState> {
 
     // 5. Route.
     state = state.copyWith(isLoading: false);
-    await Future<void>.delayed(const Duration(milliseconds: 1400));
+    await Future<void>.delayed(const Duration(milliseconds: 1000));
     _events.send(ReplaceAllRoutesEvent([
       if (data!.showOnboarding) const OnboardingRoute() else const DashboardRoute(),
     ]));

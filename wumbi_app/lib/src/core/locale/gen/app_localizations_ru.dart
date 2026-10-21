@@ -1060,6 +1060,15 @@ class AppLocalizationsRu extends AppLocalizations {
   String get progress_title => 'Прогресс';
 
   @override
+  String get progress_by_day => 'По дням';
+
+  @override
+  String get progress_by_month => 'По месяцам';
+
+  @override
+  String get progress_other => 'Другое';
+
+  @override
   String get progress_month => 'Месяц';
 
   @override
@@ -1836,6 +1845,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get debt_new => 'Новый долг';
 
   @override
+  String get debt_edit_title => 'Изменить долг';
+
+  @override
   String get debts_all => 'Все долги';
 
   @override
@@ -2552,6 +2564,16 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get debt_wallet_confirm_none => 'Сохранить без кошелька';
+
+  @override
+  String get debt_history_swipe_hint =>
+      'Смахните платёж влево, чтобы удалить его';
+
+  @override
+  String get debt_form_person => 'Человек';
+
+  @override
+  String get debt_form_wallet => 'Кошелёк';
 
   @override
   String get l10nStopLineDontTouch =>

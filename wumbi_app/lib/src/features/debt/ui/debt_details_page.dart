@@ -5,25 +5,19 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../../core/design_system/app_ui.dart';
-import '../../../core/money/amount_input.dart';
 import '../../../core/money/currency_type.dart';
 import '../../../core/money/money.dart';
+import '../../../core/routing/app_router.dart';
 import '../../../core/utils/constants/constants.dart';
 import '../../../core/utils/enums/debt_close_reason.dart';
 import '../../../core/utils/enums/debt_direction.dart';
 import '../../../core/utils/enums/payment_kind.dart';
 import '../../../core/utils/extensions/build_context_extensions.dart';
 import '../../../core/utils/extensions/date_time_extensions.dart';
-import '../../transaction/ui/widgets/amount_numpad_sheet.dart';
-import '../../transaction/ui/widgets/date_picker_sheet.dart';
-import '../../wallet/data/models/wallet_model.dart';
-import '../../wallet/ui/wallets_provider.dart';
 import '../data/models/debt_model.dart';
 import 'debt_labels.dart';
 import 'debt_sheet_notifier.dart';
 import 'debts_provider.dart';
-import 'widgets/debt_wallet_sheet.dart';
-import 'widgets/text_entry_sheet.dart';
 
 /// Room under the list so the last row clears the home indicator.
 const double _kBottomInset = 48;
@@ -35,7 +29,8 @@ const double _kBottomInset = 48;
 ///    ("Ahmed still owes you €130 of the €200 you lent on Oct 3.");
 /// 2. while open: close it in one tap ("Returned in full" → wallet), or
 ///    part / forgive / remind;
-/// 3. details tiles (amount, paid back, date, due), the note;
+/// 3. details as one grouped card (amount, paid back, date, due, note),
+///    edited in the debt form (edit icon, due, note);
 /// 4. history, newest first, ending with the loan itself.
 ///
 /// Opened from a debt row with its [seed] so the name / ring heroes have a
@@ -56,7 +51,6 @@ class DebtDetailsPage extends HookConsumerWidget {
     // Watched here so the (autoDispose) actions notifier lives as long as
     // the page — settled debts show no action row that would watch it.
     ref.watch(debtSheetProvider(debtId));
-    final notifier = ref.read(debtSheetProvider(debtId).notifier);
     // One clock for the ring's sweep-in, shared by the hero shuttle and the
     // ring that replaces it on landing.
     final ringSweepStart = useMemoized(DateTime.now);
@@ -73,42 +67,7 @@ class DebtDetailsPage extends HookConsumerWidget {
       return null;
     }, [gone]);
 
-    Future<void> overflow(DebtDetails d) async {
-      final s = d.summary;
-      final choice = await UIAlertDialog.choose(
-        context,
-        title: s.person.name,
-        actions: [
-          UIDialogAction(label: l10n.debt_rename_person),
-          UIDialogAction(label: l10n.debt_delete, destructive: true),
-          UIDialogAction(label: l10n.common_cancel),
-        ],
-      );
-      if (!context.mounted) return;
-      switch (choice) {
-        case 0:
-          final name = await TextEntrySheet.show(
-            context,
-            title: l10n.debt_rename_person,
-            initial: s.person.name,
-            maxLength: kMaxPersonNameLength,
-          );
-          if (name != null) await notifier.renamePerson(s.person.id, name);
-        case 1:
-          final moved = (s.debt.principalTransactionId == null ? 0 : 1) +
-              d.history.where((h) => h.payment.transactionId != null).length;
-          final ok = await UIAlertDialog.confirm(
-            context,
-            title: l10n.debt_delete_title,
-            message: moved == 0 ? null : l10n.debt_delete_message(moved),
-            confirmLabel: l10n.common_delete,
-            cancelLabel: l10n.common_cancel,
-            destructive: true,
-          );
-          // The page leaves by itself once the details query fails (above).
-          if (ok) await notifier.deleteDebt();
-      }
-    }
+    void edit() => context.router.push(NewDebtRoute(debtId: debtId));
 
     return Scaffold(
       appBar: UIAppbar(
@@ -117,7 +76,7 @@ class DebtDetailsPage extends HookConsumerWidget {
         backTap: () => context.router.maybePop(),
         action: details == null
             ? null
-            : UIIcon(UIIconToken.icons.general.dotsHorizontal, size: 22, onTap: () => overflow(details)),
+            : UIIcon(UIIconToken.icons.general.edit05, size: 22, onTap: edit),
       ),
       body: summary == null
           ? const Padding(
@@ -135,6 +94,7 @@ class DebtDetailsPage extends HookConsumerWidget {
                         summary: summary,
                         details: details,
                         ringSweepStart: ringSweepStart,
+                        onEdit: edit,
                       ),
                     ),
                   ),
@@ -148,11 +108,17 @@ class DebtDetailsPage extends HookConsumerWidget {
 /// Everything under the app bar. [details] is null while only the row's
 /// summary is known: the header shows, the rest fades in once loaded.
 class _Content extends ConsumerWidget {
-  const _Content({required this.summary, required this.details, required this.ringSweepStart});
+  const _Content({
+    required this.summary,
+    required this.details,
+    required this.ringSweepStart,
+    required this.onEdit,
+  });
 
   final DebtSummary summary;
   final DebtDetails? details;
   final DateTime ringSweepStart;
+  final VoidCallback onEdit;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -182,7 +148,7 @@ class _Content extends ConsumerWidget {
     Widget section(String label, Widget child, int delayMs) => Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            UiSectionLabel(text: label, padding: const EdgeInsets.fromLTRB(4, 28, 4, 8)),
+            UiSectionLabel(text: label, padding: const EdgeInsets.fromLTRB(4, 24, 4, 8)),
             child,
           ],
         ).uiFadeSlideIn(delay: Duration(milliseconds: delayMs), offset: 0.2);
@@ -214,7 +180,7 @@ class _Content extends ConsumerWidget {
             const UISpace.vert(22),
             _Actions(details: d).uiFadeSlideIn(delay: const Duration(milliseconds: 200), offset: 0.25),
           ],
-          section(l10n.debt_section_details, _DetailsBlock(details: d), 300),
+          section(l10n.debt_section_details, _DetailsBlock(details: d, onEdit: onEdit), 300),
           if (_overall(context, d) case final overall?) ...[
             const UISpace.vert(10),
             Text(overall, textAlign: TextAlign.center, style: typo.caption)
@@ -326,41 +292,10 @@ class _Actions extends ConsumerWidget {
     final lent = debt.direction == DebtDirection.lent;
     final state = ref.watch(debtSheetProvider(debt.id));
     final notifier = ref.read(debtSheetProvider(debt.id).notifier);
-    final wallets = ref.watch(walletsProvider).value ?? const <WalletSummary>[];
 
-    WalletSummary? walletById(String? id) => id == null ? null : wallets.where((w) => w.id == id).firstOrNull;
-    // Preselected in the sheet: the loan's wallet while it exists, else the
-    // primary one.
-    final suggested = (details.principalWalletDeleted ? null : walletById(details.principalWalletId)) ??
-        wallets.where((w) => w.isPrimary).firstOrNull ??
-        wallets.firstOrNull;
-
-    // Where [amount] lands (lent) / comes from (borrowed); dismissing the
-    // sheet cancels.
-    Future<void> repay(Money amount) async {
-      final picked = await DebtWalletSheet.show(
-        context,
-        wallets: wallets,
-        selectedId: suggested?.id,
-        title: lent ? l10n.debt_wallet_title_in : l10n.debt_wallet_title_out,
-        explanation: lent
-            ? l10n.debt_wallet_explain_in(s.person.name, amount.format())
-            : l10n.debt_wallet_explain_out(s.person.name, amount.format()),
-        delta: lent ? amount : -amount,
-      );
-      if (picked == null) return;
-      await notifier.repay(details, amount, wallet: picked.wallet);
-    }
-
-    Future<void> repayAll() => repay(s.remaining);
-
-    Future<void> repayPart() async {
-      final raw = await AmountNumpadSheet.show(context, currency: debt.currency, initial: '');
-      if (raw == null) return;
-      final amount = AmountInput.toMoney(raw, debt.currency);
-      if (amount == null || !context.mounted) return;
-      await repay(amount);
-    }
+    // Money that moves opens the payment page (wallet, note, tags, date).
+    void payAll() => context.router.push(DebtTransactionRoute(debtId: debt.id, full: true));
+    void payPart() => context.router.push(DebtTransactionRoute(debtId: debt.id, full: false));
 
     Future<void> forgive() async {
       final ok = await UIAlertDialog.confirm(
@@ -387,7 +322,7 @@ class _Actions extends ConsumerWidget {
         UiPrimaryButton(
           label: lent ? l10n.debt_returned_in_full : l10n.debt_paid_in_full,
           loading: state.isSaving,
-          onTap: repayAll,
+          onTap: payAll,
         ),
 
         const UISpace.vert(12),
@@ -398,7 +333,7 @@ class _Actions extends ConsumerWidget {
               child: _ActionTile(
                 icon: UIIconToken.icons.financeEcommerce.coinsHand,
                 label: lent ? l10n.debt_got_part_back : l10n.debt_paid_part,
-                onTap: repayPart,
+                onTap: payPart,
               ),
             ),
             Expanded(
@@ -463,162 +398,47 @@ class _ActionTile extends StatelessWidget {
 
 // ------------------------------------------------------------------ details
 
-/// Amount · Paid back · Date · Due tiles (two per row, equal height), then
-/// the note. Due and note are editable while the debt is open.
-class _DetailsBlock extends ConsumerWidget {
-  const _DetailsBlock({required this.details});
+/// Amount · Paid back · Date · Due · Note as one grouped card (budget details
+/// rows). Due and note open the debt form in edit mode while the debt is open.
+class _DetailsBlock extends StatelessWidget {
+  const _DetailsBlock({required this.details, required this.onEdit});
 
   final DebtDetails details;
+  final VoidCallback onEdit;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final typo = context.typo.inter;
     final colors = context.colors;
     final s = details.summary;
     final debt = s.debt;
     final lent = debt.direction == DebtDirection.lent;
-    final notifier = ref.read(debtSheetProvider(debt.id).notifier);
     final due = debt.dueDate;
-
-    Future<void> pickDue() async {
-      if (due != null) {
-        final choice = await UIAlertDialog.choose(
-          context,
-          title: l10n.debt_due_title,
-          actions: [
-            UIDialogAction(label: l10n.debt_due_change, primary: true),
-            UIDialogAction(label: l10n.debt_due_remove, destructive: true),
-            UIDialogAction(label: l10n.common_cancel),
-          ],
-        );
-        if (choice == 1) await notifier.setDueDate(null);
-        if (choice != 0) return;
-      }
-      if (!context.mounted) return;
-      final picked = await DatePickerSheet.show(context, initial: due ?? DateTime.now(), minDate: debt.openedAt);
-      if (picked != null) await notifier.setDueDate(picked);
-    }
-
-    Future<void> editNote() async {
-      final note = await TextEntrySheet.show(
-        context,
-        title: l10n.debt_edit_note,
-        initial: debt.description,
-        maxLength: kMaxDebtDescriptionLength,
-        hint: l10n.debt_note_hint,
-        allowEmpty: true,
-      );
-      if (note != null) await notifier.updateDescription(note);
-    }
-
-    final tiles = [
-      _Tile(label: lent ? l10n.debt_stat_lent : l10n.debt_stat_borrowed, value: s.principal.format()),
-      _Tile(label: l10n.debt_stat_paid_back, value: s.paid.format()),
-      _Tile(label: l10n.debt_stat_date, value: debt.openedAt.formatMediumDate()),
-      _Tile(
-        label: l10n.debt_stat_due,
-        value: due == null ? l10n.debt_none : due.formatMediumDate(),
-        color: s.overdue ? UIColorToken.neg500 : (due == null ? colors.secondContentColor : null),
-        icon: s.isOpen ? UIIconToken.icons.general.edit05 : null,
-        onTap: s.isOpen ? pickDue : null,
-      ),
-    ];
-
     final hasNote = debt.description.isNotEmpty;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+    final open = s.isOpen;
+
+    return UiGroupCard(
       children: [
-        for (var row = 0; row < tiles.length; row += 2) ...[
-          if (row > 0) const UISpace.vert(10),
-          IntrinsicHeight(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              spacing: 10,
-              children: [Expanded(child: tiles[row]), Expanded(child: tiles[row + 1])],
-            ),
+        UiValueRow(
+          label: lent ? l10n.debt_stat_lent : l10n.debt_stat_borrowed,
+          value: s.principal.format(),
+        ),
+        UiValueRow(label: l10n.debt_stat_paid_back, value: s.paid.format()),
+        UiValueRow(label: l10n.debt_stat_date, value: debt.openedAt.formatMediumDate()),
+        UiValueRow(
+          label: l10n.debt_stat_due,
+          value: due == null ? l10n.debt_none : due.formatMediumDate(),
+          valueColor: s.overdue ? UIColorToken.neg500 : (due == null ? colors.secondContentColor : null),
+          onTap: open ? onEdit : null,
+        ),
+        if (hasNote || open)
+          UiValueRow(
+            label: l10n.debt_note,
+            value: hasNote ? debt.description : l10n.debt_add_note,
+            valueColor: hasNote ? null : UIColorToken.blue,
+            onTap: open ? onEdit : null,
           ),
-        ],
-        if (hasNote || s.isOpen) ...[
-          const UISpace.vert(10),
-          UITap(
-            onTap: editNote,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-              decoration: BoxDecoration(
-                color: colors.secondContentColor.withValues(alpha: 0.08),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  UIIcon(UIIconToken.icons.editor.pencil01, size: 18, color: colors.secondContentColor),
-                  const UISpace.horz(12),
-                  Expanded(
-                    child: Text(
-                      hasNote ? debt.description : l10n.debt_add_note,
-                      style: hasNote ? typo.body : typo.body.copyWith(color: UIColorToken.blue),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
       ],
-    );
-  }
-}
-
-class _Tile extends StatelessWidget {
-  const _Tile({required this.label, required this.value, this.color, this.icon, this.onTap});
-
-  final String label;
-  final String value;
-  final Color? color;
-
-  /// Small trailing hint that the tile is editable.
-  final String? icon;
-  final VoidCallback? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = context.colors;
-    final typo = context.typo.inter;
-    final icon = this.icon;
-    return UITap(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
-        decoration: BoxDecoration(
-          color: colors.secondContentColor.withValues(alpha: 0.08),
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Text(label.toUpperCase(), maxLines: 1, overflow: TextOverflow.ellipsis, style: typo.sectionLabel),
-                ),
-                if (icon != null) UIIcon(icon, size: 14, color: colors.secondContentColor),
-              ],
-            ),
-            const UISpace.vert(6),
-            AnimatedSwitcher(
-              duration: UIAnim.fast,
-              child: Text(
-                value,
-                key: ValueKey(value),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: typo.rowTitle.copyWith(color: color),
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
@@ -681,20 +501,27 @@ class _History extends HookConsumerWidget {
       ),
     ];
 
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      decoration: BoxDecoration(
-        color: context.colors.secondContentColor.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        children: [
-          for (var i = 0; i < rows.length; i++) ...[
-            if (i > 0) const UIDivider(),
-            rows[i],
-          ],
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        if (details.history.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(4, 0, 4, 8),
+            child: Row(
+              spacing: 6,
+              children: [
+                UIIcon(UIIconToken.icons.general.infoCircle, size: 14, color: context.colors.secondContentColor),
+                Expanded(
+                  child: Text(
+                    l10n.debt_history_swipe_hint,
+                    style: context.typo.inter.caption.copyWith(color: context.colors.secondContentColor),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        UiGroupCard(children: rows),
+      ],
     );
   }
 }
@@ -755,7 +582,7 @@ class _HistoryLine extends StatelessWidget {
     final colors = context.colors;
     final typo = context.typo.inter;
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
+      padding: const EdgeInsets.symmetric(vertical: 14),
       child: Row(
         children: [
           Container(

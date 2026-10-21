@@ -433,6 +433,9 @@
 
   "l10nProgress": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ PROGRESS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
   "progress_title": "İlerleme",
+  "progress_by_day": "Gün gün",
+  "progress_by_month": "Ay ay",
+  "progress_other": "Diğer",
   "progress_month": "Ay",
   "progress_year": "Yıl",
   "progress_income": "Gelir",
@@ -657,6 +660,7 @@
   "debts_empty_owe_title": "Kimseye borcunuz yok",
   "debts_empty_subtitle": "“Yeni borç”a dokunun veya işlem ekranında Transfer → Borçlar’ı kullanın",
   "debt_new": "Yeni borç",
+  "debt_edit_title": "Borcu düzenle",
   "debts_all": "Tüm borçlar",
   "debts_empty_hint": "Verdiğin ve aldığın borçları takip et",
   "dashboard_reorder_hint": "Sıralamak için basılı tut",
@@ -820,5 +824,8 @@
   "debt_wallet_confirm_in": "{wallet} cüzdanına ekle",
   "debt_wallet_confirm_out": "{wallet} cüzdanından öde",
   "debt_wallet_confirm_none": "Cüzdansız kaydet",
+  "debt_history_swipe_hint": "Bir ödemeyi silmek için sola kaydırın",
+  "debt_form_person": "Kişi",
+  "debt_form_wallet": "Cüzdan",
   "l10nStopLineDontTouch": "☠☠☠☠☠☠☠☠☠☠☠☠☠ Don't touch this line ☠☠☠☠☠☠☠☠☠☠☠☠☠"
 }

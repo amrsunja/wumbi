@@ -1031,6 +1031,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get progress_title => 'Progress';
 
   @override
+  String get progress_by_day => 'Day by day';
+
+  @override
+  String get progress_by_month => 'Month by month';
+
+  @override
+  String get progress_other => 'Other';
+
+  @override
   String get progress_month => 'Month';
 
   @override
@@ -1801,6 +1810,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get debt_new => 'New debt';
 
   @override
+  String get debt_edit_title => 'Edit debt';
+
+  @override
   String get debts_all => 'All debts';
 
   @override
@@ -2510,6 +2522,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get debt_wallet_confirm_none => 'Save without a wallet';
+
+  @override
+  String get debt_history_swipe_hint => 'Swipe a payment left to delete it';
+
+  @override
+  String get debt_form_person => 'Person';
+
+  @override
+  String get debt_form_wallet => 'Wallet';
 
   @override
   String get l10nStopLineDontTouch =>

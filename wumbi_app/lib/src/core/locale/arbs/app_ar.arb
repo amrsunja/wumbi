@@ -433,6 +433,9 @@
 
   "l10nProgress": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ PROGRESS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
   "progress_title": "التقدم",
+  "progress_by_day": "يومًا بيوم",
+  "progress_by_month": "شهرًا بشهر",
+  "progress_other": "أخرى",
   "progress_month": "شهر",
   "progress_year": "سنة",
   "progress_income": "دخل",
@@ -657,6 +660,7 @@
   "debts_empty_owe_title": "لستَ مدينًا لأحد",
   "debts_empty_subtitle": "اضغط «دين جديد» أو استخدم تحويل ← الديون في شاشة المعاملة",
   "debt_new": "دين جديد",
+  "debt_edit_title": "تعديل الدين",
   "debts_all": "كل الديون",
   "debts_empty_hint": "تتبّع المال الذي أقرضته أو اقترضته",
   "dashboard_reorder_hint": "اضغط مطولاً لإعادة الترتيب",
@@ -820,5 +824,8 @@
   "debt_wallet_confirm_in": "إضافة إلى {wallet}",
   "debt_wallet_confirm_out": "الدفع من {wallet}",
   "debt_wallet_confirm_none": "حفظ بدون محفظة",
+  "debt_history_swipe_hint": "اسحب الدفعة لليسار لحذفها",
+  "debt_form_person": "شخص",
+  "debt_form_wallet": "المحفظة",
   "l10nStopLineDontTouch": "☠☠☠☠☠☠☠☠☠☠☠☠☠ Don't touch this line ☠☠☠☠☠☠☠☠☠☠☠☠☠"
 }

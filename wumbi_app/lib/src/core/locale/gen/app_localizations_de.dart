@@ -1036,6 +1036,15 @@ class AppLocalizationsDe extends AppLocalizations {
   String get progress_title => 'Fortschritt';
 
   @override
+  String get progress_by_day => 'Tag für Tag';
+
+  @override
+  String get progress_by_month => 'Monat für Monat';
+
+  @override
+  String get progress_other => 'Sonstige';
+
+  @override
   String get progress_month => 'Monat';
 
   @override
@@ -1810,6 +1819,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get debt_new => 'Neue Schuld';
 
   @override
+  String get debt_edit_title => 'Schuld bearbeiten';
+
+  @override
   String get debts_all => 'Alle Schulden';
 
   @override
@@ -2514,6 +2526,16 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get debt_wallet_confirm_none => 'Ohne Wallet speichern';
+
+  @override
+  String get debt_history_swipe_hint =>
+      'Zahlung nach links wischen, um sie zu löschen';
+
+  @override
+  String get debt_form_person => 'Person';
+
+  @override
+  String get debt_form_wallet => 'Wallet';
 
   @override
   String get l10nStopLineDontTouch =>

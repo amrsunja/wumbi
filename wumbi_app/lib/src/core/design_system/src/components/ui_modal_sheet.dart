@@ -19,6 +19,8 @@ abstract class UIModalSheet {
     Color? barrierColor,
     Color? bgColor,
     String? title,
+    /// Gap between the sheet handle and [title].
+    double titleTopSpacing = 10,
     RouteSettings? routeSettings,
     EdgeInsets? padding,
   }) =>
@@ -55,7 +57,7 @@ abstract class UIModalSheet {
                 ),
               if (title != null)
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 10, 16, 8),
+                  padding: EdgeInsets.fromLTRB(16, titleTopSpacing, 16, 8),
                   child: Text(
                     title,
                     textAlign: TextAlign.center,

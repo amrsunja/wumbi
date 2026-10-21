@@ -433,6 +433,9 @@
 
   "l10nProgress": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ PROGRESS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
   "progress_title": "Fortschritt",
+  "progress_by_day": "Tag für Tag",
+  "progress_by_month": "Monat für Monat",
+  "progress_other": "Sonstige",
   "progress_month": "Monat",
   "progress_year": "Jahr",
   "progress_income": "Einnahme",
@@ -657,6 +660,7 @@
   "debts_empty_owe_title": "Du schuldest niemandem etwas",
   "debts_empty_subtitle": "Tippe auf „Neue Schuld“ oder nutze Umbuchung → Schulden im Buchungsbildschirm",
   "debt_new": "Neue Schuld",
+  "debt_edit_title": "Schuld bearbeiten",
   "debts_all": "Alle Schulden",
   "debts_empty_hint": "Behalte im Blick, was du verliehen oder geliehen hast",
   "dashboard_reorder_hint": "Halten zum Sortieren",
@@ -820,5 +824,8 @@
   "debt_wallet_confirm_in": "Zu {wallet} hinzufügen",
   "debt_wallet_confirm_out": "Aus {wallet} bezahlen",
   "debt_wallet_confirm_none": "Ohne Wallet speichern",
+  "debt_history_swipe_hint": "Zahlung nach links wischen, um sie zu löschen",
+  "debt_form_person": "Person",
+  "debt_form_wallet": "Wallet",
   "l10nStopLineDontTouch": "☠☠☠☠☠☠☠☠☠☠☠☠☠ Don't touch this line ☠☠☠☠☠☠☠☠☠☠☠☠☠"
 }

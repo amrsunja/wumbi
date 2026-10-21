@@ -25,7 +25,7 @@ import '../data/dashboard_repo.dart';
 import 'dashboard_notifier.dart';
 
 /// Room under each tab list so the last row clears the FAB.
-const double _kListBottomInset = 96;
+const double _kListBottomInset = 126;
 
 /// Dashboard: pinned total + quick links + "Wallets / Budgets / Debts" tab
 /// bar; only the active tab's list scrolls (its rows dissolve under the tab
@@ -96,7 +96,7 @@ class DashboardPage extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(kPageHorzPadding, 50, kPageHorzPadding, 0),
+                    padding: const EdgeInsets.fromLTRB(kPageHorzPadding, 20, kPageHorzPadding, 0),
                     child: _Header(data: data),
                   ),
                   Expanded(
@@ -307,7 +307,6 @@ class _MoneyTabs extends HookConsumerWidget {
     final l10n = context.l10n;
     final pages = usePageController();
     final index = useState(0);
-    final tab = _MoneyTab.values[index.value];
     final overdue = ref.watch(openDebtsBadgeProvider.select((b) => b.overdueCount > 0));
 
 
@@ -330,20 +329,6 @@ class _MoneyTabs extends HookConsumerWidget {
       }
     }
 
-    final String createLabel;
-    final VoidCallback create;
-    switch (tab) {
-      case _MoneyTab.wallets:
-        createLabel = l10n.dashboard_new_wallet;
-        create = () => context.router.push(WalletFormRoute());
-      case _MoneyTab.budgets:
-        createLabel = l10n.budget_new;
-        create = () => context.router.push(BudgetFormRoute());
-      case _MoneyTab.debts:
-        createLabel = l10n.debt_new;
-        create = () => context.router.push(const NewDebtRoute());
-    }
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -355,40 +340,6 @@ class _MoneyTabs extends HookConsumerWidget {
           selectedIndex: index.value,
           onChanged: onTabTap,
         ),
-        Padding(
-          // The button carries 4 px of tap padding: its edge lines up with
-          // the rows' trailing edge.
-          padding: const EdgeInsets.fromLTRB(kListHorzPadding, 6, kListHorzPadding - 4, 0),
-          child: Row(
-            children: [
-              Expanded(
-                child: AnimatedSwitcher(
-                  duration: UIAnim.fast,
-                  switchInCurve: UIAnim.easeOut,
-                  switchOutCurve: UIAnim.easeOut,
-                  layoutBuilder: (top, previous) => Stack(
-                    alignment: AlignmentDirectional.centerStart,
-                    children: [...previous, ?top],
-                  ),
-                  child: _TabSummary(key: ValueKey(tab), tab: tab),
-                ),
-              ),
-              const UISpace.horz(12),
-              // Short "⊕ New"; the full label stays for screen readers.
-              Semantics(
-                button: true,
-                label: createLabel,
-                excludeSemantics: true,
-                child: UiIconTextButton(
-                  icon: UIIconToken.icons.general.plusCircle,
-                  title: l10n.dashboard_new,
-                  color: UIColorToken.blue,
-                  onTap: create,
-                ),
-              ),
-            ],
-          ),
-        ),
         Expanded(
           child: PageView(
             controller: pages,
@@ -397,6 +348,58 @@ class _MoneyTabs extends HookConsumerWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+/// The active tab's summary + create button. First sliver of each tab, so it
+/// scrolls with the rows.
+class _TabActionBar extends StatelessWidget {
+  const _TabActionBar({required this.tab});
+
+  final _MoneyTab tab;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final String createLabel;
+    final VoidCallback create;
+    switch (tab) {
+      case _MoneyTab.wallets:
+        createLabel = l10n.dashboard_new_wallet;
+        create = () => context.router.push(WalletFormRoute());
+      case _MoneyTab.budgets:
+        createLabel = l10n.budget_new;
+        create = () => context.router.push(BudgetFormRoute());
+      case _MoneyTab.debts:
+        createLabel = l10n.debt_new;
+        create = () => context.router.push(NewDebtRoute());
+    }
+
+    return Padding(
+      // The button carries 4 px of tap padding: its edge lines up with the
+      // rows' trailing edge.
+      padding: const EdgeInsets.fromLTRB(kListHorzPadding, 6, kListHorzPadding - 4, 0),
+      child: Row(
+        children: [
+          Expanded(
+            child: _TabSummary(tab: tab),
+          ),
+          const UISpace.horz(12),
+          // Short "⊕ New"; the full label stays for screen readers.
+          Semantics(
+            button: true,
+            label: createLabel,
+            excludeSemantics: true,
+            child: UiIconTextButton(
+              icon: UIIconToken.icons.general.plusCircle,
+              title: l10n.dashboard_new,
+              color: UIColorToken.blue,
+              onTap: create,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -457,8 +460,9 @@ class _TabSummary extends ConsumerWidget {
 /// Mounted fresh whenever its page slides into view (and once its data is
 /// ready), which replays the cascade.
 class _TabScroll extends StatelessWidget {
-  const _TabScroll({required this.slivers});
+  const _TabScroll({required this.tab, required this.slivers});
 
+  final _MoneyTab tab;
   final List<Widget> slivers;
 
   @override
@@ -468,7 +472,7 @@ class _TabScroll extends StatelessWidget {
         child: CustomScrollView(
           physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           slivers: [
-            const SliverToBoxAdapter(child: UISpace.vert(4)),
+            SliverToBoxAdapter(child: _TabActionBar(tab: tab)),
             ...slivers,
             const SliverToBoxAdapter(child: UISpace.vert(_kListBottomInset)),
           ],
@@ -487,9 +491,12 @@ class _TabSkeleton extends StatelessWidget {
 
 /// Rows of a non-reorderable tab, each staggered.
 class _StaggeredRows extends StatelessWidget {
-  const _StaggeredRows({required this.children});
+  const _StaggeredRows({required this.children, this.gap = 0});
 
   final List<Widget> children;
+
+  /// Space below each row.
+  final double gap;
 
   @override
   Widget build(BuildContext context) {
@@ -497,7 +504,10 @@ class _StaggeredRows extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: kListHorzPadding),
       sliver: SliverList.builder(
         itemCount: children.length,
-        itemBuilder: (context, i) => UIStaggerItem(index: i, child: children[i]),
+        itemBuilder: (context, i) => UIStaggerItem(
+          index: i,
+          child: Padding(padding: EdgeInsets.only(bottom: gap), child: children[i]),
+        ),
       ),
     );
   }
@@ -524,7 +534,15 @@ class _WalletsTab extends HookConsumerWidget {
       return null;
     }, [data?.wallets]);
 
-    if (data == null) return const _TabSkeleton();
+    if (data == null) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _TabActionBar(tab: _MoneyTab.wallets),
+          const Expanded(child: _TabSkeleton()),
+        ],
+      );
+    }
 
     final wallets = override.value ?? data.wallets;
     final counted = [for (final w in wallets) if (w.includeInTotal) w];
@@ -607,6 +625,7 @@ class _WalletsTab extends HookConsumerWidget {
         );
 
     return _TabScroll(
+      tab: _MoneyTab.wallets,
       slivers: [
         if (counted.isNotEmpty) group(counted, isCounted: true, first: 0),
         if (excluded.isNotEmpty) ...[
@@ -639,11 +658,21 @@ class _BudgetsTab extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
     final data = ref.watch(dashboardBudgetsProvider);
-    if (data == null) return const _TabSkeleton();
+    if (data == null) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _TabActionBar(tab: _MoneyTab.budgets),
+          const Expanded(child: _TabSkeleton()),
+        ],
+      );
+    }
 
     return _TabScroll(
+      tab: _MoneyTab.budgets,
       slivers: [
         _StaggeredRows(
+          gap: 20,
           children: [
             if (data.total == 0)
               _Hint(text: l10n.budget_empty_hint, onTap: () => context.router.push(BudgetFormRoute())),
@@ -666,13 +695,22 @@ class _DebtsTab extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
     final data = ref.watch(dashboardDebtsProvider);
-    if (data == null) return const _TabSkeleton();
+    if (data == null) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _TabActionBar(tab: _MoneyTab.debts),
+          const Expanded(child: _TabSkeleton()),
+        ],
+      );
+    }
 
     return _TabScroll(
+      tab: _MoneyTab.debts,
       slivers: [
         _StaggeredRows(
           children: [
-            if (data.open.isEmpty) _Hint(text: l10n.debts_empty_hint, onTap: () => context.router.push(const NewDebtRoute())),
+            if (data.open.isEmpty) _Hint(text: l10n.debts_empty_hint, onTap: () => context.router.push(NewDebtRoute())),
             for (final s in data.open) DebtSummaryRow(key: ValueKey('debt-${s.debt.id}'), summary: s, showSide: true),
           ],
         ),

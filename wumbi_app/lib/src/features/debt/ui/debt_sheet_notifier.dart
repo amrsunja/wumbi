@@ -59,7 +59,14 @@ class DebtSheetNotifier extends Notifier<DebtSheetState> {
 
   /// Pays back [amount] (debt currency) into / from [wallet], or outside the
   /// wallets when null. Returns true on success (the page may close).
-  Future<bool> repay(DebtDetails d, Money amount, {required WalletSummary? wallet}) async {
+  Future<bool> repay(
+    DebtDetails d,
+    Money amount, {
+    required WalletSummary? wallet,
+    String description = '',
+    List<String> tags = const [],
+    DateTime? date,
+  }) async {
     final s = d.summary;
     if (state.isSaving) return false;
     if (amount.minor <= 0) return false;
@@ -108,9 +115,9 @@ class DebtSheetNotifier extends Notifier<DebtSheetState> {
                 amount: walletAmount,
                 original: original,
                 rate: rate,
-                description: '',
-                tags: const [],
-                date: DateTime.now(),
+                description: description,
+                tags: tags,
+                date: date ?? DateTime.now(),
                 repeat: RepeatFrequency.never,
                 debt: intent,
               )
@@ -119,9 +126,9 @@ class DebtSheetNotifier extends Notifier<DebtSheetState> {
                 amount: walletAmount,
                 original: original,
                 rate: rate,
-                description: '',
-                tags: const [],
-                date: DateTime.now(),
+                description: description,
+                tags: tags,
+                date: date ?? DateTime.now(),
                 repeat: RepeatFrequency.never,
                 debt: intent,
               );

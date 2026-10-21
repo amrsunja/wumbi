@@ -73,7 +73,8 @@ class WalletFormPage extends ConsumerWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(kPageHorzPadding, 8, kPageHorzPadding, 16),
+              // Tight bar, inset like the Transaction edit bar (page + bar padding).
+              padding: const EdgeInsets.fromLTRB(kPageHorzPadding * 2, 0, kPageHorzPadding * 2, 4),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

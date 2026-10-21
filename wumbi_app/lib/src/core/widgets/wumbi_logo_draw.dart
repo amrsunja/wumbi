@@ -16,7 +16,7 @@ import 'wumbi_logo_data.dart';
 class WumbiLogoDraw extends HookWidget {
   const WumbiLogoDraw({
     super.key,
-    this.duration = const Duration(milliseconds: 1500),
+    this.duration = const Duration(milliseconds: 1000),
     this.delay = const Duration(milliseconds: 80),
     this.inkColor = _ink,
     this.coinColor = _coin,

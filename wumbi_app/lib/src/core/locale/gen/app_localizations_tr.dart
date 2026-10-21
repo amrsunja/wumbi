@@ -1020,6 +1020,15 @@ class AppLocalizationsTr extends AppLocalizations {
   String get progress_title => 'İlerleme';
 
   @override
+  String get progress_by_day => 'Gün gün';
+
+  @override
+  String get progress_by_month => 'Ay ay';
+
+  @override
+  String get progress_other => 'Diğer';
+
+  @override
   String get progress_month => 'Ay';
 
   @override
@@ -1788,6 +1797,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get debt_new => 'Yeni borç';
 
   @override
+  String get debt_edit_title => 'Borcu düzenle';
+
+  @override
   String get debts_all => 'Tüm borçlar';
 
   @override
@@ -2486,6 +2498,15 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get debt_wallet_confirm_none => 'Cüzdansız kaydet';
+
+  @override
+  String get debt_history_swipe_hint => 'Bir ödemeyi silmek için sola kaydırın';
+
+  @override
+  String get debt_form_person => 'Kişi';
+
+  @override
+  String get debt_form_wallet => 'Cüzdan';
 
   @override
   String get l10nStopLineDontTouch =>

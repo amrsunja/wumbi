@@ -1035,6 +1035,15 @@ class AppLocalizationsNl extends AppLocalizations {
   String get progress_title => 'Voortgang';
 
   @override
+  String get progress_by_day => 'Dag voor dag';
+
+  @override
+  String get progress_by_month => 'Maand voor maand';
+
+  @override
+  String get progress_other => 'Overig';
+
+  @override
   String get progress_month => 'Maand';
 
   @override
@@ -1807,6 +1816,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get debt_new => 'Nieuwe schuld';
 
   @override
+  String get debt_edit_title => 'Schuld bewerken';
+
+  @override
   String get debts_all => 'Alle schulden';
 
   @override
@@ -2511,6 +2523,16 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get debt_wallet_confirm_none => 'Opslaan zonder portemonnee';
+
+  @override
+  String get debt_history_swipe_hint =>
+      'Veeg een betaling naar links om hem te verwijderen';
+
+  @override
+  String get debt_form_person => 'Persoon';
+
+  @override
+  String get debt_form_wallet => 'Portemonnee';
 
   @override
   String get l10nStopLineDontTouch =>

@@ -25,11 +25,7 @@ import 'budget_labels.dart';
 import 'widgets/budget_sheets.dart';
 
 /// Room under each tab list so the last row clears the FAB.
-const double _kListBottomInset = 104;
-
-/// Ring (216) + gap + navigator: holds the header's place on first load so
-/// the tabs don't jump.
-const double _kHeaderPlaceholderHeight = 216 + 16 + 56;
+const double _kListBottomInset = 134;
 
 enum _BudgetTab { overview, transactions }
 
@@ -89,9 +85,6 @@ class BudgetDetailsPage extends HookConsumerWidget {
     // last numbers on screen meanwhile so the ring and counters animate from
     // them instead of flashing a skeleton.
     final lastProgress = useRef<BudgetProgress?>(seed);
-    // One clock for the ring's sweep-in, shared by the hero shuttle and the
-    // ring that replaces it on landing (else it sweeps twice).
-    final ringSweepStart = useMemoized(DateTime.now);
     final lastTags = useRef<List<TagModel>>(const []);
     final loaded = state.progress.value != null;
     if (loaded) {
@@ -141,46 +134,38 @@ class BudgetDetailsPage extends HookConsumerWidget {
           : Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // Fixed header: ring, period navigator, tabs.
+                // Header: amount left, period navigator, tabs. Natural height.
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(kListHorzPadding, 4, kListHorzPadding, 15),
+                  padding: const EdgeInsets.fromLTRB(kListHorzPadding, 8, kListHorzPadding, 0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      if (progress == null)
-                        const SizedBox(height: _kHeaderPlaceholderHeight)
-                      else ...[
-                        // Flies in from the row's bar (no entrance fade: the
-                        // hero is the entrance).
-                        Center(
-                          child: UiHero(
-                            tag: heroBudgetProgress(budgetId),
-                            pushedShuttle: true,
-                            child: _Ring(progress: progress, sweepStartedAt: ringSweepStart),
-                          ),
-                        ),
-                        const UISpace.vert(16),
+                      if (progress != null) ...[
+                        _Summary(progress: progress),
+                        const UISpace.vert(20),
                         _PeriodNavigator(
                           progress: progress,
                           offset: offset.value,
                           onPrevious: () => browse(-1),
                           onNext: () => browse(1),
                           onBackToCurrent: backToCurrent,
-                        ).uiFadeSlideIn(delay: const Duration(milliseconds: 120), offset: 0.3),
+                        ),
+                        const UISpace.vert(16),
                       ],
-                      const UISpace.vert(16),
                       UiSegmentedToggle(
                         expanded: true,
                         labels: [l10n.budget_tab_overview, l10n.wallet_tab_transactions],
                         selectedIndex: tabs.index,
                         onChanged: tabs.onTabTap,
                       ),
+                      const UISpace.vert(8),
                     ],
                   ),
                 ),
-                // Swipeable tab bodies (only they scroll). Pages are not kept
-                // alive, so their cascade replays on every switch.
+                // Body (60 %): swipeable tabs, only they scroll. Pages are not
+                // kept alive, so their cascade replays on every switch.
                 Expanded(
+                  flex: 6,
                   child: PageView(
                     controller: tabs.controller,
                     onPageChanged: tabs.onPageChanged,
@@ -284,17 +269,6 @@ class _OverviewTab extends StatelessWidget {
     final p = progress;
     if (p == null) return const _TabScroll(slivers: [_Loading()]);
 
-    final pace = _pace(context, p);
-    final statusColor = BudgetLabels.statusColor(p.status, context.colors);
-
-    Widget section(String label, Widget child, int delayMs) => Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            UiSectionLabel(text: label, padding: const EdgeInsets.fromLTRB(4, 28, 4, 8)),
-            child,
-          ],
-        ).uiFadeSlideIn(delay: Duration(milliseconds: delayMs), offset: 0.2);
-
     return _TabScroll(
       slivers: [
         SliverPadding(
@@ -303,30 +277,32 @@ class _OverviewTab extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Center(
-                  child: AnimatedSwitcher(
-                    duration: UIAnim.fast,
-                    child: pace == null
-                        ? const SizedBox(key: ValueKey('no-pace'), height: 0, width: double.infinity)
-                        : Padding(
-                            key: ValueKey(pace),
-                            padding: const EdgeInsets.only(top: 4, bottom: 14),
-                            child: _Pill(text: pace, color: statusColor, dot: true),
-                          ),
-                  ).uiFadeSlideIn(delay: const Duration(milliseconds: 200), offset: 0.3),
-                ),
-                const UISpace.vert(4),
                 _Stats(progress: p),
                 if (p.subscriptionCount > 0 && p.subscriptionPlanned != null) ...[
                   const UISpace.vert(8),
                   _SubscriptionsLink(progress: p),
                 ],
-                section(
-                  l10n.budget_what_counts,
-                  _ScopeCard(budget: p.budget, wallets: wallets, tags: tags),
-                  420,
+                UiSectionLabel(text: l10n.budget_what_counts, padding: const EdgeInsets.fromLTRB(4, 24, 4, 8)),
+                UiGroupCard(
+                  children: [
+                    if (p.budget.walletIds.isEmpty)
+                      UiValueRow(label: l10n.budget_all_wallets)
+                    else
+                      for (final w in wallets.where((w) => p.budget.walletIds.contains(w.id)))
+                        UiValueRow(
+                          leading: UiCircleColorBadge(color: w.color.color, size: 10),
+                          label: w.name,
+                          onTap: () => context.router.push(WalletDetailsRoute(walletId: w.id)),
+                        ),
+                    for (final t in tags)
+                      UiValueRow(
+                        label: '#${t.displayName}',
+                        onTap: () => context.router.push(TagDetailsRoute(tagId: t.id)),
+                      ),
+                  ],
                 ),
-                section(l10n.settings_title, _RulesCard(budget: p.budget, onTap: onEdit), 500),
+                UiSectionLabel(text: l10n.settings_title, padding: const EdgeInsets.fromLTRB(4, 24, 4, 8)),
+                _RulesList(budget: p.budget, onTap: onEdit),
               ],
             ),
           ),
@@ -450,16 +426,9 @@ class _TransactionsTab extends StatelessWidget {
 
 // ----------------------------------------------------------- period navigator
 
-/// Tinted card under the ring (fixed header):
-///
-/// ```
-/// (‹)        October 2026         (›)
-///      Oct 1 – 31 · 12 days left
-/// ```
-/// The label slides in the browsing direction; away from the running period
-/// a "Back to today" link returns to it. One-time budgets have a single
-/// period: no arrows.
-class _PeriodNavigator extends HookWidget {
+/// [UiPeriodNavigator] for a budget: `October 2026` / `Oct 1 – 31 · 12 days
+/// left`. One-time budgets have a single period: no arrows.
+class _PeriodNavigator extends StatelessWidget {
   const _PeriodNavigator({
     required this.progress,
     required this.offset,
@@ -479,8 +448,6 @@ class _PeriodNavigator extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final colors = context.colors;
-    final typo = context.typo.inter;
     final p = progress;
     final b = p.budget;
     final custom = b.period.isCustom;
@@ -497,219 +464,25 @@ class _PeriodNavigator extends HookWidget {
         l10n.budget_ended,
     ].join(' · ');
 
-    // +1 = moving forward in time (slide from the right), −1 = back.
-    final direction = useRef(1);
-    final lastIndex = useRef(p.period.index);
-    if (p.period.index != lastIndex.value) {
-      direction.value = p.period.index > lastIndex.value ? 1 : -1;
-      lastIndex.value = p.period.index;
-    }
-
-    Widget slide(Widget child, Object key) => AnimatedSwitcher(
-          duration: UIAnim.fast,
-          switchInCurve: UIAnim.easeOut,
-          switchOutCurve: UIAnim.easeOut,
-          layoutBuilder: (current, previous) => Stack(
-            alignment: Alignment.center,
-            children: [...previous, ?current],
-          ),
-          transitionBuilder: (child, animation) {
-            final incoming = child.key == ValueKey(key);
-            final dx = (incoming ? 0.25 : -0.25) * direction.value;
-            return FadeTransition(
-              opacity: animation,
-              child: SlideTransition(
-                position: Tween<Offset>(begin: Offset(dx, 0), end: Offset.zero).animate(animation),
-                child: child,
-              ),
-            );
-          },
-          child: KeyedSubtree(key: ValueKey(key), child: child),
-        );
-
-    final center = Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        slide(
-          Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, textAlign: TextAlign.center, style: typo.rowTitle),
-          label,
-        ),
-        const UISpace.vert(2),
-        slide(
-          Text(caption, maxLines: 1, overflow: TextOverflow.ellipsis, textAlign: TextAlign.center, style: typo.caption),
-          caption,
-        ),
-        AnimatedSize(
-          duration: UIAnim.fast,
-          curve: UIAnim.easeOut,
-          child: offset == 0
-              ? const SizedBox(width: double.infinity)
-              : UITap(
-                  onTap: onBackToCurrent,
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 6),
-                    child: Text(
-                      l10n.budget_back_to_current,
-                      style: typo.captionBold.copyWith(color: UIColorToken.blue),
-                    ),
-                  ),
-                ),
-        ),
-      ],
-    );
-
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 6, vertical: custom ? 14 : 8),
-      decoration: BoxDecoration(
-        color: colors.secondContentColor.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: custom
-          ? center
-          : Row(
-              children: [
-                _NavButton(icon: UIIconToken.icons.arrows.chevronLeft, onTap: onPrevious),
-                Expanded(child: center),
-                _NavButton(icon: UIIconToken.icons.arrows.chevronRight, onTap: offset < 0 ? onNext : null),
-              ],
-            ),
+    return UiPeriodNavigator(
+      label: label,
+      caption: caption,
+      position: p.period.index,
+      showArrows: !custom,
+      onPrevious: onPrevious,
+      onNext: offset < 0 ? onNext : null,
+      backLabel: offset == 0 ? null : l10n.budget_back_to_current,
+      onBackToCurrent: onBackToCurrent,
     );
   }
 }
 
-/// Round 40 px arrow on the card colour; dimmed when there is nowhere to go.
-class _NavButton extends StatelessWidget {
-  const _NavButton({required this.icon, required this.onTap});
+// ------------------------------------------------------------- overview rows
 
-  final String icon;
-  final VoidCallback? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = context.colors;
-    return AnimatedOpacity(
-      duration: UIAnim.fast,
-      opacity: onTap == null ? 0.3 : 1,
-      child: UITap(
-        onTap: onTap,
-        child: Container(
-          width: 40,
-          height: 40,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(color: colors.fgColor, shape: BoxShape.circle),
-          child: UIIcon(icon, size: 20),
-        ),
-      ),
-    );
-  }
-}
-
-// ------------------------------------------------------------ overview cards
-
-/// Tinted rounded card holding rows separated by hairlines.
-class _Card extends StatelessWidget {
-  const _Card({required this.children});
-
-  final List<Widget> children;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      decoration: BoxDecoration(
-        color: context.colors.secondContentColor.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        children: [
-          for (var i = 0; i < children.length; i++) ...[
-            if (i > 0) const UIDivider(),
-            children[i],
-          ],
-        ],
-      ),
-    );
-  }
-}
-
-/// "Counts expenses from Card tagged #food." then one row per wallet and
-/// the #tags — each opens its details.
-class _ScopeCard extends StatelessWidget {
-  const _ScopeCard({required this.budget, required this.wallets, required this.tags});
-
-  final BudgetModel budget;
-  final List<WalletSummary> wallets;
-  final List<TagModel> tags;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    final colors = context.colors;
-    final typo = context.typo.inter;
-    final scoped = wallets.where((w) => budget.walletIds.contains(w.id)).toList();
-
-    return _Card(
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(4, 14, 4, 12),
-          child: Text(
-            BudgetLabels.scopeSentence(
-              l10n,
-              walletNames: scoped.map((w) => w.name).toList(),
-              tagNames: tags.map((t) => t.displayName).toList(),
-            ),
-            style: typo.body,
-          ),
-        ),
-        if (budget.walletIds.isEmpty)
-          UiListRow(
-            leading: UIIcon(UIIconToken.icons.financeEcommerce.wallet02, size: 18, color: colors.secondContentColor),
-            title: l10n.budget_all_wallets,
-          )
-        else
-          for (final w in scoped)
-            UiListRow(
-              leading: UiCircleColorBadge(color: w.color.color, size: 10),
-              title: w.name,
-              trailing: UIIcon(UIIconToken.icons.arrows.chevronRight, size: 16, color: colors.secondContentColor),
-              onTap: () => context.router.push(WalletDetailsRoute(walletId: w.id)),
-            ),
-        if (tags.isNotEmpty)
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 4),
-                  child: UIIcon(UIIconToken.icons.general.hash01, size: 18, color: colors.secondContentColor),
-                ),
-                const UISpace.horz(14),
-                Expanded(
-                  child: Wrap(
-                    spacing: 6,
-                    runSpacing: 6,
-                    children: [
-                      for (final t in tags)
-                        UITap(
-                          onTap: () => context.router.push(TagDetailsRoute(tagId: t.id)),
-                          child: _Pill(text: '#${t.displayName}', color: UIColorToken.blue),
-                        ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-      ],
-    );
-  }
-}
-
-/// Repeats · Starts on · Carry over · Planned payments — a tap opens the
-/// form on that row's sheet.
-class _RulesCard extends StatelessWidget {
-  const _RulesCard({required this.budget, required this.onTap});
+/// Settings section: Repeats · Starts on · Carry over · Planned payments.
+/// Each row opens the form on its own sheet.
+class _RulesList extends StatelessWidget {
+  const _RulesList({required this.budget, required this.onTap});
 
   final BudgetModel budget;
   final ValueChanged<BudgetFormSheet> onTap;
@@ -731,29 +504,25 @@ class _RulesCard extends StatelessWidget {
           : '${anchor.formatMediumDate()} – ${DateTime(end.year, end.month, end.day - 1).formatMediumDate()}',
     };
 
-    return _Card(
+    return UiGroupCard(
       children: [
-        _RuleRow(
-          icon: UIIconToken.icons.mediaDevices.repeat01,
+        UiValueRow(
           label: l10n.budget_repeats,
           value: BudgetLabels.periodType(l10n, b.period),
           onTap: () => onTap(BudgetFormSheet.period),
         ),
-        _RuleRow(
-          icon: UIIconToken.icons.time.calendar,
+        UiValueRow(
           label: custom ? l10n.budget_period_section : l10n.budget_row_starts,
           value: start,
           onTap: () => onTap(BudgetFormSheet.start),
         ),
         if (!custom)
-          _RuleRow(
-            icon: UIIconToken.icons.arrows.flipForward,
+          UiValueRow(
             label: l10n.budget_carry_over,
             value: BudgetLabels.rollover(l10n, b.rollover),
             onTap: () => onTap(BudgetFormSheet.rollover),
           ),
-        _RuleRow(
-          icon: UIIconToken.icons.time.clockFastForward,
+        UiValueRow(
           label: l10n.budget_planned_title,
           value: BudgetLabels.countPlanned(l10n, b.includePlanned),
           onTap: () => onTap(BudgetFormSheet.planned),
@@ -763,106 +532,86 @@ class _RulesCard extends StatelessWidget {
   }
 }
 
-class _RuleRow extends StatelessWidget {
-  const _RuleRow({required this.icon, required this.label, required this.value, required this.onTap});
-
-  final String icon;
-  final String label;
-  final String value;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = context.colors;
-    final typo = context.typo.inter;
-    return UITap(
-      onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 4),
-        child: Row(
-          children: [
-            UIIcon(icon, size: 18, color: colors.secondContentColor),
-            const UISpace.horz(14),
-            Expanded(child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: typo.body)),
-            const UISpace.horz(12),
-            Flexible(
-              child: Text(
-                value,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.end,
-                style: typo.label,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 // ------------------------------------------------------------- shared bits
 
-/// Ring gauge with the remaining amount, its word and "42 % used".
-class _Ring extends StatelessWidget {
-  const _Ring({required this.progress, required this.sweepStartedAt});
+/// Header: what's left, one context line, a bar that glides between periods.
+class _Summary extends StatelessWidget {
+  const _Summary({required this.progress});
 
   final BudgetProgress progress;
-  final DateTime sweepStartedAt;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final typo = context.typo.inter;
     final p = progress;
-    final statusColor = BudgetLabels.statusColor(p.status, context.colors);
-
-    // Big number + its word: running → left / over; past → under / over.
     final over = p.remaining.isNegative;
-    final String word;
-    if (p.status == BudgetStatus.notStarted) {
-      word = l10n.budget_starts(p.period.start.formatShortDate());
-    } else if (over) {
-      word = l10n.budget_over_caption;
-    } else {
-      word = p.isCurrent ? l10n.budget_left_caption : l10n.budget_under_caption;
-    }
+    final color = BudgetLabels.statusColor(p, context.colors);
+    final ratio = p.spentRatio.isFinite ? p.spentRatio.clamp(0.0, 1.0).toDouble() : 0.0;
     final percent = p.spentRatio.isFinite ? (p.spentRatio * 100).round() : 0;
+    final pace = _OverviewTab._pace(context, p);
 
-    return UiBudgetRing(
-      sweepStartedAt: sweepStartedAt,
-      spentRatio: p.spentRatio,
-      plannedRatio: p.plannedRatio,
-      color: statusColor,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          UiTotalAmount(
-            money: p.remaining.abs(),
-            animated: true,
-            fontSize: 30,
-            color: over ? UIColorToken.neg500 : null,
-          ),
-          AnimatedSwitcher(
-            duration: UIAnim.fast,
-            child: Text(
-              word,
-              key: ValueKey(word),
-              textAlign: TextAlign.center,
-              style: typo.subtitle.copyWith(color: over ? UIColorToken.neg500 : null),
+    final word = switch (p.status) {
+      BudgetStatus.notStarted => l10n.budget_starts(p.period.start.formatShortDate()),
+      _ when over => l10n.budget_over_caption,
+      _ when p.isCurrent => l10n.budget_left_caption,
+      _ => l10n.budget_under_caption,
+    };
+
+    final contextLine = [
+      l10n.budget_spent_of(p.spent.format(), p.limit.format()),
+      if (p.isCurrent) l10n.budget_days_left(p.daysLeft),
+    ].join(' · ');
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        UiTotalAmount(
+          money: p.remaining.abs(),
+          animated: true,
+          fontSize: 36,
+          color: over ? UIColorToken.neg500 : null,
+        ),
+        Text(
+          word,
+          textAlign: TextAlign.center,
+          style: typo.caption.copyWith(color: over ? UIColorToken.neg500 : null),
+        ),
+        const UISpace.vert(16),
+        TweenAnimationBuilder<double>(
+          tween: Tween(end: ratio),
+          duration: const Duration(milliseconds: 600),
+          curve: UIAnim.easeOut,
+          builder: (_, value, _) => ClipRRect(
+            borderRadius: BorderRadius.circular(4),
+            child: LinearProgressIndicator(
+              value: value,
+              minHeight: 8,
+              color: color,
+              backgroundColor: color.withValues(alpha: 0.12),
             ),
           ),
-          const UISpace.vert(10),
-          _Pill(text: l10n.budget_used_percent(percent), color: statusColor),
+        ),
+        const UISpace.vert(8),
+        Row(
+          children: [
+            Expanded(
+              child: Text(contextLine, maxLines: 1, overflow: TextOverflow.ellipsis, style: typo.caption),
+            ),
+            Text(l10n.budget_used_percent(percent), style: typo.captionBold.copyWith(color: color)),
+          ],
+        ),
+        if (pace != null) ...[
+          const UISpace.vert(6),
+          Text(pace, style: typo.captionBold.copyWith(color: color)),
         ],
-      ),
+      ],
     );
   }
 }
 
-/// Spent · Limit · Planned · Per day · Forecast tiles, two per row (a lone
-/// last tile spans the row). Values cross-fade when they change. When any
-/// tile has a sub line, every tile reserves it so all share one height.
+/// Summary figures as one grouped card: label on the left (with an optional
+/// sub line), value on the right. Scans top to bottom like a settings list.
 class _Stats extends StatelessWidget {
   const _Stats({required this.progress});
 
@@ -873,157 +622,67 @@ class _Stats extends StatelessWidget {
     final l10n = context.l10n;
     final p = progress;
     final carry = p.carry;
-    final perDay = p.perDay;
+    final perDay = p.remaining.isNegative ? null : p.perDay;
     final forecast = p.forecast;
 
-    final tiles = <_StatData>[
-      _StatData(
-        label: l10n.budget_stat_spent,
-        value: '${p.incomplete ? '≈ ' : ''}${p.spent.format()}',
-        color: p.isOver ? UIColorToken.neg500 : null,
-      ),
-      _StatData(
-        label: l10n.budget_stat_limit,
-        value: p.limit.format(),
-        sub: carry.isZero ? null : l10n.budget_carried(carry.format(signed: true, positiveSign: true)),
-      ),
-      if (p.planned.isPositive) _StatData(label: l10n.budget_stat_planned, value: p.planned.format()),
-      if (perDay != null)
-        _StatData(label: l10n.budget_stat_per_day, value: perDay.format(), sub: l10n.budget_days_left(p.daysLeft)),
-      if (forecast != null)
-        // No orange here: orange means ≥ 90 % of the limit is used.
-        _StatData(label: l10n.budget_stat_forecast, value: forecast.format()),
-    ];
-
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        const gap = 10.0;
-        final half = (constraints.maxWidth - gap) / 2;
-        final reserveSub = tiles.any((t) => t.sub != null);
-        return Wrap(
-          spacing: gap,
-          runSpacing: gap,
-          children: [
-            for (var i = 0; i < tiles.length; i++)
-              SizedBox(
-                key: ValueKey(tiles[i].label),
-                width: i == tiles.length - 1 && tiles.length.isOdd ? constraints.maxWidth : half,
-                child: _StatTile(data: tiles[i], reserveSub: reserveSub).uiFadeSlideIn(
-                  delay: Duration(milliseconds: 260 + 60 * i),
-                  offset: 0.25,
-                ),
-              ),
-          ],
-        );
-      },
+    return UiGroupCard(
+      children: [
+        _StatRow(
+          label: l10n.budget_stat_spent,
+          value: '${p.incomplete ? '≈ ' : ''}${p.spent.format()}',
+          valueColor: p.isOver ? UIColorToken.neg500 : null,
+        ),
+        _StatRow(
+          label: l10n.budget_stat_limit,
+          value: p.limit.format(),
+          sub: carry.isZero ? null : l10n.budget_carried(carry.format(signed: true, positiveSign: true)),
+        ),
+        if (perDay != null)
+          _StatRow(
+            label: l10n.budget_stat_per_day,
+            value: perDay.format(),
+            sub: l10n.budget_days_left(p.daysLeft),
+          ),
+        if (forecast != null) _StatRow(label: l10n.budget_stat_forecast, value: forecast.format()),
+        if (p.planned.isPositive) _StatRow(label: l10n.budget_stat_planned, value: p.planned.format()),
+      ],
     );
   }
 }
 
-class _StatData {
-  const _StatData({required this.label, required this.value, this.sub, this.color});
+/// One figure in [_Stats]: label + optional sub line on the left, value right.
+class _StatRow extends StatelessWidget {
+  const _StatRow({required this.label, required this.value, this.sub, this.valueColor});
 
   final String label;
   final String value;
   final String? sub;
-  final Color? color;
-}
-
-class _StatTile extends StatelessWidget {
-  const _StatTile({required this.data, required this.reserveSub});
-
-  final _StatData data;
-
-  /// Keep the sub line's room even without one (equal tile heights).
-  final bool reserveSub;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = context.colors;
-    final typo = context.typo.inter;
-    final sub = data.sub;
-
-    Widget fade(Widget child) => AnimatedSwitcher(
-          duration: UIAnim.fast,
-          layoutBuilder: (current, previous) => Stack(
-            alignment: AlignmentDirectional.centerStart,
-            children: [...previous, ?current],
-          ),
-          child: child,
-        );
-
-    return Container(
-      padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
-      decoration: BoxDecoration(
-        color: colors.secondContentColor.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(data.label.toUpperCase(), maxLines: 1, overflow: TextOverflow.ellipsis, style: typo.sectionLabel),
-          const UISpace.vert(6),
-          fade(
-            Text(
-              data.value,
-              key: ValueKey(data.value),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: typo.rowTitle.copyWith(color: data.color),
-            ),
-          ),
-          if (reserveSub) ...[
-            const UISpace.vert(2),
-            fade(
-              Text(
-                sub ?? '',
-                key: ValueKey(sub),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: typo.caption,
-              ),
-            ),
-          ],
-        ],
-      ),
-    );
-  }
-}
-
-/// Rounded tinted label: status pill, pace, scope chips.
-class _Pill extends StatelessWidget {
-  const _Pill({super.key, required this.text, required this.color, this.leading, this.dot = false});
-
-  final String text;
-  final Color color;
-  final Widget? leading;
-
-  /// Leading status dot in [color].
-  final bool dot;
+  final Color? valueColor;
 
   @override
   Widget build(BuildContext context) {
     final typo = context.typo.inter;
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(20),
-      ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 18),
       child: Row(
-        mainAxisSize: MainAxisSize.min,
-        spacing: 6,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          if (dot)
-            Container(width: 6, height: 6, decoration: BoxDecoration(color: color, shape: BoxShape.circle)),
-          ?leading,
-          Flexible(
-            child: Text(
-              text,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: typo.semiBold.copyWith(fontSize: 12, color: color),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: typo.body),
+                if (sub != null)
+                  Text(sub!, maxLines: 1, overflow: TextOverflow.ellipsis, style: typo.caption),
+              ],
             ),
+          ),
+          const UISpace.horz(12),
+          Text(
+            value,
+            maxLines: 1,
+            textAlign: TextAlign.end,
+            style: typo.rowTitle.copyWith(color: valueColor),
           ),
         ],
       ),

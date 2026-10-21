@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 import '../../../../core/design_system/app_ui.dart';
+import '../../../../core/money/currency_names.dart';
 import '../../../../core/money/currency_type.dart';
 import '../../../../core/utils/extensions/build_context_extensions.dart';
 
@@ -43,7 +44,7 @@ class _CurrencyList extends HookWidget {
     final items = q.isEmpty
         ? ordered
         : ordered
-            .where((c) => c.code.toLowerCase().contains(q) || c.displayName.toLowerCase().contains(q))
+            .where((c) => c.nameMatches(l10n.localeName, q))
             .toList();
 
     return Column(
@@ -69,7 +70,7 @@ class _CurrencyList extends HookWidget {
                     return UiListRow(
                       leading: _SymbolBadge(symbol: c.symbol),
                       title: c.code,
-                      subtitle: c.displayName,
+                      subtitle: c.nameIn(l10n.localeName),
                       selected: c == selected,
                       onTap: () => Navigator.of(context).pop(c),
                     );

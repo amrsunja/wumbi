@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../../core/design_system/app_ui.dart';
+import '../../../../core/money/currency_names.dart';
 import '../../../../core/money/currency_type.dart';
 import '../../../../core/utils/constants/constants.dart';
 import '../../../../core/utils/extensions/build_context_extensions.dart';
@@ -34,7 +35,7 @@ class BaseCurrencyPage extends ConsumerWidget {
           final c = CurrencyType.values[index - 1];
           return UiListRow(
             title: c.code,
-            subtitle: c.displayName,
+            subtitle: c.nameIn(l10n.localeName),
             trailingText: c.symbol,
             selected: c == current,
             onTap: () async {

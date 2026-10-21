@@ -22,7 +22,6 @@ class HelpPage extends StatelessWidget {
       _HelpTopic(
         icon: UIIconToken.icons.general.hash01,
         title: l10n.help_tags_title,
-        subtitle: l10n.help_tags_subtitle,
         route: const TagsHelpRoute(),
       ),
     ];
@@ -37,10 +36,12 @@ class HelpPage extends StatelessWidget {
             const UISpace.vert(14),
             Text(l10n.help_subtitle, textAlign: TextAlign.center, style: typo.paragraph),
             const UISpace.vert(24),
-            for (final t in topics) ...[
-              _TopicCard(topic: t),
-              const UISpace.vert(10),
-            ],
+            for (final t in topics)
+              UiSettingsTile(
+                icon: t.icon,
+                title: t.title,
+                onTap: () => context.router.push(t.route),
+              ),
           ],
         ),
       ),
@@ -49,62 +50,9 @@ class HelpPage extends StatelessWidget {
 }
 
 class _HelpTopic {
-  const _HelpTopic({required this.icon, required this.title, required this.subtitle, required this.route});
+  const _HelpTopic({required this.icon, required this.title, required this.route});
 
   final String icon;
   final String title;
-  final String subtitle;
   final PageRouteInfo route;
-}
-
-class _TopicCard extends StatelessWidget {
-  const _TopicCard({required this.topic});
-
-  final _HelpTopic topic;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = context.colors;
-    final typo = context.typo.inter;
-    return Container(
-      decoration: BoxDecoration(
-        color: colors.fgColor,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: colors.dividerColor),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: UITap(
-        onTap: () => context.router.push(topic.route),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(14, 14, 10, 14),
-          child: Row(
-            children: [
-              Container(
-                width: 42,
-                height: 42,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: UIColorToken.blue.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(14),
-                ),
-                child: UIIcon(topic.icon, size: 20, color: UIColorToken.blue),
-              ),
-              const UISpace.horz(14),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  spacing: 3,
-                  children: [
-                    Text(topic.title, style: typo.rowTitle),
-                    Text(topic.subtitle, style: typo.caption),
-                  ],
-                ),
-              ),
-              UIIcon(UIIconToken.icons.arrows.chevronRight, size: 18, color: colors.secondContentColor),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
 }

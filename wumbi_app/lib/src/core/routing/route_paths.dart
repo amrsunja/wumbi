@@ -29,6 +29,7 @@ abstract class RoutePaths {
   /// Personal debts with people.
   static const debts = '/debts';
   static const newDebt = '/debts/new';
+  static const debtTransaction = '/debts/:id/payment';
   static const debtDetails = '/debts/:id';
 
   static const settings = '/settings';

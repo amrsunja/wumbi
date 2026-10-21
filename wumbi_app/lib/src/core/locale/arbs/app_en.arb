@@ -440,6 +440,9 @@
 
   "l10nProgress": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ PROGRESS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
   "progress_title": "Progress",
+  "progress_by_day": "Day by day",
+  "progress_by_month": "Month by month",
+  "progress_other": "Other",
   "progress_month": "Month",
   "progress_year": "Year",
   "progress_income": "Income",
@@ -957,6 +960,7 @@
   "debts_empty_owe_title": "You owe nobody",
   "debts_empty_subtitle": "Tap “New debt”, or use Transfer → Debts on the transaction screen",
   "debt_new": "New debt",
+  "debt_edit_title": "Edit debt",
   "debts_all": "All debts",
   "debts_empty_hint": "Keep track of money you lent or borrowed",
   "dashboard_reorder_hint": "Hold to reorder",
@@ -1463,5 +1467,8 @@
     "placeholders": {"wallet": {"type": "String"}}
   },
   "debt_wallet_confirm_none": "Save without a wallet",
+  "debt_history_swipe_hint": "Swipe a payment left to delete it",
+  "debt_form_person": "Person",
+  "debt_form_wallet": "Wallet",
   "l10nStopLineDontTouch": "☠☠☠☠☠☠☠☠☠☠☠☠☠ Don't touch this line ☠☠☠☠☠☠☠☠☠☠☠☠☠"
 }

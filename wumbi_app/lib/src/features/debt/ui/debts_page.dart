@@ -15,7 +15,7 @@ import 'debts_provider.dart';
 import 'widgets/debt_summary_row.dart';
 
 /// Room under each tab list so the last row clears the floating button.
-const double _kListBottomInset = 96;
+const double _kListBottomInset = 126;
 
 enum _DebtTab { owedToMe, iOwe, settled }
 
@@ -48,7 +48,7 @@ class DebtsPage extends HookConsumerWidget {
 
     return Scaffold(
       appBar: UIAppbar(title: l10n.debts_title, backTap: () => context.router.maybePop()),
-      floatingActionButton: UiFab(onTap: () => context.router.push(const NewDebtRoute()), label: l10n.debt_new),
+      floatingActionButton: UiFab(onTap: () => context.router.push(NewDebtRoute()), label: l10n.debt_new),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [

@@ -433,6 +433,9 @@
 
   "l10nProgress": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ PROGRESS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
   "progress_title": "Voortgang",
+  "progress_by_day": "Dag voor dag",
+  "progress_by_month": "Maand voor maand",
+  "progress_other": "Overig",
   "progress_month": "Maand",
   "progress_year": "Jaar",
   "progress_income": "Inkomsten",
@@ -657,6 +660,7 @@
   "debts_empty_owe_title": "Je bent niemand iets schuldig",
   "debts_empty_subtitle": "Tik op „Nieuwe schuld”, of gebruik Overboeking → Schulden op het transactiescherm",
   "debt_new": "Nieuwe schuld",
+  "debt_edit_title": "Schuld bewerken",
   "debts_all": "Alle schulden",
   "debts_empty_hint": "Houd bij wat je hebt uitgeleend of geleend",
   "dashboard_reorder_hint": "Vasthouden om te ordenen",
@@ -820,5 +824,8 @@
   "debt_wallet_confirm_in": "Toevoegen aan {wallet}",
   "debt_wallet_confirm_out": "Betalen vanuit {wallet}",
   "debt_wallet_confirm_none": "Opslaan zonder portemonnee",
+  "debt_history_swipe_hint": "Veeg een betaling naar links om hem te verwijderen",
+  "debt_form_person": "Persoon",
+  "debt_form_wallet": "Portemonnee",
   "l10nStopLineDontTouch": "☠☠☠☠☠☠☠☠☠☠☠☠☠ Don't touch this line ☠☠☠☠☠☠☠☠☠☠☠☠☠"
 }

@@ -41,7 +41,7 @@ class UiChip extends StatelessWidget {
             if (icon != null) UIIcon(icon!, size: 14, color: color),
             Text(
               label,
-              style: AppTheme.of(context).typo.inter.chip.copyWith(color: color),
+              style: AppTheme.of(context).typo.inter.labelMedium.copyWith(color: color),
             ),
             if (!readOnly && showChevron) UIIcon(UIIconToken.icons.arrows.chevronDown, size: 14, color: color),
           ],

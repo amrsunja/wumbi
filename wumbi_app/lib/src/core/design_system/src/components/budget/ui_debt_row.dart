@@ -2,22 +2,21 @@ import 'package:flutter/material.dart';
 
 import '../../../app_ui.dart';
 
-/// One debt (spec B&D §8.3): person and remaining, a caption ("Dinner · due
-/// Oct 20") whose [alert] part ("overdue") is red, and a thin blue bar of
-/// what was already paid back. Text is passed in already localised.
+/// One debt: [dot] (wallet-style colour circle) · person and caption on the
+/// left, remaining amount vertically centred on the right. Text is passed in
+/// already localised; [alert] ("overdue") is drawn red after [caption].
 class UiDebtRow extends StatelessWidget {
   const UiDebtRow({
     super.key,
     required this.title,
     required this.trailing,
-    required this.paidRatio,
     this.caption = '',
     this.alert,
-    this.color = UIColorToken.blue,
     this.dimmed = false,
+    this.dotColor,
+    this.trailingColor,
     this.onTap,
     this.titleHeroTag,
-    this.barHeroTag,
   });
 
   /// Person name.
@@ -25,72 +24,76 @@ class UiDebtRow extends StatelessWidget {
 
   /// "€100 left" / "Settled".
   final String trailing;
-
-  /// 0 – 1 already paid back.
-  final double paidRatio;
   final String caption;
 
   /// Appended to [caption] in red ("overdue").
   final String? alert;
-  final Color color;
 
   /// Settled debts are shown muted.
   final bool dimmed;
+
+  /// Leading colour circle (income blue: owed to you, expense colour: you owe).
+  final Color? dotColor;
+
+  /// Colour of [trailing]; null → the row title colour.
+  final Color? trailingColor;
   final VoidCallback? onTap;
 
-  /// Hero tags shared with the details page (name → app bar, bar → ring).
+  /// Hero tag shared with the details page (name → app bar).
   final Object? titleHeroTag;
-  final Object? barHeroTag;
 
   @override
   Widget build(BuildContext context) {
     final typo = AppTheme.of(context).typo.inter;
     final hasCaption = caption.isNotEmpty || alert != null;
     final titleHeroTag = this.titleHeroTag;
-    final barHeroTag = this.barHeroTag;
+    final dot = dotColor;
     final titleText = Text(title, maxLines: 1, overflow: TextOverflow.ellipsis, style: typo.rowTitle);
-    final bar = UiBudgetBar(spentRatio: paidRatio, color: color, height: 4);
     return Opacity(
       opacity: dimmed ? 0.55 : 1,
       child: UITap(
         onTap: onTap,
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+          padding: const EdgeInsets.symmetric(vertical: 14),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: titleHeroTag == null
+              if (dot != null) ...[
+                UiCircleColorBadge(color: dot, size: 10),
+                const UISpace.horz(12),
+              ],
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    titleHeroTag == null
                         ? titleText
                         : Align(
                             alignment: Alignment.centerLeft,
                             child: UiHero(tag: titleHeroTag, alignment: Alignment.centerLeft, child: titleText),
                           ),
-                  ),
-                  const UISpace.horz(12),
-                  Text(trailing, maxLines: 1, style: typo.rowTitle),
-                ],
-              ),
-              if (hasCaption) ...[
-                const UISpace.vert(4),
-                Text.rich(
-                  TextSpan(
-                    children: [
-                      if (caption.isNotEmpty) TextSpan(text: caption),
-                      if (caption.isNotEmpty && alert != null) const TextSpan(text: ' · '),
-                      if (alert != null)
-                        TextSpan(text: alert, style: typo.caption.copyWith(color: UIColorToken.neg500)),
+                    if (hasCaption) ...[
+                      const UISpace.vert(4),
+                      Text.rich(
+                        TextSpan(
+                          children: [
+                            if (caption.isNotEmpty) TextSpan(text: caption),
+                            if (caption.isNotEmpty && alert != null) const TextSpan(text: ' · '),
+                            if (alert != null)
+                              TextSpan(text: alert, style: typo.caption.copyWith(color: UIColorToken.neg500)),
+                          ],
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: typo.caption,
+                      ),
                     ],
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: typo.caption,
+                  ],
                 ),
-              ],
-              const UISpace.vert(8),
-              if (barHeroTag == null) bar else UiHero(tag: barHeroTag, pushedShuttle: true, child: bar),
+              ),
+              const UISpace.horz(12),
+              Text(trailing, maxLines: 1, style: typo.rowTitle.copyWith(color: trailingColor)),
             ],
           ),
         ),

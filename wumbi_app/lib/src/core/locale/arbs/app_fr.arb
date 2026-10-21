@@ -433,6 +433,9 @@
 
   "l10nProgress": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ PROGRESS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
   "progress_title": "Progression",
+  "progress_by_day": "Jour par jour",
+  "progress_by_month": "Mois par mois",
+  "progress_other": "Autres",
   "progress_month": "Mois",
   "progress_year": "Année",
   "progress_income": "Revenu",
@@ -577,7 +580,7 @@
   "budgets_all": "Tous les budgets",
   "budgets_title": "Budgets",
   "budget_left": "Reste {amount}",
-  "budget_over": "{amount} de dépassement",
+  "budget_over": "{amount} en trop",
   "budget_starts": "Commence le {date}",
   "budget_ended": "Terminé",
   "budget_per_day": "{amount}/jour",
@@ -657,6 +660,7 @@
   "debts_empty_owe_title": "Vous ne devez rien à personne",
   "debts_empty_subtitle": "Touchez « Nouvelle dette » ou Virement → Dettes sur l’écran de transaction",
   "debt_new": "Nouvelle dette",
+  "debt_edit_title": "Modifier la dette",
   "debts_all": "Toutes les dettes",
   "debts_empty_hint": "Suivez l’argent prêté ou emprunté",
   "dashboard_reorder_hint": "Maintenir pour réorganiser",
@@ -820,5 +824,8 @@
   "debt_wallet_confirm_in": "Ajouter à {wallet}",
   "debt_wallet_confirm_out": "Payer depuis {wallet}",
   "debt_wallet_confirm_none": "Enregistrer sans portefeuille",
+  "debt_history_swipe_hint": "Glissez un paiement vers la gauche pour le supprimer",
+  "debt_form_person": "Personne",
+  "debt_form_wallet": "Portefeuille",
   "l10nStopLineDontTouch": "☠☠☠☠☠☠☠☠☠☠☠☠☠ Don't touch this line ☠☠☠☠☠☠☠☠☠☠☠☠☠"
 }
