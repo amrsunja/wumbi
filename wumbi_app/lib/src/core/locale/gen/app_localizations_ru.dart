@@ -2576,6 +2576,38 @@ class AppLocalizationsRu extends AppLocalizations {
   String get debt_form_wallet => 'Кошелёк';
 
   @override
+  String get menu_open => 'Открыть меню';
+
+  @override
+  String get menu_close => 'Закрыть меню';
+
+  @override
+  String menu_wallets(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'кошелька',
+      many: 'кошельков',
+      few: 'кошелька',
+      one: 'кошелёк',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String menu_budgets(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'бюджета',
+      many: 'бюджетов',
+      few: 'бюджета',
+      one: 'бюджет',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get l10nStopLineDontTouch =>
       '☠☠☠☠☠☠☠☠☠☠☠☠☠ Don\'t touch this line ☠☠☠☠☠☠☠☠☠☠☠☠☠';
 }

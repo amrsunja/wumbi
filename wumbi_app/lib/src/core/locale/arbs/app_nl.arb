@@ -827,5 +827,9 @@
   "debt_history_swipe_hint": "Veeg een betaling naar links om hem te verwijderen",
   "debt_form_person": "Persoon",
   "debt_form_wallet": "Portemonnee",
+  "menu_open": "Menu openen",
+  "menu_close": "Menu sluiten",
+  "menu_wallets": "{count, plural, one{portemonnee} other{portemonnees}}",
+  "menu_budgets": "{count, plural, one{budget} other{budgetten}}",
   "l10nStopLineDontTouch": "☠☠☠☠☠☠☠☠☠☠☠☠☠ Don't touch this line ☠☠☠☠☠☠☠☠☠☠☠☠☠"
 }

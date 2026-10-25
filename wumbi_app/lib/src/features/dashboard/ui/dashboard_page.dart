@@ -22,14 +22,17 @@ import '../../wallet/data/wallet_repository.dart';
 import '../../wallet/ui/wallets_provider.dart';
 import '../data/dashboard_repo.dart';
 import 'dashboard_notifier.dart';
+import 'widgets/dashboard_menu.dart';
 
 /// Room under each tab list so the last row clears the FAB.
 const double _kListBottomInset = 126;
 
-/// Dashboard: pinned total + quick links + "Wallets / Budgets / Debts" tab
-/// bar; only the active tab's list scrolls (its rows dissolve under the tab
-/// bar). Every tab reads providers kept alive app-wide
-/// (`keepAppStateAlive`), so switching never re-queries the DB.
+/// Dashboard: pinned total + "Wallets / Budgets / Debts" tab bar; only the
+/// active tab's list scrolls (its rows dissolve under the tab bar). The
+/// secondary screens live in the X-style side menu ([DashboardMenu]): ☰ or a
+/// left → right swipe — anywhere off the tabs, and on the Wallets tab too
+/// (other tabs swipe back to Wallets first). Every tab reads providers kept
+/// alive app-wide (`keepAppStateAlive`), so switching never re-queries the DB.
 @RoutePage()
 class DashboardPage extends ConsumerWidget {
   const DashboardPage({super.key});
@@ -43,7 +46,7 @@ class DashboardPage extends ConsumerWidget {
     final hasWallets = data != null && !data.isEmpty;
     final showMascot = ref.watch(showMascotProvider);
 
-    // Recompute the derived providers shared by the header pills, the tab
+    // Recompute the derived providers shared by the side menu, the tab
     // summary and the tab pages here, before any of them builds. One flushed
     // lazily inside a child's build (e.g. `_Header` watching the debts
     // count) notifies a sibling mid-build ("setState() called during build",
@@ -57,60 +60,65 @@ class DashboardPage extends ConsumerWidget {
       ..watch(openDebtsBadgeProvider.select(_ignore))
       ..watch(activeSubscriptionCountProvider.select(_ignore));
 
-    return Stack(
-      children: [
-        Positioned.fill(child: ColoredBox(color: colors.bgColor)),
-        const Positioned.fill(child: UiAmbientBackground()),
-        Scaffold(
-          backgroundColor: Colors.transparent,
-          appBar: UIAppbar(
-            title: l10n.dashboard_title,
-            transparent: true,
-            action: UIIcon(
-              UIIconToken.icons.general.settings01,
-              size: 22,
-              onTap: () => context.router.push(const SettingsRoute()),
+    return UiSideMenu(
+      menu: const DashboardMenu(),
+      closeLabel: l10n.menu_close,
+      child: Stack(
+        children: [
+          Positioned.fill(child: ColoredBox(color: colors.bgColor)),
+          const Positioned.fill(child: UiAmbientBackground()),
+          Scaffold(
+            backgroundColor: Colors.transparent,
+            appBar: UIAppbar(
+              title: l10n.dashboard_title,
+              transparent: true,
+              leading: const DashboardMenuButton(),
+              action: UIIcon(
+                UIIconToken.icons.general.searchMd,
+                size: 22,
+                onTap: () => context.router.push(const SearchRoute()),
+              ),
+            ),
+            floatingActionButton: hasWallets
+                ? Padding(
+                    padding: const EdgeInsets.only(right: 8, bottom: 8),
+                    child: UiFab(
+                      heroTag: kHeroFab,
+                      onTap: () {
+                        final primary = ref.read(primaryWalletProvider);
+                        return context.router.push(TransactionRoute(walletId: primary?.id));
+                      },
+                    ),
+                  )
+                : null,
+            body: Stack(
+              children: [
+                // Peeking mascot only once the user has a wallet, and only while
+                // Settings → Show mascot is on; the empty state already shows the
+                // big centred illustration.
+                if (hasWallets && showMascot)
+                  const Positioned(left: 0, top: 12, child: UIWumbiLooksFromLeft()),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(kPageHorzPadding, 20, kPageHorzPadding, 0),
+                      child: _Header(data: data),
+                    ),
+                    Expanded(
+                      child: switch (data) {
+                        null => const _Loading(),
+                        DashboardData(isEmpty: true) => const _NoWallets(),
+                        _ => const _MoneyTabs(),
+                      },
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
-          floatingActionButton: hasWallets
-              ? Padding(
-                  padding: const EdgeInsets.only(right: 8, bottom: 8),
-                  child: UiFab(
-                    heroTag: kHeroFab,
-                    onTap: () {
-                      final primary = ref.read(primaryWalletProvider);
-                      return context.router.push(TransactionRoute(walletId: primary?.id));
-                    },
-                  ),
-                )
-              : null,
-          body: Stack(
-            children: [
-              // Peeking mascot only once the user has a wallet, and only while
-              // Settings → Show mascot is on; the empty state already shows the
-              // big centred illustration.
-              if (hasWallets && showMascot)
-                const Positioned(left: 0, top: 12, child: UIWumbiLooksFromLeft()),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(kPageHorzPadding, 20, kPageHorzPadding, 0),
-                    child: _Header(data: data),
-                  ),
-                  Expanded(
-                    child: switch (data) {
-                      null => const _Loading(),
-                      DashboardData(isEmpty: true) => const _NoWallets(),
-                      _ => const _MoneyTabs(),
-                    },
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -149,97 +157,7 @@ class _Header extends ConsumerWidget {
             style: context.typo.inter.subtitle,
           ),
         ),
-        if (!d.isEmpty) ...[
-          const UISpace.vert(12),
-          _HeaderLinks(
-            subscriptionCount: ref.watch(activeSubscriptionCountProvider),
-            hasDebts: ref.watch(dashboardDebtsProvider.select((debts) => debts?.hasAny ?? false)),
-            openDebtCount: ref.watch(openDebtsBadgeProvider.select((b) => b.count)),
-          ),
-        ],
       ],
-    );
-  }
-}
-
-/// Small outlined pills under the total: Search, Progress, "# Tags",
-/// "N Subscriptions" (only with an active rule) and "N debts" (open ones;
-/// plain "Debts" once all are settled, so the settled history stays one tap
-/// away — the Debts tab shows only open ones; overdue dot on its label).
-class _HeaderLinks extends StatelessWidget {
-  const _HeaderLinks({required this.subscriptionCount, required this.hasDebts, required this.openDebtCount});
-
-  final int subscriptionCount;
-  final bool hasDebts;
-  final int openDebtCount;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    return Wrap(
-      alignment: WrapAlignment.center,
-      spacing: 8,
-      runSpacing: 8,
-      children: [
-        _HeaderPill(
-          icon: UIIconToken.icons.general.searchMd,
-          label: l10n.search_title,
-          onTap: () => context.router.push(const SearchRoute()),
-        ),
-        _HeaderPill(
-          icon: UIIconToken.icons.charts.barChart10,
-          label: l10n.progress_title,
-          onTap: () => context.router.push(const ProgressRoute()),
-        ),
-        _HeaderPill(
-          icon: UIIconToken.icons.general.hash01,
-          label: l10n.dashboard_tags,
-          onTap: () => context.router.push(const TagsRoute()),
-        ),
-        if (subscriptionCount > 0)
-          _HeaderPill(
-            icon: UIIconToken.icons.mediaDevices.repeat01,
-            label: l10n.subscriptions_count(subscriptionCount),
-            onTap: () => context.router.push(SubscriptionsRoute()),
-          ),
-        if (hasDebts)
-          _HeaderPill(
-            icon: UIIconToken.icons.financeEcommerce.coinsHand,
-            label: openDebtCount > 0 ? l10n.debts_count(openDebtCount) : l10n.debts_title,
-            onTap: () => context.router.push(const DebtsRoute()),
-          ),
-      ],
-    );
-  }
-}
-
-class _HeaderPill extends StatelessWidget {
-  const _HeaderPill({required this.icon, required this.label, required this.onTap});
-
-  final String icon;
-  final String label;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = context.colors;
-    return UITap(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-        decoration: BoxDecoration(
-          border: Border.all(color: colors.dividerColor),
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          spacing: 4,
-          children: [
-            UIIcon(icon, size: 14),
-            Text(label, style: context.typo.inter.captionBold),
-          ],
-        ),
-      ),
     );
   }
 }
@@ -343,7 +261,9 @@ class _MoneyTabs extends HookConsumerWidget {
           child: PageView(
             controller: pages,
             onPageChanged: select,
-            children: const [_WalletsTab(), _BudgetsTab(), _DebtsTab()],
+            // The first page lets toward-trailing swipes open the menu; the
+            // others keep them for paging back.
+            children: const [UiSideMenuDragArea(child: _WalletsTab()), _BudgetsTab(), _DebtsTab()],
           ),
         ),
       ],
@@ -686,7 +606,7 @@ class _BudgetsTab extends ConsumerWidget {
 }
 
 /// Open debts of both sides, overdue first. The Debts page (per-side
-/// totals, settled ones) is the "Debts" header pill.
+/// totals, settled ones) is the menu's "Debts" entry.
 class _DebtsTab extends ConsumerWidget {
   const _DebtsTab();
 

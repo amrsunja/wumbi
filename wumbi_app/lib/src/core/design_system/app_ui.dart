@@ -39,6 +39,7 @@ export 'src/components/feedback/ui_form_hint.dart';
 export 'src/components/cards/ui_wallet_card.dart';
 export 'src/components/cards/ui_transaction_card.dart';
 export 'src/components/menus/ui_wallet_info_menu.dart';
+export 'src/components/menus/ui_side_menu.dart';
 export 'src/components/inputs/ui_numpad.dart';
 export 'src/components/inputs/ui_tag_input.dart';
 export 'src/components/inputs/ui_color_picker.dart';

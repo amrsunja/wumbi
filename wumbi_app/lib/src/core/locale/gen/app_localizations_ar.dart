@@ -2572,6 +2572,42 @@ class AppLocalizationsAr extends AppLocalizations {
   String get debt_form_wallet => 'المحفظة';
 
   @override
+  String get menu_open => 'فتح القائمة';
+
+  @override
+  String get menu_close => 'إغلاق القائمة';
+
+  @override
+  String menu_wallets(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'محفظة',
+      many: 'محفظة',
+      few: 'محافظ',
+      two: 'محفظتان',
+      one: 'محفظة',
+      zero: 'محافظ',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String menu_budgets(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'ميزانية',
+      many: 'ميزانية',
+      few: 'ميزانيات',
+      two: 'ميزانيتان',
+      one: 'ميزانية',
+      zero: 'ميزانيات',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get l10nStopLineDontTouch =>
       '☠☠☠☠☠☠☠☠☠☠☠☠☠ Don\'t touch this line ☠☠☠☠☠☠☠☠☠☠☠☠☠';
 }

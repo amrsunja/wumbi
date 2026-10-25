@@ -5,10 +5,11 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../core/design_system/app_ui.dart';
 import '../core/utils/extensions/build_context_extensions.dart';
-import '../core/widgets/wumbi_logo_draw.dart';
+import '../core/widgets/splash_widget.dart';
 import 'settings/ui/state_management/settings_provider.dart';
 
-/// Runs the startup sequence (spec 6.5) behind the logo draw-in.
+/// Runs the startup sequence (spec 6.5) behind the logo draw-in
+/// ([SplashWidget], theme-aware).
 /// DB open failures: 3 automatic retries, then an alert.
 @RoutePage()
 class SplashPage extends HookConsumerWidget {
@@ -16,7 +17,6 @@ class SplashPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final screen = MediaQuery.sizeOf(context);
     final l10n = context.l10n;
     final initFailed = ref.watch(settingsProvider.select((s) => s.initFailed));
 
@@ -57,14 +57,6 @@ class SplashPage extends HookConsumerWidget {
       return null;
     }, [initFailed]);
 
-    return Scaffold(
-      backgroundColor: UIColorToken.white,
-      body: Center(
-        child: SizedBox(
-          width: screen.width * 0.64,
-          child: const WumbiLogoDraw(),
-        ),
-      ),
-    );
+    return const SplashWidget();
   }
 }

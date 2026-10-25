@@ -2509,6 +2509,32 @@ class AppLocalizationsTr extends AppLocalizations {
   String get debt_form_wallet => 'Cüzdan';
 
   @override
+  String get menu_open => 'Menüyü aç';
+
+  @override
+  String get menu_close => 'Menüyü kapat';
+
+  @override
+  String menu_wallets(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'cüzdan',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String menu_budgets(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'bütçe',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get l10nStopLineDontTouch =>
       '☠☠☠☠☠☠☠☠☠☠☠☠☠ Don\'t touch this line ☠☠☠☠☠☠☠☠☠☠☠☠☠';
 }

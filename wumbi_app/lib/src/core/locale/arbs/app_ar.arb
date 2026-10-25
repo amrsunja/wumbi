@@ -827,5 +827,9 @@
   "debt_history_swipe_hint": "اسحب الدفعة لليسار لحذفها",
   "debt_form_person": "شخص",
   "debt_form_wallet": "المحفظة",
+  "menu_open": "فتح القائمة",
+  "menu_close": "إغلاق القائمة",
+  "menu_wallets": "{count, plural, zero{محافظ} one{محفظة} two{محفظتان} few{محافظ} many{محفظة} other{محفظة}}",
+  "menu_budgets": "{count, plural, zero{ميزانيات} one{ميزانية} two{ميزانيتان} few{ميزانيات} many{ميزانية} other{ميزانية}}",
   "l10nStopLineDontTouch": "☠☠☠☠☠☠☠☠☠☠☠☠☠ Don't touch this line ☠☠☠☠☠☠☠☠☠☠☠☠☠"
 }

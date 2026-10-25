@@ -5,6 +5,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
+import '../design_system/app_ui.dart';
 import 'wumbi_logo_data.dart';
 
 /// The Wumbi logo drawn on screen: each glyph of the wordmark is traced with a
@@ -13,18 +14,24 @@ import 'wumbi_logo_data.dart';
 ///
 /// Geometry comes from `assets/images/app_logo.svg` via [WumbiLogoData], so the
 /// mark is vector-crisp at any size and needs no raster asset.
+///
+/// The wordmark ink follows the theme unless [inkColor] is given: dark ink on
+/// the light theme (`app_logo.svg`), Carrara on the dark one
+/// (`app_logo_dark.svg`). A theme switch mid-draw (the saved theme resolves
+/// on the splash) cross-fades the ink instead of snapping it.
 class WumbiLogoDraw extends HookWidget {
   const WumbiLogoDraw({
     super.key,
     this.duration = const Duration(milliseconds: 1000),
     this.delay = const Duration(milliseconds: 80),
-    this.inkColor = _ink,
+    this.inkColor,
     this.coinColor = _coin,
     this.coinGlyphColor = Colors.white,
     this.strokeWidth = 1.5,
   });
 
   static const Color _ink = Color(0xff120F1B);
+  static const Color _inkOnDark = UIColorToken.cararra;
   static const Color _coin = Color(0xff3884FF);
 
   /// Full draw-in, from the first pen stroke to the settled mark.
@@ -33,8 +40,8 @@ class WumbiLogoDraw extends HookWidget {
   /// Beat before the pen starts, so the page transition can settle first.
   final Duration delay;
 
-  /// Wordmark colour. Pass a light ink on dark surfaces.
-  final Color inkColor;
+  /// Wordmark colour; null = by theme (see the class doc).
+  final Color? inkColor;
 
   /// The coin disc.
   final Color coinColor;
@@ -61,19 +68,26 @@ class WumbiLogoDraw extends HookWidget {
       return timer.cancel;
     }, const []);
 
+    final ink = inkColor ?? (AppTheme.of(context).isDark ? _inkOnDark : _ink);
+
     return AspectRatio(
       aspectRatio: WumbiLogoData.viewWidth / WumbiLogoData.viewHeight,
       child: RepaintBoundary(
-        child: AnimatedBuilder(
-          animation: controller,
-          builder: (_, _) => CustomPaint(
-            size: Size.infinite,
-            painter: _WumbiLogoPainter(
-              t: controller.value,
-              ink: inkColor,
-              coin: coinColor,
-              coinGlyph: coinGlyphColor,
-              strokeWidth: strokeWidth,
+        child: TweenAnimationBuilder<Color?>(
+          tween: ColorTween(end: ink),
+          duration: UIAnim.normal,
+          curve: UIAnim.easeOut,
+          builder: (_, animatedInk, _) => AnimatedBuilder(
+            animation: controller,
+            builder: (_, _) => CustomPaint(
+              size: Size.infinite,
+              painter: _WumbiLogoPainter(
+                t: controller.value,
+                ink: animatedInk ?? ink,
+                coin: coinColor,
+                coinGlyph: coinGlyphColor,
+                strokeWidth: strokeWidth,
+              ),
             ),
           ),
         ),

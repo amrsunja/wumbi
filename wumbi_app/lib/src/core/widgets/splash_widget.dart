@@ -3,7 +3,12 @@ import 'package:wumbi/src/core/design_system/app_ui.dart';
 
 import 'wumbi_logo_draw.dart';
 
-/// Static stand-in for [SplashPage] — same mark, same draw-in.
+/// Splash surface: the logo drawing itself in on the app background.
+///
+/// Theme-aware: Carrara + dark ink (light), #120F1B + Carrara ink (dark).
+/// The theme first follows the OS and switches to the saved one once
+/// settings load (mid-draw, on [SplashPage]); background and ink cross-fade
+/// then, while the draw-in keeps running.
 class SplashWidget extends StatelessWidget {
   const SplashWidget({super.key});
 
@@ -12,8 +17,12 @@ class SplashWidget extends StatelessWidget {
     final screen = MediaQuery.sizeOf(context);
 
     return Scaffold(
-      backgroundColor: UIColorToken.white,
-      body: Center(
+      backgroundColor: Colors.transparent,
+      body: AnimatedContainer(
+        duration: UIAnim.normal,
+        curve: UIAnim.easeOut,
+        color: AppTheme.of(context).colors.bgColor,
+        alignment: Alignment.center,
         child: SizedBox(
           width: screen.width * 0.64,
           child: const WumbiLogoDraw(),

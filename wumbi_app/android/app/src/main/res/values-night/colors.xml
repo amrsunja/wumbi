@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Native launch / window ground = Flutter `bgColor` (dark). -->
+    <color name="launch_background">#120F1B</color>
+</resources>

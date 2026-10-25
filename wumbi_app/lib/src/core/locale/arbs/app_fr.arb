@@ -827,5 +827,9 @@
   "debt_history_swipe_hint": "Glissez un paiement vers la gauche pour le supprimer",
   "debt_form_person": "Personne",
   "debt_form_wallet": "Portefeuille",
+  "menu_open": "Ouvrir le menu",
+  "menu_close": "Fermer le menu",
+  "menu_wallets": "{count, plural, one{portefeuille} other{portefeuilles}}",
+  "menu_budgets": "{count, plural, one{budget} other{budgets}}",
   "l10nStopLineDontTouch": "☠☠☠☠☠☠☠☠☠☠☠☠☠ Don't touch this line ☠☠☠☠☠☠☠☠☠☠☠☠☠"
 }

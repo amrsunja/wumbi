@@ -1470,5 +1470,19 @@
   "debt_history_swipe_hint": "Swipe a payment left to delete it",
   "debt_form_person": "Person",
   "debt_form_wallet": "Wallet",
+  "menu_open": "Open menu",
+  "menu_close": "Close menu",
+  "menu_wallets": "{count, plural, one{wallet} other{wallets}}",
+  "@menu_wallets": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "menu_budgets": "{count, plural, one{budget} other{budgets}}",
+  "@menu_budgets": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
   "l10nStopLineDontTouch": "☠☠☠☠☠☠☠☠☠☠☠☠☠ Don't touch this line ☠☠☠☠☠☠☠☠☠☠☠☠☠"
 }

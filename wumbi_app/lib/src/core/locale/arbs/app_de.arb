@@ -827,5 +827,9 @@
   "debt_history_swipe_hint": "Zahlung nach links wischen, um sie zu löschen",
   "debt_form_person": "Person",
   "debt_form_wallet": "Wallet",
+  "menu_open": "Menü öffnen",
+  "menu_close": "Menü schließen",
+  "menu_wallets": "{count, plural, one{Konto} other{Konten}}",
+  "menu_budgets": "{count, plural, one{Budget} other{Budgets}}",
   "l10nStopLineDontTouch": "☠☠☠☠☠☠☠☠☠☠☠☠☠ Don't touch this line ☠☠☠☠☠☠☠☠☠☠☠☠☠"
 }

@@ -3987,6 +3987,30 @@ abstract class AppLocalizations {
   /// **'Wallet'**
   String get debt_form_wallet;
 
+  /// No description provided for @menu_open.
+  ///
+  /// In en, this message translates to:
+  /// **'Open menu'**
+  String get menu_open;
+
+  /// No description provided for @menu_close.
+  ///
+  /// In en, this message translates to:
+  /// **'Close menu'**
+  String get menu_close;
+
+  /// No description provided for @menu_wallets.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{wallet} other{wallets}}'**
+  String menu_wallets(int count);
+
+  /// No description provided for @menu_budgets.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{budget} other{budgets}}'**
+  String menu_budgets(int count);
+
   /// No description provided for @l10nStopLineDontTouch.
   ///
   /// In en, this message translates to:

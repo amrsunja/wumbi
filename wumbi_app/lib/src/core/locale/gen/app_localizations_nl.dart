@@ -2535,6 +2535,34 @@ class AppLocalizationsNl extends AppLocalizations {
   String get debt_form_wallet => 'Portemonnee';
 
   @override
+  String get menu_open => 'Menu openen';
+
+  @override
+  String get menu_close => 'Menu sluiten';
+
+  @override
+  String menu_wallets(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'portemonnees',
+      one: 'portemonnee',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String menu_budgets(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'budgetten',
+      one: 'budget',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get l10nStopLineDontTouch =>
       '☠☠☠☠☠☠☠☠☠☠☠☠☠ Don\'t touch this line ☠☠☠☠☠☠☠☠☠☠☠☠☠';
 }

@@ -827,5 +827,9 @@
   "debt_history_swipe_hint": "Смахните платёж влево, чтобы удалить его",
   "debt_form_person": "Человек",
   "debt_form_wallet": "Кошелёк",
+  "menu_open": "Открыть меню",
+  "menu_close": "Закрыть меню",
+  "menu_wallets": "{count, plural, one{кошелёк} few{кошелька} many{кошельков} other{кошелька}}",
+  "menu_budgets": "{count, plural, one{бюджет} few{бюджета} many{бюджетов} other{бюджета}}",
   "l10nStopLineDontTouch": "☠☠☠☠☠☠☠☠☠☠☠☠☠ Don't touch this line ☠☠☠☠☠☠☠☠☠☠☠☠☠"
 }

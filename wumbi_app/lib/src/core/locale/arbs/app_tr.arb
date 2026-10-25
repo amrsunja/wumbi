@@ -827,5 +827,9 @@
   "debt_history_swipe_hint": "Bir ödemeyi silmek için sola kaydırın",
   "debt_form_person": "Kişi",
   "debt_form_wallet": "Cüzdan",
+  "menu_open": "Menüyü aç",
+  "menu_close": "Menüyü kapat",
+  "menu_wallets": "{count, plural, other{cüzdan}}",
+  "menu_budgets": "{count, plural, other{bütçe}}",
   "l10nStopLineDontTouch": "☠☠☠☠☠☠☠☠☠☠☠☠☠ Don't touch this line ☠☠☠☠☠☠☠☠☠☠☠☠☠"
 }

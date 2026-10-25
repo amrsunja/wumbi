@@ -180,6 +180,9 @@ class _AppState extends ConsumerState<App> with WidgetsBindingObserver {
           localizationsDelegates: AppLocale.localizationsDelegates,
           scaffoldMessengerKey: ref.read(scaffoldMessengerProvider),
           routerConfig: appRouter.router.config(),
+          // App ground under every route: the splash → dashboard fade (and
+          // any transparent page) shows the theme background, not black.
+          builder: (context, child) => ColoredBox(color: colors.bgColor, child: child),
         ),
       ),
     );
