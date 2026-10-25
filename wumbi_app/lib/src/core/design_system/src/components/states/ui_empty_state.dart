@@ -6,14 +6,13 @@ import '../../../app_ui.dart';
 class UiEmptyState extends StatelessWidget {
   const UiEmptyState({
     super.key,
-    required this.image,
+    required this.mood,
     required this.title,
     this.subtitle,
     this.action,
   });
 
-  /// Asset path (e.g. `Assets.images.wumbiOo.path`).
-  final String image;
+  final WumbiMood mood;
   final String title;
   final String? subtitle;
   final Widget? action;
@@ -27,7 +26,7 @@ class UiEmptyState extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Image.asset(image, height: 110),
+            UIWumbi(mood),
             const UISpace.vert(20),
             Text(
               title,

@@ -10,7 +10,6 @@ import '../../../core/utils/constants/constants.dart';
 import '../../../core/utils/extensions/build_context_extensions.dart';
 import '../../../core/utils/state_management/app_events.dart';
 import '../../../core/utils/state_management/single_events.dart';
-import '../../../core/utils/typedefs.dart';
 import '../../budget/ui/budget_labels.dart';
 import '../../budget/ui/budgets_provider.dart';
 import '../../budget/ui/widgets/budget_progress_row.dart';
@@ -273,7 +272,7 @@ class _NoWallets extends StatelessWidget {
       physics: const BouncingScrollPhysics(),
       padding: const EdgeInsets.only(top: 32, bottom: _kListBottomInset),
       child: UiEmptyState(
-        image: AppAssets.images.wumbiOo.path,
+        mood: WumbiMood.pouchOpen,
         title: l10n.dashboard_empty_title,
         subtitle: l10n.dashboard_empty_subtitle,
         action: UiIconTextButton(

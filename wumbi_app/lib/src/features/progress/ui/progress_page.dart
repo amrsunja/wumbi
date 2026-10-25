@@ -10,7 +10,6 @@ import '../../../core/utils/app_vibrations.dart';
 import '../../../core/utils/constants/constants.dart';
 import '../../../core/utils/extensions/build_context_extensions.dart';
 import '../../../core/utils/extensions/date_time_extensions.dart';
-import '../../../core/utils/typedefs.dart';
 import '../../settings/ui/state_management/settings_provider.dart';
 import '../../tag/ui/widgets/tag_visuals.dart';
 import '../../wallet/data/models/wallet_model.dart';
@@ -163,7 +162,7 @@ class _Body extends StatelessWidget {
 
     if (r.isLedgerEmpty) {
       return UiEmptyState(
-        image: AppAssets.images.wumbiOo.path,
+        mood: WumbiMood.sleep,
         title: l10n.progress_empty_title,
         subtitle: l10n.progress_empty_subtitle,
       );

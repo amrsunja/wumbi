@@ -11,7 +11,6 @@ import '../../../core/utils/enums/budget_period_type.dart';
 import '../../../core/utils/extensions/build_context_extensions.dart';
 import '../../../core/utils/extensions/date_time_extensions.dart';
 import '../../../core/utils/hooks/use_swipe_tabs.dart';
-import '../../../core/utils/typedefs.dart';
 import '../../tag/data/models/tag_model.dart';
 import '../../transaction/data/models/transaction_model.dart';
 import '../../wallet/data/models/wallet_model.dart';
@@ -365,7 +364,7 @@ class _TransactionsTab extends StatelessWidget {
           hasScrollBody: false,
           child: UIStaggerItem(
             index: 0,
-            child: UiEmptyState(image: AppAssets.images.wumbiOo.path, title: context.l10n.budget_no_spending),
+            child: UiEmptyState(mood: WumbiMood.sleep, title: context.l10n.budget_no_spending),
           ),
         ),
       ];

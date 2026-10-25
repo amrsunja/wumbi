@@ -4,7 +4,6 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../../../core/design_system/app_ui.dart';
 import '../../../../core/utils/constants/constants.dart';
 import '../../../../core/utils/extensions/build_context_extensions.dart';
-import '../../../../core/utils/typedefs.dart';
 import '../widgets/onboarding_typography.dart';
 
 /// Onboarding index 6 — "Create your first Wallet".
@@ -35,7 +34,7 @@ class OnboardingWalletPage extends StatelessWidget {
         Positioned(
           right: 0,
           top: screen.height * 0.40,
-          child: Image.asset(AppAssets.images.wumbiLookRight.path, height: mascotHeight)
+          child: UIWumbi(WumbiMood.peekRight, height: mascotHeight)
               // Idle: a slow, subtle bob so the character feels alive.
               .animate(onPlay: (c) => c.repeat(reverse: true))
               .moveY(begin: 0, end: -6, duration: 1800.ms, curve: Curves.easeInOut)

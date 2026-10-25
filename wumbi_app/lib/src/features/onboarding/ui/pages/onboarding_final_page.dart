@@ -5,7 +5,6 @@ import '../../../../core/design_system/app_ui.dart';
 import '../../../../core/utils/app_vibrations.dart';
 import '../../../../core/utils/constants/constants.dart';
 import '../../../../core/utils/extensions/build_context_extensions.dart';
-import '../../../../core/utils/typedefs.dart';
 import '../widgets/onboarding_confetti.dart';
 import '../widgets/onboarding_typography.dart';
 
@@ -46,7 +45,7 @@ class OnboardingFinalPage extends HookWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset(AppAssets.images.wumbiTakeMoney.path, height: 210)
+                    const UIWumbi(WumbiMood.celebrate, height: 230)
                         .uiElasticScaleIn(begin: 0.4, duration: const Duration(milliseconds: 1100)),
                     const UISpace.vert(40),
                     Text(

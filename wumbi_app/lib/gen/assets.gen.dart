@@ -105,41 +105,55 @@ class $AssetsImagesGen {
   /// File path: assets/images/splash.gif
   AssetGenImage get splash => const AssetGenImage('assets/images/splash.gif');
 
-  /// File path: assets/images/wumbi_hello.png
-  AssetGenImage get wumbiHello =>
-      const AssetGenImage('assets/images/wumbi_hello.png');
+  /// File path: assets/images/wumbi_celebrate.svg
+  String get wumbiCelebrate => 'assets/images/wumbi_celebrate.svg';
 
-  /// File path: assets/images/wumbi_look.png
-  AssetGenImage get wumbiLook =>
-      const AssetGenImage('assets/images/wumbi_look.png');
+  /// File path: assets/images/wumbi_confused.svg
+  String get wumbiConfused => 'assets/images/wumbi_confused.svg';
 
-  /// File path: assets/images/wumbi_look_left.png
-  AssetGenImage get wumbiLookLeft =>
-      const AssetGenImage('assets/images/wumbi_look_left.png');
+  /// File path: assets/images/wumbi_idle.svg
+  String get wumbiIdle => 'assets/images/wumbi_idle.svg';
 
-  /// File path: assets/images/wumbi_look_right.png
-  AssetGenImage get wumbiLookRight =>
-      const AssetGenImage('assets/images/wumbi_look_right.png');
+  /// File path: assets/images/wumbi_nervous.svg
+  String get wumbiNervous => 'assets/images/wumbi_nervous.svg';
 
-  /// File path: assets/images/wumbi_oo.png
-  AssetGenImage get wumbiOo =>
-      const AssetGenImage('assets/images/wumbi_oo.png');
+  /// File path: assets/images/wumbi_panic.svg
+  String get wumbiPanic => 'assets/images/wumbi_panic.svg';
 
-  /// File path: assets/images/wumbi_take_money.png
-  AssetGenImage get wumbiTakeMoney =>
-      const AssetGenImage('assets/images/wumbi_take_money.png');
+  /// File path: assets/images/wumbi_peek_left.svg
+  String get wumbiPeekLeft => 'assets/images/wumbi_peek_left.svg';
+
+  /// File path: assets/images/wumbi_peek_right.svg
+  String get wumbiPeekRight => 'assets/images/wumbi_peek_right.svg';
+
+  /// File path: assets/images/wumbi_pouch_open.svg
+  String get wumbiPouchOpen => 'assets/images/wumbi_pouch_open.svg';
+
+  /// File path: assets/images/wumbi_searching.svg
+  String get wumbiSearching => 'assets/images/wumbi_searching.svg';
+
+  /// File path: assets/images/wumbi_sleep.svg
+  String get wumbiSleep => 'assets/images/wumbi_sleep.svg';
+
+  /// File path: assets/images/wumbi_wave.svg
+  String get wumbiWave => 'assets/images/wumbi_wave.svg';
 
   /// List of all assets
   List<dynamic> get values => [
     appLogoPng,
     appLogoSvg,
     splash,
-    wumbiHello,
-    wumbiLook,
-    wumbiLookLeft,
-    wumbiLookRight,
-    wumbiOo,
-    wumbiTakeMoney,
+    wumbiCelebrate,
+    wumbiConfused,
+    wumbiIdle,
+    wumbiNervous,
+    wumbiPanic,
+    wumbiPeekLeft,
+    wumbiPeekRight,
+    wumbiPouchOpen,
+    wumbiSearching,
+    wumbiSleep,
+    wumbiWave,
   ];
 }
 

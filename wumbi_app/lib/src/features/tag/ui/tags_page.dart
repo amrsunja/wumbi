@@ -8,7 +8,6 @@ import '../../../core/routing/app_router.dart';
 import '../../../core/utils/constants/constants.dart';
 import '../../../core/utils/extensions/build_context_extensions.dart';
 import '../../../core/utils/hooks/use_swipe_tabs.dart';
-import '../../../core/utils/typedefs.dart';
 import '../data/models/tag_stats.dart';
 import '../data/models/tag_tree.dart';
 import 'tags_notifier.dart';
@@ -142,7 +141,7 @@ class _TagList extends HookWidget {
     }
     if (all.isEmpty) {
       return UiEmptyState(
-        image: AppAssets.images.wumbiOo.path,
+        mood: WumbiMood.sleep,
         title: l10n.tags_empty_title,
         subtitle: l10n.tags_empty_subtitle,
         action: SizedBox(
@@ -365,7 +364,7 @@ class _TagMap extends StatelessWidget {
     }
     if (data.isEmpty) {
       return UiEmptyState(
-        image: AppAssets.images.wumbiOo.path,
+        mood: WumbiMood.sleep,
         title: l10n.tags_empty_title,
         subtitle: l10n.tags_graph_empty,
       );

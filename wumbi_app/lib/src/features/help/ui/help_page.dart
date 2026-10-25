@@ -5,7 +5,6 @@ import '../../../core/design_system/app_ui.dart';
 import '../../../core/routing/app_router.dart';
 import '../../../core/utils/constants/constants.dart';
 import '../../../core/utils/extensions/build_context_extensions.dart';
-import '../../../core/utils/typedefs.dart';
 
 /// `/settings/help` — "Need help?": a list of short guides. Each topic is a
 /// nested page; add new ones to the `topics` list below.
@@ -32,7 +31,7 @@ class HelpPage extends StatelessWidget {
         child: ListView(
           padding: const EdgeInsets.fromLTRB(kPageHorzPadding, 8, kPageHorzPadding, 48),
           children: [
-            Center(child: Image.asset(AppAssets.images.wumbiHello.path, height: 110)),
+            const Center(child: UIWumbi(WumbiMood.wave)),
             const UISpace.vert(14),
             Text(l10n.help_subtitle, textAlign: TextAlign.center, style: typo.paragraph),
             const UISpace.vert(24),

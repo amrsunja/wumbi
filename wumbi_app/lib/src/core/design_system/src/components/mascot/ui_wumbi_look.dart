@@ -1,18 +1,20 @@
-import 'package:wumbi/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
-/// Front-facing mascot illustration. Used as a page decoration (wallet
-/// details, top-right); drops in 400 ms (easeOutBack) once.
+import 'ui_wumbi.dart';
+
+/// Front-facing mascot. Used as a page decoration (wallet details, debts,
+/// subscriptions, tag details — top-right); drops in 400 ms (easeOutBack) once.
 class UIWumbiLook extends StatelessWidget {
-  const UIWumbiLook({super.key, this.height = 45, this.animate = true});
+  const UIWumbiLook({super.key, this.height = 45, this.animate = true, this.mood = WumbiMood.idle});
 
   final double height;
   final bool animate;
+  final WumbiMood mood;
 
   @override
   Widget build(BuildContext context) {
-    final image = Image.asset(Assets.images.wumbiLook.path, height: height);
+    final image = UIWumbi(mood, height: height);
     if (!animate) return image;
     return image
         .animate()

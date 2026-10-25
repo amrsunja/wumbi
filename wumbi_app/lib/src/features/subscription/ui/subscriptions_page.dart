@@ -9,7 +9,6 @@ import '../../../core/utils/constants/constants.dart';
 import '../../../core/utils/enums/repeat_frequency.dart';
 import '../../../core/utils/extensions/build_context_extensions.dart';
 import '../../../core/utils/hooks/use_swipe_tabs.dart';
-import '../../../core/utils/typedefs.dart';
 import '../../settings/ui/state_management/settings_provider.dart';
 import '../../transaction/data/models/recurring_rule_model.dart';
 import '../../wallet/data/models/wallet_model.dart';
@@ -217,7 +216,7 @@ class _RulesTab extends StatelessWidget {
                 child: UIStaggerItem(
                   index: 0,
                   child: UiEmptyState(
-                    image: AppAssets.images.wumbiOo.path,
+                    mood: WumbiMood.sleep,
                     title: emptyTitle,
                     subtitle: emptySubtitle,
                   ),

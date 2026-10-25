@@ -19,6 +19,7 @@ export 'src/components/app_bars/ui_appbar.dart';
 export 'src/components/mascot/ui_wumbi_looks_from_left.dart';
 export 'src/components/mascot/ui_wumbi_looks_from_right.dart';
 export 'src/components/mascot/ui_wumbi_look.dart';
+export 'src/components/mascot/ui_wumbi.dart';
 export 'src/components/amounts/ui_total_amount.dart';
 export 'src/components/amounts/ui_conversion_hint.dart';
 export 'src/components/buttons/ui_icon_text_button.dart';

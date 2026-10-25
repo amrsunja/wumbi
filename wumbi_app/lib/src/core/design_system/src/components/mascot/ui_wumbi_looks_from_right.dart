@@ -1,17 +1,18 @@
-import 'package:wumbi/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
+import 'ui_wumbi.dart';
+
 /// Mascot peeking in from the right edge; slides in 400 ms (easeOutBack) once.
 class UIWumbiLooksFromRight extends StatelessWidget {
-  const UIWumbiLooksFromRight({super.key, this.height = 45, this.animate = true});
+  const UIWumbiLooksFromRight({super.key, this.height = 56, this.animate = true});
 
   final double height;
   final bool animate;
 
   @override
   Widget build(BuildContext context) {
-    final image = Image.asset(Assets.images.wumbiLookRight.path, height: height);
+    final image = UIWumbi(WumbiMood.peekRight, height: height);
     if (!animate) return image;
     return image
         .animate()

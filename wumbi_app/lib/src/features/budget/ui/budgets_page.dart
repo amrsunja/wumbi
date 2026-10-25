@@ -7,7 +7,6 @@ import '../../../core/design_system/app_ui.dart';
 import '../../../core/routing/app_router.dart';
 import '../../../core/utils/constants/constants.dart';
 import '../../../core/utils/extensions/build_context_extensions.dart';
-import '../../../core/utils/typedefs.dart';
 import '../data/budget_metrics.dart';
 import '../data/models/budget_model.dart';
 import 'budget_labels.dart';
@@ -103,7 +102,7 @@ class BudgetsPage extends HookConsumerWidget {
             SliverFillRemaining(
               hasScrollBody: false,
               child: UiEmptyState(
-                image: AppAssets.images.wumbiOo.path,
+                mood: WumbiMood.pouchOpen,
                 title: l10n.budgets_empty_title,
                 subtitle: l10n.budgets_empty_subtitle,
                 action: UiIconTextButton(

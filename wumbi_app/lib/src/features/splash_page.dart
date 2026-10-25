@@ -23,6 +23,7 @@ class SplashPage extends HookConsumerWidget {
     Future<void> start() async {
       await Future.wait([
         ref.read(settingsProvider.notifier).startUp(),
+        WumbiMood.precacheAll().catchError((Object _) {}),
       ]);
     }
 

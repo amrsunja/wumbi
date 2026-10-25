@@ -12,7 +12,6 @@ import '../../../core/utils/enums/transaction_type.dart';
 import '../../../core/utils/extensions/build_context_extensions.dart';
 import '../../../core/utils/extensions/date_time_extensions.dart';
 import '../../../core/utils/hooks/use_swipe_tabs.dart';
-import '../../../core/utils/typedefs.dart';
 import '../../budget/data/models/budget_model.dart';
 import '../../budget/ui/budget_labels.dart';
 import '../../budget/ui/budgets_provider.dart';
@@ -117,7 +116,7 @@ class WalletDetailsPage extends HookConsumerWidget {
       body: Builder(
         builder: (context) {
           if (state.wallet.hasError) {
-            return UiEmptyState(image: AppAssets.images.wumbiOo.path, title: l10n.wallet_not_found);
+            return UiEmptyState(mood: WumbiMood.confused, title: l10n.wallet_not_found);
           }
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -417,7 +416,7 @@ class _BudgetsTab extends ConsumerWidget {
             child: UIStaggerItem(
               index: 0,
               child: UiEmptyState(
-                image: AppAssets.images.wumbiOo.path,
+                mood: WumbiMood.sleep,
                 title: l10n.wallet_budgets_empty,
                 subtitle: l10n.wallet_budgets_empty_subtitle,
               ),
@@ -489,7 +488,7 @@ class _SubscriptionsTab extends ConsumerWidget {
             child: UIStaggerItem(
               index: 0,
               child: UiEmptyState(
-                image: AppAssets.images.wumbiOo.path,
+                mood: WumbiMood.sleep,
                 title: l10n.subscriptions_empty_title,
                 subtitle: l10n.subscriptions_empty_subtitle,
               ),
@@ -710,7 +709,7 @@ class _TransactionList {
         return [
           SliverToBoxAdapter(
             child: UiEmptyState(
-              image: AppAssets.images.wumbiTakeMoney.path,
+              mood: WumbiMood.pouchOpen,
               title: l10n.wallet_empty_title,
               subtitle: l10n.wallet_empty_subtitle,
             ),
@@ -720,7 +719,7 @@ class _TransactionList {
       return [
         SliverToBoxAdapter(
           child: UiEmptyState(
-            image: AppAssets.images.wumbiOo.path,
+            mood: WumbiMood.searching,
             title: l10n.wallet_filter_no_results_title,
             subtitle: l10n.wallet_filter_no_results_subtitle,
             action: UiTextButton(

@@ -1,7 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:wumbi/gen/assets.gen.dart';
 
 import '../../../../core/design_system/app_ui.dart';
 import '../../../../core/fx/fx_service.dart';
@@ -153,7 +152,7 @@ class _WalletsPaneState extends ConsumerState<_WalletsPane> {
       return SingleChildScrollView(
         padding: const EdgeInsets.only(top: 16, bottom: 16),
         child: UiEmptyState(
-          image: Assets.images.wumbiOo.path,
+          mood: WumbiMood.pouchOpen,
           title: l10n.transaction_need_second_wallet_title,
           subtitle: l10n.transaction_need_second_wallet_message,
           action: UiIconTextButton(

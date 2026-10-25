@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../../../../core/design_system/app_ui.dart';
 import '../../../../core/utils/constants/constants.dart';
 import '../../../../core/utils/extensions/build_context_extensions.dart';
-import '../../../../core/utils/typedefs.dart';
 import '../widgets/onboarding_typography.dart';
 
 /// Onboarding index 0 — fullscreen hero welcome. No header: the page owns
@@ -25,7 +24,7 @@ class OnboardingWelcomePage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset(AppAssets.images.wumbiHello.path, height: 200)
+                const UIWumbi(WumbiMood.wave, height: 220)
                     .uiElasticScaleIn(begin: 0.7, duration: const Duration(milliseconds: 1100)),
                 const UISpace.vert(40),
                 Text(

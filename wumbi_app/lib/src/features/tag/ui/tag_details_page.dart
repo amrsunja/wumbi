@@ -13,7 +13,6 @@ import '../../../core/utils/extensions/date_time_extensions.dart';
 import '../../../core/utils/hooks/use_swipe_tabs.dart';
 import '../../../core/utils/state_management/app_events.dart';
 import '../../../core/utils/state_management/single_events.dart';
-import '../../../core/utils/typedefs.dart';
 import '../../debt/ui/debt_labels.dart';
 import '../../debt/ui/debt_rows.dart';
 import '../../settings/ui/state_management/settings_provider.dart';
@@ -395,7 +394,7 @@ class _Empty extends StatelessWidget {
       hasScrollBody: false,
       child: UIStaggerItem(
         index: 0,
-        child: UiEmptyState(image: AppAssets.images.wumbiOo.path, title: title, action: action),
+        child: UiEmptyState(mood: WumbiMood.sleep, title: title, action: action),
       ),
     );
   }

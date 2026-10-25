@@ -8,7 +8,6 @@ import '../../../core/routing/app_router.dart';
 import '../../../core/utils/constants/constants.dart';
 import '../../../core/utils/extensions/build_context_extensions.dart';
 import '../../../core/utils/hooks/use_swipe_tabs.dart';
-import '../../../core/utils/typedefs.dart';
 import '../../settings/ui/state_management/settings_provider.dart';
 import '../data/models/debt_model.dart';
 import 'debts_provider.dart';
@@ -221,7 +220,7 @@ class _DebtsTab extends StatelessWidget {
                 child: UIStaggerItem(
                   index: 0,
                   child: UiEmptyState(
-                    image: AppAssets.images.wumbiOo.path,
+                    mood: WumbiMood.celebrate,
                     title: emptyTitle,
                     subtitle: emptySubtitle,
                   ),

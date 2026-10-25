@@ -8,7 +8,6 @@ import '../../../core/utils/constants/constants.dart';
 import '../../../core/utils/enums/transaction_type.dart';
 import '../../../core/utils/extensions/build_context_extensions.dart';
 import '../../../core/utils/extensions/date_time_extensions.dart';
-import '../../../core/utils/typedefs.dart';
 import '../../debt/ui/debt_labels.dart';
 import '../../debt/ui/debt_rows.dart';
 import '../../transaction/data/models/transaction_model.dart';
@@ -114,7 +113,7 @@ class _Results extends StatelessWidget {
 
     if (state.results.hasError) {
       return UiEmptyState(
-        image: AppAssets.images.wumbiOo.path,
+        mood: WumbiMood.confused,
         title: l10n.error_unknown,
         action: UiTextButton(label: l10n.common_retry, fontSize: 16, onTap: onRetry),
       );
@@ -130,7 +129,7 @@ class _Results extends StatelessWidget {
 
     if (rows.isEmpty) {
       return UiEmptyState(
-        image: AppAssets.images.wumbiOo.path,
+        mood: WumbiMood.searching,
         title: l10n.search_no_results_title,
         subtitle: l10n.search_no_results_subtitle,
         action: UiTextButton(label: l10n.common_clear, fontSize: 16, onTap: onClear),
