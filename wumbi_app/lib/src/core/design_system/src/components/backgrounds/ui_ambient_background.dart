@@ -17,6 +17,10 @@ class UiAmbientBackground extends StatefulWidget {
   /// 0..1 multiplier on the blob alpha.
   final double intensity;
 
+  /// Master switch. Off (2026-10): every page sits on the plain ground; the
+  /// painter and its call sites are kept so it can come back by flipping it.
+  static const bool enabled = false;
+
   static const List<Color> bluePalette = [
     UIColorToken.violet, // 3B82F6
     UIColorToken.blue, // 3B82F6
@@ -36,7 +40,8 @@ class _UiAmbientBackgroundState extends State<UiAmbientBackground> with SingleTi
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(vsync: this, duration: const Duration(seconds: 32))..repeat();
+    _controller = AnimationController(vsync: this, duration: const Duration(seconds: 32));
+    if (UiAmbientBackground.enabled) _controller.repeat();
   }
 
   @override
@@ -47,6 +52,7 @@ class _UiAmbientBackgroundState extends State<UiAmbientBackground> with SingleTi
 
   @override
   Widget build(BuildContext context) {
+    if (!UiAmbientBackground.enabled) return const SizedBox.shrink();
     final theme = AppTheme.of(context).colors;
     final custom = widget.colors;
     final tints = custom == null || custom.isEmpty ? UiAmbientBackground.bluePalette : custom;

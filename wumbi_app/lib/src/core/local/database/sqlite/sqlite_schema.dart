@@ -4,7 +4,11 @@
 /// shape through `SQLiteMigrations`. [v1] is kept verbatim so the v1→v2
 /// migration can be tested against a real v1 database.
 abstract class SQLiteSchema {
-  static final List<String> latest = v5;
+  static final List<String> latest = v6;
+
+  /// v6 (2026-10): `settings.mascot_talks` and the `mascot_memory` table
+  /// (hamster companion: shown messages, milestones, visits).
+  static final List<String> v6 = SQLiteSchemaV6.statements;
 
   /// v5 (2026-10): `wallets.include_in_total` (Dashboard total opt-out).
   static final List<String> v5 = SQLiteSchemaV5.statements;
@@ -577,5 +581,41 @@ abstract class SQLiteSchemaV5 {
   static final List<String> statements = [
     for (final s in SQLiteSchemaV4.statements)
       if (s.contains('CREATE TABLE wallets (')) walletsTable else s,
+  ];
+}
+
+/// v6 DDL, see [SQLiteSchema.v6]. `settings` gains `mascot_talks` inline and
+/// the key-value `mascot_memory` table is appended; everything else in v5 is
+/// reused verbatim. The v5 → v6 migration shares [mascotTalksColumn] and
+/// [mascotMemoryTable].
+abstract class SQLiteSchemaV6 {
+  static const String settingsTable = '''
+    CREATE TABLE settings (
+      id                    INTEGER PRIMARY KEY CHECK (id = 1),
+      language_code         TEXT,
+      country_code          TEXT,
+      theme_mode            TEXT    NOT NULL DEFAULT 'system' CHECK (theme_mode IN ('system','light','dark')),
+      show_onboarding       INTEGER NOT NULL DEFAULT 1,
+      base_currency         TEXT    NOT NULL DEFAULT 'USD',
+      notifications_enabled INTEGER NOT NULL DEFAULT 0,
+      show_mascot           INTEGER NOT NULL DEFAULT 1,
+      last_recurring_run_at INTEGER,
+      mascot_talks          INTEGER NOT NULL DEFAULT 1
+    )''';
+
+  static const String mascotTalksColumn =
+      'ALTER TABLE settings ADD COLUMN mascot_talks INTEGER NOT NULL DEFAULT 1';
+
+  static const String mascotMemoryTable = '''
+    CREATE TABLE mascot_memory (
+      key        TEXT PRIMARY KEY,
+      value      TEXT    NOT NULL,
+      updated_at INTEGER NOT NULL
+    )''';
+
+  static final List<String> statements = [
+    for (final s in SQLiteSchemaV5.statements)
+      if (s.contains('CREATE TABLE settings (')) settingsTable else s,
+    mascotMemoryTable,
   ];
 }

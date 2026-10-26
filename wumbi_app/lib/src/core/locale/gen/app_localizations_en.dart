@@ -2539,26 +2539,791 @@ class AppLocalizationsEn extends AppLocalizations {
   String get menu_close => 'Close menu';
 
   @override
-  String menu_wallets(int count) {
+  String get settings_mascot_talks => 'Wumbi talks';
+
+  @override
+  String get mascot_label => 'Wumbi the hamster. Tap to chat';
+
+  @override
+  String get mascot_dismiss => 'Let Wumbi go back to his corner';
+
+  @override
+  String get mascot_action_view => 'Show me';
+
+  @override
+  String get mascot_action_add => 'Add';
+
+  @override
+  String mascot_month_flow(String month, String income, String expense) {
+    return '$month: +$income · −$expense';
+  }
+
+  @override
+  String get mascot_greeting_morning => 'Morning, boss!';
+
+  @override
+  String get mascot_greeting_afternoon => 'Hey there, boss!';
+
+  @override
+  String get mascot_greeting_evening => 'Evening, boss!';
+
+  @override
+  String get mascot_all_calm =>
+      'All quiet. The seeds are right where they should be';
+
+  @override
+  String get mascot_all_for_now => 'That’s all I’ve got for now 🙂';
+
+  @override
+  String get mascot_quiet_today => 'Got it, boss. Quiet as a mouse today';
+
+  @override
+  String mascot_flow_up(String amount, String month) {
+    return '$month so far: the stash grew by $amount. Keep it up!';
+  }
+
+  @override
+  String mascot_flow_down(String amount, String month) {
+    return '$month so far: $amount more went out than came in. We’ll catch up';
+  }
+
+  @override
+  String mascot_reserve_full(int months) {
     String _temp0 = intl.Intl.pluralLogic(
-      count,
+      months,
       locale: localeName,
-      other: 'wallets',
-      one: 'wallet',
+      other: 'Cheeks are full! Enough seeds for $months months',
     );
     return '$_temp0';
   }
 
   @override
-  String menu_budgets(int count) {
+  String mascot_debt_overdue(String name, int days) {
     String _temp0 = intl.Intl.pluralLogic(
-      count,
+      days,
       locale: localeName,
-      other: 'budgets',
-      one: 'budget',
+      other: 'Boss, the debt with $name was due $days days ago',
+      one: 'Boss, the debt with $name was due yesterday',
     );
     return '$_temp0';
   }
+
+  @override
+  String mascot_debt_overdue_nudge(String name) {
+    return 'That debt with $name is still hanging around, boss. Take a look?';
+  }
+
+  @override
+  String mascot_budget_over(String name) {
+    return 'Boss, “$name” went over the limit. Let’s see where the seeds leaked';
+  }
+
+  @override
+  String mascot_budget_over_by(String name, String amount) {
+    return '“$name” is $amount over. Want to figure it out together, boss?';
+  }
+
+  @override
+  String mascot_budget_near_left(String name, String amount) {
+    return 'Only $amount left in “$name” this period, boss';
+  }
+
+  @override
+  String mascot_budget_near_percent(String name, int percent) {
+    return '“$name” is already at $percent%. Maybe ease off a little?';
+  }
+
+  @override
+  String mascot_sleep_days(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other:
+          'I dozed off, boss… $days days without a single entry. Shall we catch up?',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get mascot_sleep_quiet =>
+      'It’s awfully quiet here. Forgot to log something, boss?';
+
+  @override
+  String get mascot_sigh_month =>
+      'Boss, more seeds are going out than coming in this month. Let’s find the leak?';
+
+  @override
+  String get mascot_sigh_ahead =>
+      'Spending is outrunning income. Let’s see what we can trim together';
+
+  @override
+  String mascot_welcome_back(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'You’re back, boss! $count new entries since last time',
+      one: 'You’re back, boss! One new entry since last time',
+      zero: 'You’re back, boss! It was quiet without you',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get mascot_evening_waited =>
+      'Boss! I’ve been waiting for you all day!';
+
+  @override
+  String get mascot_evening_missed => 'I missed you…';
+
+  @override
+  String get mascot_evening_log =>
+      'Let’s log today’s spending before it slips our minds?';
+
+  @override
+  String get mascot_evening_count => 'Help me count today’s seeds?';
+
+  @override
+  String get mascot_event_reserve =>
+      'Boss, we’ve got three months of seeds stashed! Now we can sleep easy';
+
+  @override
+  String mascot_event_best_month(String amount) {
+    return 'Best month in half a year! $amount went into the stash. Proud of you, boss';
+  }
+
+  @override
+  String mascot_event_days(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '$days days of counting seeds together. Thank you, boss!',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get mascot_event_records =>
+      'That’s the 100th entry! Counting is way more fun together, boss';
+
+  @override
+  String mascot_event_streak(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '$days days in a row without missing one, boss! That’s discipline',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String mascot_charge_today(String name, String amount) {
+    return 'Heads up, boss: $name takes $amount today';
+  }
+
+  @override
+  String mascot_charge_tomorrow(String name, String amount) {
+    return 'Tomorrow $name takes $amount, boss';
+  }
+
+  @override
+  String mascot_charge_soon(String name, String amount) {
+    return 'In a couple of days $name takes $amount';
+  }
+
+  @override
+  String get mascot_charge_unnamed => 'a subscription';
+
+  @override
+  String mascot_debt_due_today(String name) {
+    return 'Boss, the debt with $name is due today';
+  }
+
+  @override
+  String mascot_debt_due_tomorrow(String name) {
+    return 'The debt with $name is due tomorrow. Let’s not forget?';
+  }
+
+  @override
+  String mascot_debt_due_soon(String name, int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '$days days left on the debt with $name',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String mascot_insight_mover(String name, int percent) {
+    return 'Boss, “$name” is eating $percent% more seeds than last month. Take a look?';
+  }
+
+  @override
+  String mascot_insight_untagged(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count expenses this month have no tag. Let’s sort them out?',
+      one: 'One expense this month has no tag. Let’s sort it out?',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String mascot_insight_peak_day(String weekday) {
+    return '$weekday is your hungriest day, boss';
+  }
+
+  @override
+  String mascot_insight_reserve(int months) {
+    String _temp0 = intl.Intl.pluralLogic(
+      months,
+      locale: localeName,
+      other: 'Cheeks look good: about $months months of seeds stashed',
+      one: 'Cheeks look good: about a month of seeds stashed',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String mascot_insight_top_expense(String name, String amount) {
+    return 'Biggest bite this month: “$name”, $amount';
+  }
+
+  @override
+  String mascot_insight_top_expense_amount(String amount) {
+    return 'Biggest single bite this month: $amount';
+  }
+
+  @override
+  String mascot_insight_daily_average(String amount) {
+    return 'Boss, about $amount goes out every day this month';
+  }
+
+  @override
+  String mascot_insight_daily_below(int percent) {
+    return '$percent% fewer seeds a day than usual. Nice work, boss!';
+  }
+
+  @override
+  String mascot_insight_daily_above(int percent) {
+    return 'Boss, $percent% more seeds a day than usual. Want to see where they go?';
+  }
+
+  @override
+  String mascot_insight_weekend(int percent) {
+    return 'On weekends the seeds fly out $percent% faster than on weekdays';
+  }
+
+  @override
+  String mascot_insight_frequent_tag(String name, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count trips to “$name” this month. Becoming a habit, boss?',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String mascot_insight_small_spends(String amount) {
+    return 'Little purchases added up to $amount this month. Seed by seed, boss';
+  }
+
+  @override
+  String mascot_insight_savings_rate(int percent) {
+    return 'Boss, $percent% of this month’s income is staying in the stash. Happy cheeks!';
+  }
+
+  @override
+  String get mascot_insight_no_income =>
+      'Not a single seed has come in this month, boss. Did you forget to log your pay?';
+
+  @override
+  String mascot_insight_forecast_over(String amount) {
+    return 'At this rate the month will cost about $amount. That’s more than usual, boss';
+  }
+
+  @override
+  String mascot_insight_forecast_under(String amount) {
+    return 'This month is shaping up light: about $amount. The stash says thanks';
+  }
+
+  @override
+  String mascot_insight_owed_to_me(String amount) {
+    return 'Boss, people owe you $amount. Maybe time for a gentle nudge?';
+  }
+
+  @override
+  String mascot_insight_negative_wallet(String name) {
+    return '“$name” dipped below zero, boss. Move a few seeds over?';
+  }
+
+  @override
+  String mascot_insight_no_rate(String codes) {
+    return 'Can’t convert $codes yet, no rate. I’ll finish counting once we’re online';
+  }
+
+  @override
+  String mascot_insight_income_up(int percent) {
+    return 'Boss, $percent% more seeds came in than usual! Stash half of the extra right away?';
+  }
+
+  @override
+  String mascot_insight_tag_yearly(String name, String amount) {
+    return 'At this pace, “$name” will eat about $amount a year';
+  }
+
+  @override
+  String get mascot_insight_no_spend_yesterday =>
+      'Not a single expense yesterday! My cheeks are proud of you, boss';
+
+  @override
+  String get mascot_tip_budget =>
+      'Boss, a budget is just a little fence around the seeds. Put up the first one?';
+
+  @override
+  String get mascot_tip_subscriptions =>
+      'Got regular payments? Add them once and I’ll keep an eye on them';
+
+  @override
+  String mascot_tip_subs_yearly(String amount) {
+    return 'Boss, subscriptions eat $amount a year. Any you don’t really use?';
+  }
+
+  @override
+  String mascot_tip_recurring_share(int percent) {
+    return '$percent% of this month’s spending is regular payments. Round and round, like my wheel';
+  }
+
+  @override
+  String get mascot_tip_new_month =>
+      'New month, boss! Fresh pouch. Set up some budgets?';
+
+  @override
+  String mascot_tip_monday_recap(String amount) {
+    return 'Last week $amount went out. Let’s see how we do this week, boss';
+  }
+
+  @override
+  String mascot_tip_month_end(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '$days days to go this month. You’re doing great, boss',
+      one: 'One day to go this month. You’re doing great, boss',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get mascot_tip_tags =>
+      'Tags help me see where the seeds go, boss. Try #food or #home';
+
+  @override
+  String mascot_tip_debt_due_date(String name) {
+    return 'Give the debt with $name a due date and I’ll remind you in time';
+  }
+
+  @override
+  String mascot_tip_budget_for(String name, int percent) {
+    return 'Boss, “$name” takes $percent% of all spending. Give it a budget?';
+  }
+
+  @override
+  String get mascot_tip_rainy_day =>
+      'Boss, start a separate rainy-day wallet. Then surprises won’t catch us off guard';
+
+  @override
+  String get mascot_tip_pay_yourself_first =>
+      'Seeds just came in! Put some aside right away, boss, before they scatter';
+
+  @override
+  String get mascot_tip_treat =>
+      'The stash is in good shape, boss. It’s okay to treat yourself now and then, no guilt';
+
+  @override
+  String mascot_tip_future_self(String amount, String amount2) {
+    return 'Just $amount a day adds up to $amount2 a year. Imagine those cheeks, boss!';
+  }
+
+  @override
+  String get mascot_joke_friday =>
+      'It’s Friday, boss! Go have fun, I’ll guard the seeds';
+
+  @override
+  String get mascot_joke_late_night =>
+      'It’s late, boss… Log it and off to bed? I’m yawning already';
+
+  @override
+  String get mascot_joke_cheeks =>
+      'Fun fact, boss: hamsters carry seeds in their cheeks. I carry your budget';
+
+  @override
+  String get mascot_joke_trees =>
+      'Even if seeds grew on trees, I’d still hide them in my cheeks';
+
+  @override
+  String get mascot_joke_twice =>
+      'I counted your seeds twice. Same number, boss. Good sign';
+
+  @override
+  String get mascot_joke_secret =>
+      'Psst, boss… Round every expense up in your head. The difference is your secret stash';
+
+  @override
+  String mascot_reaction_income(String amount) {
+    return 'Caught $amount! Into the stash, boss';
+  }
+
+  @override
+  String mascot_reaction_big_income(String amount) {
+    return 'Whoa, boss! +$amount. My cheeks might burst!';
+  }
+
+  @override
+  String mascot_reaction_transfer(String amount) {
+    return 'Moved $amount over';
+  }
+
+  @override
+  String mascot_reaction_lent(String amount) {
+    return 'Lent $amount. I’ll remember, boss';
+  }
+
+  @override
+  String get mascot_reaction_debt_closed => 'Debt closed! Clean paws, boss';
+
+  @override
+  String get mascot_reaction_forgiven =>
+      'You forgave it… You’ve got a kind heart, boss';
+
+  @override
+  String get mascot_reaction_first_wallet =>
+      'First wallet, boss! Let the stashing begin';
+
+  @override
+  String get mascot_reaction_budget => 'Budget’s set. I’ll stand guard, boss';
+
+  @override
+  String get mascot_wallet_negative => 'Boss, this wallet went below zero';
+
+  @override
+  String mascot_wallet_down(int percent) {
+    return '$percent% of the seeds here are gone since the 1st';
+  }
+
+  @override
+  String mascot_wallet_up(String amount) {
+    return 'Up $amount since the 1st. Lovely, boss!';
+  }
+
+  @override
+  String get mascot_wallet_sleeping =>
+      'This wallet’s been asleep for a month. Shh…';
+
+  @override
+  String get mascot_wallet_calm => 'All quiet in this one, boss';
+
+  @override
+  String mascot_budgets_over(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Boss, $count budgets went over the limit',
+      one: 'Boss, one budget went over the limit',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String mascot_budgets_near(String name) {
+    return '“$name” is almost tapped out, boss';
+  }
+
+  @override
+  String get mascot_budgets_calm =>
+      'All fences holding, boss. Budgets look good';
+
+  @override
+  String mascot_budget_detail_over(String amount) {
+    return '$amount over. Maybe raise the limit next time, boss?';
+  }
+
+  @override
+  String mascot_budget_detail_pace(String date) {
+    return 'At this pace the limit runs out on $date';
+  }
+
+  @override
+  String get mascot_budget_detail_within =>
+      'Stayed within the limit! Proud of you, boss';
+
+  @override
+  String get mascot_budget_detail_calm => 'Right on track, boss';
+
+  @override
+  String mascot_debts_overdue(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Boss, $count debts are overdue',
+      one: 'Boss, one debt is overdue',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get mascot_debts_all_closed =>
+      'Every debt is closed! Clean paws, boss';
+
+  @override
+  String get mascot_debts_tracking => 'I keep track of who owes whom seeds';
+
+  @override
+  String mascot_debt_detail_overdue(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'This was due $days days ago, boss',
+      one: 'This was due yesterday, boss',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get mascot_debt_detail_lent =>
+      'I remember who borrowed our seeds, boss';
+
+  @override
+  String mascot_debt_detail_due(String date) {
+    return 'Due by $date';
+  }
+
+  @override
+  String mascot_subs_spinning(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count subscriptions take their share of seeds every month',
+      one: 'One subscription takes its share of seeds every month',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String mascot_tags_top(String name) {
+    return 'Most seeds this month went to “$name”';
+  }
+
+  @override
+  String mascot_tag_up(int percent) {
+    return '$percent% more than last month here';
+  }
+
+  @override
+  String mascot_tag_down(int percent) {
+    return '$percent% less than last month. Nice, boss!';
+  }
+
+  @override
+  String mascot_progress_saved(String amount) {
+    return '$amount went into the stash. Great job, boss!';
+  }
+
+  @override
+  String mascot_progress_over(String amount) {
+    return '$amount more seeds went out than came in';
+  }
+
+  @override
+  String mascot_progress_over_tag(String amount, String name) {
+    return '$amount more seeds went out than came in, mostly on “$name”';
+  }
+
+  @override
+  String mascot_progress_forecast(String amount) {
+    return 'At this pace, about $amount will go out this period';
+  }
+
+  @override
+  String get mascot_progress_counting => 'Still counting this one, boss';
+
+  @override
+  String get mascot_screen_wallet_filter =>
+      'Filter by tag and you’ll see where this wallet’s seeds go';
+
+  @override
+  String get mascot_screen_wallet_switch =>
+      'Tap the wallet name up top to hop to another one';
+
+  @override
+  String get mascot_screen_wallet_limit =>
+      'In the Budgets tab you can put a limit on this wallet';
+
+  @override
+  String get mascot_screen_budgets_rollover =>
+      'Budgets can carry leftovers into the next period. Not a seed wasted';
+
+  @override
+  String get mascot_screen_budgets_tags =>
+      'A budget can watch just the tags you pick. Say, #cafe';
+
+  @override
+  String get mascot_screen_budget_periods =>
+      'Flip through periods to compare with earlier ones';
+
+  @override
+  String get mascot_screen_debts_due =>
+      'Add a due date and I’ll remind you in time, boss';
+
+  @override
+  String get mascot_screen_debts_quick =>
+      'Quickest way to repay: Transfer → Debts on the transaction screen';
+
+  @override
+  String get mascot_screen_subs_pause =>
+      'You can pause a subscription instead of deleting it. The history stays';
+
+  @override
+  String get mascot_screen_tags_nest => 'Nest tags with a slash: food/coffee';
+
+  @override
+  String get mascot_screen_tags_map =>
+      'Open the map and you’ll see how your tags connect, boss';
+
+  @override
+  String get mascot_screen_tag_rename =>
+      'Rename or move a tag and the nested ones follow along';
+
+  @override
+  String get mascot_screen_progress_baseline =>
+      'Tap “vs …” to compare with last year or a 3-month average';
+
+  @override
+  String mascot_ans_spent_today(String amount, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Today: $amount across $count expenses',
+      one: 'Today: $amount, just one expense',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get mascot_ans_nothing_today =>
+      'Not a single expense today, boss. Seeds intact!';
+
+  @override
+  String mascot_ans_spent_yesterday(String amount, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Yesterday: $amount across $count expenses',
+      one: 'Yesterday: $amount, just one expense',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get mascot_ans_nothing_yesterday =>
+      'Yesterday you didn’t spend a single seed. Hooray!';
+
+  @override
+  String mascot_ans_spent_week(String amount) {
+    return 'This week so far: $amount';
+  }
+
+  @override
+  String mascot_ans_spent_month(String expense, String income) {
+    return 'This month $expense went out and $income came in';
+  }
+
+  @override
+  String get mascot_ans_no_expenses =>
+      'No expenses this month yet. Lovely, boss';
+
+  @override
+  String mascot_ans_upcoming(String amount, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count payments in the next 7 days: $amount',
+      one: 'One payment in the next 7 days: $amount',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get mascot_ans_nothing_upcoming => 'Nothing to pay for the next week';
+
+  @override
+  String mascot_ans_owed(String amount, String name) {
+    return 'People owe you $amount, mostly $name';
+  }
+
+  @override
+  String get mascot_ans_nobody_owes => 'Nobody owes you anything right now';
+
+  @override
+  String get mascot_ans_reserve_low =>
+      'Less than a month of seeds, boss. Let’s fill those cheeks together';
+
+  @override
+  String get mascot_ans_reserve_unknown =>
+      'I need about a month of entries to answer that properly';
+
+  @override
+  String mascot_ans_where(String name, int percent, String name2) {
+    return 'Most seeds went to “$name” ($percent%), then “$name2”';
+  }
+
+  @override
+  String mascot_ans_where_one(String name, int percent) {
+    return 'Nearly all the seeds went to “$name”, $percent%';
+  }
+
+  @override
+  String mascot_ans_where_untagged(int percent) {
+    return 'Boss, $percent% of spending has no tags, so I can’t see where it went. Sort it out?';
+  }
+
+  @override
+  String get mascot_q_today => 'Spent today?';
+
+  @override
+  String get mascot_q_yesterday => 'And yesterday?';
+
+  @override
+  String get mascot_q_week => 'This week?';
+
+  @override
+  String get mascot_q_month => 'This month?';
+
+  @override
+  String get mascot_q_where => 'Where did the seeds go?';
+
+  @override
+  String get mascot_q_biggest => 'Biggest expense?';
+
+  @override
+  String get mascot_q_budgets => 'Am I within budget?';
+
+  @override
+  String get mascot_q_upcoming => 'What’s due soon?';
+
+  @override
+  String get mascot_q_owed => 'Who owes me?';
+
+  @override
+  String get mascot_q_reserve => 'How long will it last?';
+
+  @override
+  String get mascot_q_tip => 'Any advice?';
+
+  @override
+  String get mascot_q_joke => 'Make me smile';
 
   @override
   String get l10nStopLineDontTouch =>

@@ -13,6 +13,7 @@ class AppSettingsModel {
     required this.baseCurrency,
     required this.notificationsEnabled,
     required this.showMascot,
+    this.mascotTalks = true,
     required this.lastRecurringRunAt,
   });
 
@@ -28,6 +29,9 @@ class AppSettingsModel {
 
   /// Settings → Preferences; hides the decorative mascot app-wide.
   final bool showMascot;
+
+  /// Settings → Preferences; off keeps the mascot silent (no bubbles).
+  final bool mascotTalks;
 
   /// Watermark for the recurring engine.
   final DateTime? lastRecurringRunAt;
@@ -45,6 +49,7 @@ class AppSettingsModel {
         notificationsEnabled: json[SQLiteConfig.notificationsEnabled] == 1,
         // Missing column on a not-yet-migrated row reads as "show".
         showMascot: json[SQLiteConfig.showMascot] != 0,
+        mascotTalks: json[SQLiteConfig.mascotTalks] != 0,
         lastRecurringRunAt: json[SQLiteConfig.lastRecurringRunAt] == null
             ? null
             : DateTime.fromMillisecondsSinceEpoch(
@@ -61,6 +66,7 @@ class AppSettingsModel {
         SQLiteConfig.baseCurrency: baseCurrency.code,
         SQLiteConfig.notificationsEnabled: notificationsEnabled ? 1 : 0,
         SQLiteConfig.showMascot: showMascot ? 1 : 0,
+        SQLiteConfig.mascotTalks: mascotTalks ? 1 : 0,
         SQLiteConfig.lastRecurringRunAt: lastRecurringRunAt?.toUtc().millisecondsSinceEpoch,
       };
 
@@ -71,6 +77,7 @@ class AppSettingsModel {
     CurrencyType? baseCurrency,
     bool? notificationsEnabled,
     bool? showMascot,
+    bool? mascotTalks,
     DateTime? lastRecurringRunAt,
   }) =>
       AppSettingsModel(
@@ -80,6 +87,7 @@ class AppSettingsModel {
         baseCurrency: baseCurrency ?? this.baseCurrency,
         notificationsEnabled: notificationsEnabled ?? this.notificationsEnabled,
         showMascot: showMascot ?? this.showMascot,
+        mascotTalks: mascotTalks ?? this.mascotTalks,
         lastRecurringRunAt: lastRecurringRunAt ?? this.lastRecurringRunAt,
       );
 

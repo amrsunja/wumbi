@@ -31,6 +31,7 @@ class UIInputField extends StatelessWidget {
     this.onSubmitted,
     this.inputFormatters,
     this.textCapitalization = TextCapitalization.sentences,
+    this.suffixIcon,
   });
 
   final TextEditingController? controller;
@@ -50,6 +51,9 @@ class UIInputField extends StatelessWidget {
   final ValueChanged<String>? onSubmitted;
   final List<TextInputFormatter>? inputFormatters;
   final TextCapitalization textCapitalization;
+
+  /// Trailing widget inside the field (e.g. the search clear button).
+  final Widget? suffixIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -83,6 +87,8 @@ class UIInputField extends StatelessWidget {
         label: label == null ? null : Text(label!),
         hintText: hintText,
         hintStyle: effectiveHintStyle,
+        suffixIcon: suffixIcon,
+        suffixIconConstraints: const BoxConstraints(minWidth: 44, minHeight: 44),
         filled: !borderless,
         fillColor: colors.fgColor,
         contentPadding: borderless

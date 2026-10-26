@@ -20,6 +20,7 @@ import 'core/utils/state_management/app_events.dart';
 import 'core/utils/state_management/single_events.dart';
 import 'features/budget/ui/budgets_provider.dart';
 import 'features/debt/ui/debts_provider.dart';
+import 'features/mascot/ui/mascot_providers.dart';
 import 'features/settings/ui/state_management/settings_provider.dart';
 
 class App extends ConsumerStatefulWidget {
@@ -73,6 +74,10 @@ class _AppState extends ConsumerState<App> with WidgetsBindingObserver {
       _pausedAt = null;
       if (pausedAt != null && DateTime.now().difference(pausedAt) >= const Duration(hours: 1)) {
         ref.read(recurringEngineProvider).catchUpIfPossible();
+      }
+      // Back after a long pause = a new "open": the hamster says its next thought.
+      if (pausedAt != null) {
+        ref.read(mascotSessionProvider.notifier).resumedAfter(DateTime.now().difference(pausedAt));
       }
       // Upcoming transactions whose date arrived while in the background.
       ref.read(upcomingPosterProvider).postDueIfPossible();

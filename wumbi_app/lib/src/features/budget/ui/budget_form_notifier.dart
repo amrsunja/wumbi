@@ -13,6 +13,8 @@ import '../../../core/utils/enums/rollover_mode.dart';
 import '../../../core/utils/extensions/date_time_extensions.dart';
 import '../../../core/utils/state_management/app_events.dart';
 import '../../../core/utils/state_management/single_events.dart';
+import '../../mascot/domain/mascot_reaction.dart';
+import '../../mascot/ui/mascot_providers.dart';
 import '../../settings/ui/state_management/settings_provider.dart';
 import '../../tag/data/tag_repository.dart';
 import '../../wallet/data/models/wallet_model.dart';
@@ -394,10 +396,12 @@ class BudgetFormNotifier extends Notifier<BudgetFormState> {
       walletIds: state.walletIds,
     );
     state = state.copyWith(isSaving: true, error: null);
+    final reactions = ref.read(mascotReactionProvider.notifier);
     final result = args.isEdit
         ? await _repo.update(args.budgetId!, draft, tagNames: state.tags)
         : await _repo.create(draft, tagNames: state.tags);
     if (!ref.mounted) return false;
+    if (!args.isEdit && result.isSuccess()) reactions.push(MascotReactionKind.budgetCreated);
     var ok = false;
     result.when(
       (_) => ok = true,

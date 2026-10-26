@@ -31,7 +31,7 @@ class HelpPage extends StatelessWidget {
         child: ListView(
           padding: const EdgeInsets.fromLTRB(kPageHorzPadding, 8, kPageHorzPadding, 48),
           children: [
-            const Center(child: UIWumbi(WumbiMood.wave)),
+            const Center(child: UIWumbi(WumbiMood.kindly)),
             const UISpace.vert(14),
             Text(l10n.help_subtitle, textAlign: TextAlign.center, style: typo.paragraph),
             const UISpace.vert(24),

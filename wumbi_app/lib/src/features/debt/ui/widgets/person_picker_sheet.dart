@@ -69,7 +69,7 @@ class _Body extends HookConsumerWidget {
 
     return Column(
       children: [
-        UIInputField(
+        UISearchField(
           autofocus: true,
           hintText: l10n.debt_person_search,
           maxLength: kMaxPersonNameLength,

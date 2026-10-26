@@ -10,6 +10,10 @@ import '../../../core/utils/app_vibrations.dart';
 import '../../../core/utils/constants/constants.dart';
 import '../../../core/utils/extensions/build_context_extensions.dart';
 import '../../../core/utils/extensions/date_time_extensions.dart';
+import '../../mascot/domain/mascot_screens.dart';
+import '../../mascot/ui/mascot_providers.dart';
+import '../../mascot/ui/mascot_answers.dart';
+import '../../mascot/ui/widgets/mascot_peek.dart';
 import '../../settings/ui/state_management/settings_provider.dart';
 import '../../tag/ui/widgets/tag_visuals.dart';
 import '../../wallet/data/models/wallet_model.dart';
@@ -84,11 +88,24 @@ class ProgressPage extends HookConsumerWidget {
       notifier.browse(delta);
     }
 
-    return Scaffold(
+    return MascotPeekLayer(
+      states: state.report == null || state.report!.isLedgerEmpty
+          ? null
+          : MascotScreens.withTips(
+              MascotCornerState.of(MascotScreens.progressVerdict(state.report!, weekdayName: mascotWeekdayName)),
+              MascotScreens.progressTips(),
+            ),
+      questions: MascotQuestions.progress,
+      child: Scaffold(
       appBar: UIAppbar(title: l10n.progress_title, backTap: () => context.router.maybePop()),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-        padding: const EdgeInsets.fromLTRB(kListHorzPadding, 4, kListHorzPadding, 56),
+        padding: EdgeInsets.fromLTRB(
+          kListHorzPadding,
+          4,
+          kListHorzPadding,
+          kPageBottomInset + MediaQuery.paddingOf(context).bottom,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -132,6 +149,7 @@ class ProgressPage extends HookConsumerWidget {
           ],
         ),
       ),
+    ),
     );
   }
 }
@@ -177,6 +195,7 @@ class _Body extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+
         _Result(report: r, baselineName: baselineName).uiFadeSlideIn(delay: delay(), offset: 0.1),
         if (!r.current.isEmpty) ...[
           if (spent) ...[

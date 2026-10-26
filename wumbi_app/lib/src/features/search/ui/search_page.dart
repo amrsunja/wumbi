@@ -54,12 +54,10 @@ class SearchPage extends HookConsumerWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(kPageHorzPadding, 4, kPageHorzPadding, 8),
-                child: UIInputField(
+                child: UISearchField(
                   controller: controller,
                   hintText: l10n.search_placeholder,
                   autofocus: true,
-                  textCapitalization: TextCapitalization.none,
-                  textInputAction: TextInputAction.search,
                   onChanged: notifier.onQueryChanged,
                   onSubmitted: notifier.submit,
                 ),
@@ -100,13 +98,22 @@ class _Results extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
+    // Top-aligned + scrollable: the keyboard is up (autofocus), a centred
+    // empty state would get squeezed.
     if (state.isIdle) {
-      return Padding(
-        padding: const EdgeInsets.fromLTRB(40, 40, 40, 0),
-        child: Text(
-          l10n.search_hint,
-          textAlign: TextAlign.center,
-          style: context.typo.inter.hint,
+      return SingleChildScrollView(
+        padding: const EdgeInsets.fromLTRB(40, 32, 40, 24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const UIWumbi(WumbiMood.searching),
+            const UISpace.vert(20),
+            Text(
+              l10n.search_hint,
+              textAlign: TextAlign.center,
+              style: context.typo.inter.hint,
+            ),
+          ],
         ),
       );
     }

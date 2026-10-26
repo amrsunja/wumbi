@@ -8,7 +8,9 @@ import '../../../core/routing/app_router.dart';
 import '../../../core/utils/constants/constants.dart';
 import '../../../core/utils/extensions/build_context_extensions.dart';
 import '../../../core/utils/hooks/use_swipe_tabs.dart';
-import '../../settings/ui/state_management/settings_provider.dart';
+import '../../mascot/domain/mascot_screens.dart';
+import '../../mascot/ui/mascot_answers.dart';
+import '../../mascot/ui/widgets/mascot_peek.dart';
 import '../data/models/debt_model.dart';
 import 'debts_provider.dart';
 import 'widgets/debt_summary_row.dart';
@@ -31,7 +33,6 @@ class DebtsPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
     final overview = ref.watch(debtsOverviewProvider).value;
-    final showMascot = ref.watch(showMascotProvider);
 
     // Opens on "I owe" when nobody owes me but I owe someone.
     final tabs = useSwipeTabs(
@@ -45,7 +46,12 @@ class DebtsPage extends HookConsumerWidget {
           ..sort((a, b) => (b.debt.closedAt ?? b.debt.updatedAt).compareTo(a.debt.closedAt ?? a.debt.updatedAt)));
     final hasAny = (o?.openCount ?? 0) > 0 || (settled?.isNotEmpty ?? false);
 
-    return Scaffold(
+    return MascotPeekLayer(
+      states: o == null ? null : MascotScreens.withTips(MascotScreens.debts(o, now: DateTime.now()), MascotScreens.debtsTips()),
+      // No debt at all: the tab's empty state is the hamster.
+      hidden: !hasAny,
+      questions: MascotQuestions.debts,
+      child: Scaffold(
       appBar: UIAppbar(title: l10n.debts_title, backTap: () => context.router.maybePop()),
       floatingActionButton: UiFab(onTap: () => context.router.push(NewDebtRoute()), label: l10n.debt_new),
       body: Column(
@@ -98,10 +104,7 @@ class DebtsPage extends HookConsumerWidget {
                   ],
                 ),
               ),
-              if (showMascot)
-                // Inside the header (a negative top tucks the antenna under
-                // the app bar).
-                const Positioned(right: 8, top: 12, child: UIWumbiLook(key: ValueKey('wumbi-debts'))),
+
             ],
           ),
           // Swipeable tab bodies (only they scroll). Pages are not kept
@@ -120,6 +123,8 @@ class DebtsPage extends HookConsumerWidget {
                       _DebtTab.settled => settled,
                     },
                     showSide: t == _DebtTab.settled,
+                    // "No debts. Nice" — calm, not a party (spec §4.11).
+                    emptyMood: t == _DebtTab.settled ? WumbiMood.sleep : WumbiMood.thumbsUp,
                     // Nothing at all yet → explain how debts appear;
                     // otherwise just "none in this tab".
                     emptyTitle: switch (t) {
@@ -134,6 +139,7 @@ class DebtsPage extends HookConsumerWidget {
           ),
         ],
       ),
+    ),
     );
   }
 }
@@ -186,6 +192,7 @@ class _DebtsTab extends StatelessWidget {
     super.key,
     required this.debts,
     required this.showSide,
+    required this.emptyMood,
     required this.emptyTitle,
     required this.emptySubtitle,
   });
@@ -194,6 +201,7 @@ class _DebtsTab extends StatelessWidget {
 
   /// Settled mixes both sides: each row says which.
   final bool showSide;
+  final WumbiMood emptyMood;
   final String emptyTitle;
   final String? emptySubtitle;
 
@@ -220,7 +228,7 @@ class _DebtsTab extends StatelessWidget {
                 child: UIStaggerItem(
                   index: 0,
                   child: UiEmptyState(
-                    mood: WumbiMood.celebrate,
+                    mood: emptyMood,
                     title: emptyTitle,
                     subtitle: emptySubtitle,
                   ),

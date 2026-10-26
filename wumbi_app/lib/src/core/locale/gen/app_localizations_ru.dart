@@ -2582,30 +2582,816 @@ class AppLocalizationsRu extends AppLocalizations {
   String get menu_close => 'Закрыть меню';
 
   @override
-  String menu_wallets(int count) {
+  String get settings_mascot_talks => 'Wumbi говорит';
+
+  @override
+  String get mascot_label => 'Хомяк Wumbi. Нажми, чтобы поболтать';
+
+  @override
+  String get mascot_dismiss => 'Отпустить Wumbi в уголок';
+
+  @override
+  String get mascot_action_view => 'Посмотреть';
+
+  @override
+  String get mascot_action_add => 'Добавить';
+
+  @override
+  String mascot_month_flow(String month, String income, String expense) {
+    return '$month: +$income · −$expense';
+  }
+
+  @override
+  String get mascot_greeting_morning => 'Доброе утро, хозяин!';
+
+  @override
+  String get mascot_greeting_afternoon => 'Привет, хозяин!';
+
+  @override
+  String get mascot_greeting_evening => 'Добрый вечер, хозяин!';
+
+  @override
+  String get mascot_all_calm => 'Всё спокойно, семечки на месте';
+
+  @override
+  String get mascot_all_for_now => 'Пока это всё, что я знаю 🙂';
+
+  @override
+  String get mascot_quiet_today => 'Понял, хозяин. Сегодня молчу';
+
+  @override
+  String mascot_flow_up(String amount, String month) {
+    return '$month: запас подрос на $amount. Так держать!';
+  }
+
+  @override
+  String mascot_flow_down(String amount, String month) {
+    return '$month: ушло на $amount больше, чем пришло. Ничего, наверстаем';
+  }
+
+  @override
+  String mascot_reserve_full(int months) {
     String _temp0 = intl.Intl.pluralLogic(
-      count,
+      months,
       locale: localeName,
-      other: 'кошелька',
-      many: 'кошельков',
-      few: 'кошелька',
-      one: 'кошелёк',
+      other: 'Щёки полные! Семечек хватит на $months месяцев',
+      few: 'Щёки полные! Семечек хватит на $months месяца',
+      one: 'Щёки полные! Семечек хватит на $months месяц',
     );
     return '$_temp0';
   }
 
   @override
-  String menu_budgets(int count) {
+  String mascot_debt_overdue(String name, int days) {
     String _temp0 = intl.Intl.pluralLogic(
-      count,
+      days,
       locale: localeName,
-      other: 'бюджета',
-      many: 'бюджетов',
-      few: 'бюджета',
-      one: 'бюджет',
+      other: 'Хозяин, срок по долгу с $name прошёл $days дней назад',
+      few: 'Хозяин, срок по долгу с $name прошёл $days дня назад',
+      one: 'Хозяин, срок по долгу с $name прошёл $days день назад',
     );
     return '$_temp0';
   }
+
+  @override
+  String mascot_debt_overdue_nudge(String name) {
+    return 'Долг с $name всё ещё висит, хозяин. Заглянем?';
+  }
+
+  @override
+  String mascot_budget_over(String name) {
+    return 'Хозяин, «$name» вышел за лимит. Давай глянем, куда утекли семечки';
+  }
+
+  @override
+  String mascot_budget_over_by(String name, String amount) {
+    return 'В «$name» перебор на $amount. Разберёмся вместе, хозяин?';
+  }
+
+  @override
+  String mascot_budget_near_left(String name, String amount) {
+    return 'Хозяин, в «$name» осталось всего $amount до конца периода';
+  }
+
+  @override
+  String mascot_budget_near_percent(String name, int percent) {
+    return '«$name» уже на $percent%. Притормозим немножко?';
+  }
+
+  @override
+  String mascot_sleep_days(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other:
+          'Я задремал, хозяин… $days дней без записей. Добавим, что пропустили?',
+      few:
+          'Я задремал, хозяин… $days дня без записей. Добавим, что пропустили?',
+      one:
+          'Я задремал, хозяин… $days день без записей. Добавим, что пропустили?',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get mascot_sleep_quiet =>
+      'Что-то тихо у нас. Хозяин, ничего не забыл записать?';
+
+  @override
+  String get mascot_sigh_month =>
+      'Хозяин, в этом месяце семечек уходит больше, чем приходит. Поищем утечку?';
+
+  @override
+  String get mascot_sigh_ahead =>
+      'Траты обгоняют доход. Давай вместе прикинем, что можно урезать';
+
+  @override
+  String mascot_welcome_back(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Хозяин, ты вернулся! С прошлого раза $count новых записей',
+      few: 'Хозяин, ты вернулся! С прошлого раза $count новые записи',
+      one: 'Хозяин, ты вернулся! С прошлого раза $count новая запись',
+      zero: 'Хозяин, ты вернулся! Без тебя тут было тихо',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get mascot_evening_waited => 'Хозяин! Я тебя весь день ждал!';
+
+  @override
+  String get mascot_evening_missed => 'Я скучал…';
+
+  @override
+  String get mascot_evening_log =>
+      'Давай запишем сегодняшние траты, пока не забылись?';
+
+  @override
+  String get mascot_evening_count =>
+      'Поможешь мне посчитать сегодняшние семечки?';
+
+  @override
+  String get mascot_event_reserve =>
+      'Хозяин, у нас запас на три месяца! Теперь можно спать спокойно';
+
+  @override
+  String mascot_event_best_month(String amount) {
+    return 'Лучший месяц за полгода! В запас ушло $amount. Горжусь тобой, хозяин';
+  }
+
+  @override
+  String mascot_event_days(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Уже $days дней мы считаем семечки вместе. Спасибо, хозяин!',
+      few: 'Уже $days дня мы считаем семечки вместе. Спасибо, хозяин!',
+      one: 'Уже $days день мы считаем семечки вместе. Спасибо, хозяин!',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get mascot_event_records =>
+      'Сотая запись! Хозяин, вдвоём считать куда веселее';
+
+  @override
+  String mascot_event_streak(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Хозяин, $days дней подряд без пропусков! Вот это дисциплина',
+      few: 'Хозяин, $days дня подряд без пропусков! Вот это дисциплина',
+      one: 'Хозяин, $days день подряд без пропусков! Вот это дисциплина',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String mascot_charge_today(String name, String amount) {
+    return 'Хозяин, сегодня $name заберёт $amount';
+  }
+
+  @override
+  String mascot_charge_tomorrow(String name, String amount) {
+    return 'Завтра $name заберёт $amount, хозяин';
+  }
+
+  @override
+  String mascot_charge_soon(String name, String amount) {
+    return 'Через пару дней $name заберёт $amount';
+  }
+
+  @override
+  String get mascot_charge_unnamed => 'подписка';
+
+  @override
+  String mascot_debt_due_today(String name) {
+    return 'Хозяин, сегодня срок по долгу с $name';
+  }
+
+  @override
+  String mascot_debt_due_tomorrow(String name) {
+    return 'Завтра срок по долгу с $name. Не забудем?';
+  }
+
+  @override
+  String mascot_debt_due_soon(String name, int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'До срока по долгу с $name осталось $days дней',
+      few: 'До срока по долгу с $name осталось $days дня',
+      one: 'До срока по долгу с $name остался $days день',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String mascot_insight_mover(String name, int percent) {
+    return 'Хозяин, на «$name» ушло на $percent% больше, чем в прошлом месяце. Глянем?';
+  }
+
+  @override
+  String mascot_insight_untagged(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count трат в этом месяце без метки. Разложим по полочкам?',
+      few: '$count траты в этом месяце без метки. Разложим по полочкам?',
+      one: '$count трата в этом месяце без метки. Разложим по полочкам?',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String mascot_insight_peak_day(String weekday) {
+    return '$weekday у тебя самый прожорливый день, хозяин';
+  }
+
+  @override
+  String mascot_insight_reserve(int months) {
+    String _temp0 = intl.Intl.pluralLogic(
+      months,
+      locale: localeName,
+      other: 'Щёчки в норме: семечек хватит примерно на $months месяцев',
+      few: 'Щёчки в норме: семечек хватит примерно на $months месяца',
+      one: 'Щёчки в норме: семечек хватит примерно на $months месяц',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String mascot_insight_top_expense(String name, String amount) {
+    return 'Самый большой укус месяца: «$name», $amount';
+  }
+
+  @override
+  String mascot_insight_top_expense_amount(String amount) {
+    return 'Самый большой укус месяца: $amount';
+  }
+
+  @override
+  String mascot_insight_daily_average(String amount) {
+    return 'Хозяин, в этом месяце в день уходит примерно $amount';
+  }
+
+  @override
+  String mascot_insight_daily_below(int percent) {
+    return 'В день уходит на $percent% меньше обычного. Хозяин, ты молодец!';
+  }
+
+  @override
+  String mascot_insight_daily_above(int percent) {
+    return 'Хозяин, в день уходит на $percent% больше обычного. Посмотрим, на что?';
+  }
+
+  @override
+  String mascot_insight_weekend(int percent) {
+    return 'По выходным семечки улетают на $percent% быстрее, чем в будни';
+  }
+
+  @override
+  String mascot_insight_frequent_tag(String name, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count раз за месяц в «$name». Хозяин, это уже привычка?',
+      few: '$count раза за месяц в «$name». Хозяин, это уже привычка?',
+      one: '$count раз за месяц в «$name». Хозяин, это уже привычка?',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String mascot_insight_small_spends(String amount) {
+    return 'Мелочь за месяц набежала на $amount. Семечка к семечке, хозяин';
+  }
+
+  @override
+  String mascot_insight_savings_rate(int percent) {
+    return 'Хозяин, в этом месяце $percent% дохода остаётся в запасе. Щёчки довольны!';
+  }
+
+  @override
+  String get mascot_insight_no_income =>
+      'Хозяин, в этом месяце ещё ни одной семечки не пришло. Зарплату записать не забыл?';
+
+  @override
+  String mascot_insight_forecast_over(String amount) {
+    return 'Если так пойдёт, за месяц уйдёт около $amount. Это больше обычного, хозяин';
+  }
+
+  @override
+  String mascot_insight_forecast_under(String amount) {
+    return 'Этот месяц выходит лёгким: около $amount. Запас скажет спасибо';
+  }
+
+  @override
+  String mascot_insight_owed_to_me(String amount) {
+    return 'Хозяин, тебе должны $amount. Может, пора аккуратно напомнить?';
+  }
+
+  @override
+  String mascot_insight_negative_wallet(String name) {
+    return '«$name» ушёл в минус, хозяин. Переложим туда немного семечек?';
+  }
+
+  @override
+  String mascot_insight_no_rate(String codes) {
+    return 'Не могу пересчитать $codes: нет курса. Появится интернет, досчитаю';
+  }
+
+  @override
+  String mascot_insight_income_up(int percent) {
+    return 'Хозяин, семечек пришло на $percent% больше обычного! Может, половину прибавки сразу в запас?';
+  }
+
+  @override
+  String mascot_insight_tag_yearly(String name, String amount) {
+    return 'Если так пойдёт, «$name» за год съест около $amount';
+  }
+
+  @override
+  String get mascot_insight_no_spend_yesterday =>
+      'Вчера ни одной траты! Хозяин, щёчки тобой гордятся';
+
+  @override
+  String get mascot_tip_budget =>
+      'Хозяин, бюджет — это просто заборчик вокруг семечек. Поставим первый?';
+
+  @override
+  String get mascot_tip_subscriptions =>
+      'Есть регулярные платежи? Добавь их один раз, дальше я сам послежу';
+
+  @override
+  String mascot_tip_subs_yearly(String amount) {
+    return 'Хозяин, подписки съедают $amount в год. Есть такие, которыми ты не пользуешься?';
+  }
+
+  @override
+  String mascot_tip_recurring_share(int percent) {
+    return '$percent% трат месяца — регулярные платежи. Крутятся, как моё колесо';
+  }
+
+  @override
+  String get mascot_tip_new_month =>
+      'Новый месяц, хозяин! Мешочек чистый. Заведём бюджеты?';
+
+  @override
+  String mascot_tip_monday_recap(String amount) {
+    return 'На прошлой неделе ушло $amount. Посмотрим, как справимся на этой, хозяин';
+  }
+
+  @override
+  String mascot_tip_month_end(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'До конца месяца $days дней. Хозяин, держишься отлично',
+      few: 'До конца месяца $days дня. Хозяин, держишься отлично',
+      one: 'До конца месяца $days день. Хозяин, держишься отлично',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get mascot_tip_tags =>
+      'Хозяин, метки помогают мне видеть, куда уходят семечки. Попробуй #еда или #дом';
+
+  @override
+  String mascot_tip_debt_due_date(String name) {
+    return 'Поставь срок долгу с $name, и я напомню вовремя';
+  }
+
+  @override
+  String mascot_tip_budget_for(String name, int percent) {
+    return 'Хозяин, «$name» забирает $percent% всех трат. Поставим ему бюджет?';
+  }
+
+  @override
+  String get mascot_tip_rainy_day =>
+      'Хозяин, заведи отдельный кошелёк-заначку на чёрный день. Тогда сюрпризы не застанут врасплох';
+
+  @override
+  String get mascot_tip_pay_yourself_first =>
+      'Семечки пришли! Хозяин, отложи часть сразу, пока не разбежались';
+
+  @override
+  String get mascot_tip_treat =>
+      'Запас в порядке, хозяин. Иногда можно себя побаловать, без угрызений';
+
+  @override
+  String mascot_tip_future_self(String amount, String amount2) {
+    return 'Всего $amount в день — это $amount2 за год. Хозяин, представь, какие будут щёки!';
+  }
+
+  @override
+  String get mascot_joke_friday =>
+      'Пятница, хозяин! Отдыхай, а семечки я посторожу';
+
+  @override
+  String get mascot_joke_late_night =>
+      'Поздно уже, хозяин… Записали и спать? Я уже зеваю';
+
+  @override
+  String get mascot_joke_cheeks =>
+      'Знаешь, хозяин, хомяки носят семечки за щеками. А я ношу твой бюджет';
+
+  @override
+  String get mascot_joke_trees =>
+      'Даже если бы семечки росли на деревьях, я бы всё равно прятал их за щёки';
+
+  @override
+  String get mascot_joke_twice =>
+      'Пересчитал твои семечки дважды. Сошлось, хозяин. Хороший знак';
+
+  @override
+  String get mascot_joke_secret =>
+      'Псс, хозяин… Округляй каждую трату в уме вверх. Разница и будет твоей тайной заначкой';
+
+  @override
+  String mascot_reaction_income(String amount) {
+    return 'Поймал $amount! В запас, хозяин';
+  }
+
+  @override
+  String mascot_reaction_big_income(String amount) {
+    return 'Ого, хозяин! +$amount. Щёки сейчас лопнут!';
+  }
+
+  @override
+  String mascot_reaction_transfer(String amount) {
+    return 'Переложил $amount';
+  }
+
+  @override
+  String mascot_reaction_lent(String amount) {
+    return 'Одолжили $amount. Я запомню, хозяин';
+  }
+
+  @override
+  String get mascot_reaction_debt_closed => 'Долг закрыт! Хозяин, лапки чистые';
+
+  @override
+  String get mascot_reaction_forgiven =>
+      'Простил долг… Хозяин, у тебя доброе сердце';
+
+  @override
+  String get mascot_reaction_first_wallet =>
+      'Первый кошелёк, хозяин! Начинаем копить';
+
+  @override
+  String get mascot_reaction_budget => 'Бюджет готов. Буду сторожить, хозяин';
+
+  @override
+  String get mascot_wallet_negative => 'Хозяин, этот кошелёк ушёл в минус';
+
+  @override
+  String mascot_wallet_down(int percent) {
+    return 'С начала месяца тут убыло $percent% семечек';
+  }
+
+  @override
+  String mascot_wallet_up(String amount) {
+    return 'С начала месяца тут прибавилось $amount. Хозяин, красота!';
+  }
+
+  @override
+  String get mascot_wallet_sleeping => 'Этот кошелёк спит уже месяц. Тсс…';
+
+  @override
+  String get mascot_wallet_calm => 'Тут всё спокойно, хозяин';
+
+  @override
+  String mascot_budgets_over(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Хозяин, $count бюджетов вышли за лимит',
+      few: 'Хозяин, $count бюджета вышли за лимит',
+      one: 'Хозяин, $count бюджет вышел за лимит',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String mascot_budgets_near(String name) {
+    return '«$name» почти на пределе, хозяин';
+  }
+
+  @override
+  String get mascot_budgets_calm =>
+      'Все заборчики целы, хозяин. Бюджеты в норме';
+
+  @override
+  String mascot_budget_detail_over(String amount) {
+    return 'Перебор на $amount. Может, в следующий раз поднимем лимит, хозяин?';
+  }
+
+  @override
+  String mascot_budget_detail_pace(String date) {
+    return 'Если так пойдёт, лимит закончится $date';
+  }
+
+  @override
+  String get mascot_budget_detail_within =>
+      'Уложились в лимит! Хозяин, горжусь';
+
+  @override
+  String get mascot_budget_detail_calm => 'Всё идёт по плану, хозяин';
+
+  @override
+  String mascot_debts_overdue(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Хозяин, $count долгов просрочены',
+      few: 'Хозяин, $count долга просрочены',
+      one: 'Хозяин, $count долг просрочен',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get mascot_debts_all_closed =>
+      'Все долги закрыты! Хозяин, лапки чистые';
+
+  @override
+  String get mascot_debts_tracking => 'Я слежу, кто кому должен семечки';
+
+  @override
+  String mascot_debt_detail_overdue(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Срок прошёл $days дней назад, хозяин',
+      few: 'Срок прошёл $days дня назад, хозяин',
+      one: 'Срок прошёл $days день назад, хозяин',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get mascot_debt_detail_lent => 'Я запомнил, кому мы одолжили, хозяин';
+
+  @override
+  String mascot_debt_detail_due(String date) {
+    return 'Вернуть нужно до $date';
+  }
+
+  @override
+  String mascot_subs_spinning(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count подписок каждый месяц забирают свою долю семечек',
+      few: '$count подписки каждый месяц забирают свою долю семечек',
+      one: '$count подписка каждый месяц забирает свою долю семечек',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String mascot_tags_top(String name) {
+    return 'Больше всего семечек в этом месяце ушло на «$name»';
+  }
+
+  @override
+  String mascot_tag_up(int percent) {
+    return 'Тут на $percent% больше, чем в прошлом месяце';
+  }
+
+  @override
+  String mascot_tag_down(int percent) {
+    return 'На $percent% меньше, чем в прошлом месяце. Хозяин, молодец!';
+  }
+
+  @override
+  String mascot_progress_saved(String amount) {
+    return 'В запас ушло $amount. Хозяин, отличная работа!';
+  }
+
+  @override
+  String mascot_progress_over(String amount) {
+    return 'Семечек ушло на $amount больше, чем пришло';
+  }
+
+  @override
+  String mascot_progress_over_tag(String amount, String name) {
+    return 'Семечек ушло на $amount больше, чем пришло, в основном на «$name»';
+  }
+
+  @override
+  String mascot_progress_forecast(String amount) {
+    return 'Если так пойдёт, за период уйдёт около $amount';
+  }
+
+  @override
+  String get mascot_progress_counting => 'Ещё считаю этот период, хозяин';
+
+  @override
+  String get mascot_screen_wallet_filter =>
+      'Отфильтруй по метке, и увидишь, куда уходят семечки из этого кошелька';
+
+  @override
+  String get mascot_screen_wallet_switch =>
+      'Нажми на название кошелька сверху, чтобы перепрыгнуть в другой';
+
+  @override
+  String get mascot_screen_wallet_limit =>
+      'Во вкладке «Бюджеты» можно поставить лимит на этот кошелёк';
+
+  @override
+  String get mascot_screen_budgets_rollover =>
+      'Бюджет умеет переносить остаток на следующий период. Ни одна семечка не пропадёт';
+
+  @override
+  String get mascot_screen_budgets_tags =>
+      'Бюджет может следить только за нужными метками. Например, за #кафе';
+
+  @override
+  String get mascot_screen_budget_periods =>
+      'Листай периоды, чтобы сравнить с прошлыми';
+
+  @override
+  String get mascot_screen_debts_due =>
+      'Поставь срок, и я напомню вовремя, хозяин';
+
+  @override
+  String get mascot_screen_debts_quick =>
+      'Вернуть долг быстрее всего с экрана операции: Перевод → Долги';
+
+  @override
+  String get mascot_screen_subs_pause =>
+      'Подписку можно поставить на паузу вместо удаления. История останется';
+
+  @override
+  String get mascot_screen_tags_nest =>
+      'Метки можно вкладывать через слэш: еда/кофе';
+
+  @override
+  String get mascot_screen_tags_map =>
+      'Открой карту, хозяин, и увидишь, как связаны твои метки';
+
+  @override
+  String get mascot_screen_tag_rename =>
+      'Переименуй или перенеси метку, вложенные пойдут следом';
+
+  @override
+  String get mascot_screen_progress_baseline =>
+      'Нажми «vs …», чтобы сравнить с прошлым годом или средним за 3 месяца';
+
+  @override
+  String mascot_ans_spent_today(String amount, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Сегодня ушло $amount, $count трат',
+      few: 'Сегодня ушло $amount, $count траты',
+      one: 'Сегодня ушло $amount, $count трата',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get mascot_ans_nothing_today =>
+      'Сегодня ни одной траты, хозяин. Семечки целы!';
+
+  @override
+  String mascot_ans_spent_yesterday(String amount, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Вчера ушло $amount, $count трат',
+      few: 'Вчера ушло $amount, $count траты',
+      one: 'Вчера ушло $amount, $count трата',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get mascot_ans_nothing_yesterday =>
+      'Вчера ты не потратил ни семечки. Ура!';
+
+  @override
+  String mascot_ans_spent_week(String amount) {
+    return 'За эту неделю ушло $amount';
+  }
+
+  @override
+  String mascot_ans_spent_month(String expense, String income) {
+    return 'В этом месяце ушло $expense, а пришло $income';
+  }
+
+  @override
+  String get mascot_ans_no_expenses =>
+      'В этом месяце трат пока нет. Хозяин, красота';
+
+  @override
+  String mascot_ans_upcoming(String amount, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'В ближайшие 7 дней $count платежей: $amount',
+      few: 'В ближайшие 7 дней $count платежа: $amount',
+      one: 'В ближайшие 7 дней $count платёж: $amount',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get mascot_ans_nothing_upcoming =>
+      'Ближайшую неделю платить ничего не нужно';
+
+  @override
+  String mascot_ans_owed(String amount, String name) {
+    return 'Тебе должны $amount, больше всех $name';
+  }
+
+  @override
+  String get mascot_ans_nobody_owes => 'Сейчас тебе никто ничего не должен';
+
+  @override
+  String get mascot_ans_reserve_low =>
+      'Запаса меньше чем на месяц, хозяин. Давай вместе набьём щёчки';
+
+  @override
+  String get mascot_ans_reserve_unknown =>
+      'Мне нужен примерно месяц записей, чтобы ответить точно';
+
+  @override
+  String mascot_ans_where(String name, int percent, String name2) {
+    return 'Больше всего семечек ушло на «$name» ($percent%), следом «$name2»';
+  }
+
+  @override
+  String mascot_ans_where_one(String name, int percent) {
+    return 'Почти все семечки ушли на «$name», $percent%';
+  }
+
+  @override
+  String mascot_ans_where_untagged(int percent) {
+    return 'Хозяин, $percent% трат без меток, и я не вижу, куда они ушли. Разложим?';
+  }
+
+  @override
+  String get mascot_q_today => 'Сколько сегодня?';
+
+  @override
+  String get mascot_q_yesterday => 'А вчера?';
+
+  @override
+  String get mascot_q_week => 'За неделю?';
+
+  @override
+  String get mascot_q_month => 'За месяц?';
+
+  @override
+  String get mascot_q_where => 'Куда ушли семечки?';
+
+  @override
+  String get mascot_q_biggest => 'Самая большая трата?';
+
+  @override
+  String get mascot_q_budgets => 'Укладываюсь в бюджеты?';
+
+  @override
+  String get mascot_q_upcoming => 'Что скоро платить?';
+
+  @override
+  String get mascot_q_owed => 'Кто мне должен?';
+
+  @override
+  String get mascot_q_reserve => 'Надолго хватит?';
+
+  @override
+  String get mascot_q_tip => 'Дай совет';
+
+  @override
+  String get mascot_q_joke => 'Рассмеши';
 
   @override
   String get l10nStopLineDontTouch =>

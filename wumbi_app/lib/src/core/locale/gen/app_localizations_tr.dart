@@ -2515,24 +2515,781 @@ class AppLocalizationsTr extends AppLocalizations {
   String get menu_close => 'Menüyü kapat';
 
   @override
-  String menu_wallets(int count) {
+  String get settings_mascot_talks => 'Wumbi konuşsun';
+
+  @override
+  String get mascot_label => 'Hamster Wumbi. Sohbet için dokun';
+
+  @override
+  String get mascot_dismiss => 'Wumbi köşesine dönsün';
+
+  @override
+  String get mascot_action_view => 'Göster';
+
+  @override
+  String get mascot_action_add => 'Ekle';
+
+  @override
+  String mascot_month_flow(String month, String income, String expense) {
+    return '$month: +$income · −$expense';
+  }
+
+  @override
+  String get mascot_greeting_morning => 'Günaydın patron!';
+
+  @override
+  String get mascot_greeting_afternoon => 'Selam patron!';
+
+  @override
+  String get mascot_greeting_evening => 'İyi akşamlar patron!';
+
+  @override
+  String get mascot_all_calm => 'Her şey sakin, çekirdekler yerli yerinde';
+
+  @override
+  String get mascot_all_for_now => 'Şimdilik bildiğim bu kadar 🙂';
+
+  @override
+  String get mascot_quiet_today => 'Anladım patron, bugün sesim çıkmayacak';
+
+  @override
+  String mascot_flow_up(String amount, String month) {
+    return '$month: zula $amount büyüdü. Böyle devam!';
+  }
+
+  @override
+  String mascot_flow_down(String amount, String month) {
+    return '$month: gidenden $amount fazla çıktı. Telafi ederiz';
+  }
+
+  @override
+  String mascot_reserve_full(int months) {
     String _temp0 = intl.Intl.pluralLogic(
-      count,
+      months,
       locale: localeName,
-      other: 'cüzdan',
+      other: 'Yanaklar dolu! $months ay yetecek kadar çekirdek var',
     );
     return '$_temp0';
   }
 
   @override
-  String menu_budgets(int count) {
+  String mascot_debt_overdue(String name, int days) {
     String _temp0 = intl.Intl.pluralLogic(
-      count,
+      days,
       locale: localeName,
-      other: 'bütçe',
+      other: 'Patron, $name ile olan borcun vadesi $days gün önce geçti',
+      one: 'Patron, $name ile olan borcun vadesi dün geçti',
     );
     return '$_temp0';
   }
+
+  @override
+  String mascot_debt_overdue_nudge(String name) {
+    return '$name ile olan borç hâlâ duruyor patron. Bir bakalım mı?';
+  }
+
+  @override
+  String mascot_budget_over(String name) {
+    return 'Patron, “$name” limiti aştı. Çekirdekler nereye kaçmış bakalım';
+  }
+
+  @override
+  String mascot_budget_over_by(String name, String amount) {
+    return '“$name” $amount aştı. Birlikte bakalım mı patron?';
+  }
+
+  @override
+  String mascot_budget_near_left(String name, String amount) {
+    return 'Bu dönem “$name” içinde sadece $amount kaldı patron';
+  }
+
+  @override
+  String mascot_budget_near_percent(String name, int percent) {
+    return '“$name” şimdiden %$percent oldu. Biraz yavaşlayalım mı?';
+  }
+
+  @override
+  String mascot_sleep_days(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other:
+          'Uyuyakalmışım patron… $days gündür kayıt yok. Eksikleri ekleyelim mi?',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get mascot_sleep_quiet =>
+      'Burası çok sessiz. Bir şey yazmayı unutmadın mı patron?';
+
+  @override
+  String get mascot_sigh_month =>
+      'Patron, bu ay giren çekirdekten çok çıkan var. Sızıntıyı bulalım mı?';
+
+  @override
+  String get mascot_sigh_ahead =>
+      'Harcamalar geliri geçti. Neyi kısabiliriz birlikte bakalım';
+
+  @override
+  String mascot_welcome_back(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Döndün patron! Geçen seferden beri $count yeni kayıt var',
+      zero: 'Döndün patron! Sen yokken her yer sessizdi',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get mascot_evening_waited => 'Patron! Bütün gün seni bekledim!';
+
+  @override
+  String get mascot_evening_missed => 'Seni özledim…';
+
+  @override
+  String get mascot_evening_log =>
+      'Unutmadan bugünün harcamalarını yazalım mı?';
+
+  @override
+  String get mascot_evening_count =>
+      'Bugünün çekirdeklerini saymama yardım eder misin?';
+
+  @override
+  String get mascot_event_reserve =>
+      'Patron, üç aylık çekirdeğimiz var! Artık rahat uyuyabiliriz';
+
+  @override
+  String mascot_event_best_month(String amount) {
+    return 'Son altı ayın en iyi ayı! Zulaya $amount girdi. Seninle gurur duyuyorum patron';
+  }
+
+  @override
+  String mascot_event_days(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '$days gündür birlikte çekirdek sayıyoruz. Teşekkürler patron!',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get mascot_event_records =>
+      '100. kayıt! İkimiz birlikte sayınca çok daha eğlenceli patron';
+
+  @override
+  String mascot_event_streak(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '$days gündür hiç aksatmadın patron! İşte disiplin bu',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String mascot_charge_today(String name, String amount) {
+    return 'Patron, bugün $name $amount alacak';
+  }
+
+  @override
+  String mascot_charge_tomorrow(String name, String amount) {
+    return 'Yarın $name $amount alacak patron';
+  }
+
+  @override
+  String mascot_charge_soon(String name, String amount) {
+    return 'Birkaç gün içinde $name $amount alacak';
+  }
+
+  @override
+  String get mascot_charge_unnamed => 'bir abonelik';
+
+  @override
+  String mascot_debt_due_today(String name) {
+    return 'Patron, $name ile olan borcun vadesi bugün';
+  }
+
+  @override
+  String mascot_debt_due_tomorrow(String name) {
+    return '$name ile olan borcun vadesi yarın. Unutmayalım mı?';
+  }
+
+  @override
+  String mascot_debt_due_soon(String name, int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '$name ile olan borcun vadesine $days gün kaldı',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String mascot_insight_mover(String name, int percent) {
+    return 'Patron, “$name” geçen aydan %$percent fazla çekirdek yiyor. Bakalım mı?';
+  }
+
+  @override
+  String mascot_insight_untagged(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Bu ay $count harcamanın etiketi yok. Bir düzene sokalım mı?',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String mascot_insight_peak_day(String weekday) {
+    return 'En aç gözlü günün $weekday patron';
+  }
+
+  @override
+  String mascot_insight_reserve(int months) {
+    String _temp0 = intl.Intl.pluralLogic(
+      months,
+      locale: localeName,
+      other: 'Yanaklar fena değil: yaklaşık $months aylık çekirdek var',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String mascot_insight_top_expense(String name, String amount) {
+    return 'Bu ayın en büyük lokması: “$name”, $amount';
+  }
+
+  @override
+  String mascot_insight_top_expense_amount(String amount) {
+    return 'Bu ayın en büyük tek lokması: $amount';
+  }
+
+  @override
+  String mascot_insight_daily_average(String amount) {
+    return 'Patron, bu ay günde yaklaşık $amount gidiyor';
+  }
+
+  @override
+  String mascot_insight_daily_below(int percent) {
+    return 'Günde her zamankinden %$percent az çekirdek gidiyor. Aferin patron!';
+  }
+
+  @override
+  String mascot_insight_daily_above(int percent) {
+    return 'Patron, günde her zamankinden %$percent fazla çekirdek gidiyor. Nereye, bakalım mı?';
+  }
+
+  @override
+  String mascot_insight_weekend(int percent) {
+    return 'Hafta sonları çekirdekler hafta içinden %$percent daha hızlı uçuyor';
+  }
+
+  @override
+  String mascot_insight_frequent_tag(String name, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Bu ay $count kez “$name”. Alışkanlık mı oluyor patron?',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String mascot_insight_small_spends(String amount) {
+    return 'Ufak alışverişler bu ay $amount etti. Çekirdek çekirdek patron';
+  }
+
+  @override
+  String mascot_insight_savings_rate(int percent) {
+    return 'Patron, bu ay gelirin %$percent kadarı zulada kalıyor. Yanaklar mutlu!';
+  }
+
+  @override
+  String get mascot_insight_no_income =>
+      'Bu ay tek çekirdek gelmedi patron. Maaşı yazmayı unutmadın mı?';
+
+  @override
+  String mascot_insight_forecast_over(String amount) {
+    return 'Böyle giderse bu ay yaklaşık $amount gidecek. Her zamankinden fazla patron';
+  }
+
+  @override
+  String mascot_insight_forecast_under(String amount) {
+    return 'Bu ay hafif geçiyor: yaklaşık $amount. Zula teşekkür ediyor';
+  }
+
+  @override
+  String mascot_insight_owed_to_me(String amount) {
+    return 'Patron, sana $amount borç var. Kibarca hatırlatma zamanı mı?';
+  }
+
+  @override
+  String mascot_insight_negative_wallet(String name) {
+    return '“$name” eksiye düştü patron. Biraz çekirdek aktaralım mı?';
+  }
+
+  @override
+  String mascot_insight_no_rate(String codes) {
+    return '$codes için kur yok, çeviremiyorum. İnternet gelince saymayı bitiririm';
+  }
+
+  @override
+  String mascot_insight_income_up(int percent) {
+    return 'Patron, her zamankinden %$percent fazla çekirdek geldi! Fazlanın yarısını hemen zulaya mı atsak?';
+  }
+
+  @override
+  String mascot_insight_tag_yearly(String name, String amount) {
+    return 'Böyle giderse “$name” yılda yaklaşık $amount yiyecek';
+  }
+
+  @override
+  String get mascot_insight_no_spend_yesterday =>
+      'Dün tek bir harcama yok! Yanaklarım seninle gurur duyuyor patron';
+
+  @override
+  String get mascot_tip_budget =>
+      'Patron, bütçe çekirdeklerin etrafına küçük bir çit. İlkini kuralım mı?';
+
+  @override
+  String get mascot_tip_subscriptions =>
+      'Düzenli ödemeler var mı? Bir kez ekle, gerisini ben takip ederim';
+
+  @override
+  String mascot_tip_subs_yearly(String amount) {
+    return 'Patron, abonelikler yılda $amount yiyor. Kullanmadığın var mı?';
+  }
+
+  @override
+  String mascot_tip_recurring_share(int percent) {
+    return 'Bu ayın harcamalarının %$percent kadarı düzenli ödeme. Benim çark gibi dönüp duruyor';
+  }
+
+  @override
+  String get mascot_tip_new_month =>
+      'Yeni ay patron! Kese tertemiz. Bütçe kuralım mı?';
+
+  @override
+  String mascot_tip_monday_recap(String amount) {
+    return 'Geçen hafta $amount gitti. Bakalım bu hafta nasıl gideceğiz patron';
+  }
+
+  @override
+  String mascot_tip_month_end(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Ayın bitmesine $days gün kaldı. Harika gidiyorsun patron',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get mascot_tip_tags =>
+      'Etiketler çekirdeklerin nereye gittiğini görmeme yardım ediyor patron. #yemek ya da #ev dene';
+
+  @override
+  String mascot_tip_debt_due_date(String name) {
+    return '$name ile olan borca vade koy, zamanında hatırlatırım';
+  }
+
+  @override
+  String mascot_tip_budget_for(String name, int percent) {
+    return 'Patron, “$name” tüm harcamaların %$percent kadarını alıyor. Ona bir bütçe koyalım mı?';
+  }
+
+  @override
+  String get mascot_tip_rainy_day =>
+      'Patron, kara gün için ayrı bir cüzdan aç. Sürprizler bizi hazırlıksız yakalamasın';
+
+  @override
+  String get mascot_tip_pay_yourself_first =>
+      'Çekirdekler geldi! Dağılmadan bir kısmını hemen kenara koy patron';
+
+  @override
+  String get mascot_tip_treat =>
+      'Zula yerinde patron. Arada bir kendini şımartabilirsin, vicdan azabı yok';
+
+  @override
+  String mascot_tip_future_self(String amount, String amount2) {
+    return 'Günde sadece $amount, yılda $amount2 eder. O yanakları düşün patron!';
+  }
+
+  @override
+  String get mascot_joke_friday =>
+      'Cuma geldi patron! Sen eğlen, çekirdekleri ben beklerim';
+
+  @override
+  String get mascot_joke_late_night =>
+      'Geç oldu patron… Yazıp yatalım mı? Ben esniyorum bile';
+
+  @override
+  String get mascot_joke_cheeks =>
+      'Biliyor musun patron? Hamsterlar çekirdeği yanağında taşır. Ben de senin bütçeni';
+
+  @override
+  String get mascot_joke_trees =>
+      'Çekirdekler ağaçta yetişse bile yine yanaklarıma saklardım';
+
+  @override
+  String get mascot_joke_twice =>
+      'Çekirdeklerini iki kez saydım. Aynı çıktı patron. İyiye işaret';
+
+  @override
+  String get mascot_joke_secret =>
+      'Psst patron… Her harcamayı kafanda yukarı yuvarla. Aradaki fark senin gizli zulan';
+
+  @override
+  String mascot_reaction_income(String amount) {
+    return '$amount yakaladım! Zulaya patron';
+  }
+
+  @override
+  String mascot_reaction_big_income(String amount) {
+    return 'Vay patron! +$amount. Yanaklarım patlayacak!';
+  }
+
+  @override
+  String mascot_reaction_transfer(String amount) {
+    return '$amount aktardım';
+  }
+
+  @override
+  String mascot_reaction_lent(String amount) {
+    return '$amount borç verdik. Unutmam patron';
+  }
+
+  @override
+  String get mascot_reaction_debt_closed =>
+      'Borç kapandı! Patiler tertemiz patron';
+
+  @override
+  String get mascot_reaction_forgiven => 'Bağışladın… Yüreğin güzel patron';
+
+  @override
+  String get mascot_reaction_first_wallet =>
+      'İlk cüzdan patron! Biriktirmeye başlıyoruz';
+
+  @override
+  String get mascot_reaction_budget => 'Bütçe hazır. Nöbetteyim patron';
+
+  @override
+  String get mascot_wallet_negative => 'Patron, bu cüzdan eksiye düştü';
+
+  @override
+  String mascot_wallet_down(int percent) {
+    return 'Ayın başından beri buradaki çekirdeklerin %$percent kadarı gitti';
+  }
+
+  @override
+  String mascot_wallet_up(String amount) {
+    return 'Ay başından beri $amount arttı. Harika patron!';
+  }
+
+  @override
+  String get mascot_wallet_sleeping => 'Bu cüzdan bir aydır uyuyor. Şşş…';
+
+  @override
+  String get mascot_wallet_calm => 'Burada her şey sakin patron';
+
+  @override
+  String mascot_budgets_over(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Patron, $count bütçe limiti aştı',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String mascot_budgets_near(String name) {
+    return '“$name” neredeyse bitti patron';
+  }
+
+  @override
+  String get mascot_budgets_calm =>
+      'Bütün çitler sağlam patron. Bütçeler yolunda';
+
+  @override
+  String mascot_budget_detail_over(String amount) {
+    return '$amount aştı. Bir dahaki sefere limiti artıralım mı patron?';
+  }
+
+  @override
+  String mascot_budget_detail_pace(String date) {
+    return 'Böyle giderse limit $date tarihinde biter';
+  }
+
+  @override
+  String get mascot_budget_detail_within =>
+      'Limitin içinde kaldık! Gurur duyuyorum patron';
+
+  @override
+  String get mascot_budget_detail_calm => 'Her şey planlandığı gibi patron';
+
+  @override
+  String mascot_debts_overdue(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Patron, $count borcun vadesi geçti',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get mascot_debts_all_closed =>
+      'Bütün borçlar kapandı! Patiler tertemiz patron';
+
+  @override
+  String get mascot_debts_tracking =>
+      'Kimin kime çekirdek borcu var, ben takip ediyorum';
+
+  @override
+  String mascot_debt_detail_overdue(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Vadesi $days gün önce geçti patron',
+      one: 'Vadesi dün geçti patron',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get mascot_debt_detail_lent =>
+      'Çekirdeklerimizi kimin ödünç aldığını unutmadım patron';
+
+  @override
+  String mascot_debt_detail_due(String date) {
+    return 'Son tarih: $date';
+  }
+
+  @override
+  String mascot_subs_spinning(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count abonelik her ay çekirdekten payını alıyor',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String mascot_tags_top(String name) {
+    return 'Bu ay çekirdeklerin çoğu “$name” için gitti';
+  }
+
+  @override
+  String mascot_tag_up(int percent) {
+    return 'Burada geçen aydan %$percent fazla';
+  }
+
+  @override
+  String mascot_tag_down(int percent) {
+    return 'Geçen aydan %$percent az. Aferin patron!';
+  }
+
+  @override
+  String mascot_progress_saved(String amount) {
+    return 'Zulaya $amount girdi. Harika iş patron!';
+  }
+
+  @override
+  String mascot_progress_over(String amount) {
+    return 'Gelenden $amount fazla çekirdek gitti';
+  }
+
+  @override
+  String mascot_progress_over_tag(String amount, String name) {
+    return 'Gelenden $amount fazla çekirdek gitti, çoğu “$name” için';
+  }
+
+  @override
+  String mascot_progress_forecast(String amount) {
+    return 'Böyle giderse bu dönem yaklaşık $amount gidecek';
+  }
+
+  @override
+  String get mascot_progress_counting => 'Bu dönemi hâlâ sayıyorum patron';
+
+  @override
+  String get mascot_screen_wallet_filter =>
+      'Etikete göre filtrele, bu cüzdanın çekirdekleri nereye gidiyor gör';
+
+  @override
+  String get mascot_screen_wallet_switch =>
+      'Başka cüzdana zıplamak için üstteki adına dokun';
+
+  @override
+  String get mascot_screen_wallet_limit =>
+      'Bütçeler sekmesinden bu cüzdana sınır koyabilirsin';
+
+  @override
+  String get mascot_screen_budgets_rollover =>
+      'Bütçe artanı bir sonraki döneme aktarabilir. Tek çekirdek ziyan olmaz';
+
+  @override
+  String get mascot_screen_budgets_tags =>
+      'Bütçe sadece seçtiğin etiketleri izleyebilir. Mesela #kafe';
+
+  @override
+  String get mascot_screen_budget_periods =>
+      'Öncekilerle karşılaştırmak için dönemler arasında gez';
+
+  @override
+  String get mascot_screen_debts_due =>
+      'Vade koy, zamanında hatırlatırım patron';
+
+  @override
+  String get mascot_screen_debts_quick =>
+      'En hızlı ödeme yolu: işlem ekranında Aktarım → Borçlar';
+
+  @override
+  String get mascot_screen_subs_pause =>
+      'Aboneliği silmek yerine duraklatabilirsin. Geçmişi kalır';
+
+  @override
+  String get mascot_screen_tags_nest =>
+      'Etiketleri eğik çizgiyle iç içe koy: yemek/kahve';
+
+  @override
+  String get mascot_screen_tags_map =>
+      'Haritayı aç patron, etiketlerin nasıl bağlı gör';
+
+  @override
+  String get mascot_screen_tag_rename =>
+      'Etiketi yeniden adlandır ya da taşı, alt etiketler de peşinden gelir';
+
+  @override
+  String get mascot_screen_progress_baseline =>
+      'Geçen yılla ya da 3 aylık ortalamayla karşılaştırmak için “vs …” dokun';
+
+  @override
+  String mascot_ans_spent_today(String amount, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Bugün $count harcamada $amount gitti',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get mascot_ans_nothing_today =>
+      'Bugün hiç harcama yok patron. Çekirdekler sapasağlam!';
+
+  @override
+  String mascot_ans_spent_yesterday(String amount, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Dün $count harcamada $amount gitti',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get mascot_ans_nothing_yesterday =>
+      'Dün tek çekirdek harcamadın. Yaşasın!';
+
+  @override
+  String mascot_ans_spent_week(String amount) {
+    return 'Bu hafta şimdiye kadar $amount gitti';
+  }
+
+  @override
+  String mascot_ans_spent_month(String expense, String income) {
+    return 'Bu ay $expense gitti, $income geldi';
+  }
+
+  @override
+  String get mascot_ans_no_expenses => 'Bu ay henüz harcama yok. Harika patron';
+
+  @override
+  String mascot_ans_upcoming(String amount, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Önümüzdeki 7 günde $count ödeme var: $amount',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get mascot_ans_nothing_upcoming =>
+      'Önümüzdeki hafta ödenecek bir şey yok';
+
+  @override
+  String mascot_ans_owed(String amount, String name) {
+    return 'Sana $amount borç var, en çok $name';
+  }
+
+  @override
+  String get mascot_ans_nobody_owes => 'Şu an kimsenin sana borcu yok';
+
+  @override
+  String get mascot_ans_reserve_low =>
+      'Bir aydan az çekirdek var patron. Hadi bu yanakları birlikte dolduralım';
+
+  @override
+  String get mascot_ans_reserve_unknown =>
+      'Doğru cevap için yaklaşık bir aylık kayıt lazım';
+
+  @override
+  String mascot_ans_where(String name, int percent, String name2) {
+    return 'Çekirdeklerin çoğu “$name” için gitti (%$percent), sonra “$name2”';
+  }
+
+  @override
+  String mascot_ans_where_one(String name, int percent) {
+    return 'Çekirdeklerin neredeyse hepsi “$name” için gitti, %$percent';
+  }
+
+  @override
+  String mascot_ans_where_untagged(int percent) {
+    return 'Patron, harcamaların %$percent kadarında etiket yok, nereye gittiğini göremiyorum. Düzenleyelim mi?';
+  }
+
+  @override
+  String get mascot_q_today => 'Bugün ne kadar?';
+
+  @override
+  String get mascot_q_yesterday => 'Peki dün?';
+
+  @override
+  String get mascot_q_week => 'Bu hafta?';
+
+  @override
+  String get mascot_q_month => 'Bu ay?';
+
+  @override
+  String get mascot_q_where => 'Çekirdekler nereye gitti?';
+
+  @override
+  String get mascot_q_biggest => 'En büyük harcama?';
+
+  @override
+  String get mascot_q_budgets => 'Bütçede miyim?';
+
+  @override
+  String get mascot_q_upcoming => 'Yakında ne ödeyeceğim?';
+
+  @override
+  String get mascot_q_owed => 'Kimin bana borcu var?';
+
+  @override
+  String get mascot_q_reserve => 'Ne kadar yeter?';
+
+  @override
+  String get mascot_q_tip => 'Bir tavsiye?';
+
+  @override
+  String get mascot_q_joke => 'Beni güldür';
 
   @override
   String get l10nStopLineDontTouch =>

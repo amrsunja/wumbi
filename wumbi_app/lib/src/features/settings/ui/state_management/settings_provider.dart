@@ -12,6 +12,7 @@ import '../../../../core/utils/enums/app_theme_type.dart';
 import '../../../../core/utils/state_management/app_events.dart';
 import '../../../../core/utils/state_management/single_events.dart';
 import '../../../../core/utils/typedefs.dart';
+import '../../../mascot/ui/mascot_providers.dart';
 import '../../../wallet/data/wallet_repository.dart';
 import '../../data/models/app_settings.dart';
 import '../../data/settings_repo.dart';
@@ -28,6 +29,11 @@ final baseCurrencyProvider = Provider<CurrencyType>(
 /// settings row is loaded.
 final showMascotProvider = Provider<bool>(
   (ref) => ref.watch(settingsProvider.select((s) => s.data?.showMascot)) ?? true,
+);
+
+/// Settings → "Wumbi talks": speech bubbles on / off (on until loaded).
+final mascotTalksProvider = Provider<bool>(
+  (ref) => ref.watch(settingsProvider.select((s) => s.data?.mascotTalks)) ?? true,
 );
 
 class SettingsNotifier extends Notifier<SettingsState> {
@@ -118,6 +124,8 @@ class SettingsNotifier extends Notifier<SettingsState> {
   Future<void> changeMascotVisibility(bool visible) =>
       _apply(() => _repo.changeMascotVisibility(visible));
 
+  Future<void> changeMascotTalks(bool talks) => _apply(() => _repo.changeMascotTalks(talks));
+
   Future<void> onboardingCompleted() => _apply(_repo.onboardingCompleted);
 
   /// Reset All Data ([A6]): wipe DB + key, re-init, back to onboarding.
@@ -129,6 +137,8 @@ class SettingsNotifier extends Notifier<SettingsState> {
         ok = true;
         state = state.copyWith(data: success);
         ref.read(dbRevisionProvider.notifier).bump();
+        // The file is gone: the companion's memory starts over too.
+        ref.invalidate(mascotMemoryProvider);
         _events.send(const ReplaceAllRoutesEvent([OnboardingRoute()]));
       },
       (error) => _events.send(ShowErrorEvent(error)),

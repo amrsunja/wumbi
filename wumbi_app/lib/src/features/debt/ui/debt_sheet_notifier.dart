@@ -18,6 +18,8 @@ import '../../wallet/data/models/wallet_model.dart';
 import '../data/debt_repository.dart';
 import '../data/models/debt_intent.dart';
 import '../data/models/debt_model.dart';
+import '../../mascot/domain/mascot_reaction.dart';
+import '../../mascot/ui/mascot_providers.dart';
 import 'debt_labels.dart';
 
 part 'debt_sheet_notifier.freezed.dart';
@@ -139,6 +141,9 @@ class DebtSheetNotifier extends Notifier<DebtSheetState> {
         message = summary == null ? _l10n.transaction_saved(walletAmount.format(), wallet.name) : DebtLabels.commitToast(_l10n, summary);
       }
       AppVibrations.medium();
+      if (amount.minor >= s.remaining.minor) {
+        ref.read(mascotReactionProvider.notifier).push(MascotReactionKind.debtClosed);
+      }
       _events.send(ShowSuccessMessageEvent(message));
       return true;
     } on FxUnavailableException {
@@ -161,6 +166,7 @@ class DebtSheetNotifier extends Notifier<DebtSheetState> {
     );
     return result.when((_) {
       AppVibrations.medium();
+      ref.read(mascotReactionProvider.notifier).push(MascotReactionKind.debtForgiven);
       _events.send(ShowInfoMessageEvent(_l10n.debt_forgiven_toast(d.summary.person.name)));
       return true;
     }, (error) {

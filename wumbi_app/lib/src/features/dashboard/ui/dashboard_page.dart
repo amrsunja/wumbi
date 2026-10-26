@@ -8,6 +8,7 @@ import '../../../core/routing/app_router.dart';
 import '../../../core/utils/app_vibrations.dart';
 import '../../../core/utils/constants/constants.dart';
 import '../../../core/utils/extensions/build_context_extensions.dart';
+import '../../../core/utils/extensions/date_time_extensions.dart';
 import '../../../core/utils/state_management/app_events.dart';
 import '../../../core/utils/state_management/single_events.dart';
 import '../../budget/ui/budget_labels.dart';
@@ -15,7 +16,8 @@ import '../../budget/ui/budgets_provider.dart';
 import '../../budget/ui/widgets/budget_progress_row.dart';
 import '../../debt/ui/debts_provider.dart';
 import '../../debt/ui/widgets/debt_summary_row.dart';
-import '../../settings/ui/state_management/settings_provider.dart';
+import '../../mascot/ui/mascot_providers.dart';
+import '../../mascot/ui/widgets/dashboard_peek.dart';
 import '../../subscription/ui/subscriptions_provider.dart';
 import '../../wallet/data/models/wallet_model.dart';
 import '../../wallet/data/wallet_repository.dart';
@@ -44,7 +46,6 @@ class DashboardPage extends ConsumerWidget {
     final dashboard = ref.watch(dashboardProvider);
     final data = dashboard.value;
     final hasWallets = data != null && !data.isEmpty;
-    final showMascot = ref.watch(showMascotProvider);
 
     // Recompute the derived providers shared by the side menu, the tab
     // summary and the tab pages here, before any of them builds. One flushed
@@ -63,14 +64,17 @@ class DashboardPage extends ConsumerWidget {
     return UiSideMenu(
       menu: const DashboardMenu(),
       closeLabel: l10n.menu_close,
-      child: Stack(
+      // The hamster peeks from the bottom-start corner once there is
+      // something to interpret (the empty state has its own big one).
+      child: DashboardPeekLayer(
+        hidden: !hasWallets,
+        child: Stack(
         children: [
           Positioned.fill(child: ColoredBox(color: colors.bgColor)),
           const Positioned.fill(child: UiAmbientBackground()),
           Scaffold(
             backgroundColor: Colors.transparent,
             appBar: UIAppbar(
-              title: l10n.dashboard_title,
               transparent: true,
               leading: const DashboardMenuButton(),
               action: UIIcon(
@@ -91,33 +95,25 @@ class DashboardPage extends ConsumerWidget {
                     ),
                   )
                 : null,
-            body: Stack(
+            body: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // Peeking mascot only once the user has a wallet, and only while
-                // Settings → Show mascot is on; the empty state already shows the
-                // big centred illustration.
-                if (hasWallets && showMascot)
-                  const Positioned(left: 0, top: 12, child: UIWumbiLooksFromLeft()),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(kPageHorzPadding, 20, kPageHorzPadding, 0),
-                      child: _Header(data: data),
-                    ),
-                    Expanded(
-                      child: switch (data) {
-                        null => const _Loading(),
-                        DashboardData(isEmpty: true) => const _NoWallets(),
-                        _ => const _MoneyTabs(),
-                      },
-                    ),
-                  ],
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(kPageHorzPadding, 12, kPageHorzPadding, 20),
+                  child: _Header(data: data),
+                ),
+                Expanded(
+                  child: switch (data) {
+                    null => const _Loading(),
+                    DashboardData(isEmpty: true) => const _NoWallets(),
+                    _ => const _MoneyTabs(),
+                  },
                 ),
               ],
             ),
           ),
         ],
+      ),
       ),
     );
   }
@@ -138,25 +134,69 @@ class _Header extends ConsumerWidget {
     }
 
     final codes = d.unconvertible.map((c) => c.code).join(', ');
-    final caption = [
+    // This month's flow replaces "Across N wallets" (spec §4.3) once there
+    // is something in it.
+    final month = ref.watch(mascotMonthReportProvider).value?.current;
+    final flow = month == null || month.isEmpty ? null : month;
+    final hasFlow = flow != null;
+    // One note per line — a "·"-joined run is hard to scan under the total.
+    final notes = [
       // Every wallet switched off: only "N not counted" (never "No wallets yet").
-      if (d.countedWallets > 0 || d.excludedCount == 0) l10n.dashboard_across_wallets(d.countedWallets),
+      if (!hasFlow && (d.countedWallets > 0 || d.excludedCount == 0)) l10n.dashboard_across_wallets(d.countedWallets),
       if (d.excludedCount > 0) l10n.dashboard_wallets_excluded(d.excludedCount),
       if (d.unconvertible.isNotEmpty) l10n.dashboard_not_included(codes),
-    ].join(' · ');
+    ];
 
     return Column(
       children: [
         UiTotalAmount(money: d.total, animated: true),
         const UISpace.vert(16),
-        UITap(
-          onTap: d.unconvertible.isEmpty ? null : () => ref.read(dashboardProvider.notifier).retryRates(),
-          child: Text(
-            caption,
-            textAlign: TextAlign.center,
-            style: context.typo.inter.subtitle,
+        if (flow != null)
+          _MonthFlow(
+            month: DateTime.now().formatMonthYear(),
+            income: flow.income.format(),
+            expense: flow.expense.format(),
           ),
-        ),
+        if (hasFlow && notes.isNotEmpty) const UISpace.vert(6),
+        if (notes.isNotEmpty)
+          UITap(
+            onTap: d.unconvertible.isEmpty ? null : () => ref.read(dashboardProvider.notifier).retryRates(),
+            child: Text(
+              notes.join('\n'),
+              textAlign: TextAlign.center,
+              style: context.typo.inter.subtitle.copyWith(height: 1.5),
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+/// "October 2026   +€1,200.00   −€840.00" — no separators: the month is
+/// muted, income blue, expense in the expense colour, with real gaps.
+class _MonthFlow extends StatelessWidget {
+  const _MonthFlow({required this.month, required this.income, required this.expense});
+
+  final String month;
+  final String income;
+  final String expense;
+
+  @override
+  Widget build(BuildContext context) {
+    final subtitle = context.typo.inter.subtitle;
+    final amount = subtitle.copyWith(fontWeight: FontWeight.w600);
+    // LRM keeps the sign on the left of the number in RTL locales.
+    const lrm = '\u200E';
+
+    return Wrap(
+      alignment: WrapAlignment.center,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      spacing: 14,
+      runSpacing: 2,
+      children: [
+        Text(month, style: subtitle),
+        Text('$lrm+$income', style: amount.copyWith(color: UIColorToken.blue)),
+        Text('$lrm−$expense', style: amount.copyWith(color: context.colors.expenseColor)),
       ],
     );
   }

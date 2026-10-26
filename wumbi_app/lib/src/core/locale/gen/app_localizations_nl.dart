@@ -2541,26 +2541,796 @@ class AppLocalizationsNl extends AppLocalizations {
   String get menu_close => 'Menu sluiten';
 
   @override
-  String menu_wallets(int count) {
+  String get settings_mascot_talks => 'Wumbi praat';
+
+  @override
+  String get mascot_label => 'Hamster Wumbi. Tik om te kletsen';
+
+  @override
+  String get mascot_dismiss => 'Wumbi terug laten gaan naar zijn hoekje';
+
+  @override
+  String get mascot_action_view => 'Laat zien';
+
+  @override
+  String get mascot_action_add => 'Toevoegen';
+
+  @override
+  String mascot_month_flow(String month, String income, String expense) {
+    return '$month: +$income · −$expense';
+  }
+
+  @override
+  String get mascot_greeting_morning => 'Goedemorgen, baas!';
+
+  @override
+  String get mascot_greeting_afternoon => 'Hoi baas!';
+
+  @override
+  String get mascot_greeting_evening => 'Goedenavond, baas!';
+
+  @override
+  String get mascot_all_calm => 'Alles rustig, de zaadjes liggen op hun plek';
+
+  @override
+  String get mascot_all_for_now => 'Meer weet ik nu even niet 🙂';
+
+  @override
+  String get mascot_quiet_today => 'Begrepen, baas. Vandaag zeg ik niks';
+
+  @override
+  String mascot_flow_up(String amount, String month) {
+    return '$month: de voorraad groeide met $amount. Zo doorgaan!';
+  }
+
+  @override
+  String mascot_flow_down(String amount, String month) {
+    return '$month: er ging $amount meer uit dan er binnenkwam. Dat halen we wel in';
+  }
+
+  @override
+  String mascot_reserve_full(int months) {
     String _temp0 = intl.Intl.pluralLogic(
-      count,
+      months,
       locale: localeName,
-      other: 'portemonnees',
-      one: 'portemonnee',
+      other: 'Volle wangen! Zaadjes voor $months maanden',
     );
     return '$_temp0';
   }
 
   @override
-  String menu_budgets(int count) {
+  String mascot_debt_overdue(String name, int days) {
     String _temp0 = intl.Intl.pluralLogic(
-      count,
+      days,
       locale: localeName,
-      other: 'budgetten',
-      one: 'budget',
+      other: 'Baas, de schuld met $name moest $days dagen geleden terug',
+      one: 'Baas, de schuld met $name moest gisteren terug',
     );
     return '$_temp0';
   }
+
+  @override
+  String mascot_debt_overdue_nudge(String name) {
+    return 'Die schuld met $name staat nog steeds open, baas. Even kijken?';
+  }
+
+  @override
+  String mascot_budget_over(String name) {
+    return 'Baas, “$name” is over de limiet. Kijken waar de zaadjes heen lekten?';
+  }
+
+  @override
+  String mascot_budget_over_by(String name, String amount) {
+    return '“$name” zit $amount over. Samen even uitzoeken, baas?';
+  }
+
+  @override
+  String mascot_budget_near_left(String name, String amount) {
+    return 'Nog maar $amount over in “$name” deze periode, baas';
+  }
+
+  @override
+  String mascot_budget_near_percent(String name, int percent) {
+    return '“$name” zit al op $percent%. Een beetje rustiger aan?';
+  }
+
+  @override
+  String mascot_sleep_days(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other:
+          'Ik was in slaap gesukkeld, baas… $days dagen zonder boeking. Even inhalen?',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get mascot_sleep_quiet =>
+      'Wel erg stil hier. Niets vergeten te noteren, baas?';
+
+  @override
+  String get mascot_sigh_month =>
+      'Baas, deze maand gaan er meer zaadjes uit dan erin. Zoeken we het lek?';
+
+  @override
+  String get mascot_sigh_ahead =>
+      'De uitgaven lopen voor op het inkomen. Samen kijken wat eraf kan?';
+
+  @override
+  String mascot_welcome_back(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'Je bent terug, baas! $count nieuwe boekingen sinds de vorige keer',
+      one: 'Je bent terug, baas! Eén nieuwe boeking sinds de vorige keer',
+      zero: 'Je bent terug, baas! Zonder jou was het stil',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get mascot_evening_waited => 'Baas! Ik heb de hele dag op je gewacht!';
+
+  @override
+  String get mascot_evening_missed => 'Ik heb je gemist…';
+
+  @override
+  String get mascot_evening_log =>
+      'Zullen we de uitgaven van vandaag noteren voor we ze vergeten?';
+
+  @override
+  String get mascot_evening_count =>
+      'Help je me de zaadjes van vandaag te tellen?';
+
+  @override
+  String get mascot_event_reserve =>
+      'Baas, we hebben voor drie maanden zaadjes! Nu kunnen we rustig slapen';
+
+  @override
+  String mascot_event_best_month(String amount) {
+    return 'Beste maand in een half jaar! $amount de voorraad in. Trots op je, baas';
+  }
+
+  @override
+  String mascot_event_days(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Al $days dagen tellen we samen zaadjes. Dank je, baas!',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get mascot_event_records =>
+      'De 100e boeking! Samen tellen is veel leuker, baas';
+
+  @override
+  String mascot_event_streak(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other:
+          '$days dagen op rij zonder er één over te slaan, baas! Wat een discipline',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String mascot_charge_today(String name, String amount) {
+    return 'Baas, vandaag neemt $name $amount';
+  }
+
+  @override
+  String mascot_charge_tomorrow(String name, String amount) {
+    return 'Morgen neemt $name $amount, baas';
+  }
+
+  @override
+  String mascot_charge_soon(String name, String amount) {
+    return 'Over een paar dagen neemt $name $amount';
+  }
+
+  @override
+  String get mascot_charge_unnamed => 'een abonnement';
+
+  @override
+  String mascot_debt_due_today(String name) {
+    return 'Baas, de schuld met $name vervalt vandaag';
+  }
+
+  @override
+  String mascot_debt_due_tomorrow(String name) {
+    return 'De schuld met $name vervalt morgen. Niet vergeten?';
+  }
+
+  @override
+  String mascot_debt_due_soon(String name, int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Nog $days dagen voor de schuld met $name',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String mascot_insight_mover(String name, int percent) {
+    return 'Baas, “$name” eet $percent% meer zaadjes dan vorige maand. Even kijken?';
+  }
+
+  @override
+  String mascot_insight_untagged(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count uitgaven zonder tag deze maand. Zullen we ze indelen?',
+      one: 'Eén uitgave zonder tag deze maand. Even indelen?',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String mascot_insight_peak_day(String weekday) {
+    return '$weekday is je hongerigste dag, baas';
+  }
+
+  @override
+  String mascot_insight_reserve(int months) {
+    String _temp0 = intl.Intl.pluralLogic(
+      months,
+      locale: localeName,
+      other: 'De wangen zitten goed: zaadjes voor ongeveer $months maanden',
+      one: 'De wangen zitten goed: zaadjes voor ongeveer een maand',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String mascot_insight_top_expense(String name, String amount) {
+    return 'Grootste hap deze maand: “$name”, $amount';
+  }
+
+  @override
+  String mascot_insight_top_expense_amount(String amount) {
+    return 'Grootste losse hap deze maand: $amount';
+  }
+
+  @override
+  String mascot_insight_daily_average(String amount) {
+    return 'Baas, deze maand gaat er per dag zo’n $amount uit';
+  }
+
+  @override
+  String mascot_insight_daily_below(int percent) {
+    return 'Per dag $percent% minder zaadjes dan normaal. Goed bezig, baas!';
+  }
+
+  @override
+  String mascot_insight_daily_above(int percent) {
+    return 'Baas, per dag $percent% meer zaadjes dan normaal. Kijken waar ze heen gaan?';
+  }
+
+  @override
+  String mascot_insight_weekend(int percent) {
+    return 'In het weekend vliegen de zaadjes $percent% sneller weg dan doordeweeks';
+  }
+
+  @override
+  String mascot_insight_frequent_tag(String name, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count keer “$name” deze maand. Wordt het een gewoonte, baas?',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String mascot_insight_small_spends(String amount) {
+    return 'Kleine aankopen kwamen deze maand op $amount. Zaadje voor zaadje, baas';
+  }
+
+  @override
+  String mascot_insight_savings_rate(int percent) {
+    return 'Baas, $percent% van het inkomen blijft deze maand in de voorraad. Blije wangen!';
+  }
+
+  @override
+  String get mascot_insight_no_income =>
+      'Er is deze maand nog geen zaadje binnengekomen, baas. Salaris vergeten te noteren?';
+
+  @override
+  String mascot_insight_forecast_over(String amount) {
+    return 'In dit tempo kost de maand zo’n $amount. Meer dan normaal, baas';
+  }
+
+  @override
+  String mascot_insight_forecast_under(String amount) {
+    return 'Deze maand wordt licht: zo’n $amount. De voorraad zegt dankjewel';
+  }
+
+  @override
+  String mascot_insight_owed_to_me(String amount) {
+    return 'Baas, er staat $amount voor je open. Tijd voor een vriendelijk duwtje?';
+  }
+
+  @override
+  String mascot_insight_negative_wallet(String name) {
+    return '“$name” staat onder nul, baas. Een paar zaadjes overzetten?';
+  }
+
+  @override
+  String mascot_insight_no_rate(String codes) {
+    return '$codes kan ik nog niet omrekenen, geen koers. Zodra we online zijn, tel ik verder';
+  }
+
+  @override
+  String mascot_insight_income_up(int percent) {
+    return 'Baas, $percent% meer zaadjes binnen dan normaal! De helft van het extraatje meteen opzij?';
+  }
+
+  @override
+  String mascot_insight_tag_yearly(String name, String amount) {
+    return 'In dit tempo eet “$name” zo’n $amount per jaar';
+  }
+
+  @override
+  String get mascot_insight_no_spend_yesterday =>
+      'Gisteren geen enkele uitgave! Mijn wangen zijn trots op je, baas';
+
+  @override
+  String get mascot_tip_budget =>
+      'Baas, een budget is gewoon een hekje om de zaadjes. Zetten we het eerste neer?';
+
+  @override
+  String get mascot_tip_subscriptions =>
+      'Vaste betalingen? Voeg ze één keer toe, dan houd ik ze in de gaten';
+
+  @override
+  String mascot_tip_subs_yearly(String amount) {
+    return 'Baas, abonnementen eten $amount per jaar. Zijn er die je niet echt gebruikt?';
+  }
+
+  @override
+  String mascot_tip_recurring_share(int percent) {
+    return '$percent% van de uitgaven deze maand zijn vaste betalingen. Rondjes, net als mijn rad';
+  }
+
+  @override
+  String get mascot_tip_new_month =>
+      'Nieuwe maand, baas! Schoon buideltje. Budgetten instellen?';
+
+  @override
+  String mascot_tip_monday_recap(String amount) {
+    return 'Vorige week ging er $amount uit. Eens kijken hoe we het deze week doen, baas';
+  }
+
+  @override
+  String mascot_tip_month_end(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Nog $days dagen deze maand. Je doet het geweldig, baas',
+      one: 'Nog één dag deze maand. Je doet het geweldig, baas',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get mascot_tip_tags =>
+      'Met tags zie ik waar de zaadjes heen gaan, baas. Probeer #eten of #thuis';
+
+  @override
+  String mascot_tip_debt_due_date(String name) {
+    return 'Geef de schuld met $name een termijn, dan herinner ik je op tijd';
+  }
+
+  @override
+  String mascot_tip_budget_for(String name, int percent) {
+    return 'Baas, “$name” neemt $percent% van alle uitgaven. Een budget ervoor?';
+  }
+
+  @override
+  String get mascot_tip_rainy_day =>
+      'Baas, maak een aparte potje-voor-later portemonnee. Dan overvallen verrassingen ons niet';
+
+  @override
+  String get mascot_tip_pay_yourself_first =>
+      'Er zijn zaadjes binnen! Zet meteen een deel opzij, baas, voor ze wegrollen';
+
+  @override
+  String get mascot_tip_treat =>
+      'De voorraad staat er goed voor, baas. Jezelf af en toe verwennen mag, zonder schuldgevoel';
+
+  @override
+  String mascot_tip_future_self(String amount, String amount2) {
+    return 'Maar $amount per dag is $amount2 per jaar. Stel je die wangen voor, baas!';
+  }
+
+  @override
+  String get mascot_joke_friday =>
+      'Het is vrijdag, baas! Ga lekker, ik pas op de zaadjes';
+
+  @override
+  String get mascot_joke_late_night =>
+      'Het is laat, baas… Even noteren en naar bed? Ik zit al te gapen';
+
+  @override
+  String get mascot_joke_cheeks =>
+      'Wist je, baas? Hamsters dragen zaadjes in hun wangen. Ik draag jouw budget';
+
+  @override
+  String get mascot_joke_trees =>
+      'Zelfs als zaadjes aan bomen groeiden, zou ik ze nog in mijn wangen verstoppen';
+
+  @override
+  String get mascot_joke_twice =>
+      'Ik heb je zaadjes twee keer geteld. Zelfde aantal, baas. Goed teken';
+
+  @override
+  String get mascot_joke_secret =>
+      'Psst, baas… Rond elke uitgave in je hoofd naar boven af. Het verschil is je geheime voorraad';
+
+  @override
+  String mascot_reaction_income(String amount) {
+    return '$amount gevangen! De voorraad in, baas';
+  }
+
+  @override
+  String mascot_reaction_big_income(String amount) {
+    return 'Wauw, baas! +$amount. Mijn wangen knappen bijna!';
+  }
+
+  @override
+  String mascot_reaction_transfer(String amount) {
+    return '$amount verplaatst';
+  }
+
+  @override
+  String mascot_reaction_lent(String amount) {
+    return '$amount uitgeleend. Ik onthoud het, baas';
+  }
+
+  @override
+  String get mascot_reaction_debt_closed =>
+      'Schuld afgelost! Schone pootjes, baas';
+
+  @override
+  String get mascot_reaction_forgiven =>
+      'Kwijtgescholden… Je hebt een goed hart, baas';
+
+  @override
+  String get mascot_reaction_first_wallet =>
+      'Eerste portemonnee, baas! Het verzamelen begint';
+
+  @override
+  String get mascot_reaction_budget => 'Budget staat. Ik houd de wacht, baas';
+
+  @override
+  String get mascot_wallet_negative => 'Baas, deze portemonnee staat onder nul';
+
+  @override
+  String mascot_wallet_down(int percent) {
+    return 'Sinds de 1e is hier $percent% van de zaadjes weg';
+  }
+
+  @override
+  String mascot_wallet_up(String amount) {
+    return 'Sinds de 1e $amount erbij. Prachtig, baas!';
+  }
+
+  @override
+  String get mascot_wallet_sleeping =>
+      'Deze portemonnee slaapt al een maand. Ssst…';
+
+  @override
+  String get mascot_wallet_calm => 'Hier is alles rustig, baas';
+
+  @override
+  String mascot_budgets_over(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Baas, $count budgetten zijn over de limiet',
+      one: 'Baas, één budget is over de limiet',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String mascot_budgets_near(String name) {
+    return '“$name” is bijna op, baas';
+  }
+
+  @override
+  String get mascot_budgets_calm =>
+      'Alle hekjes staan, baas. De budgetten zitten goed';
+
+  @override
+  String mascot_budget_detail_over(String amount) {
+    return '$amount over. Volgende keer de limiet omhoog, baas?';
+  }
+
+  @override
+  String mascot_budget_detail_pace(String date) {
+    return 'In dit tempo is de limiet op $date op';
+  }
+
+  @override
+  String get mascot_budget_detail_within =>
+      'Binnen de limiet gebleven! Trots op je, baas';
+
+  @override
+  String get mascot_budget_detail_calm => 'Alles volgens plan, baas';
+
+  @override
+  String mascot_debts_overdue(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Baas, $count schulden zijn over tijd',
+      one: 'Baas, één schuld is over tijd',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get mascot_debts_all_closed =>
+      'Alle schulden afgelost! Schone pootjes, baas';
+
+  @override
+  String get mascot_debts_tracking => 'Ik houd bij wie wie zaadjes schuldig is';
+
+  @override
+  String mascot_debt_detail_overdue(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Dit moest $days dagen geleden terug, baas',
+      one: 'Dit moest gisteren terug, baas',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get mascot_debt_detail_lent => 'Ik weet wie onze zaadjes leende, baas';
+
+  @override
+  String mascot_debt_detail_due(String date) {
+    return 'Terug vóór $date';
+  }
+
+  @override
+  String mascot_subs_spinning(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count abonnementen nemen elke maand hun deel zaadjes',
+      one: 'Eén abonnement neemt elke maand zijn deel zaadjes',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String mascot_tags_top(String name) {
+    return 'De meeste zaadjes gingen deze maand naar “$name”';
+  }
+
+  @override
+  String mascot_tag_up(int percent) {
+    return 'Hier $percent% meer dan vorige maand';
+  }
+
+  @override
+  String mascot_tag_down(int percent) {
+    return '$percent% minder dan vorige maand. Mooi zo, baas!';
+  }
+
+  @override
+  String mascot_progress_saved(String amount) {
+    return '$amount de voorraad in. Top gedaan, baas!';
+  }
+
+  @override
+  String mascot_progress_over(String amount) {
+    return '$amount meer zaadjes uit dan in';
+  }
+
+  @override
+  String mascot_progress_over_tag(String amount, String name) {
+    return '$amount meer zaadjes uit dan in, vooral aan “$name”';
+  }
+
+  @override
+  String mascot_progress_forecast(String amount) {
+    return 'In dit tempo gaat er deze periode zo’n $amount uit';
+  }
+
+  @override
+  String get mascot_progress_counting =>
+      'Ik ben deze periode nog aan het tellen, baas';
+
+  @override
+  String get mascot_screen_wallet_filter =>
+      'Filter op tag en je ziet waar de zaadjes van deze portemonnee heen gaan';
+
+  @override
+  String get mascot_screen_wallet_switch =>
+      'Tik bovenaan op de naam om naar een andere portemonnee te springen';
+
+  @override
+  String get mascot_screen_wallet_limit =>
+      'In het tabblad Budgetten kun je een limiet op deze portemonnee zetten';
+
+  @override
+  String get mascot_screen_budgets_rollover =>
+      'Budgetten kunnen restjes meenemen naar de volgende periode. Geen zaadje verspild';
+
+  @override
+  String get mascot_screen_budgets_tags =>
+      'Een budget kan alleen de tags volgen die jij kiest. Bijvoorbeeld #café';
+
+  @override
+  String get mascot_screen_budget_periods =>
+      'Blader door de periodes om met eerdere te vergelijken';
+
+  @override
+  String get mascot_screen_debts_due =>
+      'Voeg een termijn toe, dan herinner ik je op tijd, baas';
+
+  @override
+  String get mascot_screen_debts_quick =>
+      'Snelst terugbetalen: Overboeking → Schulden op het boekingsscherm';
+
+  @override
+  String get mascot_screen_subs_pause =>
+      'Je kunt een abonnement pauzeren in plaats van verwijderen. De geschiedenis blijft';
+
+  @override
+  String get mascot_screen_tags_nest =>
+      'Nest tags met een schuine streep: eten/koffie';
+
+  @override
+  String get mascot_screen_tags_map =>
+      'Open de kaart, baas, dan zie je hoe je tags samenhangen';
+
+  @override
+  String get mascot_screen_tag_rename =>
+      'Hernoem of verplaats een tag, de geneste gaan mee';
+
+  @override
+  String get mascot_screen_progress_baseline =>
+      'Tik op “vs …” om te vergelijken met vorig jaar of een gemiddelde van 3 maanden';
+
+  @override
+  String mascot_ans_spent_today(String amount, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Vandaag: $amount in $count uitgaven',
+      one: 'Vandaag: $amount, maar één uitgave',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get mascot_ans_nothing_today =>
+      'Vandaag geen enkele uitgave, baas. Alle zaadjes nog daar!';
+
+  @override
+  String mascot_ans_spent_yesterday(String amount, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Gisteren: $amount in $count uitgaven',
+      one: 'Gisteren: $amount, maar één uitgave',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get mascot_ans_nothing_yesterday =>
+      'Gisteren gaf je geen enkel zaadje uit. Hoera!';
+
+  @override
+  String mascot_ans_spent_week(String amount) {
+    return 'Deze week tot nu toe: $amount';
+  }
+
+  @override
+  String mascot_ans_spent_month(String expense, String income) {
+    return 'Deze maand ging er $expense uit en kwam er $income binnen';
+  }
+
+  @override
+  String get mascot_ans_no_expenses =>
+      'Deze maand nog geen uitgaven. Prachtig, baas';
+
+  @override
+  String mascot_ans_upcoming(String amount, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count betalingen in de komende 7 dagen: $amount',
+      one: 'Eén betaling in de komende 7 dagen: $amount',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get mascot_ans_nothing_upcoming =>
+      'De komende week hoef je niets te betalen';
+
+  @override
+  String mascot_ans_owed(String amount, String name) {
+    return 'Er staat $amount voor je open, vooral bij $name';
+  }
+
+  @override
+  String get mascot_ans_nobody_owes =>
+      'Op dit moment is niemand je iets schuldig';
+
+  @override
+  String get mascot_ans_reserve_low =>
+      'Minder dan een maand aan zaadjes, baas. Laten we die wangen samen vullen';
+
+  @override
+  String get mascot_ans_reserve_unknown =>
+      'Daarvoor heb ik ongeveer een maand aan boekingen nodig';
+
+  @override
+  String mascot_ans_where(String name, int percent, String name2) {
+    return 'De meeste zaadjes gingen naar “$name” ($percent%), daarna “$name2”';
+  }
+
+  @override
+  String mascot_ans_where_one(String name, int percent) {
+    return 'Bijna alle zaadjes gingen naar “$name”, $percent%';
+  }
+
+  @override
+  String mascot_ans_where_untagged(int percent) {
+    return 'Baas, $percent% van de uitgaven heeft geen tag, dus ik zie niet waar het heen ging. Indelen?';
+  }
+
+  @override
+  String get mascot_q_today => 'Vandaag uitgegeven?';
+
+  @override
+  String get mascot_q_yesterday => 'En gisteren?';
+
+  @override
+  String get mascot_q_week => 'Deze week?';
+
+  @override
+  String get mascot_q_month => 'Deze maand?';
+
+  @override
+  String get mascot_q_where => 'Waar zijn de zaadjes gebleven?';
+
+  @override
+  String get mascot_q_biggest => 'Grootste uitgave?';
+
+  @override
+  String get mascot_q_budgets => 'Blijf ik binnen budget?';
+
+  @override
+  String get mascot_q_upcoming => 'Wat moet ik binnenkort betalen?';
+
+  @override
+  String get mascot_q_owed => 'Wie is me iets schuldig?';
+
+  @override
+  String get mascot_q_reserve => 'Hoe lang kan ik ermee toe?';
+
+  @override
+  String get mascot_q_tip => 'Een tip?';
+
+  @override
+  String get mascot_q_joke => 'Laat me lachen';
 
   @override
   String get l10nStopLineDontTouch =>

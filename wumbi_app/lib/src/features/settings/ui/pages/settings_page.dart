@@ -98,6 +98,12 @@ class SettingsPage extends ConsumerWidget {
                       switchValue: settings?.showMascot ?? true,
                       onSwitchChanged: notifier.changeMascotVisibility,
                     ),
+                    UiSettingsTile(
+                      icon: UIIconToken.icons.communication.messageChatCircle,
+                      title: l10n.settings_mascot_talks,
+                      switchValue: settings?.mascotTalks ?? true,
+                      onSwitchChanged: notifier.changeMascotTalks,
+                    ),
                     UiSectionLabel(text: l10n.settings_about_section),
                     UiSettingsTile(
                       icon: UIIconToken.icons.general.lifeBuoy01,

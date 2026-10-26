@@ -3999,17 +3999,965 @@ abstract class AppLocalizations {
   /// **'Close menu'**
   String get menu_close;
 
-  /// No description provided for @menu_wallets.
+  /// No description provided for @settings_mascot_talks.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, one{wallet} other{wallets}}'**
-  String menu_wallets(int count);
+  /// **'Wumbi talks'**
+  String get settings_mascot_talks;
 
-  /// No description provided for @menu_budgets.
+  /// No description provided for @mascot_label.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, one{budget} other{budgets}}'**
-  String menu_budgets(int count);
+  /// **'Wumbi the hamster. Tap to chat'**
+  String get mascot_label;
+
+  /// No description provided for @mascot_dismiss.
+  ///
+  /// In en, this message translates to:
+  /// **'Let Wumbi go back to his corner'**
+  String get mascot_dismiss;
+
+  /// No description provided for @mascot_action_view.
+  ///
+  /// In en, this message translates to:
+  /// **'Show me'**
+  String get mascot_action_view;
+
+  /// No description provided for @mascot_action_add.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get mascot_action_add;
+
+  /// No description provided for @mascot_month_flow.
+  ///
+  /// In en, this message translates to:
+  /// **'{month}: +{income} · −{expense}'**
+  String mascot_month_flow(String month, String income, String expense);
+
+  /// No description provided for @mascot_greeting_morning.
+  ///
+  /// In en, this message translates to:
+  /// **'Morning, boss!'**
+  String get mascot_greeting_morning;
+
+  /// No description provided for @mascot_greeting_afternoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Hey there, boss!'**
+  String get mascot_greeting_afternoon;
+
+  /// No description provided for @mascot_greeting_evening.
+  ///
+  /// In en, this message translates to:
+  /// **'Evening, boss!'**
+  String get mascot_greeting_evening;
+
+  /// No description provided for @mascot_all_calm.
+  ///
+  /// In en, this message translates to:
+  /// **'All quiet. The seeds are right where they should be'**
+  String get mascot_all_calm;
+
+  /// No description provided for @mascot_all_for_now.
+  ///
+  /// In en, this message translates to:
+  /// **'That’s all I’ve got for now 🙂'**
+  String get mascot_all_for_now;
+
+  /// No description provided for @mascot_quiet_today.
+  ///
+  /// In en, this message translates to:
+  /// **'Got it, boss. Quiet as a mouse today'**
+  String get mascot_quiet_today;
+
+  /// No description provided for @mascot_flow_up.
+  ///
+  /// In en, this message translates to:
+  /// **'{month} so far: the stash grew by {amount}. Keep it up!'**
+  String mascot_flow_up(String amount, String month);
+
+  /// No description provided for @mascot_flow_down.
+  ///
+  /// In en, this message translates to:
+  /// **'{month} so far: {amount} more went out than came in. We’ll catch up'**
+  String mascot_flow_down(String amount, String month);
+
+  /// No description provided for @mascot_reserve_full.
+  ///
+  /// In en, this message translates to:
+  /// **'{months, plural, other{Cheeks are full! Enough seeds for {months} months}}'**
+  String mascot_reserve_full(int months);
+
+  /// No description provided for @mascot_debt_overdue.
+  ///
+  /// In en, this message translates to:
+  /// **'{days, plural, =1{Boss, the debt with {name} was due yesterday} other{Boss, the debt with {name} was due {days} days ago}}'**
+  String mascot_debt_overdue(String name, int days);
+
+  /// No description provided for @mascot_debt_overdue_nudge.
+  ///
+  /// In en, this message translates to:
+  /// **'That debt with {name} is still hanging around, boss. Take a look?'**
+  String mascot_debt_overdue_nudge(String name);
+
+  /// No description provided for @mascot_budget_over.
+  ///
+  /// In en, this message translates to:
+  /// **'Boss, “{name}” went over the limit. Let’s see where the seeds leaked'**
+  String mascot_budget_over(String name);
+
+  /// No description provided for @mascot_budget_over_by.
+  ///
+  /// In en, this message translates to:
+  /// **'“{name}” is {amount} over. Want to figure it out together, boss?'**
+  String mascot_budget_over_by(String name, String amount);
+
+  /// No description provided for @mascot_budget_near_left.
+  ///
+  /// In en, this message translates to:
+  /// **'Only {amount} left in “{name}” this period, boss'**
+  String mascot_budget_near_left(String name, String amount);
+
+  /// No description provided for @mascot_budget_near_percent.
+  ///
+  /// In en, this message translates to:
+  /// **'“{name}” is already at {percent}%. Maybe ease off a little?'**
+  String mascot_budget_near_percent(String name, int percent);
+
+  /// No description provided for @mascot_sleep_days.
+  ///
+  /// In en, this message translates to:
+  /// **'{days, plural, other{I dozed off, boss… {days} days without a single entry. Shall we catch up?}}'**
+  String mascot_sleep_days(int days);
+
+  /// No description provided for @mascot_sleep_quiet.
+  ///
+  /// In en, this message translates to:
+  /// **'It’s awfully quiet here. Forgot to log something, boss?'**
+  String get mascot_sleep_quiet;
+
+  /// No description provided for @mascot_sigh_month.
+  ///
+  /// In en, this message translates to:
+  /// **'Boss, more seeds are going out than coming in this month. Let’s find the leak?'**
+  String get mascot_sigh_month;
+
+  /// No description provided for @mascot_sigh_ahead.
+  ///
+  /// In en, this message translates to:
+  /// **'Spending is outrunning income. Let’s see what we can trim together'**
+  String get mascot_sigh_ahead;
+
+  /// No description provided for @mascot_welcome_back.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{You’re back, boss! It was quiet without you} =1{You’re back, boss! One new entry since last time} other{You’re back, boss! {count} new entries since last time}}'**
+  String mascot_welcome_back(int count);
+
+  /// No description provided for @mascot_evening_waited.
+  ///
+  /// In en, this message translates to:
+  /// **'Boss! I’ve been waiting for you all day!'**
+  String get mascot_evening_waited;
+
+  /// No description provided for @mascot_evening_missed.
+  ///
+  /// In en, this message translates to:
+  /// **'I missed you…'**
+  String get mascot_evening_missed;
+
+  /// No description provided for @mascot_evening_log.
+  ///
+  /// In en, this message translates to:
+  /// **'Let’s log today’s spending before it slips our minds?'**
+  String get mascot_evening_log;
+
+  /// No description provided for @mascot_evening_count.
+  ///
+  /// In en, this message translates to:
+  /// **'Help me count today’s seeds?'**
+  String get mascot_evening_count;
+
+  /// No description provided for @mascot_event_reserve.
+  ///
+  /// In en, this message translates to:
+  /// **'Boss, we’ve got three months of seeds stashed! Now we can sleep easy'**
+  String get mascot_event_reserve;
+
+  /// No description provided for @mascot_event_best_month.
+  ///
+  /// In en, this message translates to:
+  /// **'Best month in half a year! {amount} went into the stash. Proud of you, boss'**
+  String mascot_event_best_month(String amount);
+
+  /// No description provided for @mascot_event_days.
+  ///
+  /// In en, this message translates to:
+  /// **'{days, plural, other{{days} days of counting seeds together. Thank you, boss!}}'**
+  String mascot_event_days(int days);
+
+  /// No description provided for @mascot_event_records.
+  ///
+  /// In en, this message translates to:
+  /// **'That’s the 100th entry! Counting is way more fun together, boss'**
+  String get mascot_event_records;
+
+  /// No description provided for @mascot_event_streak.
+  ///
+  /// In en, this message translates to:
+  /// **'{days, plural, other{{days} days in a row without missing one, boss! That’s discipline}}'**
+  String mascot_event_streak(int days);
+
+  /// No description provided for @mascot_charge_today.
+  ///
+  /// In en, this message translates to:
+  /// **'Heads up, boss: {name} takes {amount} today'**
+  String mascot_charge_today(String name, String amount);
+
+  /// No description provided for @mascot_charge_tomorrow.
+  ///
+  /// In en, this message translates to:
+  /// **'Tomorrow {name} takes {amount}, boss'**
+  String mascot_charge_tomorrow(String name, String amount);
+
+  /// No description provided for @mascot_charge_soon.
+  ///
+  /// In en, this message translates to:
+  /// **'In a couple of days {name} takes {amount}'**
+  String mascot_charge_soon(String name, String amount);
+
+  /// No description provided for @mascot_charge_unnamed.
+  ///
+  /// In en, this message translates to:
+  /// **'a subscription'**
+  String get mascot_charge_unnamed;
+
+  /// No description provided for @mascot_debt_due_today.
+  ///
+  /// In en, this message translates to:
+  /// **'Boss, the debt with {name} is due today'**
+  String mascot_debt_due_today(String name);
+
+  /// No description provided for @mascot_debt_due_tomorrow.
+  ///
+  /// In en, this message translates to:
+  /// **'The debt with {name} is due tomorrow. Let’s not forget?'**
+  String mascot_debt_due_tomorrow(String name);
+
+  /// No description provided for @mascot_debt_due_soon.
+  ///
+  /// In en, this message translates to:
+  /// **'{days, plural, other{{days} days left on the debt with {name}}}'**
+  String mascot_debt_due_soon(String name, int days);
+
+  /// No description provided for @mascot_insight_mover.
+  ///
+  /// In en, this message translates to:
+  /// **'Boss, “{name}” is eating {percent}% more seeds than last month. Take a look?'**
+  String mascot_insight_mover(String name, int percent);
+
+  /// No description provided for @mascot_insight_untagged.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{One expense this month has no tag. Let’s sort it out?} other{{count} expenses this month have no tag. Let’s sort them out?}}'**
+  String mascot_insight_untagged(int count);
+
+  /// No description provided for @mascot_insight_peak_day.
+  ///
+  /// In en, this message translates to:
+  /// **'{weekday} is your hungriest day, boss'**
+  String mascot_insight_peak_day(String weekday);
+
+  /// No description provided for @mascot_insight_reserve.
+  ///
+  /// In en, this message translates to:
+  /// **'{months, plural, =1{Cheeks look good: about a month of seeds stashed} other{Cheeks look good: about {months} months of seeds stashed}}'**
+  String mascot_insight_reserve(int months);
+
+  /// No description provided for @mascot_insight_top_expense.
+  ///
+  /// In en, this message translates to:
+  /// **'Biggest bite this month: “{name}”, {amount}'**
+  String mascot_insight_top_expense(String name, String amount);
+
+  /// No description provided for @mascot_insight_top_expense_amount.
+  ///
+  /// In en, this message translates to:
+  /// **'Biggest single bite this month: {amount}'**
+  String mascot_insight_top_expense_amount(String amount);
+
+  /// No description provided for @mascot_insight_daily_average.
+  ///
+  /// In en, this message translates to:
+  /// **'Boss, about {amount} goes out every day this month'**
+  String mascot_insight_daily_average(String amount);
+
+  /// No description provided for @mascot_insight_daily_below.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent}% fewer seeds a day than usual. Nice work, boss!'**
+  String mascot_insight_daily_below(int percent);
+
+  /// No description provided for @mascot_insight_daily_above.
+  ///
+  /// In en, this message translates to:
+  /// **'Boss, {percent}% more seeds a day than usual. Want to see where they go?'**
+  String mascot_insight_daily_above(int percent);
+
+  /// No description provided for @mascot_insight_weekend.
+  ///
+  /// In en, this message translates to:
+  /// **'On weekends the seeds fly out {percent}% faster than on weekdays'**
+  String mascot_insight_weekend(int percent);
+
+  /// No description provided for @mascot_insight_frequent_tag.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, other{{count} trips to “{name}” this month. Becoming a habit, boss?}}'**
+  String mascot_insight_frequent_tag(String name, int count);
+
+  /// No description provided for @mascot_insight_small_spends.
+  ///
+  /// In en, this message translates to:
+  /// **'Little purchases added up to {amount} this month. Seed by seed, boss'**
+  String mascot_insight_small_spends(String amount);
+
+  /// No description provided for @mascot_insight_savings_rate.
+  ///
+  /// In en, this message translates to:
+  /// **'Boss, {percent}% of this month’s income is staying in the stash. Happy cheeks!'**
+  String mascot_insight_savings_rate(int percent);
+
+  /// No description provided for @mascot_insight_no_income.
+  ///
+  /// In en, this message translates to:
+  /// **'Not a single seed has come in this month, boss. Did you forget to log your pay?'**
+  String get mascot_insight_no_income;
+
+  /// No description provided for @mascot_insight_forecast_over.
+  ///
+  /// In en, this message translates to:
+  /// **'At this rate the month will cost about {amount}. That’s more than usual, boss'**
+  String mascot_insight_forecast_over(String amount);
+
+  /// No description provided for @mascot_insight_forecast_under.
+  ///
+  /// In en, this message translates to:
+  /// **'This month is shaping up light: about {amount}. The stash says thanks'**
+  String mascot_insight_forecast_under(String amount);
+
+  /// No description provided for @mascot_insight_owed_to_me.
+  ///
+  /// In en, this message translates to:
+  /// **'Boss, people owe you {amount}. Maybe time for a gentle nudge?'**
+  String mascot_insight_owed_to_me(String amount);
+
+  /// No description provided for @mascot_insight_negative_wallet.
+  ///
+  /// In en, this message translates to:
+  /// **'“{name}” dipped below zero, boss. Move a few seeds over?'**
+  String mascot_insight_negative_wallet(String name);
+
+  /// No description provided for @mascot_insight_no_rate.
+  ///
+  /// In en, this message translates to:
+  /// **'Can’t convert {codes} yet, no rate. I’ll finish counting once we’re online'**
+  String mascot_insight_no_rate(String codes);
+
+  /// No description provided for @mascot_insight_income_up.
+  ///
+  /// In en, this message translates to:
+  /// **'Boss, {percent}% more seeds came in than usual! Stash half of the extra right away?'**
+  String mascot_insight_income_up(int percent);
+
+  /// No description provided for @mascot_insight_tag_yearly.
+  ///
+  /// In en, this message translates to:
+  /// **'At this pace, “{name}” will eat about {amount} a year'**
+  String mascot_insight_tag_yearly(String name, String amount);
+
+  /// No description provided for @mascot_insight_no_spend_yesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'Not a single expense yesterday! My cheeks are proud of you, boss'**
+  String get mascot_insight_no_spend_yesterday;
+
+  /// No description provided for @mascot_tip_budget.
+  ///
+  /// In en, this message translates to:
+  /// **'Boss, a budget is just a little fence around the seeds. Put up the first one?'**
+  String get mascot_tip_budget;
+
+  /// No description provided for @mascot_tip_subscriptions.
+  ///
+  /// In en, this message translates to:
+  /// **'Got regular payments? Add them once and I’ll keep an eye on them'**
+  String get mascot_tip_subscriptions;
+
+  /// No description provided for @mascot_tip_subs_yearly.
+  ///
+  /// In en, this message translates to:
+  /// **'Boss, subscriptions eat {amount} a year. Any you don’t really use?'**
+  String mascot_tip_subs_yearly(String amount);
+
+  /// No description provided for @mascot_tip_recurring_share.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent}% of this month’s spending is regular payments. Round and round, like my wheel'**
+  String mascot_tip_recurring_share(int percent);
+
+  /// No description provided for @mascot_tip_new_month.
+  ///
+  /// In en, this message translates to:
+  /// **'New month, boss! Fresh pouch. Set up some budgets?'**
+  String get mascot_tip_new_month;
+
+  /// No description provided for @mascot_tip_monday_recap.
+  ///
+  /// In en, this message translates to:
+  /// **'Last week {amount} went out. Let’s see how we do this week, boss'**
+  String mascot_tip_monday_recap(String amount);
+
+  /// No description provided for @mascot_tip_month_end.
+  ///
+  /// In en, this message translates to:
+  /// **'{days, plural, =1{One day to go this month. You’re doing great, boss} other{{days} days to go this month. You’re doing great, boss}}'**
+  String mascot_tip_month_end(int days);
+
+  /// No description provided for @mascot_tip_tags.
+  ///
+  /// In en, this message translates to:
+  /// **'Tags help me see where the seeds go, boss. Try #food or #home'**
+  String get mascot_tip_tags;
+
+  /// No description provided for @mascot_tip_debt_due_date.
+  ///
+  /// In en, this message translates to:
+  /// **'Give the debt with {name} a due date and I’ll remind you in time'**
+  String mascot_tip_debt_due_date(String name);
+
+  /// No description provided for @mascot_tip_budget_for.
+  ///
+  /// In en, this message translates to:
+  /// **'Boss, “{name}” takes {percent}% of all spending. Give it a budget?'**
+  String mascot_tip_budget_for(String name, int percent);
+
+  /// No description provided for @mascot_tip_rainy_day.
+  ///
+  /// In en, this message translates to:
+  /// **'Boss, start a separate rainy-day wallet. Then surprises won’t catch us off guard'**
+  String get mascot_tip_rainy_day;
+
+  /// No description provided for @mascot_tip_pay_yourself_first.
+  ///
+  /// In en, this message translates to:
+  /// **'Seeds just came in! Put some aside right away, boss, before they scatter'**
+  String get mascot_tip_pay_yourself_first;
+
+  /// No description provided for @mascot_tip_treat.
+  ///
+  /// In en, this message translates to:
+  /// **'The stash is in good shape, boss. It’s okay to treat yourself now and then, no guilt'**
+  String get mascot_tip_treat;
+
+  /// No description provided for @mascot_tip_future_self.
+  ///
+  /// In en, this message translates to:
+  /// **'Just {amount} a day adds up to {amount2} a year. Imagine those cheeks, boss!'**
+  String mascot_tip_future_self(String amount, String amount2);
+
+  /// No description provided for @mascot_joke_friday.
+  ///
+  /// In en, this message translates to:
+  /// **'It’s Friday, boss! Go have fun, I’ll guard the seeds'**
+  String get mascot_joke_friday;
+
+  /// No description provided for @mascot_joke_late_night.
+  ///
+  /// In en, this message translates to:
+  /// **'It’s late, boss… Log it and off to bed? I’m yawning already'**
+  String get mascot_joke_late_night;
+
+  /// No description provided for @mascot_joke_cheeks.
+  ///
+  /// In en, this message translates to:
+  /// **'Fun fact, boss: hamsters carry seeds in their cheeks. I carry your budget'**
+  String get mascot_joke_cheeks;
+
+  /// No description provided for @mascot_joke_trees.
+  ///
+  /// In en, this message translates to:
+  /// **'Even if seeds grew on trees, I’d still hide them in my cheeks'**
+  String get mascot_joke_trees;
+
+  /// No description provided for @mascot_joke_twice.
+  ///
+  /// In en, this message translates to:
+  /// **'I counted your seeds twice. Same number, boss. Good sign'**
+  String get mascot_joke_twice;
+
+  /// No description provided for @mascot_joke_secret.
+  ///
+  /// In en, this message translates to:
+  /// **'Psst, boss… Round every expense up in your head. The difference is your secret stash'**
+  String get mascot_joke_secret;
+
+  /// No description provided for @mascot_reaction_income.
+  ///
+  /// In en, this message translates to:
+  /// **'Caught {amount}! Into the stash, boss'**
+  String mascot_reaction_income(String amount);
+
+  /// No description provided for @mascot_reaction_big_income.
+  ///
+  /// In en, this message translates to:
+  /// **'Whoa, boss! +{amount}. My cheeks might burst!'**
+  String mascot_reaction_big_income(String amount);
+
+  /// No description provided for @mascot_reaction_transfer.
+  ///
+  /// In en, this message translates to:
+  /// **'Moved {amount} over'**
+  String mascot_reaction_transfer(String amount);
+
+  /// No description provided for @mascot_reaction_lent.
+  ///
+  /// In en, this message translates to:
+  /// **'Lent {amount}. I’ll remember, boss'**
+  String mascot_reaction_lent(String amount);
+
+  /// No description provided for @mascot_reaction_debt_closed.
+  ///
+  /// In en, this message translates to:
+  /// **'Debt closed! Clean paws, boss'**
+  String get mascot_reaction_debt_closed;
+
+  /// No description provided for @mascot_reaction_forgiven.
+  ///
+  /// In en, this message translates to:
+  /// **'You forgave it… You’ve got a kind heart, boss'**
+  String get mascot_reaction_forgiven;
+
+  /// No description provided for @mascot_reaction_first_wallet.
+  ///
+  /// In en, this message translates to:
+  /// **'First wallet, boss! Let the stashing begin'**
+  String get mascot_reaction_first_wallet;
+
+  /// No description provided for @mascot_reaction_budget.
+  ///
+  /// In en, this message translates to:
+  /// **'Budget’s set. I’ll stand guard, boss'**
+  String get mascot_reaction_budget;
+
+  /// No description provided for @mascot_wallet_negative.
+  ///
+  /// In en, this message translates to:
+  /// **'Boss, this wallet went below zero'**
+  String get mascot_wallet_negative;
+
+  /// No description provided for @mascot_wallet_down.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent}% of the seeds here are gone since the 1st'**
+  String mascot_wallet_down(int percent);
+
+  /// No description provided for @mascot_wallet_up.
+  ///
+  /// In en, this message translates to:
+  /// **'Up {amount} since the 1st. Lovely, boss!'**
+  String mascot_wallet_up(String amount);
+
+  /// No description provided for @mascot_wallet_sleeping.
+  ///
+  /// In en, this message translates to:
+  /// **'This wallet’s been asleep for a month. Shh…'**
+  String get mascot_wallet_sleeping;
+
+  /// No description provided for @mascot_wallet_calm.
+  ///
+  /// In en, this message translates to:
+  /// **'All quiet in this one, boss'**
+  String get mascot_wallet_calm;
+
+  /// No description provided for @mascot_budgets_over.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Boss, one budget went over the limit} other{Boss, {count} budgets went over the limit}}'**
+  String mascot_budgets_over(int count);
+
+  /// No description provided for @mascot_budgets_near.
+  ///
+  /// In en, this message translates to:
+  /// **'“{name}” is almost tapped out, boss'**
+  String mascot_budgets_near(String name);
+
+  /// No description provided for @mascot_budgets_calm.
+  ///
+  /// In en, this message translates to:
+  /// **'All fences holding, boss. Budgets look good'**
+  String get mascot_budgets_calm;
+
+  /// No description provided for @mascot_budget_detail_over.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} over. Maybe raise the limit next time, boss?'**
+  String mascot_budget_detail_over(String amount);
+
+  /// No description provided for @mascot_budget_detail_pace.
+  ///
+  /// In en, this message translates to:
+  /// **'At this pace the limit runs out on {date}'**
+  String mascot_budget_detail_pace(String date);
+
+  /// No description provided for @mascot_budget_detail_within.
+  ///
+  /// In en, this message translates to:
+  /// **'Stayed within the limit! Proud of you, boss'**
+  String get mascot_budget_detail_within;
+
+  /// No description provided for @mascot_budget_detail_calm.
+  ///
+  /// In en, this message translates to:
+  /// **'Right on track, boss'**
+  String get mascot_budget_detail_calm;
+
+  /// No description provided for @mascot_debts_overdue.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Boss, one debt is overdue} other{Boss, {count} debts are overdue}}'**
+  String mascot_debts_overdue(int count);
+
+  /// No description provided for @mascot_debts_all_closed.
+  ///
+  /// In en, this message translates to:
+  /// **'Every debt is closed! Clean paws, boss'**
+  String get mascot_debts_all_closed;
+
+  /// No description provided for @mascot_debts_tracking.
+  ///
+  /// In en, this message translates to:
+  /// **'I keep track of who owes whom seeds'**
+  String get mascot_debts_tracking;
+
+  /// No description provided for @mascot_debt_detail_overdue.
+  ///
+  /// In en, this message translates to:
+  /// **'{days, plural, =1{This was due yesterday, boss} other{This was due {days} days ago, boss}}'**
+  String mascot_debt_detail_overdue(int days);
+
+  /// No description provided for @mascot_debt_detail_lent.
+  ///
+  /// In en, this message translates to:
+  /// **'I remember who borrowed our seeds, boss'**
+  String get mascot_debt_detail_lent;
+
+  /// No description provided for @mascot_debt_detail_due.
+  ///
+  /// In en, this message translates to:
+  /// **'Due by {date}'**
+  String mascot_debt_detail_due(String date);
+
+  /// No description provided for @mascot_subs_spinning.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{One subscription takes its share of seeds every month} other{{count} subscriptions take their share of seeds every month}}'**
+  String mascot_subs_spinning(int count);
+
+  /// No description provided for @mascot_tags_top.
+  ///
+  /// In en, this message translates to:
+  /// **'Most seeds this month went to “{name}”'**
+  String mascot_tags_top(String name);
+
+  /// No description provided for @mascot_tag_up.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent}% more than last month here'**
+  String mascot_tag_up(int percent);
+
+  /// No description provided for @mascot_tag_down.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent}% less than last month. Nice, boss!'**
+  String mascot_tag_down(int percent);
+
+  /// No description provided for @mascot_progress_saved.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} went into the stash. Great job, boss!'**
+  String mascot_progress_saved(String amount);
+
+  /// No description provided for @mascot_progress_over.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} more seeds went out than came in'**
+  String mascot_progress_over(String amount);
+
+  /// No description provided for @mascot_progress_over_tag.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} more seeds went out than came in, mostly on “{name}”'**
+  String mascot_progress_over_tag(String amount, String name);
+
+  /// No description provided for @mascot_progress_forecast.
+  ///
+  /// In en, this message translates to:
+  /// **'At this pace, about {amount} will go out this period'**
+  String mascot_progress_forecast(String amount);
+
+  /// No description provided for @mascot_progress_counting.
+  ///
+  /// In en, this message translates to:
+  /// **'Still counting this one, boss'**
+  String get mascot_progress_counting;
+
+  /// No description provided for @mascot_screen_wallet_filter.
+  ///
+  /// In en, this message translates to:
+  /// **'Filter by tag and you’ll see where this wallet’s seeds go'**
+  String get mascot_screen_wallet_filter;
+
+  /// No description provided for @mascot_screen_wallet_switch.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the wallet name up top to hop to another one'**
+  String get mascot_screen_wallet_switch;
+
+  /// No description provided for @mascot_screen_wallet_limit.
+  ///
+  /// In en, this message translates to:
+  /// **'In the Budgets tab you can put a limit on this wallet'**
+  String get mascot_screen_wallet_limit;
+
+  /// No description provided for @mascot_screen_budgets_rollover.
+  ///
+  /// In en, this message translates to:
+  /// **'Budgets can carry leftovers into the next period. Not a seed wasted'**
+  String get mascot_screen_budgets_rollover;
+
+  /// No description provided for @mascot_screen_budgets_tags.
+  ///
+  /// In en, this message translates to:
+  /// **'A budget can watch just the tags you pick. Say, #cafe'**
+  String get mascot_screen_budgets_tags;
+
+  /// No description provided for @mascot_screen_budget_periods.
+  ///
+  /// In en, this message translates to:
+  /// **'Flip through periods to compare with earlier ones'**
+  String get mascot_screen_budget_periods;
+
+  /// No description provided for @mascot_screen_debts_due.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a due date and I’ll remind you in time, boss'**
+  String get mascot_screen_debts_due;
+
+  /// No description provided for @mascot_screen_debts_quick.
+  ///
+  /// In en, this message translates to:
+  /// **'Quickest way to repay: Transfer → Debts on the transaction screen'**
+  String get mascot_screen_debts_quick;
+
+  /// No description provided for @mascot_screen_subs_pause.
+  ///
+  /// In en, this message translates to:
+  /// **'You can pause a subscription instead of deleting it. The history stays'**
+  String get mascot_screen_subs_pause;
+
+  /// No description provided for @mascot_screen_tags_nest.
+  ///
+  /// In en, this message translates to:
+  /// **'Nest tags with a slash: food/coffee'**
+  String get mascot_screen_tags_nest;
+
+  /// No description provided for @mascot_screen_tags_map.
+  ///
+  /// In en, this message translates to:
+  /// **'Open the map and you’ll see how your tags connect, boss'**
+  String get mascot_screen_tags_map;
+
+  /// No description provided for @mascot_screen_tag_rename.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename or move a tag and the nested ones follow along'**
+  String get mascot_screen_tag_rename;
+
+  /// No description provided for @mascot_screen_progress_baseline.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap “vs …” to compare with last year or a 3-month average'**
+  String get mascot_screen_progress_baseline;
+
+  /// No description provided for @mascot_ans_spent_today.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Today: {amount}, just one expense} other{Today: {amount} across {count} expenses}}'**
+  String mascot_ans_spent_today(String amount, int count);
+
+  /// No description provided for @mascot_ans_nothing_today.
+  ///
+  /// In en, this message translates to:
+  /// **'Not a single expense today, boss. Seeds intact!'**
+  String get mascot_ans_nothing_today;
+
+  /// No description provided for @mascot_ans_spent_yesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Yesterday: {amount}, just one expense} other{Yesterday: {amount} across {count} expenses}}'**
+  String mascot_ans_spent_yesterday(String amount, int count);
+
+  /// No description provided for @mascot_ans_nothing_yesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'Yesterday you didn’t spend a single seed. Hooray!'**
+  String get mascot_ans_nothing_yesterday;
+
+  /// No description provided for @mascot_ans_spent_week.
+  ///
+  /// In en, this message translates to:
+  /// **'This week so far: {amount}'**
+  String mascot_ans_spent_week(String amount);
+
+  /// No description provided for @mascot_ans_spent_month.
+  ///
+  /// In en, this message translates to:
+  /// **'This month {expense} went out and {income} came in'**
+  String mascot_ans_spent_month(String expense, String income);
+
+  /// No description provided for @mascot_ans_no_expenses.
+  ///
+  /// In en, this message translates to:
+  /// **'No expenses this month yet. Lovely, boss'**
+  String get mascot_ans_no_expenses;
+
+  /// No description provided for @mascot_ans_upcoming.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{One payment in the next 7 days: {amount}} other{{count} payments in the next 7 days: {amount}}}'**
+  String mascot_ans_upcoming(String amount, int count);
+
+  /// No description provided for @mascot_ans_nothing_upcoming.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing to pay for the next week'**
+  String get mascot_ans_nothing_upcoming;
+
+  /// No description provided for @mascot_ans_owed.
+  ///
+  /// In en, this message translates to:
+  /// **'People owe you {amount}, mostly {name}'**
+  String mascot_ans_owed(String amount, String name);
+
+  /// No description provided for @mascot_ans_nobody_owes.
+  ///
+  /// In en, this message translates to:
+  /// **'Nobody owes you anything right now'**
+  String get mascot_ans_nobody_owes;
+
+  /// No description provided for @mascot_ans_reserve_low.
+  ///
+  /// In en, this message translates to:
+  /// **'Less than a month of seeds, boss. Let’s fill those cheeks together'**
+  String get mascot_ans_reserve_low;
+
+  /// No description provided for @mascot_ans_reserve_unknown.
+  ///
+  /// In en, this message translates to:
+  /// **'I need about a month of entries to answer that properly'**
+  String get mascot_ans_reserve_unknown;
+
+  /// No description provided for @mascot_ans_where.
+  ///
+  /// In en, this message translates to:
+  /// **'Most seeds went to “{name}” ({percent}%), then “{name2}”'**
+  String mascot_ans_where(String name, int percent, String name2);
+
+  /// No description provided for @mascot_ans_where_one.
+  ///
+  /// In en, this message translates to:
+  /// **'Nearly all the seeds went to “{name}”, {percent}%'**
+  String mascot_ans_where_one(String name, int percent);
+
+  /// No description provided for @mascot_ans_where_untagged.
+  ///
+  /// In en, this message translates to:
+  /// **'Boss, {percent}% of spending has no tags, so I can’t see where it went. Sort it out?'**
+  String mascot_ans_where_untagged(int percent);
+
+  /// No description provided for @mascot_q_today.
+  ///
+  /// In en, this message translates to:
+  /// **'Spent today?'**
+  String get mascot_q_today;
+
+  /// No description provided for @mascot_q_yesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'And yesterday?'**
+  String get mascot_q_yesterday;
+
+  /// No description provided for @mascot_q_week.
+  ///
+  /// In en, this message translates to:
+  /// **'This week?'**
+  String get mascot_q_week;
+
+  /// No description provided for @mascot_q_month.
+  ///
+  /// In en, this message translates to:
+  /// **'This month?'**
+  String get mascot_q_month;
+
+  /// No description provided for @mascot_q_where.
+  ///
+  /// In en, this message translates to:
+  /// **'Where did the seeds go?'**
+  String get mascot_q_where;
+
+  /// No description provided for @mascot_q_biggest.
+  ///
+  /// In en, this message translates to:
+  /// **'Biggest expense?'**
+  String get mascot_q_biggest;
+
+  /// No description provided for @mascot_q_budgets.
+  ///
+  /// In en, this message translates to:
+  /// **'Am I within budget?'**
+  String get mascot_q_budgets;
+
+  /// No description provided for @mascot_q_upcoming.
+  ///
+  /// In en, this message translates to:
+  /// **'What’s due soon?'**
+  String get mascot_q_upcoming;
+
+  /// No description provided for @mascot_q_owed.
+  ///
+  /// In en, this message translates to:
+  /// **'Who owes me?'**
+  String get mascot_q_owed;
+
+  /// No description provided for @mascot_q_reserve.
+  ///
+  /// In en, this message translates to:
+  /// **'How long will it last?'**
+  String get mascot_q_reserve;
+
+  /// No description provided for @mascot_q_tip.
+  ///
+  /// In en, this message translates to:
+  /// **'Any advice?'**
+  String get mascot_q_tip;
+
+  /// No description provided for @mascot_q_joke.
+  ///
+  /// In en, this message translates to:
+  /// **'Make me smile'**
+  String get mascot_q_joke;
 
   /// No description provided for @l10nStopLineDontTouch.
   ///

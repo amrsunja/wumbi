@@ -15,6 +15,10 @@ const double kPageHorzPadding = 16;
 /// Wider gutter for list blocks (dashboard wallets, wallet details rows).
 const double kListHorzPadding = 24;
 
+/// Bottom inset for scrollable detail pages: clears the peeking mascot
+/// (bottom-start corner). Add `MediaQuery.paddingOf(context).bottom` on top.
+const double kPageBottomInset = 120;
+
 /// Extra inset applied to the numpad on top of [kPageHorzPadding].
 const double kNumpadHorzPadding = 28;
 

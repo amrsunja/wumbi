@@ -3,8 +3,8 @@ import 'package:flutter_animate/flutter_animate.dart';
 
 import 'ui_wumbi.dart';
 
-/// Front-facing mascot. Used as a page decoration (wallet details, debts,
-/// subscriptions, tag details — top-right); drops in 400 ms (easeOutBack) once.
+/// Front-facing corner mascot (45 px). Drops in 400 ms (easeOutBack) once;
+/// later mood changes cross-fade inside [UIWumbi].
 class UIWumbiLook extends StatelessWidget {
   const UIWumbiLook({super.key, this.height = 45, this.animate = true, this.mood = WumbiMood.idle});
 

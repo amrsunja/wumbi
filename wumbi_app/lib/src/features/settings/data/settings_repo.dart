@@ -60,6 +60,12 @@ class SettingsRepo {
         return localDatasource.getLocalSettings();
       });
 
+  Future<SuccessOrError<AppSettingsModel>> changeMascotTalks(bool talks) =>
+      Failure.exceptionsCatcher(() async {
+        await localDatasource.changeMascotTalks(talks);
+        return localDatasource.getLocalSettings();
+      });
+
   Future<SuccessOrError<AppSettingsModel>> onboardingCompleted() =>
       Failure.exceptionsCatcher(() async {
         await localDatasource.onboardingCompleted();

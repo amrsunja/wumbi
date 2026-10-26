@@ -1472,17 +1472,399 @@
   "debt_form_wallet": "Wallet",
   "menu_open": "Open menu",
   "menu_close": "Close menu",
-  "menu_wallets": "{count, plural, one{wallet} other{wallets}}",
-  "@menu_wallets": {
-    "placeholders": {
-      "count": {"type": "int"}
-    }
+  "settings_mascot_talks": "Wumbi talks",
+  "mascot_label": "Wumbi the hamster. Tap to chat",
+  "mascot_dismiss": "Let Wumbi go back to his corner",
+  "mascot_action_view": "Show me",
+  "mascot_action_add": "Add",
+  "mascot_month_flow": "{month}: +{income} · −{expense}",
+  "@mascot_month_flow": {
+    "placeholders": {"month": {"type": "String"}, "income": {"type": "String"}, "expense": {"type": "String"}}
   },
-  "menu_budgets": "{count, plural, one{budget} other{budgets}}",
-  "@menu_budgets": {
-    "placeholders": {
-      "count": {"type": "int"}
-    }
+  "mascot_greeting_morning": "Morning, boss!",
+  "mascot_greeting_afternoon": "Hey there, boss!",
+  "mascot_greeting_evening": "Evening, boss!",
+  "mascot_all_calm": "All quiet. The seeds are right where they should be",
+  "mascot_all_for_now": "That’s all I’ve got for now 🙂",
+  "mascot_quiet_today": "Got it, boss. Quiet as a mouse today",
+  "mascot_flow_up": "{month} so far: the stash grew by {amount}. Keep it up!",
+  "@mascot_flow_up": {
+    "placeholders": {"amount": {"type": "String"}, "month": {"type": "String"}}
   },
+  "mascot_flow_down": "{month} so far: {amount} more went out than came in. We’ll catch up",
+  "@mascot_flow_down": {
+    "placeholders": {"amount": {"type": "String"}, "month": {"type": "String"}}
+  },
+  "mascot_reserve_full": "{months, plural, other{Cheeks are full! Enough seeds for {months} months}}",
+  "@mascot_reserve_full": {
+    "placeholders": {"months": {"type": "int"}}
+  },
+  "mascot_debt_overdue": "{days, plural, =1{Boss, the debt with {name} was due yesterday} other{Boss, the debt with {name} was due {days} days ago}}",
+  "@mascot_debt_overdue": {
+    "placeholders": {"name": {"type": "String"}, "days": {"type": "int"}}
+  },
+  "mascot_debt_overdue_nudge": "That debt with {name} is still hanging around, boss. Take a look?",
+  "@mascot_debt_overdue_nudge": {
+    "placeholders": {"name": {"type": "String"}}
+  },
+  "mascot_budget_over": "Boss, “{name}” went over the limit. Let’s see where the seeds leaked",
+  "@mascot_budget_over": {
+    "placeholders": {"name": {"type": "String"}}
+  },
+  "mascot_budget_over_by": "“{name}” is {amount} over. Want to figure it out together, boss?",
+  "@mascot_budget_over_by": {
+    "placeholders": {"name": {"type": "String"}, "amount": {"type": "String"}}
+  },
+  "mascot_budget_near_left": "Only {amount} left in “{name}” this period, boss",
+  "@mascot_budget_near_left": {
+    "placeholders": {"name": {"type": "String"}, "amount": {"type": "String"}}
+  },
+  "mascot_budget_near_percent": "“{name}” is already at {percent}%. Maybe ease off a little?",
+  "@mascot_budget_near_percent": {
+    "placeholders": {"name": {"type": "String"}, "percent": {"type": "int"}}
+  },
+  "mascot_sleep_days": "{days, plural, other{I dozed off, boss… {days} days without a single entry. Shall we catch up?}}",
+  "@mascot_sleep_days": {
+    "placeholders": {"days": {"type": "int"}}
+  },
+  "mascot_sleep_quiet": "It’s awfully quiet here. Forgot to log something, boss?",
+  "mascot_sigh_month": "Boss, more seeds are going out than coming in this month. Let’s find the leak?",
+  "mascot_sigh_ahead": "Spending is outrunning income. Let’s see what we can trim together",
+  "mascot_welcome_back": "{count, plural, =0{You’re back, boss! It was quiet without you} =1{You’re back, boss! One new entry since last time} other{You’re back, boss! {count} new entries since last time}}",
+  "@mascot_welcome_back": {
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "mascot_evening_waited": "Boss! I’ve been waiting for you all day!",
+  "mascot_evening_missed": "I missed you…",
+  "mascot_evening_log": "Let’s log today’s spending before it slips our minds?",
+  "mascot_evening_count": "Help me count today’s seeds?",
+  "mascot_event_reserve": "Boss, we’ve got three months of seeds stashed! Now we can sleep easy",
+  "mascot_event_best_month": "Best month in half a year! {amount} went into the stash. Proud of you, boss",
+  "@mascot_event_best_month": {
+    "placeholders": {"amount": {"type": "String"}}
+  },
+  "mascot_event_days": "{days, plural, other{{days} days of counting seeds together. Thank you, boss!}}",
+  "@mascot_event_days": {
+    "placeholders": {"days": {"type": "int"}}
+  },
+  "mascot_event_records": "That’s the 100th entry! Counting is way more fun together, boss",
+  "mascot_event_streak": "{days, plural, other{{days} days in a row without missing one, boss! That’s discipline}}",
+  "@mascot_event_streak": {
+    "placeholders": {"days": {"type": "int"}}
+  },
+  "mascot_charge_today": "Heads up, boss: {name} takes {amount} today",
+  "@mascot_charge_today": {
+    "placeholders": {"name": {"type": "String"}, "amount": {"type": "String"}}
+  },
+  "mascot_charge_tomorrow": "Tomorrow {name} takes {amount}, boss",
+  "@mascot_charge_tomorrow": {
+    "placeholders": {"name": {"type": "String"}, "amount": {"type": "String"}}
+  },
+  "mascot_charge_soon": "In a couple of days {name} takes {amount}",
+  "@mascot_charge_soon": {
+    "placeholders": {"name": {"type": "String"}, "amount": {"type": "String"}}
+  },
+  "mascot_charge_unnamed": "a subscription",
+  "mascot_debt_due_today": "Boss, the debt with {name} is due today",
+  "@mascot_debt_due_today": {
+    "placeholders": {"name": {"type": "String"}}
+  },
+  "mascot_debt_due_tomorrow": "The debt with {name} is due tomorrow. Let’s not forget?",
+  "@mascot_debt_due_tomorrow": {
+    "placeholders": {"name": {"type": "String"}}
+  },
+  "mascot_debt_due_soon": "{days, plural, other{{days} days left on the debt with {name}}}",
+  "@mascot_debt_due_soon": {
+    "placeholders": {"name": {"type": "String"}, "days": {"type": "int"}}
+  },
+  "mascot_insight_mover": "Boss, “{name}” is eating {percent}% more seeds than last month. Take a look?",
+  "@mascot_insight_mover": {
+    "placeholders": {"name": {"type": "String"}, "percent": {"type": "int"}}
+  },
+  "mascot_insight_untagged": "{count, plural, =1{One expense this month has no tag. Let’s sort it out?} other{{count} expenses this month have no tag. Let’s sort them out?}}",
+  "@mascot_insight_untagged": {
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "mascot_insight_peak_day": "{weekday} is your hungriest day, boss",
+  "@mascot_insight_peak_day": {
+    "placeholders": {"weekday": {"type": "String"}}
+  },
+  "mascot_insight_reserve": "{months, plural, =1{Cheeks look good: about a month of seeds stashed} other{Cheeks look good: about {months} months of seeds stashed}}",
+  "@mascot_insight_reserve": {
+    "placeholders": {"months": {"type": "int"}}
+  },
+  "mascot_insight_top_expense": "Biggest bite this month: “{name}”, {amount}",
+  "@mascot_insight_top_expense": {
+    "placeholders": {"name": {"type": "String"}, "amount": {"type": "String"}}
+  },
+  "mascot_insight_top_expense_amount": "Biggest single bite this month: {amount}",
+  "@mascot_insight_top_expense_amount": {
+    "placeholders": {"amount": {"type": "String"}}
+  },
+  "mascot_insight_daily_average": "Boss, about {amount} goes out every day this month",
+  "@mascot_insight_daily_average": {
+    "placeholders": {"amount": {"type": "String"}}
+  },
+  "mascot_insight_daily_below": "{percent}% fewer seeds a day than usual. Nice work, boss!",
+  "@mascot_insight_daily_below": {
+    "placeholders": {"percent": {"type": "int"}}
+  },
+  "mascot_insight_daily_above": "Boss, {percent}% more seeds a day than usual. Want to see where they go?",
+  "@mascot_insight_daily_above": {
+    "placeholders": {"percent": {"type": "int"}}
+  },
+  "mascot_insight_weekend": "On weekends the seeds fly out {percent}% faster than on weekdays",
+  "@mascot_insight_weekend": {
+    "placeholders": {"percent": {"type": "int"}}
+  },
+  "mascot_insight_frequent_tag": "{count, plural, other{{count} trips to “{name}” this month. Becoming a habit, boss?}}",
+  "@mascot_insight_frequent_tag": {
+    "placeholders": {"name": {"type": "String"}, "count": {"type": "int"}}
+  },
+  "mascot_insight_small_spends": "Little purchases added up to {amount} this month. Seed by seed, boss",
+  "@mascot_insight_small_spends": {
+    "placeholders": {"amount": {"type": "String"}}
+  },
+  "mascot_insight_savings_rate": "Boss, {percent}% of this month’s income is staying in the stash. Happy cheeks!",
+  "@mascot_insight_savings_rate": {
+    "placeholders": {"percent": {"type": "int"}}
+  },
+  "mascot_insight_no_income": "Not a single seed has come in this month, boss. Did you forget to log your pay?",
+  "mascot_insight_forecast_over": "At this rate the month will cost about {amount}. That’s more than usual, boss",
+  "@mascot_insight_forecast_over": {
+    "placeholders": {"amount": {"type": "String"}}
+  },
+  "mascot_insight_forecast_under": "This month is shaping up light: about {amount}. The stash says thanks",
+  "@mascot_insight_forecast_under": {
+    "placeholders": {"amount": {"type": "String"}}
+  },
+  "mascot_insight_owed_to_me": "Boss, people owe you {amount}. Maybe time for a gentle nudge?",
+  "@mascot_insight_owed_to_me": {
+    "placeholders": {"amount": {"type": "String"}}
+  },
+  "mascot_insight_negative_wallet": "“{name}” dipped below zero, boss. Move a few seeds over?",
+  "@mascot_insight_negative_wallet": {
+    "placeholders": {"name": {"type": "String"}}
+  },
+  "mascot_insight_no_rate": "Can’t convert {codes} yet, no rate. I’ll finish counting once we’re online",
+  "@mascot_insight_no_rate": {
+    "placeholders": {"codes": {"type": "String"}}
+  },
+  "mascot_insight_income_up": "Boss, {percent}% more seeds came in than usual! Stash half of the extra right away?",
+  "@mascot_insight_income_up": {
+    "placeholders": {"percent": {"type": "int"}}
+  },
+  "mascot_insight_tag_yearly": "At this pace, “{name}” will eat about {amount} a year",
+  "@mascot_insight_tag_yearly": {
+    "placeholders": {"name": {"type": "String"}, "amount": {"type": "String"}}
+  },
+  "mascot_insight_no_spend_yesterday": "Not a single expense yesterday! My cheeks are proud of you, boss",
+  "mascot_tip_budget": "Boss, a budget is just a little fence around the seeds. Put up the first one?",
+  "mascot_tip_subscriptions": "Got regular payments? Add them once and I’ll keep an eye on them",
+  "mascot_tip_subs_yearly": "Boss, subscriptions eat {amount} a year. Any you don’t really use?",
+  "@mascot_tip_subs_yearly": {
+    "placeholders": {"amount": {"type": "String"}}
+  },
+  "mascot_tip_recurring_share": "{percent}% of this month’s spending is regular payments. Round and round, like my wheel",
+  "@mascot_tip_recurring_share": {
+    "placeholders": {"percent": {"type": "int"}}
+  },
+  "mascot_tip_new_month": "New month, boss! Fresh pouch. Set up some budgets?",
+  "mascot_tip_monday_recap": "Last week {amount} went out. Let’s see how we do this week, boss",
+  "@mascot_tip_monday_recap": {
+    "placeholders": {"amount": {"type": "String"}}
+  },
+  "mascot_tip_month_end": "{days, plural, =1{One day to go this month. You’re doing great, boss} other{{days} days to go this month. You’re doing great, boss}}",
+  "@mascot_tip_month_end": {
+    "placeholders": {"days": {"type": "int"}}
+  },
+  "mascot_tip_tags": "Tags help me see where the seeds go, boss. Try #food or #home",
+  "mascot_tip_debt_due_date": "Give the debt with {name} a due date and I’ll remind you in time",
+  "@mascot_tip_debt_due_date": {
+    "placeholders": {"name": {"type": "String"}}
+  },
+  "mascot_tip_budget_for": "Boss, “{name}” takes {percent}% of all spending. Give it a budget?",
+  "@mascot_tip_budget_for": {
+    "placeholders": {"name": {"type": "String"}, "percent": {"type": "int"}}
+  },
+  "mascot_tip_rainy_day": "Boss, start a separate rainy-day wallet. Then surprises won’t catch us off guard",
+  "mascot_tip_pay_yourself_first": "Seeds just came in! Put some aside right away, boss, before they scatter",
+  "mascot_tip_treat": "The stash is in good shape, boss. It’s okay to treat yourself now and then, no guilt",
+  "mascot_tip_future_self": "Just {amount} a day adds up to {amount2} a year. Imagine those cheeks, boss!",
+  "@mascot_tip_future_self": {
+    "placeholders": {"amount": {"type": "String"}, "amount2": {"type": "String"}}
+  },
+  "mascot_joke_friday": "It’s Friday, boss! Go have fun, I’ll guard the seeds",
+  "mascot_joke_late_night": "It’s late, boss… Log it and off to bed? I’m yawning already",
+  "mascot_joke_cheeks": "Fun fact, boss: hamsters carry seeds in their cheeks. I carry your budget",
+  "mascot_joke_trees": "Even if seeds grew on trees, I’d still hide them in my cheeks",
+  "mascot_joke_twice": "I counted your seeds twice. Same number, boss. Good sign",
+  "mascot_joke_secret": "Psst, boss… Round every expense up in your head. The difference is your secret stash",
+  "mascot_reaction_income": "Caught {amount}! Into the stash, boss",
+  "@mascot_reaction_income": {
+    "placeholders": {"amount": {"type": "String"}}
+  },
+  "mascot_reaction_big_income": "Whoa, boss! +{amount}. My cheeks might burst!",
+  "@mascot_reaction_big_income": {
+    "placeholders": {"amount": {"type": "String"}}
+  },
+  "mascot_reaction_transfer": "Moved {amount} over",
+  "@mascot_reaction_transfer": {
+    "placeholders": {"amount": {"type": "String"}}
+  },
+  "mascot_reaction_lent": "Lent {amount}. I’ll remember, boss",
+  "@mascot_reaction_lent": {
+    "placeholders": {"amount": {"type": "String"}}
+  },
+  "mascot_reaction_debt_closed": "Debt closed! Clean paws, boss",
+  "mascot_reaction_forgiven": "You forgave it… You’ve got a kind heart, boss",
+  "mascot_reaction_first_wallet": "First wallet, boss! Let the stashing begin",
+  "mascot_reaction_budget": "Budget’s set. I’ll stand guard, boss",
+  "mascot_wallet_negative": "Boss, this wallet went below zero",
+  "mascot_wallet_down": "{percent}% of the seeds here are gone since the 1st",
+  "@mascot_wallet_down": {
+    "placeholders": {"percent": {"type": "int"}}
+  },
+  "mascot_wallet_up": "Up {amount} since the 1st. Lovely, boss!",
+  "@mascot_wallet_up": {
+    "placeholders": {"amount": {"type": "String"}}
+  },
+  "mascot_wallet_sleeping": "This wallet’s been asleep for a month. Shh…",
+  "mascot_wallet_calm": "All quiet in this one, boss",
+  "mascot_budgets_over": "{count, plural, =1{Boss, one budget went over the limit} other{Boss, {count} budgets went over the limit}}",
+  "@mascot_budgets_over": {
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "mascot_budgets_near": "“{name}” is almost tapped out, boss",
+  "@mascot_budgets_near": {
+    "placeholders": {"name": {"type": "String"}}
+  },
+  "mascot_budgets_calm": "All fences holding, boss. Budgets look good",
+  "mascot_budget_detail_over": "{amount} over. Maybe raise the limit next time, boss?",
+  "@mascot_budget_detail_over": {
+    "placeholders": {"amount": {"type": "String"}}
+  },
+  "mascot_budget_detail_pace": "At this pace the limit runs out on {date}",
+  "@mascot_budget_detail_pace": {
+    "placeholders": {"date": {"type": "String"}}
+  },
+  "mascot_budget_detail_within": "Stayed within the limit! Proud of you, boss",
+  "mascot_budget_detail_calm": "Right on track, boss",
+  "mascot_debts_overdue": "{count, plural, =1{Boss, one debt is overdue} other{Boss, {count} debts are overdue}}",
+  "@mascot_debts_overdue": {
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "mascot_debts_all_closed": "Every debt is closed! Clean paws, boss",
+  "mascot_debts_tracking": "I keep track of who owes whom seeds",
+  "mascot_debt_detail_overdue": "{days, plural, =1{This was due yesterday, boss} other{This was due {days} days ago, boss}}",
+  "@mascot_debt_detail_overdue": {
+    "placeholders": {"days": {"type": "int"}}
+  },
+  "mascot_debt_detail_lent": "I remember who borrowed our seeds, boss",
+  "mascot_debt_detail_due": "Due by {date}",
+  "@mascot_debt_detail_due": {
+    "placeholders": {"date": {"type": "String"}}
+  },
+  "mascot_subs_spinning": "{count, plural, =1{One subscription takes its share of seeds every month} other{{count} subscriptions take their share of seeds every month}}",
+  "@mascot_subs_spinning": {
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "mascot_tags_top": "Most seeds this month went to “{name}”",
+  "@mascot_tags_top": {
+    "placeholders": {"name": {"type": "String"}}
+  },
+  "mascot_tag_up": "{percent}% more than last month here",
+  "@mascot_tag_up": {
+    "placeholders": {"percent": {"type": "int"}}
+  },
+  "mascot_tag_down": "{percent}% less than last month. Nice, boss!",
+  "@mascot_tag_down": {
+    "placeholders": {"percent": {"type": "int"}}
+  },
+  "mascot_progress_saved": "{amount} went into the stash. Great job, boss!",
+  "@mascot_progress_saved": {
+    "placeholders": {"amount": {"type": "String"}}
+  },
+  "mascot_progress_over": "{amount} more seeds went out than came in",
+  "@mascot_progress_over": {
+    "placeholders": {"amount": {"type": "String"}}
+  },
+  "mascot_progress_over_tag": "{amount} more seeds went out than came in, mostly on “{name}”",
+  "@mascot_progress_over_tag": {
+    "placeholders": {"amount": {"type": "String"}, "name": {"type": "String"}}
+  },
+  "mascot_progress_forecast": "At this pace, about {amount} will go out this period",
+  "@mascot_progress_forecast": {
+    "placeholders": {"amount": {"type": "String"}}
+  },
+  "mascot_progress_counting": "Still counting this one, boss",
+  "mascot_screen_wallet_filter": "Filter by tag and you’ll see where this wallet’s seeds go",
+  "mascot_screen_wallet_switch": "Tap the wallet name up top to hop to another one",
+  "mascot_screen_wallet_limit": "In the Budgets tab you can put a limit on this wallet",
+  "mascot_screen_budgets_rollover": "Budgets can carry leftovers into the next period. Not a seed wasted",
+  "mascot_screen_budgets_tags": "A budget can watch just the tags you pick. Say, #cafe",
+  "mascot_screen_budget_periods": "Flip through periods to compare with earlier ones",
+  "mascot_screen_debts_due": "Add a due date and I’ll remind you in time, boss",
+  "mascot_screen_debts_quick": "Quickest way to repay: Transfer → Debts on the transaction screen",
+  "mascot_screen_subs_pause": "You can pause a subscription instead of deleting it. The history stays",
+  "mascot_screen_tags_nest": "Nest tags with a slash: food/coffee",
+  "mascot_screen_tags_map": "Open the map and you’ll see how your tags connect, boss",
+  "mascot_screen_tag_rename": "Rename or move a tag and the nested ones follow along",
+  "mascot_screen_progress_baseline": "Tap “vs …” to compare with last year or a 3-month average",
+  "mascot_ans_spent_today": "{count, plural, =1{Today: {amount}, just one expense} other{Today: {amount} across {count} expenses}}",
+  "@mascot_ans_spent_today": {
+    "placeholders": {"amount": {"type": "String"}, "count": {"type": "int"}}
+  },
+  "mascot_ans_nothing_today": "Not a single expense today, boss. Seeds intact!",
+  "mascot_ans_spent_yesterday": "{count, plural, =1{Yesterday: {amount}, just one expense} other{Yesterday: {amount} across {count} expenses}}",
+  "@mascot_ans_spent_yesterday": {
+    "placeholders": {"amount": {"type": "String"}, "count": {"type": "int"}}
+  },
+  "mascot_ans_nothing_yesterday": "Yesterday you didn’t spend a single seed. Hooray!",
+  "mascot_ans_spent_week": "This week so far: {amount}",
+  "@mascot_ans_spent_week": {
+    "placeholders": {"amount": {"type": "String"}}
+  },
+  "mascot_ans_spent_month": "This month {expense} went out and {income} came in",
+  "@mascot_ans_spent_month": {
+    "placeholders": {"expense": {"type": "String"}, "income": {"type": "String"}}
+  },
+  "mascot_ans_no_expenses": "No expenses this month yet. Lovely, boss",
+  "mascot_ans_upcoming": "{count, plural, =1{One payment in the next 7 days: {amount}} other{{count} payments in the next 7 days: {amount}}}",
+  "@mascot_ans_upcoming": {
+    "placeholders": {"amount": {"type": "String"}, "count": {"type": "int"}}
+  },
+  "mascot_ans_nothing_upcoming": "Nothing to pay for the next week",
+  "mascot_ans_owed": "People owe you {amount}, mostly {name}",
+  "@mascot_ans_owed": {
+    "placeholders": {"amount": {"type": "String"}, "name": {"type": "String"}}
+  },
+  "mascot_ans_nobody_owes": "Nobody owes you anything right now",
+  "mascot_ans_reserve_low": "Less than a month of seeds, boss. Let’s fill those cheeks together",
+  "mascot_ans_reserve_unknown": "I need about a month of entries to answer that properly",
+  "mascot_ans_where": "Most seeds went to “{name}” ({percent}%), then “{name2}”",
+  "@mascot_ans_where": {
+    "placeholders": {"name": {"type": "String"}, "percent": {"type": "int"}, "name2": {"type": "String"}}
+  },
+  "mascot_ans_where_one": "Nearly all the seeds went to “{name}”, {percent}%",
+  "@mascot_ans_where_one": {
+    "placeholders": {"name": {"type": "String"}, "percent": {"type": "int"}}
+  },
+  "mascot_ans_where_untagged": "Boss, {percent}% of spending has no tags, so I can’t see where it went. Sort it out?",
+  "@mascot_ans_where_untagged": {
+    "placeholders": {"percent": {"type": "int"}}
+  },
+  "mascot_q_today": "Spent today?",
+  "mascot_q_yesterday": "And yesterday?",
+  "mascot_q_week": "This week?",
+  "mascot_q_month": "This month?",
+  "mascot_q_where": "Where did the seeds go?",
+  "mascot_q_biggest": "Biggest expense?",
+  "mascot_q_budgets": "Am I within budget?",
+  "mascot_q_upcoming": "What’s due soon?",
+  "mascot_q_owed": "Who owes me?",
+  "mascot_q_reserve": "How long will it last?",
+  "mascot_q_tip": "Any advice?",
+  "mascot_q_joke": "Make me smile",
   "l10nStopLineDontTouch": "☠☠☠☠☠☠☠☠☠☠☠☠☠ Don't touch this line ☠☠☠☠☠☠☠☠☠☠☠☠☠"
 }

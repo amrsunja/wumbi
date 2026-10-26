@@ -14,13 +14,13 @@ import '../../../core/utils/enums/debt_direction.dart';
 import '../../../core/utils/enums/payment_kind.dart';
 import '../../../core/utils/extensions/build_context_extensions.dart';
 import '../../../core/utils/extensions/date_time_extensions.dart';
+import '../../mascot/domain/mascot_screens.dart';
+import '../../mascot/ui/mascot_answers.dart';
+import '../../mascot/ui/widgets/mascot_peek.dart';
 import '../data/models/debt_model.dart';
 import 'debt_labels.dart';
 import 'debt_sheet_notifier.dart';
 import 'debts_provider.dart';
-
-/// Room under the list so the last row clears the home indicator.
-const double _kBottomInset = 48;
 
 /// `/debts/:id` (spec B&D §8.4) — one debt, read top to bottom:
 ///
@@ -69,7 +69,15 @@ class DebtDetailsPage extends HookConsumerWidget {
 
     void edit() => context.router.push(NewDebtRoute(debtId: debtId));
 
-    return Scaffold(
+    return MascotPeekLayer(
+      states: summary == null
+          ? null
+          : MascotScreens.withTips(
+              MascotScreens.debtDetails(summary, now: DateTime.now()),
+              MascotScreens.debtDetailsTips(summary),
+            ),
+      questions: MascotQuestions.debts,
+      child: Scaffold(
       appBar: UIAppbar(
         title: summary?.person.name ?? '',
         titleHeroTag: heroDebtName(debtId),
@@ -88,7 +96,12 @@ class DebtDetailsPage extends HookConsumerWidget {
                 physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                 slivers: [
                   SliverPadding(
-                    padding: const EdgeInsets.fromLTRB(kListHorzPadding, 4, kListHorzPadding, _kBottomInset),
+                    padding: EdgeInsets.fromLTRB(
+                      kListHorzPadding,
+                      4,
+                      kListHorzPadding,
+                      kPageBottomInset + MediaQuery.paddingOf(context).bottom,
+                    ),
                     sliver: SliverToBoxAdapter(
                       child: _Content(
                         summary: summary,
@@ -101,6 +114,7 @@ class DebtDetailsPage extends HookConsumerWidget {
                 ],
               ),
             ),
+    ),
     );
   }
 }

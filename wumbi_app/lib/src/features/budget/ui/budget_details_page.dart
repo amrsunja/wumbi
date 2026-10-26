@@ -16,6 +16,9 @@ import '../../transaction/data/models/transaction_model.dart';
 import '../../wallet/data/models/wallet_model.dart';
 import '../../wallet/ui/wallets_provider.dart';
 import '../../wallet/ui/widgets/month_divider.dart';
+import '../../mascot/domain/mascot_screens.dart';
+import '../../mascot/ui/mascot_answers.dart';
+import '../../mascot/ui/widgets/mascot_peek.dart';
 import '../data/budget_metrics.dart';
 import '../data/models/budget_model.dart';
 import 'budget_details_notifier.dart';
@@ -107,7 +110,16 @@ class BudgetDetailsPage extends HookConsumerWidget {
     void edit([BudgetFormSheet? sheet]) =>
         context.router.push(BudgetFormRoute(budgetId: budgetId, sheet: sheet?.name));
 
-    return Scaffold(
+    return MascotPeekLayer(
+      states: progress == null
+          ? null
+          : MascotScreens.withTips(
+              MascotScreens.budgetDetails(progress, now: DateTime.now()),
+              MascotScreens.budgetDetailsTips(),
+            ),
+      hidden: state.notFound,
+      questions: MascotQuestions.budgets,
+      child: Scaffold(
       appBar: UIAppbar(
         title: progress?.budget.name ?? '',
         titleHeroTag: heroBudgetName(budgetId),
@@ -191,6 +203,7 @@ class BudgetDetailsPage extends HookConsumerWidget {
                 ),
               ],
             ),
+    ),
     );
   }
 

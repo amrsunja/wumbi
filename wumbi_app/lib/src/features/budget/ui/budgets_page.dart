@@ -7,6 +7,9 @@ import '../../../core/design_system/app_ui.dart';
 import '../../../core/routing/app_router.dart';
 import '../../../core/utils/constants/constants.dart';
 import '../../../core/utils/extensions/build_context_extensions.dart';
+import '../../mascot/domain/mascot_screens.dart';
+import '../../mascot/ui/mascot_answers.dart';
+import '../../mascot/ui/widgets/mascot_peek.dart';
 import '../data/budget_metrics.dart';
 import '../data/models/budget_model.dart';
 import 'budget_labels.dart';
@@ -64,7 +67,11 @@ class BudgetsPage extends HookConsumerWidget {
           ],
         );
 
-    return Scaffold(
+    return MascotPeekLayer(
+      states: scoped == null ? null : MascotScreens.withTips(MascotScreens.budgets(active), MascotScreens.budgetsTips()),
+      hidden: scoped?.isEmpty ?? true,
+      questions: MascotQuestions.budgets,
+      child: Scaffold(
       appBar: UIAppbar(title: l10n.budgets_title, backTap: () => context.router.maybePop()),
       body: CustomScrollView(
         slivers: [
@@ -72,9 +79,9 @@ class BudgetsPage extends HookConsumerWidget {
             child: Padding(
               padding: const EdgeInsets.fromLTRB(kListHorzPadding, 8, kListHorzPadding, 0),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(l10n.dashboard_budgets, style: typo.headline),
+                  Expanded(child: Text(l10n.dashboard_budgets, style: typo.headline)),
+
                   UiIconTextButton(icon: UIIconToken.icons.general.plusCircle, title: l10n.budget_new, onTap: create),
                 ],
               ),
@@ -102,7 +109,7 @@ class BudgetsPage extends HookConsumerWidget {
             SliverFillRemaining(
               hasScrollBody: false,
               child: UiEmptyState(
-                mood: WumbiMood.pouchOpen,
+                mood: WumbiMood.kindly,
                 title: l10n.budgets_empty_title,
                 subtitle: l10n.budgets_empty_subtitle,
                 action: UiIconTextButton(
@@ -149,6 +156,7 @@ class BudgetsPage extends HookConsumerWidget {
           const SliverToBoxAdapter(child: UISpace.vert(64)),
         ],
       ),
+    ),
     );
   }
 }

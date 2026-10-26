@@ -9,6 +9,9 @@ import '../../../core/utils/constants/constants.dart';
 import '../../../core/utils/enums/repeat_frequency.dart';
 import '../../../core/utils/extensions/build_context_extensions.dart';
 import '../../../core/utils/hooks/use_swipe_tabs.dart';
+import '../../mascot/domain/mascot_screens.dart';
+import '../../mascot/ui/mascot_answers.dart';
+import '../../mascot/ui/widgets/mascot_peek.dart';
 import '../../settings/ui/state_management/settings_provider.dart';
 import '../../transaction/data/models/recurring_rule_model.dart';
 import '../../wallet/data/models/wallet_model.dart';
@@ -48,7 +51,7 @@ class SubscriptionsPage extends HookConsumerWidget {
     final wallets = ref.watch(walletsProvider).value ?? const <WalletSummary>[];
     final monthly = ref.watch(monthlySubscriptionTotalProvider(scopeId)).value;
     final base = ref.watch(baseCurrencyProvider);
-    final showMascot = ref.watch(showMascotProvider);
+
 
     final walletsById = <String, WalletSummary>{for (final w in wallets) w.id: w};
     final scopeWallet = scopeId == null ? null : walletsById[scopeId];
@@ -83,7 +86,17 @@ class SubscriptionsPage extends HookConsumerWidget {
 
     final hasAny = scoped?.isNotEmpty ?? false;
 
-    return Scaffold(
+    return MascotPeekLayer(
+      states: scoped == null
+          ? null
+          : MascotScreens.withTips(
+              MascotScreens.subscriptions(scoped, now: DateTime.now()),
+              MascotScreens.subscriptionsTips(monthly: monthly),
+            ),
+      // Nothing in this scope: the empty state is the hamster.
+      hidden: !hasAny,
+      questions: MascotQuestions.subscriptions,
+      child: Scaffold(
       appBar: UIAppbar(
         title: l10n.subscriptions_title,
         backTap: () => context.router.maybePop(),
@@ -134,12 +147,7 @@ class SubscriptionsPage extends HookConsumerWidget {
                   ],
                 ),
               ),
-              if (showMascot)
-                const Positioned(
-                  right: 8,
-                  top: 4,
-                  child: UIWumbiLook(key: ValueKey('wumbi-subscriptions')),
-                ),
+
             ],
           ),
           // Swipeable tab bodies (only they scroll). Pages are not kept
@@ -173,6 +181,7 @@ class SubscriptionsPage extends HookConsumerWidget {
           ),
         ],
       ),
+    ),
     );
   }
 }

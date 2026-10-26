@@ -8,9 +8,10 @@ import '../widgets/onboarding_typography.dart';
 
 /// Onboarding index 6 — "Create your first Wallet".
 ///
-/// Left-aligned hero title with the accent word in blue, the mascot peeking
-/// in from the right edge, "+ New Wallet" (opens the wallet form modal) and a
-/// quiet "Skip" pinned to the bottom.
+/// Left-aligned hero title with the accent word in blue, the hamster holding
+/// its empty pouch open on the right ("where is the money kept?"),
+/// "+ New Wallet" (opens the wallet form modal) and a quiet "Skip" pinned to
+/// the bottom.
 class OnboardingWalletPage extends StatelessWidget {
   const OnboardingWalletPage({
     super.key,
@@ -26,21 +27,22 @@ class OnboardingWalletPage extends StatelessWidget {
     final l10n = context.l10n;
     final colors = context.colors;
     final screen = MediaQuery.sizeOf(context);
-    final mascotHeight = (screen.height * 0.26).clamp(160.0, 260.0).toDouble();
+    final mascotHeight = (screen.height * 0.22).clamp(140.0, 210.0).toDouble();
 
     return Stack(
       children: [
-        // Mascot peeking in from the right edge, slightly below the middle.
-        Positioned(
-          right: 0,
+        // Hamster with its empty pouch, right of centre, slightly below the
+        // middle.
+        PositionedDirectional(
+          end: kPageHorzPadding + 8,
           top: screen.height * 0.40,
-          child: UIWumbi(WumbiMood.peekRight, height: mascotHeight)
+          child: UIWumbi(WumbiMood.pouchOpen, height: mascotHeight)
               // Idle: a slow, subtle bob so the character feels alive.
               .animate(onPlay: (c) => c.repeat(reverse: true))
               .moveY(begin: 0, end: -6, duration: 1800.ms, curve: Curves.easeInOut)
-              // Entrance: peeks in from the edge once.
+              // Entrance: pops in once.
               .animate(delay: (UIAnim.stagger * 3).inMilliseconds.ms)
-              .slideX(begin: 1, end: 0, duration: UIAnim.slow, curve: Curves.easeOutBack)
+              .scaleXY(begin: 0.7, end: 1, duration: UIAnim.slow, curve: Curves.easeOutBack, alignment: Alignment.bottomCenter)
               .fadeIn(duration: UIAnim.fast),
         ),
 

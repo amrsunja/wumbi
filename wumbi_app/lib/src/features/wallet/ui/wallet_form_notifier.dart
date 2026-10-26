@@ -9,6 +9,8 @@ import '../../../core/utils/constants/constants.dart';
 import '../../../core/utils/enums/wallet_color.dart';
 import '../../../core/utils/state_management/app_events.dart';
 import '../../../core/utils/state_management/single_events.dart';
+import '../../mascot/domain/mascot_reaction.dart';
+import '../../mascot/ui/mascot_providers.dart';
 import '../../settings/ui/state_management/settings_provider.dart';
 import '../data/models/wallet_model.dart';
 import '../data/wallet_repository.dart';
@@ -161,7 +163,10 @@ class WalletFormNotifier extends Notifier<WalletFormState> {
   Future<WalletModel?> save() async {
     if (!state.canSave) return null;
     state = state.copyWith(isSaving: true);
+    final first = !state.isEdit && (ref.read(walletsProvider).value?.isEmpty ?? false);
+    final reactions = ref.read(mascotReactionProvider.notifier);
     final result = state.isEdit ? await _repo.update(args.walletId!, _draft()) : await _repo.create(_draft());
+    if (first && result.isSuccess()) reactions.push(MascotReactionKind.firstWallet);
     if (!ref.mounted) return null;
     WalletModel? saved;
     result.when(

@@ -19,6 +19,9 @@ import '../../../core/utils/state_management/app_events.dart';
 import '../../../core/utils/state_management/single_events.dart';
 import '../../budget/data/budget_repository.dart';
 import '../../debt/data/debt_repository.dart';
+import '../../debt/data/models/debt_model.dart';
+import '../../mascot/domain/mascot_reaction.dart';
+import '../../mascot/ui/mascot_providers.dart';
 import '../../debt/data/models/debt_intent.dart';
 import '../../debt/ui/debt_labels.dart';
 import '../../debt/ui/person_pick.dart';
@@ -555,6 +558,7 @@ class TransactionNotifier extends Notifier<TransactionState> {
     final signed = type == TransactionType.income ? '+${amount.format()}' : '-${amount.format()}';
     final cancel = _cancelAction(saved);
     final events = _events;
+    final reactions = ref.read(mascotReactionProvider.notifier);
     final scheduledDay = state.date.formatMediumDate();
     _resetAfterCommit();
     state = state.copyWith(isSaving: false);
@@ -574,15 +578,32 @@ class TransactionNotifier extends Notifier<TransactionState> {
     if (saved.isDebtLinked) {
       final l10n = _l10n;
       var message = l10n.transaction_saved(signed, wallet.name);
+      DebtCommitSummary? summary;
       try {
-        final summary = (await ref.read(debtRepositoryProvider).commitSummary(saved.id)).tryGetSuccess();
+        summary = (await ref.read(debtRepositoryProvider).commitSummary(saved.id)).tryGetSuccess();
         if (summary != null) message = DebtLabels.commitToast(l10n, summary);
       } catch (e) {
         debugPrint('Debt summary unavailable: $e');
       }
+      switch (summary?.kind) {
+        case DebtCommitKind.openedLent:
+          reactions.push(MascotReactionKind.lent, amount: amount);
+        case DebtCommitKind.repaidIn || DebtCommitKind.repaidOut when summary?.leftAfter == null:
+          reactions.push(MascotReactionKind.debtClosed);
+        case _ when type == TransactionType.income:
+          reactions.pushIncome(amount);
+        case _:
+          reactions.push(MascotReactionKind.expense);
+      }
       AppVibrations.medium();
       events.send(ShowSuccessMessageEvent(message, actionLabel: cancel.$1, onAction: cancel.$2));
       return true;
+    }
+
+    if (type == TransactionType.income) {
+      reactions.pushIncome(amount);
+    } else {
+      reactions.push(MascotReactionKind.expense);
     }
 
     // Budget impact (spec B&D §6.5): appended to the saved message; crossing
@@ -667,6 +688,9 @@ class TransactionNotifier extends Notifier<TransactionState> {
       (saved) {
         ok = true;
         AppVibrations.medium();
+        if (!saved.isUpcoming) {
+          ref.read(mascotReactionProvider.notifier).push(MascotReactionKind.transfer, amount: sent);
+        }
         final cancel = _cancelAction(saved);
         if (saved.isUpcoming) {
           _events.send(ShowInfoMessageEvent(

@@ -18,7 +18,10 @@ import '../../budget/ui/budgets_provider.dart';
 import '../../budget/ui/widgets/budget_progress_row.dart';
 import '../../debt/ui/debt_labels.dart';
 import '../../debt/ui/debt_rows.dart';
-import '../../settings/ui/state_management/settings_provider.dart';
+import '../../mascot/domain/mascot_screens.dart';
+import '../../mascot/ui/mascot_providers.dart';
+import '../../mascot/ui/mascot_answers.dart';
+import '../../mascot/ui/widgets/mascot_peek.dart';
 import '../../subscription/ui/subscriptions_provider.dart';
 import '../../subscription/ui/widgets/subscription_row.dart';
 import '../../transaction/data/models/recurring_rule_model.dart';
@@ -59,8 +62,8 @@ class WalletDetailsPage extends HookConsumerWidget {
     final notifier = ref.read(walletDetailsProvider(id).notifier);
     final wallets = ref.watch(walletsProvider).value ?? const <WalletSummary>[];
     final scrollController = useScrollController();
-    final showMascot = ref.watch(showMascotProvider);
     final tabs = useSwipeTabs();
+    final activity = ref.watch(mascotWalletActivityProvider(id)).value;
 
     useEffect(() {
       void onScroll() {
@@ -92,7 +95,22 @@ class WalletDetailsPage extends HookConsumerWidget {
       currentId.value = picked.id;
     }
 
-    return Scaffold(
+    return MascotPeekLayer(
+      states: wallet == null
+          ? null
+          : MascotScreens.withTips(
+              MascotScreens.wallet(
+                balance: wallet.balance,
+                monthNet: activity?.monthNetMinor,
+                lastActivityAt: activity?.lastActivityAt,
+                now: DateTime.now(),
+              ),
+              MascotScreens.walletTips(manyWallets: wallets.length > 1),
+            ),
+      // An empty history shows its own big hamster.
+      hidden: _isEmptyHistory(state) || state.wallet.hasError,
+      questions: MascotQuestions.wallet,
+      child: Scaffold(
       appBar: UIAppbar(
         backTap: () => context.router.maybePop(),
         action: wallet == null
@@ -158,12 +176,7 @@ class WalletDetailsPage extends HookConsumerWidget {
                       ],
                     ),
                   ),
-                  if (showMascot)
-                    Positioned(
-                      right: 8,
-                      top: 4,
-                      child: UIWumbiLook(key: ValueKey('wumbi-$id')),
-                    ),
+
                 ],
               ),
               // Swipeable tab bodies (only they scroll). Pages are not kept
@@ -196,9 +209,14 @@ class WalletDetailsPage extends HookConsumerWidget {
           );
         },
       ),
+    ),
     );
   }
 }
+
+/// No transaction at all (no filter applied).
+bool _isEmptyHistory(WalletDetailsState state) =>
+    state.filter.isEmpty && (state.transactions.value?.isEmpty ?? false);
 
 // ------------------------------------------------------------------ tab data
 
@@ -709,9 +727,14 @@ class _TransactionList {
         return [
           SliverToBoxAdapter(
             child: UiEmptyState(
-              mood: WumbiMood.pouchOpen,
+              mood: WumbiMood.sleep,
               title: l10n.wallet_empty_title,
               subtitle: l10n.wallet_empty_subtitle,
+              action: UiIconTextButton(
+                icon: UIIconToken.icons.general.plusCircle,
+                title: l10n.mascot_action_add,
+                onTap: () => context.router.push(TransactionRoute(walletId: walletId)),
+              ),
             ),
           ),
         ];

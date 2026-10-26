@@ -15,7 +15,10 @@ import '../../../core/utils/state_management/app_events.dart';
 import '../../../core/utils/state_management/single_events.dart';
 import '../../debt/ui/debt_labels.dart';
 import '../../debt/ui/debt_rows.dart';
-import '../../settings/ui/state_management/settings_provider.dart';
+import '../../mascot/domain/mascot_screens.dart';
+import '../../mascot/ui/mascot_providers.dart';
+import '../../mascot/ui/mascot_answers.dart';
+import '../../mascot/ui/widgets/mascot_peek.dart';
 import '../../transaction/data/models/transaction_model.dart';
 import '../../wallet/ui/widgets/month_divider.dart';
 import '../data/models/tag_model.dart';
@@ -48,7 +51,7 @@ class TagDetailsPage extends HookConsumerWidget {
     final l10n = context.l10n;
     final state = ref.watch(tagDetailsProvider(tagId));
     final notifier = ref.read(tagDetailsProvider(tagId).notifier);
-    final showMascot = ref.watch(showMascotProvider);
+    final month = ref.watch(mascotMonthReportProvider).value;
     final scrollController = useScrollController();
     final tabs = useSwipeTabs();
 
@@ -155,7 +158,11 @@ class TagDetailsPage extends HookConsumerWidget {
 
     void openTag(String id) => context.router.push(TagDetailsRoute(tagId: id));
 
-    return Scaffold(
+    return MascotPeekLayer(
+      states: stats == null ? null : MascotScreens.withTips(MascotScreens.tagDetails(month, tagId), MascotScreens.tagDetailsTips()),
+      hidden: state.notFound,
+      questions: MascotQuestions.tags,
+      child: Scaffold(
       appBar: UIAppbar(
         backTap: () => context.router.maybePop(),
         action: tag == null
@@ -210,12 +217,7 @@ class TagDetailsPage extends HookConsumerWidget {
                         ],
                       ),
                     ),
-                    if (showMascot)
-                      Positioned(
-                        right: 8,
-                        top: 4,
-                        child: UIWumbiLook(key: ValueKey('wumbi-tag-$tagId')),
-                      ),
+
                   ],
                 ),
                 // Swipeable tab bodies (only they scroll). Pages are not kept
@@ -239,6 +241,7 @@ class TagDetailsPage extends HookConsumerWidget {
                 ),
               ],
             ),
+    ),
     );
   }
 }

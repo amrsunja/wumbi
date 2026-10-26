@@ -51,10 +51,9 @@ class _CurrencyList extends HookWidget {
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 8),
-          child: UIInputField(
+          child: UISearchField(
             hintText: l10n.common_search,
             textCapitalization: TextCapitalization.characters,
-            textInputAction: TextInputAction.search,
             onChanged: (v) => query.value = v,
           ),
         ),

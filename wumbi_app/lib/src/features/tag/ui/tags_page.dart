@@ -8,6 +8,10 @@ import '../../../core/routing/app_router.dart';
 import '../../../core/utils/constants/constants.dart';
 import '../../../core/utils/extensions/build_context_extensions.dart';
 import '../../../core/utils/hooks/use_swipe_tabs.dart';
+import '../../mascot/domain/mascot_screens.dart';
+import '../../mascot/ui/mascot_providers.dart';
+import '../../mascot/ui/mascot_answers.dart';
+import '../../mascot/ui/widgets/mascot_peek.dart';
 import '../data/models/tag_stats.dart';
 import '../data/models/tag_tree.dart';
 import 'tags_notifier.dart';
@@ -38,8 +42,14 @@ class TagsPage extends HookConsumerWidget {
     Future<void> create() => createTagFlow(context, ref);
 
     final hasTags = state.stats.value?.isNotEmpty ?? false;
+    final month = ref.watch(mascotMonthReportProvider).value;
 
-    return Stack(
+    return MascotPeekLayer(
+      states: MascotScreens.withTips(MascotScreens.tags(month), MascotScreens.tagsTips()),
+      // The map is its own picture; an empty list shows the big hamster.
+      hidden: view != _TagsView.list || !hasTags,
+      questions: MascotQuestions.tags,
+      child: Stack(
       children: [
         Positioned.fill(child: ColoredBox(color: colors.bgColor)),
         if (view == _TagsView.map) const Positioned.fill(child: UiAmbientBackground(intensity: 0.7)),
@@ -68,44 +78,51 @@ class TagsPage extends HookConsumerWidget {
             ),
           ),
           floatingActionButton: view == _TagsView.list && hasTags ? UiFab(onTap: create, label: l10n.tags_new) : null,
-          body: Column(
+          body: Stack(
+            clipBehavior: Clip.none,
             children: [
-              const UISpace.vert(4),
-              UiSegmentedToggle(
-                labels: [l10n.tags_view_list, l10n.tags_view_graph],
-                selectedIndex: tabs.index,
-                onChanged: tabs.onTabTap,
-              ),
-              const UISpace.vert(8),
-              Expanded(
-                child: NotificationListener<ScrollEndNotification>(
-                  onNotification: (n) {
-                    // depth 0 = the pager itself, not the tag list inside it.
-                    if (n.depth == 0) {
-                      mapSettled.value = (tabs.controller.page ?? 0).round() == _TagsView.map.index;
-                    }
-                    return false;
-                  },
-                  child: PageView(
-                    controller: tabs.controller,
-                    onPageChanged: tabs.onPageChanged,
-                    physics: mapSettled.value ? const NeverScrollableScrollPhysics() : null,
-                    children: [
-                      _TagList(
-                        stats: state.stats,
-                        tree: state.tree,
-                        onTap: openTag,
-                        onCreate: create,
-                      ),
-                      _TagMap(graph: state.graph, onOpen: openTag),
-                    ],
+              Column(
+                children: [
+                  const UISpace.vert(4),
+                  UiSegmentedToggle(
+                    labels: [l10n.tags_view_list, l10n.tags_view_graph],
+                    selectedIndex: tabs.index,
+                    onChanged: tabs.onTabTap,
                   ),
-                ),
+                  const UISpace.vert(8),
+                  Expanded(
+                    child: NotificationListener<ScrollEndNotification>(
+                      onNotification: (n) {
+                        // depth 0 = the pager itself, not the tag list inside it.
+                        if (n.depth == 0) {
+                          mapSettled.value = (tabs.controller.page ?? 0).round() == _TagsView.map.index;
+                        }
+                        return false;
+                      },
+                      child: PageView(
+                        controller: tabs.controller,
+                        onPageChanged: tabs.onPageChanged,
+                        physics: mapSettled.value ? const NeverScrollableScrollPhysics() : null,
+                        children: [
+                          _TagList(
+                            stats: state.stats,
+                            tree: state.tree,
+                            onTap: openTag,
+                            onCreate: create,
+                          ),
+                          _TagMap(graph: state.graph, onOpen: openTag),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
+
             ],
           ),
         ),
       ],
+    ),
     );
   }
 }
@@ -141,7 +158,7 @@ class _TagList extends HookWidget {
     }
     if (all.isEmpty) {
       return UiEmptyState(
-        mood: WumbiMood.sleep,
+        mood: WumbiMood.sorting,
         title: l10n.tags_empty_title,
         subtitle: l10n.tags_empty_subtitle,
         action: SizedBox(
@@ -182,10 +199,8 @@ class _TagList extends HookWidget {
       children: [
         Padding(
           padding: const EdgeInsets.fromLTRB(kPageHorzPadding, 8, kPageHorzPadding, 8),
-          child: UIInputField(
+          child: UISearchField(
             hintText: l10n.tags_search_placeholder,
-            textCapitalization: TextCapitalization.none,
-            textInputAction: TextInputAction.search,
             onChanged: (v) => query.value = v,
           ),
         ),

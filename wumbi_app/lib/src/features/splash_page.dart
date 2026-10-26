@@ -21,10 +21,10 @@ class SplashPage extends HookConsumerWidget {
     final initFailed = ref.watch(settingsProvider.select((s) => s.initFailed));
 
     Future<void> start() async {
-      await Future.wait([
-        ref.read(settingsProvider.notifier).startUp(),
-        WumbiMood.precacheAll().catchError((Object _) {}),
-      ]);
+      // ~30 hamster emotions: parsed in the background so the splash never
+      // waits on them (the dashboard's first one is warm by then).
+      WumbiMood.precacheAll().catchError((Object _) {});
+      await ref.read(settingsProvider.notifier).startUp();
     }
 
     useEffect(() {

@@ -11,7 +11,7 @@ typedef Migration = Future<void> Function(DatabaseExecutor db);
 /// A fresh install runs `SQLiteSchema.latest` in `onCreate` and never touches
 /// this list.
 abstract class SQLiteMigrations {
-  static const List<Migration> migrations = [_v1ToV2, _v2ToV3, _v3ToV4, _v4ToV5];
+  static const List<Migration> migrations = [_v1ToV2, _v2ToV3, _v3ToV4, _v4ToV5, _v5ToV6];
 
   static Future<void> upgrade(Database db, int oldVersion, int newVersion) async {
     if (oldVersion >= newVersion) return;
@@ -119,5 +119,12 @@ abstract class SQLiteMigrations {
   /// keep counting.
   static Future<void> _v4ToV5(DatabaseExecutor db) async {
     await db.execute(SQLiteSchemaV5.includeInTotalColumn);
+  }
+
+  /// v6 (2026-10): hamster companion — `settings.mascot_talks` (Settings →
+  /// "Wumbi talks", on by default) and the local `mascot_memory` table.
+  static Future<void> _v5ToV6(DatabaseExecutor db) async {
+    await db.execute(SQLiteSchemaV6.mascotTalksColumn);
+    await db.execute(SQLiteSchemaV6.mascotMemoryTable);
   }
 }
