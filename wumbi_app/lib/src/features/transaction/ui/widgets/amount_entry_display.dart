@@ -10,14 +10,15 @@ import '../../../../core/utils/extensions/build_context_extensions.dart';
 /// every numpad (Transaction screen, amount sheet, transfer "received") so
 /// they read as one control.
 ///
-/// [prefix] (sign, currency symbol) is drawn in the same style but outside
-/// the animated text, so only the digits pop.
+/// [prefix] (sign) and [suffix] (currency symbol) are drawn in the same
+/// style but outside the animated text, so only the digits pop.
 class AmountEntryDisplay extends StatelessWidget {
-  const AmountEntryDisplay({super.key, required this.input, this.prefix = ''});
+  const AmountEntryDisplay({super.key, required this.input, this.prefix = '', this.suffix = ''});
 
   /// Raw [AmountInput] string ('' = nothing typed yet).
   final String input;
   final String prefix;
+  final String suffix;
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +33,7 @@ class AmountEntryDisplay extends StatelessWidget {
         children: [
           if (prefix.isNotEmpty) Text(prefix, style: style),
           UiAmountText(text: AmountInput.display(input), style: style),
+          if (suffix.isNotEmpty) Text(suffix, style: style),
         ],
       ),
     );

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../app_ui.dart';
 
-/// 1 px hairline; `colors.dividerColor` (casper 30 % light / #191524 dark)
+/// 1 px hairline; `colors.dividerColor` (athens gray #F3F4F6 light / #191524 dark)
 /// unless [color] is given.
 class UIDivider extends StatelessWidget {
   const UIDivider({super.key, this.indent = 0, this.color});

@@ -39,7 +39,7 @@ class UIColorToken {
         secondContentColor: casper,
         disabledContentColor: Color(0xffE5E7EB),
         expenseColor: neu700,
-        dividerColor: Color(0x4DAEC2D4), // casper 30 %
+        dividerColor: athensGray, // #F3F4F6
         numpadKeyColor: Color(0x80FFFFFF), // white 50 %
         iconColor: bismark,
         brightness: Brightness.light,

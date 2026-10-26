@@ -105,10 +105,6 @@ class WalletFormBody extends HookConsumerWidget {
               textBaseline: TextBaseline.alphabetic,
               spacing: 10,
               children: [
-                Text(
-                  state.currency.symbol,
-                  style: typo.inter.display.copyWith(color: colors.secondContentColor),
-                ),
                 Flexible(
                   child: FittedBox(
                     fit: BoxFit.scaleDown,
@@ -119,6 +115,10 @@ class WalletFormBody extends HookConsumerWidget {
                       ),
                     ),
                   ),
+                ),
+                Text(
+                  state.currency.symbol,
+                  style: typo.inter.display.copyWith(color: colors.secondContentColor),
                 ),
               ],
             ),

@@ -102,12 +102,9 @@ enum CurrencyType {
   /// Backwards compatible alias used by older widgets.
   String get dbValue => code;
 
-  /// Symbols made only of letters (any script) get a trailing space:
-  /// `CHF 1,234.00`, `kr 1,234.00`, `zł 1,234.00`, `د.إ 1,234.00`;
-  /// `CA$1,234.00` and `E£1,234.00` stay glued.
-  String get formatSymbol => _lettersOnly.hasMatch(symbol) ? '$symbol ' : symbol;
-
-  static final RegExp _lettersOnly = RegExp(r'^[\p{L}.ʻʼ]+$', unicode: true);
+  /// Symbol as it follows an amount, always after a space:
+  /// `1,234 €`, `1,234.50 CHF`, `1,234 CA$`.
+  String get formatSuffix => ' $symbol';
 
   static CurrencyType fromCode(String? code) {
     if (code == null) return usd;

@@ -19,6 +19,13 @@ class Money {
   bool get isNegative => minor < 0;
   bool get isPositive => minor > 0;
 
+  /// True when the minor part is non-zero (`12.50` yes, `12.00` no).
+  bool get hasFraction => currency.scale > 0 && minor.abs() % math.pow(10, currency.scale).toInt() != 0;
+
+  /// Digits shown after the point: the currency's full scale when there is a
+  /// fraction, none for whole amounts (`€12.50`, `€12`).
+  int get displayScale => hasFraction ? currency.scale : 0;
+
   Money operator +(Money o) {
     assert(o.currency == currency, 'Currency mismatch');
     return Money(minor + o.minor, currency);
@@ -55,36 +62,35 @@ class Money {
     return Money(negative ? -value : value, c);
   }
 
-  /// Plain decimal string without separators or symbol: 12345 → "123.45".
-  /// Used to pre-fill the numpad in edit mode.
+  /// Plain decimal string without separators or symbol: 12345 → "123.45",
+  /// 12000 → "120". Used to pre-fill the numpad in edit mode.
   String toPlainString() {
     final abs = minor.abs();
     final s = abs.toString().padLeft(currency.scale + 1, '0');
     final intPart = s.substring(0, s.length - currency.scale);
     final frac = s.substring(s.length - currency.scale);
-    final body = currency.scale == 0 ? intPart : '$intPart.$frac';
+    final body = hasFraction ? '$intPart.$frac' : intPart;
     return minor < 0 ? '-$body' : body;
   }
 
-  /// Formatting only — never stored. `$12,345.67`, `€5,678.90`, `¥1,500`,
-  /// `₿0.00420000`, `CHF 1,234.00`.
+  /// Formatting only — never stored. Symbol after the amount:
+  /// `12,345.67 $`, `5,678.90 €`, `1,500 ¥`, `0.00420000 ₿`, `1,234 CHF`.
+  /// Whole amounts drop the fraction ([displayScale]); any non-zero fraction
+  /// shows the currency's full scale. Sign stays in front: `-120 $`.
   String format({
     bool signed = false,
     bool positiveSign = false,
     bool withSymbol = true,
   }) {
-    final f = NumberFormat.currency(
-      locale: 'en_US',
-      symbol: withSymbol ? currency.formatSymbol : '',
-      decimalDigits: currency.scale,
-    );
-    final s = f.format(minor.abs() / math.pow(10, currency.scale)).trim();
+    final f = NumberFormat.currency(locale: 'en_US', symbol: '', decimalDigits: displayScale);
+    final number = f.format(minor.abs() / math.pow(10, currency.scale)).trim();
+    final s = withSymbol ? '$number${currency.formatSuffix}' : number;
     if (signed && minor < 0) return '-$s';
     if (positiveSign && minor > 0) return '+$s';
     return s;
   }
 
-  /// `120.00 EUR` — used for the "original amount" caption in lists.
+  /// `120 EUR` / `120.50 EUR` — used for the "original amount" caption in lists.
   String formatWithCode() => '${format(withSymbol: false)} ${currency.code}';
 
   @override

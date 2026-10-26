@@ -123,7 +123,7 @@ void main() {
       expect(await _count("SELECT COUNT(*) FROM transactions WHERE debt_role = 'principal'"), 1);
       expect(_state(w.id).hasPerson, isFalse, reason: 'cleared with description and tags');
       final toast = events.whereType<ShowSuccessMessageEvent>().last;
-      expect(toast.message, 'Lent \$50.00 to Ahmed');
+      expect(toast.message, 'Lent 50 \$ to Ahmed');
     });
 
     test('over-repayment stays on screen with an inline message and a shake', () async {
@@ -138,7 +138,7 @@ void main() {
       _type(n, '60');
       expect(await n.commit(TransactionType.income), isFalse);
       final s = _state(w.id);
-      expect(s.validationError, 'Ahmed owes you only \$50.00');
+      expect(s.validationError, 'Ahmed owes you only 50 \$');
       expect(s.shakeSignal, 1);
       expect(s.amountInput, '60', reason: 'nothing is lost');
     });
@@ -165,14 +165,14 @@ void main() {
       await _settle();
       final ok = events.last;
       expect(ok, isA<ShowSuccessMessageEvent>());
-      expect((ok as ShowSuccessMessageEvent).message, endsWith('Groceries: \$5.00 left'));
+      expect((ok as ShowSuccessMessageEvent).message, endsWith('Groceries: 5 \$ left'));
 
       _type(n, '10');
       await n.commit(TransactionType.expense);
       await _settle();
       final warn = events.last;
       expect(warn, isA<ShowInfoMessageEvent>(), reason: 'crossed from not-over to over');
-      expect((warn as ShowInfoMessageEvent).message, endsWith('Groceries: \$5.00 over'));
+      expect((warn as ShowInfoMessageEvent).message, endsWith('Groceries: 5 \$ over'));
     });
   });
 

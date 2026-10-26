@@ -39,9 +39,10 @@ class UiTotalAmount extends StatelessWidget {
         fit: BoxFit.scaleDown,
         child: AnimatedFlipCounter(
           value: value,
-          fractionDigits: scale,
+          fractionDigits: money.displayScale,
           thousandSeparator: ',',
-          prefix: '${money.isNegative ? '-' : ''}${money.currency.formatSymbol}',
+          prefix: money.isNegative ? '-' : null,
+          suffix: money.currency.formatSuffix,
           duration: const Duration(milliseconds: 500),
           curve: Curves.easeOutCubic,
           textStyle: style,

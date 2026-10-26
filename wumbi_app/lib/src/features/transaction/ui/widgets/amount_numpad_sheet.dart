@@ -58,7 +58,7 @@ class _AmountNumpadState extends State<_AmountNumpad> {
         mainAxisSize: MainAxisSize.min,
         children: [
           const UISpace.vert(8),
-          AmountEntryDisplay(input: _value, prefix: '${_negative ? '-' : ''}${widget.currency.symbol} '),
+          AmountEntryDisplay(input: _value, prefix: _negative ? '-' : '', suffix: widget.currency.formatSuffix),
           if (widget.allowNegative)
             UITap(
               onTap: () => setState(() => _negative = !_negative),

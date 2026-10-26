@@ -42,15 +42,15 @@ abstract class ProgressLabels {
     }
   }
 
-  /// `€1.2k` / `€600` — chart axes only; exact figures live in tooltips
+  /// `1.2k €` / `600 €` — chart axes only; exact figures live in tooltips
   /// and rows.
   static String compact(double value, CurrencyType c) {
-    final symbol = c.formatSymbol;
+    final symbol = c.formatSuffix;
     final sign = value < 0 ? '-' : '';
     final abs = value.abs();
-    if (abs >= 1000000) return '$sign$symbol${_short(abs / 1000000)}M';
-    if (abs >= 1000) return '$sign$symbol${_short(abs / 1000)}k';
-    return '$sign$symbol${_short(abs)}';
+    if (abs >= 1000000) return '$sign${_short(abs / 1000000)}M$symbol';
+    if (abs >= 1000) return '$sign${_short(abs / 1000)}k$symbol';
+    return '$sign${_short(abs)}$symbol';
   }
 
   static String _short(double v) {

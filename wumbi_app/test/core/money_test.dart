@@ -34,22 +34,25 @@ void main() {
 
   group('Money.format', () {
     test('formats per currency', () {
-      expect(const Money(1234567, CurrencyType.usd).format(), r'$12,345.67');
-      expect(const Money(567890, CurrencyType.eur).format(), '€5,678.90');
-      expect(const Money(1500, CurrencyType.jpy).format(), '¥1,500');
-      expect(const Money(420000, CurrencyType.btc).format(), '₿0.00420000');
-      expect(const Money(123400, CurrencyType.chf).format(), 'CHF 1,234.00');
-      expect(const Money(123400, CurrencyType.sek).format(), 'kr 1,234.00');
+      expect(const Money(1234567, CurrencyType.usd).format(), r'12,345.67 $');
+      expect(const Money(567890, CurrencyType.eur).format(), '5,678.90 €');
+      expect(const Money(1500, CurrencyType.jpy).format(), '1,500 ¥');
+      expect(const Money(420000, CurrencyType.btc).format(), '0.00420000 ₿');
+      expect(const Money(123400, CurrencyType.chf).format(), '1,234 CHF');
+      expect(const Money(123400, CurrencyType.sek).format(), '1,234 kr');
     });
 
     test('signs', () {
-      expect(const Money(150000, CurrencyType.usd).format(positiveSign: true), r'+$1,500.00');
-      expect(const Money(-12000, CurrencyType.usd).format(signed: true), r'-$120.00');
-      expect(const Money(-12000, CurrencyType.usd).format(), r'$120.00');
+      expect(const Money(150000, CurrencyType.usd).format(positiveSign: true), r'+1,500 $');
+      expect(const Money(-12000, CurrencyType.usd).format(signed: true), r'-120 $');
+      expect(const Money(-12000, CurrencyType.usd).format(), r'120 $');
+      expect(const Money(-12050, CurrencyType.usd).format(signed: true), r'-120.50 $');
     });
 
     test('formatWithCode / toPlainString', () {
-      expect(const Money(12000, CurrencyType.eur).formatWithCode(), '120.00 EUR');
+      expect(const Money(12000, CurrencyType.eur).formatWithCode(), '120 EUR');
+      expect(const Money(12050, CurrencyType.eur).formatWithCode(), '120.50 EUR');
+      expect(const Money(12000, CurrencyType.usd).toPlainString(), '120');
       expect(const Money(12345, CurrencyType.usd).toPlainString(), '123.45');
       expect(const Money(5, CurrencyType.usd).toPlainString(), '0.05');
       expect(const Money(1500, CurrencyType.jpy).toPlainString(), '1500');
