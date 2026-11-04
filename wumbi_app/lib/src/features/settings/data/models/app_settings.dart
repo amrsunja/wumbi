@@ -4,6 +4,7 @@ import '../../../../core/local/database/sqlite/sqlite_config.dart';
 import '../../../../core/money/currency_type.dart';
 import '../../../../core/utils/enums/app_theme_type.dart';
 import '../../../../core/utils/typedefs.dart';
+import '../../../notification/domain/notification_prefs.dart';
 
 class AppSettingsModel {
   const AppSettingsModel({
@@ -15,6 +16,7 @@ class AppSettingsModel {
     required this.showMascot,
     this.mascotTalks = true,
     required this.lastRecurringRunAt,
+    this.notificationPrefs = const NotificationPrefs(),
   });
 
   final Locale? locale;
@@ -24,8 +26,11 @@ class AppSettingsModel {
   /// Settings → Currency; drives the dashboard total.
   final CurrencyType baseCurrency;
 
-  /// Stub toggle (D10) — persisted only.
+  /// Settings → Notifications master switch (OS permission granted).
   final bool notificationsEnabled;
+
+  /// Settings → Notifications per-category switches.
+  final NotificationPrefs notificationPrefs;
 
   /// Settings → Preferences; hides the decorative mascot app-wide.
   final bool showMascot;
@@ -56,6 +61,7 @@ class AppSettingsModel {
                 json[SQLiteConfig.lastRecurringRunAt] as int,
                 isUtc: true,
               ).toLocal(),
+        notificationPrefs: NotificationPrefs.decode(json[SQLiteConfig.notificationPrefs] as String?),
       );
 
   Json toJson() => {
@@ -68,6 +74,7 @@ class AppSettingsModel {
         SQLiteConfig.showMascot: showMascot ? 1 : 0,
         SQLiteConfig.mascotTalks: mascotTalks ? 1 : 0,
         SQLiteConfig.lastRecurringRunAt: lastRecurringRunAt?.toUtc().millisecondsSinceEpoch,
+        SQLiteConfig.notificationPrefs: notificationPrefs.encode(),
       };
 
   AppSettingsModel copyWith({
@@ -79,6 +86,7 @@ class AppSettingsModel {
     bool? showMascot,
     bool? mascotTalks,
     DateTime? lastRecurringRunAt,
+    NotificationPrefs? notificationPrefs,
   }) =>
       AppSettingsModel(
         locale: locale ?? this.locale,
@@ -89,6 +97,7 @@ class AppSettingsModel {
         showMascot: showMascot ?? this.showMascot,
         mascotTalks: mascotTalks ?? this.mascotTalks,
         lastRecurringRunAt: lastRecurringRunAt ?? this.lastRecurringRunAt,
+        notificationPrefs: notificationPrefs ?? this.notificationPrefs,
       );
 
   static AppSettingsModel get getInitSettings => const AppSettingsModel(

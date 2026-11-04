@@ -6,6 +6,7 @@ import '../../../core/errors/failures/failures.dart';
 import '../../../core/money/currency_type.dart';
 import '../../../core/utils/enums/app_theme_type.dart';
 import '../../../core/utils/typedefs.dart';
+import '../../notification/domain/notification_prefs.dart';
 import 'datasources/settings_local_datasource.dart';
 import 'models/app_settings.dart';
 
@@ -51,6 +52,12 @@ class SettingsRepo {
   Future<SuccessOrError<AppSettingsModel>> changeNotifications(bool enabled) =>
       Failure.exceptionsCatcher(() async {
         await localDatasource.changeNotifications(enabled);
+        return localDatasource.getLocalSettings();
+      });
+
+  Future<SuccessOrError<AppSettingsModel>> changeNotificationPrefs(NotificationPrefs prefs) =>
+      Failure.exceptionsCatcher(() async {
+        await localDatasource.changeNotificationPrefs(prefs);
         return localDatasource.getLocalSettings();
       });
 

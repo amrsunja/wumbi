@@ -112,6 +112,10 @@ class $AssetsImagesGen {
 class $AssetsMascotGen {
   const $AssetsMascotGen();
 
+  /// Directory path: assets/mascot/notification
+  $AssetsMascotNotificationGen get notification =>
+      const $AssetsMascotNotificationGen();
+
   /// File path: assets/mascot/wumbi_alert.svg
   String get wumbiAlert => 'assets/mascot/wumbi_alert.svg';
 
@@ -5261,6 +5265,184 @@ class $AssetsIconsWeatherGen {
     wind01,
     wind02,
     wind03,
+  ];
+}
+
+class $AssetsMascotNotificationGen {
+  const $AssetsMascotNotificationGen();
+
+  /// File path: assets/mascot/notification/alert.png
+  AssetGenImage get alert =>
+      const AssetGenImage('assets/mascot/notification/alert.png');
+
+  /// File path: assets/mascot/notification/calendar.png
+  AssetGenImage get calendar =>
+      const AssetGenImage('assets/mascot/notification/calendar.png');
+
+  /// File path: assets/mascot/notification/calm.png
+  AssetGenImage get calm =>
+      const AssetGenImage('assets/mascot/notification/calm.png');
+
+  /// File path: assets/mascot/notification/catching.png
+  AssetGenImage get catching =>
+      const AssetGenImage('assets/mascot/notification/catching.png');
+
+  /// File path: assets/mascot/notification/celebrate.png
+  AssetGenImage get celebrate =>
+      const AssetGenImage('assets/mascot/notification/celebrate.png');
+
+  /// File path: assets/mascot/notification/cheeksStuffed.png
+  AssetGenImage get cheeksStuffed =>
+      const AssetGenImage('assets/mascot/notification/cheeksStuffed.png');
+
+  /// File path: assets/mascot/notification/confused.png
+  AssetGenImage get confused =>
+      const AssetGenImage('assets/mascot/notification/confused.png');
+
+  /// File path: assets/mascot/notification/counting.png
+  AssetGenImage get counting =>
+      const AssetGenImage('assets/mascot/notification/counting.png');
+
+  /// File path: assets/mascot/notification/dusting.png
+  AssetGenImage get dusting =>
+      const AssetGenImage('assets/mascot/notification/dusting.png');
+
+  /// File path: assets/mascot/notification/handing.png
+  AssetGenImage get handing =>
+      const AssetGenImage('assets/mascot/notification/handing.png');
+
+  /// File path: assets/mascot/notification/happy.png
+  AssetGenImage get happy =>
+      const AssetGenImage('assets/mascot/notification/happy.png');
+
+  /// File path: assets/mascot/notification/hush.png
+  AssetGenImage get hush =>
+      const AssetGenImage('assets/mascot/notification/hush.png');
+
+  /// File path: assets/mascot/notification/idle.png
+  AssetGenImage get idle =>
+      const AssetGenImage('assets/mascot/notification/idle.png');
+
+  /// File path: assets/mascot/notification/impatient.png
+  AssetGenImage get impatient =>
+      const AssetGenImage('assets/mascot/notification/impatient.png');
+
+  /// File path: assets/mascot/notification/kindly.png
+  AssetGenImage get kindly =>
+      const AssetGenImage('assets/mascot/notification/kindly.png');
+
+  /// File path: assets/mascot/notification/love.png
+  AssetGenImage get love =>
+      const AssetGenImage('assets/mascot/notification/love.png');
+
+  /// File path: assets/mascot/notification/nervous.png
+  AssetGenImage get nervous =>
+      const AssetGenImage('assets/mascot/notification/nervous.png');
+
+  /// File path: assets/mascot/notification/pouchOpen.png
+  AssetGenImage get pouchOpen =>
+      const AssetGenImage('assets/mascot/notification/pouchOpen.png');
+
+  /// File path: assets/mascot/notification/proud.png
+  AssetGenImage get proud =>
+      const AssetGenImage('assets/mascot/notification/proud.png');
+
+  /// File path: assets/mascot/notification/reserveFull.png
+  AssetGenImage get reserveFull =>
+      const AssetGenImage('assets/mascot/notification/reserveFull.png');
+
+  /// File path: assets/mascot/notification/sad.png
+  AssetGenImage get sad =>
+      const AssetGenImage('assets/mascot/notification/sad.png');
+
+  /// File path: assets/mascot/notification/saving.png
+  AssetGenImage get saving =>
+      const AssetGenImage('assets/mascot/notification/saving.png');
+
+  /// File path: assets/mascot/notification/searching.png
+  AssetGenImage get searching =>
+      const AssetGenImage('assets/mascot/notification/searching.png');
+
+  /// File path: assets/mascot/notification/shrug.png
+  AssetGenImage get shrug =>
+      const AssetGenImage('assets/mascot/notification/shrug.png');
+
+  /// File path: assets/mascot/notification/sigh.png
+  AssetGenImage get sigh =>
+      const AssetGenImage('assets/mascot/notification/sigh.png');
+
+  /// File path: assets/mascot/notification/sleep.png
+  AssetGenImage get sleep =>
+      const AssetGenImage('assets/mascot/notification/sleep.png');
+
+  /// File path: assets/mascot/notification/sorting.png
+  AssetGenImage get sorting =>
+      const AssetGenImage('assets/mascot/notification/sorting.png');
+
+  /// File path: assets/mascot/notification/stop.png
+  AssetGenImage get stop =>
+      const AssetGenImage('assets/mascot/notification/stop.png');
+
+  /// File path: assets/mascot/notification/thinking.png
+  AssetGenImage get thinking =>
+      const AssetGenImage('assets/mascot/notification/thinking.png');
+
+  /// File path: assets/mascot/notification/thumbsUp.png
+  AssetGenImage get thumbsUp =>
+      const AssetGenImage('assets/mascot/notification/thumbsUp.png');
+
+  /// File path: assets/mascot/notification/tossing.png
+  AssetGenImage get tossing =>
+      const AssetGenImage('assets/mascot/notification/tossing.png');
+
+  /// File path: assets/mascot/notification/victory.png
+  AssetGenImage get victory =>
+      const AssetGenImage('assets/mascot/notification/victory.png');
+
+  /// File path: assets/mascot/notification/wave.png
+  AssetGenImage get wave =>
+      const AssetGenImage('assets/mascot/notification/wave.png');
+
+  /// File path: assets/mascot/notification/wheel.png
+  AssetGenImage get wheel =>
+      const AssetGenImage('assets/mascot/notification/wheel.png');
+
+  /// List of all assets
+  List<AssetGenImage> get values => [
+    alert,
+    calendar,
+    calm,
+    catching,
+    celebrate,
+    cheeksStuffed,
+    confused,
+    counting,
+    dusting,
+    handing,
+    happy,
+    hush,
+    idle,
+    impatient,
+    kindly,
+    love,
+    nervous,
+    pouchOpen,
+    proud,
+    reserveFull,
+    sad,
+    saving,
+    searching,
+    shrug,
+    sigh,
+    sleep,
+    sorting,
+    stop,
+    thinking,
+    thumbsUp,
+    tossing,
+    victory,
+    wave,
+    wheel,
   ];
 }
 

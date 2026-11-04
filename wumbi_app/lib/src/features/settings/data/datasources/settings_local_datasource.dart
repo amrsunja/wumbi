@@ -7,6 +7,7 @@ import '../../../../core/local/database/sqlite/sqlite_services.dart';
 import '../../../../core/money/currency_type.dart';
 import '../../../../core/providers/local/sqlite_database_provider.dart';
 import '../../../../core/utils/enums/app_theme_type.dart';
+import '../../../notification/domain/notification_prefs.dart';
 import '../models/app_settings.dart';
 
 final settingsLocalDataProvider = Provider(
@@ -53,6 +54,9 @@ class SettingsLocalDatasource {
 
   Future<void> changeNotifications(bool enabled) =>
       _update({SQLiteConfig.notificationsEnabled: enabled ? 1 : 0});
+
+  Future<void> changeNotificationPrefs(NotificationPrefs prefs) =>
+      _update({SQLiteConfig.notificationPrefs: prefs.encode()});
 
   Future<void> changeMascotVisibility(bool visible) =>
       _update({SQLiteConfig.showMascot: visible ? 1 : 0});

@@ -4959,6 +4959,509 @@ abstract class AppLocalizations {
   /// **'Make me smile'**
   String get mascot_q_joke;
 
+  /// No description provided for @l10nNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ NOTIFICATIONS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠'**
+  String get l10nNotifications;
+
+  /// No description provided for @notif_channel_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminders'**
+  String get notif_channel_name;
+
+  /// No description provided for @notif_channel_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Payments, debts and friendly nudges from Wumbi'**
+  String get notif_channel_description;
+
+  /// No description provided for @notif_more.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{+1 more thing inside} other{+{count} more things inside}}'**
+  String notif_more(int count);
+
+  /// No description provided for @notif_preview_now.
+  ///
+  /// In en, this message translates to:
+  /// **'now'**
+  String get notif_preview_now;
+
+  /// No description provided for @notif_sample_person.
+  ///
+  /// In en, this message translates to:
+  /// **'Sam'**
+  String get notif_sample_person;
+
+  /// No description provided for @notif_a_payment.
+  ///
+  /// In en, this message translates to:
+  /// **'a payment'**
+  String get notif_a_payment;
+
+  /// No description provided for @notif_subscription.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscription'**
+  String get notif_subscription;
+
+  /// No description provided for @notif_planned_payment.
+  ///
+  /// In en, this message translates to:
+  /// **'Planned payment'**
+  String get notif_planned_payment;
+
+  /// No description provided for @notif_expected_income.
+  ///
+  /// In en, this message translates to:
+  /// **'Expected income'**
+  String get notif_expected_income;
+
+  /// No description provided for @notif_overdraft_title.
+  ///
+  /// In en, this message translates to:
+  /// **'“{wallet}” could go negative'**
+  String notif_overdraft_title(String wallet);
+
+  /// No description provided for @notif_overdraft_body.
+  ///
+  /// In en, this message translates to:
+  /// **'On {date}, {name} takes {amount} and leaves {balance}. Top it up before then, boss?'**
+  String notif_overdraft_body(
+    String name,
+    String amount,
+    String date,
+    String balance,
+  );
+
+  /// No description provided for @notif_charge_title.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} charges tomorrow'**
+  String notif_charge_title(String name);
+
+  /// No description provided for @notif_charge_body.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} goes out tomorrow. Just a heads-up so it doesn’t catch you off guard, boss'**
+  String notif_charge_body(String amount);
+
+  /// No description provided for @notif_charge_body_wallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Tomorrow it takes {amount} from “{wallet}”. Enough seeds in there?'**
+  String notif_charge_body_wallet(String amount, String wallet);
+
+  /// No description provided for @notif_today_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Today: {name}'**
+  String notif_today_title(String name);
+
+  /// No description provided for @notif_planned_body.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} is planned for today. Tap to make sure it all went as planned'**
+  String notif_planned_body(String amount);
+
+  /// No description provided for @notif_income_body.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} should land today. Did it all come in, boss?'**
+  String notif_income_body(String amount);
+
+  /// No description provided for @notif_payday.
+  ///
+  /// In en, this message translates to:
+  /// **'Payday!'**
+  String get notif_payday;
+
+  /// No description provided for @notif_payday_named.
+  ///
+  /// In en, this message translates to:
+  /// **'Payday: {name}'**
+  String notif_payday_named(String name);
+
+  /// No description provided for @notif_debt_soon_lent_title.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} owes you {amount}'**
+  String notif_debt_soon_lent_title(String name, String amount);
+
+  /// No description provided for @notif_debt_soon_lent_body.
+  ///
+  /// In en, this message translates to:
+  /// **'{days, plural, =1{Due tomorrow. A friendly reminder won’t hurt} other{Due in {days} days. A friendly reminder won’t hurt}}'**
+  String notif_debt_soon_lent_body(int days);
+
+  /// No description provided for @notif_debt_soon_borrowed_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Paying back {name} soon'**
+  String notif_debt_soon_borrowed_title(String name);
+
+  /// No description provided for @notif_debt_soon_borrowed_body.
+  ///
+  /// In en, this message translates to:
+  /// **'{days, plural, =1{{amount} is due tomorrow. Is the money set aside, boss?} other{{amount} is due in {days} days. Is the money set aside, boss?}}'**
+  String notif_debt_soon_borrowed_body(String amount, int days);
+
+  /// No description provided for @notif_debt_today_lent_title.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} pays you back today'**
+  String notif_debt_today_lent_title(String name);
+
+  /// No description provided for @notif_debt_today_lent_body.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} is due today. Got it? Mark it so I can stop worrying'**
+  String notif_debt_today_lent_body(String amount);
+
+  /// No description provided for @notif_debt_today_borrowed_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Today you pay back {name}'**
+  String notif_debt_today_borrowed_title(String name);
+
+  /// No description provided for @notif_debt_today_borrowed_body.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} is due today. Already done? Mark it and you’re all square'**
+  String notif_debt_today_borrowed_body(String amount);
+
+  /// No description provided for @notif_debt_late_lent_title.
+  ///
+  /// In en, this message translates to:
+  /// **'{days, plural, =1{{name} is a day late} other{{name} is {days} days late}}'**
+  String notif_debt_late_lent_title(String name, int days);
+
+  /// No description provided for @notif_debt_late_lent_body.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} still isn’t back. Maybe time for a gentle nudge?'**
+  String notif_debt_late_lent_body(String amount);
+
+  /// No description provided for @notif_debt_late_borrowed_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Your debt to {name} is overdue'**
+  String notif_debt_late_borrowed_title(String name);
+
+  /// No description provided for @notif_debt_late_borrowed_body.
+  ///
+  /// In en, this message translates to:
+  /// **'{days, plural, =1{A day past due, {amount} left. Let’s settle it before it gets awkward} other{{days} days past due, {amount} left. Let’s settle it before it gets awkward}}'**
+  String notif_debt_late_borrowed_body(String amount, int days);
+
+  /// No description provided for @notif_debt_forgotten_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Remember {name}?'**
+  String notif_debt_forgotten_title(String name);
+
+  /// No description provided for @notif_debt_forgotten_body.
+  ///
+  /// In en, this message translates to:
+  /// **'{days, plural, other{You lent {amount} {days} days ago and it’s still not back. Worth asking?}}'**
+  String notif_debt_forgotten_body(String amount, int days);
+
+  /// No description provided for @notif_safe_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Today’s “{name}” budget'**
+  String notif_safe_title(String name);
+
+  /// No description provided for @notif_safe_body.
+  ///
+  /// In en, this message translates to:
+  /// **'You can spend {amount} today and stay on track. Have a good one, boss'**
+  String notif_safe_body(String amount);
+
+  /// No description provided for @notif_safe_empty_title.
+  ///
+  /// In en, this message translates to:
+  /// **'“{name}” is empty'**
+  String notif_safe_empty_title(String name);
+
+  /// No description provided for @notif_safe_empty_body.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing left for this period. Let’s give it a rest today'**
+  String get notif_safe_empty_body;
+
+  /// No description provided for @notif_week_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Your week: {amount}'**
+  String notif_week_title(String amount);
+
+  /// No description provided for @notif_week_less.
+  ///
+  /// In en, this message translates to:
+  /// **'That’s {percent}% less than last week. Proud of you, boss!'**
+  String notif_week_less(String percent);
+
+  /// No description provided for @notif_week_more.
+  ///
+  /// In en, this message translates to:
+  /// **'That’s {percent}% more than last week. Want to see where it went?'**
+  String notif_week_more(String percent);
+
+  /// No description provided for @notif_week_tag.
+  ///
+  /// In en, this message translates to:
+  /// **'Most of it went to “{tag}”. Tap for the full picture'**
+  String notif_week_tag(String tag);
+
+  /// No description provided for @notif_week_plain.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to see where it all went, boss'**
+  String get notif_week_plain;
+
+  /// No description provided for @notif_log_title_1.
+  ///
+  /// In en, this message translates to:
+  /// **'How was today?'**
+  String get notif_log_title_1;
+
+  /// No description provided for @notif_log_body_1.
+  ///
+  /// In en, this message translates to:
+  /// **'Ten seconds to jot down what you spent — I’ll do the counting'**
+  String get notif_log_body_1;
+
+  /// No description provided for @notif_log_title_2.
+  ///
+  /// In en, this message translates to:
+  /// **'Boss, I’m waiting!'**
+  String get notif_log_title_2;
+
+  /// No description provided for @notif_log_body_2.
+  ///
+  /// In en, this message translates to:
+  /// **'Today’s seeds aren’t counted yet. Coffee, groceries, a taxi — let’s add them?'**
+  String get notif_log_body_2;
+
+  /// No description provided for @notif_log_title_3.
+  ///
+  /// In en, this message translates to:
+  /// **'Spent anything today?'**
+  String get notif_log_title_3;
+
+  /// No description provided for @notif_log_body_3.
+  ///
+  /// In en, this message translates to:
+  /// **'Even small stuff adds up. Log it now while you still remember'**
+  String get notif_log_body_3;
+
+  /// No description provided for @notif_log_title_4.
+  ///
+  /// In en, this message translates to:
+  /// **'Evening count?'**
+  String get notif_log_title_4;
+
+  /// No description provided for @notif_log_body_4.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing logged today yet. Let’s fix that before bed'**
+  String get notif_log_body_4;
+
+  /// No description provided for @notif_streak_title.
+  ///
+  /// In en, this message translates to:
+  /// **'{days, plural, other{{days} days in a row!}}'**
+  String notif_streak_title(int days);
+
+  /// No description provided for @notif_streak_body.
+  ///
+  /// In en, this message translates to:
+  /// **'Don’t break the streak, boss — one entry today is enough'**
+  String get notif_streak_body;
+
+  /// No description provided for @notif_miss_title.
+  ///
+  /// In en, this message translates to:
+  /// **'I miss you, boss'**
+  String get notif_miss_title;
+
+  /// No description provided for @notif_miss_body.
+  ///
+  /// In en, this message translates to:
+  /// **'Three days without a single entry. Let’s catch up — it only takes a minute'**
+  String get notif_miss_body;
+
+  /// No description provided for @notif_asleep_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Wumbi dozed off…'**
+  String get notif_asleep_title;
+
+  /// No description provided for @notif_asleep_body.
+  ///
+  /// In en, this message translates to:
+  /// **'A whole week of silence. Wake me up and let’s get your numbers back in order'**
+  String get notif_asleep_body;
+
+  /// No description provided for @notif_settings_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get notif_settings_title;
+
+  /// No description provided for @notif_settings_allow.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow notifications'**
+  String get notif_settings_allow;
+
+  /// No description provided for @notif_settings_allow_on.
+  ///
+  /// In en, this message translates to:
+  /// **'Two a day at most: one in the morning, one in the evening'**
+  String get notif_settings_allow_on;
+
+  /// No description provided for @notif_settings_allow_off.
+  ///
+  /// In en, this message translates to:
+  /// **'Wumbi stays quiet'**
+  String get notif_settings_allow_off;
+
+  /// No description provided for @notif_settings_blocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications for Wumbi are turned off in your phone’s settings'**
+  String get notif_settings_blocked;
+
+  /// No description provided for @notif_settings_open_system.
+  ///
+  /// In en, this message translates to:
+  /// **'Open settings'**
+  String get notif_settings_open_system;
+
+  /// No description provided for @notif_settings_what.
+  ///
+  /// In en, this message translates to:
+  /// **'Remind me about'**
+  String get notif_settings_what;
+
+  /// No description provided for @notif_cat_payments.
+  ///
+  /// In en, this message translates to:
+  /// **'Payments'**
+  String get notif_cat_payments;
+
+  /// No description provided for @notif_cat_payments_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscriptions, planned payments, payday — and a warning if a wallet might go negative'**
+  String get notif_cat_payments_desc;
+
+  /// No description provided for @notif_cat_debts.
+  ///
+  /// In en, this message translates to:
+  /// **'Debts'**
+  String get notif_cat_debts;
+
+  /// No description provided for @notif_cat_debts_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Due dates and late returns, whoever owes whom'**
+  String get notif_cat_debts_desc;
+
+  /// No description provided for @notif_cat_habits.
+  ///
+  /// In en, this message translates to:
+  /// **'Evening nudges'**
+  String get notif_cat_habits;
+
+  /// No description provided for @notif_cat_habits_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'A reminder when nothing is logged, and a hello if you vanish for a while'**
+  String get notif_cat_habits_desc;
+
+  /// No description provided for @notif_cat_recaps.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly recap'**
+  String get notif_cat_recaps;
+
+  /// No description provided for @notif_cat_recaps_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Sunday evening: what the week cost'**
+  String get notif_cat_recaps_desc;
+
+  /// No description provided for @notif_cat_morning.
+  ///
+  /// In en, this message translates to:
+  /// **'Morning budget'**
+  String get notif_cat_morning;
+
+  /// No description provided for @notif_cat_morning_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'How much you can spend today and stay within your budgets'**
+  String get notif_cat_morning_desc;
+
+  /// No description provided for @notif_state_on.
+  ///
+  /// In en, this message translates to:
+  /// **'On'**
+  String get notif_state_on;
+
+  /// No description provided for @notif_state_off.
+  ///
+  /// In en, this message translates to:
+  /// **'Off'**
+  String get notif_state_off;
+
+  /// No description provided for @notif_ask_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Can I nudge you now and then?'**
+  String get notif_ask_title;
+
+  /// No description provided for @notif_ask_body.
+  ///
+  /// In en, this message translates to:
+  /// **'Only when it matters: a payment tomorrow, a debt due, an evening with nothing logged. Two messages a day at most, promise'**
+  String get notif_ask_body;
+
+  /// No description provided for @notif_ask_allow.
+  ///
+  /// In en, this message translates to:
+  /// **'Sure, go ahead'**
+  String get notif_ask_allow;
+
+  /// No description provided for @notif_ask_later.
+  ///
+  /// In en, this message translates to:
+  /// **'Not now'**
+  String get notif_ask_later;
+
+  /// No description provided for @notif_refused_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications are off'**
+  String get notif_refused_title;
+
+  /// No description provided for @notif_refused_body.
+  ///
+  /// In en, this message translates to:
+  /// **'Without them I can’t warn you about payments, debts or an empty evening. You can turn them on in your phone’s settings — it takes a few seconds'**
+  String get notif_refused_body;
+
+  /// No description provided for @notif_enabled_toast.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications are on — I’ll keep an eye on things, boss'**
+  String get notif_enabled_toast;
+
   /// No description provided for @l10nStopLineDontTouch.
   ///
   /// In en, this message translates to:

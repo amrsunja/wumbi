@@ -108,12 +108,19 @@ enum WumbiMood {
 
   /// Parses every mood into flutter_svg's cache so the first paint of a
   /// mascot (and every emotion swap) never shows an empty frame.
-  static Future<void> precacheAll() => Future.wait(
-    values.map((mood) {
-      final loader = SvgAssetLoader(mood.asset);
-      return svg.cache.putIfAbsent(loader.cacheKey(null), () => loader.loadBytes(null));
-    }),
-  );
+  ///
+  /// Best effort: a mood that fails to load is skipped (it will load, or
+  /// fail visibly, on first paint) — the others are still cached.
+  static Future<void> precacheAll() async {
+    await Future.wait(
+      values.map((mood) async {
+        try {
+          final loader = SvgAssetLoader(mood.asset);
+          await svg.cache.putIfAbsent(loader.cacheKey(null), () => loader.loadBytes(null));
+        } catch (_) {}
+      }),
+    );
+  }
 }
 
 /// Mascot illustration in a fixed [height] × `height · 0.8` box, feet on the

@@ -38,6 +38,9 @@ abstract class RoutePaths {
 
   static const appLangSettings = '/settings/language';
 
+  /// Master switch, preview and per-category switches.
+  static const notificationSettings = '/settings/notifications';
+
   /// "Need help?" — list of guides; each guide is a nested page.
   static const help = '/settings/help';
   static const tagsHelp = '/settings/help/tags';

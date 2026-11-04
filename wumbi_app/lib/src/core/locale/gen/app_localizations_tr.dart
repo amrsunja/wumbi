@@ -3292,6 +3292,382 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mascot_q_joke => 'Beni güldür';
 
   @override
+  String get l10nNotifications =>
+      '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ NOTIFICATIONS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
+
+  @override
+  String get notif_channel_name => 'Hatırlatmalar';
+
+  @override
+  String get notif_channel_description =>
+      'Wumbi’den ödemeler, borçlar ve dostça hatırlatmalar';
+
+  @override
+  String notif_more(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '+ uygulamada $count şey daha',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notif_preview_now => 'şimdi';
+
+  @override
+  String get notif_sample_person => 'Sam';
+
+  @override
+  String get notif_a_payment => 'bir ödeme';
+
+  @override
+  String get notif_subscription => 'Abonelik';
+
+  @override
+  String get notif_planned_payment => 'Planlı ödeme';
+
+  @override
+  String get notif_expected_income => 'Beklenen gelir';
+
+  @override
+  String notif_overdraft_title(String wallet) {
+    return '“$wallet” eksiye düşebilir';
+  }
+
+  @override
+  String notif_overdraft_body(
+    String name,
+    String amount,
+    String date,
+    String balance,
+  ) {
+    return '$date tarihinde $name için $amount çıkacak ve geriye $balance kalacak. Önceden takviye yapalım mı patron?';
+  }
+
+  @override
+  String notif_charge_title(String name) {
+    return '$name yarın çekiliyor';
+  }
+
+  @override
+  String notif_charge_body(String amount) {
+    return 'Yarın $amount çıkacak. Sürpriz olmasın diye haber veriyorum patron';
+  }
+
+  @override
+  String notif_charge_body_wallet(String amount, String wallet) {
+    return 'Yarın “$wallet” cüzdanından $amount çıkacak. İçinde yeterince çekirdek var mı?';
+  }
+
+  @override
+  String notif_today_title(String name) {
+    return 'Bugün: $name';
+  }
+
+  @override
+  String notif_planned_body(String amount) {
+    return 'Bugün için $amount planlandı. Her şey yolunda mı, bir göz at';
+  }
+
+  @override
+  String notif_income_body(String amount) {
+    return 'Bugün $amount gelmesi lazım. Hepsi geldi mi patron?';
+  }
+
+  @override
+  String get notif_payday => 'Maaş günü!';
+
+  @override
+  String notif_payday_named(String name) {
+    return 'Maaş günü: $name';
+  }
+
+  @override
+  String notif_debt_soon_lent_title(String name, String amount) {
+    return '$name sana $amount borçlu';
+  }
+
+  @override
+  String notif_debt_soon_lent_body(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Vadesine $days gün var. Nazik bir hatırlatma iyi olur',
+      one: 'Vadesi yarın. Nazik bir hatırlatma iyi olur',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String notif_debt_soon_borrowed_title(String name) {
+    return 'Borç ödeme günü yaklaşıyor: $name';
+  }
+
+  @override
+  String notif_debt_soon_borrowed_body(String amount, int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '$amount $days gün sonra ödenecek. Para kenarda mı patron?',
+      one: '$amount yarın ödenecek. Para kenarda mı patron?',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String notif_debt_today_lent_title(String name) {
+    return '$name bugün borcunu ödüyor';
+  }
+
+  @override
+  String notif_debt_today_lent_body(String amount) {
+    return 'Bugün $amount geri gelecek. Aldın mı? İşaretle de içim rahatlasın';
+  }
+
+  @override
+  String notif_debt_today_borrowed_title(String name) {
+    return 'Bugün borcunu ödüyorsun: $name';
+  }
+
+  @override
+  String notif_debt_today_borrowed_body(String amount) {
+    return 'Bugün $amount ödenecek. Hallettin mi? İşaretle, ödeşmiş olun';
+  }
+
+  @override
+  String notif_debt_late_lent_title(String name, int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '$name $days gün gecikti',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String notif_debt_late_lent_body(String amount) {
+    return '$amount hâlâ geri gelmedi. Nazikçe hatırlatma zamanı mı?';
+  }
+
+  @override
+  String notif_debt_late_borrowed_title(String name) {
+    return 'Borcunun vadesi geçti: $name';
+  }
+
+  @override
+  String notif_debt_late_borrowed_body(String amount, int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Vade $days gün geçti, $amount kaldı. İş tatsızlaşmadan kapatalım',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String notif_debt_forgotten_title(String name) {
+    return '$name aklında mı?';
+  }
+
+  @override
+  String notif_debt_forgotten_body(String amount, int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other:
+          '$days gün önce $amount borç verdin ve hâlâ geri gelmedi. Bir sorsan mı?',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String notif_safe_title(String name) {
+    return 'Bugünkü “$name” bütçesi';
+  }
+
+  @override
+  String notif_safe_body(String amount) {
+    return 'Bugün $amount harcayıp planda kalabilirsin. İyi günler patron';
+  }
+
+  @override
+  String notif_safe_empty_title(String name) {
+    return '“$name” boşaldı';
+  }
+
+  @override
+  String get notif_safe_empty_body =>
+      'Bu dönem için bir şey kalmadı. Bugün oraya biraz ara verelim';
+
+  @override
+  String notif_week_title(String amount) {
+    return 'Haftan: $amount';
+  }
+
+  @override
+  String notif_week_less(String percent) {
+    return 'Geçen haftadan %$percent daha az. Seninle gurur duyuyorum patron!';
+  }
+
+  @override
+  String notif_week_more(String percent) {
+    return 'Geçen haftadan %$percent daha fazla. Nereye gittiğine bakalım mı?';
+  }
+
+  @override
+  String notif_week_tag(String tag) {
+    return 'En çok “$tag” için harcandı. Tamamını görmek için dokun';
+  }
+
+  @override
+  String get notif_week_plain =>
+      'Her şey nereye gitti, görmek için dokun patron';
+
+  @override
+  String get notif_log_title_1 => 'Bugün nasıl geçti?';
+
+  @override
+  String get notif_log_body_1 =>
+      'Harcamalarını yazmak on saniye sürer — saymayı ben hallederim';
+
+  @override
+  String get notif_log_title_2 => 'Patron, bekliyorum!';
+
+  @override
+  String get notif_log_body_2 =>
+      'Bugünün çekirdekleri henüz sayılmadı. Kahve, market, taksi — ekleyelim mi?';
+
+  @override
+  String get notif_log_title_3 => 'Bugün bir şey harcadın mı?';
+
+  @override
+  String get notif_log_body_3 =>
+      'Küçük şeyler de birikir. Hâlâ aklındayken şimdi yaz';
+
+  @override
+  String get notif_log_title_4 => 'Akşam sayımı?';
+
+  @override
+  String get notif_log_body_4 =>
+      'Bugün henüz hiçbir şey yazılmadı. Uyumadan halledelim';
+
+  @override
+  String notif_streak_title(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Üst üste $days gün!',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notif_streak_body =>
+      'Seriyi bozma patron — bugün tek bir kayıt yeter';
+
+  @override
+  String get notif_miss_title => 'Seni özledim patron';
+
+  @override
+  String get notif_miss_body =>
+      'Üç gündür tek bir kayıt yok. Hadi telafi edelim, bir dakika sürer';
+
+  @override
+  String get notif_asleep_title => 'Wumbi uyuyakaldı…';
+
+  @override
+  String get notif_asleep_body =>
+      'Koca bir hafta sessizlik. Uyandır beni, rakamlarını yeniden düzene sokalım';
+
+  @override
+  String get notif_settings_title => 'Bildirimler';
+
+  @override
+  String get notif_settings_allow => 'Bildirimlere izin ver';
+
+  @override
+  String get notif_settings_allow_on =>
+      'Günde en fazla iki: biri sabah, biri akşam';
+
+  @override
+  String get notif_settings_allow_off => 'Wumbi sessiz kalır';
+
+  @override
+  String get notif_settings_blocked =>
+      'Wumbi bildirimleri telefon ayarlarında kapalı';
+
+  @override
+  String get notif_settings_open_system => 'Ayarları aç';
+
+  @override
+  String get notif_settings_what => 'Bana hatırlat';
+
+  @override
+  String get notif_cat_payments => 'Ödemeler';
+
+  @override
+  String get notif_cat_payments_desc =>
+      'Abonelikler, planlı ödemeler, maaş günü — ve bir cüzdan eksiye düşebilecekse uyarı';
+
+  @override
+  String get notif_cat_debts => 'Borçlar';
+
+  @override
+  String get notif_cat_debts_desc =>
+      'Vadeler ve gecikmeler, kim kime borçlu olursa olsun';
+
+  @override
+  String get notif_cat_habits => 'Akşam hatırlatmaları';
+
+  @override
+  String get notif_cat_habits_desc =>
+      'Hiçbir şey yazılmadıysa bir hatırlatma, uzun süre kaybolursan bir merhaba';
+
+  @override
+  String get notif_cat_recaps => 'Haftalık özet';
+
+  @override
+  String get notif_cat_recaps_desc => 'Pazar akşamı: hafta kaça mal oldu';
+
+  @override
+  String get notif_cat_morning => 'Sabah bütçesi';
+
+  @override
+  String get notif_cat_morning_desc =>
+      'Bütçelerinde kalmak için bugün ne kadar harcayabileceğin';
+
+  @override
+  String get notif_state_on => 'Açık';
+
+  @override
+  String get notif_state_off => 'Kapalı';
+
+  @override
+  String get notif_ask_title => 'Arada bir seni dürtebilir miyim?';
+
+  @override
+  String get notif_ask_body =>
+      'Sadece önemli olduğunda: yarın bir ödeme, vadesi gelen bir borç, kayıtsız geçen bir akşam. Günde en fazla iki mesaj, söz';
+
+  @override
+  String get notif_ask_allow => 'Tabii, olur';
+
+  @override
+  String get notif_ask_later => 'Şimdi değil';
+
+  @override
+  String get notif_refused_title => 'Bildirimler kapalı';
+
+  @override
+  String get notif_refused_body =>
+      'Bildirimler olmadan seni ödemeler, borçlar ya da kayıtsız geçen bir akşam için uyaramam. Telefon ayarlarından açabilirsin, birkaç saniye sürer';
+
+  @override
+  String get notif_enabled_toast =>
+      'Bildirimler açık — her şeye göz kulak olurum patron';
+
+  @override
   String get l10nStopLineDontTouch =>
       '☠☠☠☠☠☠☠☠☠☠☠☠☠ Don\'t touch this line ☠☠☠☠☠☠☠☠☠☠☠☠☠';
 }

@@ -3333,6 +3333,389 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mascot_q_joke => 'Laat me lachen';
 
   @override
+  String get l10nNotifications =>
+      '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ NOTIFICATIONS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
+
+  @override
+  String get notif_channel_name => 'Herinneringen';
+
+  @override
+  String get notif_channel_description =>
+      'Betalingen, schulden en vriendelijke duwtjes van Wumbi';
+
+  @override
+  String notif_more(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '+ nog $count dingen in de app',
+      one: '+ nog 1 ding in de app',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notif_preview_now => 'nu';
+
+  @override
+  String get notif_sample_person => 'Sam';
+
+  @override
+  String get notif_a_payment => 'een betaling';
+
+  @override
+  String get notif_subscription => 'Abonnement';
+
+  @override
+  String get notif_planned_payment => 'Geplande betaling';
+
+  @override
+  String get notif_expected_income => 'Verwachte inkomsten';
+
+  @override
+  String notif_overdraft_title(String wallet) {
+    return '„$wallet” kan rood komen te staan';
+  }
+
+  @override
+  String notif_overdraft_body(
+    String name,
+    String amount,
+    String date,
+    String balance,
+  ) {
+    return 'Op $date gaat er $amount af voor $name en blijft er $balance over. Even aanvullen, baas?';
+  }
+
+  @override
+  String notif_charge_title(String name) {
+    return '$name schrijft morgen af';
+  }
+
+  @override
+  String notif_charge_body(String amount) {
+    return 'Morgen gaat er $amount af. Even een seintje, zodat het je niet overvalt, baas';
+  }
+
+  @override
+  String notif_charge_body_wallet(String amount, String wallet) {
+    return 'Morgen gaat er $amount van „$wallet” af. Zitten er genoeg zaadjes in?';
+  }
+
+  @override
+  String notif_today_title(String name) {
+    return 'Vandaag: $name';
+  }
+
+  @override
+  String notif_planned_body(String amount) {
+    return 'Voor vandaag staat $amount gepland. Kijk even of alles goed is gegaan';
+  }
+
+  @override
+  String notif_income_body(String amount) {
+    return 'Vandaag zou $amount binnen moeten komen. Is alles binnen, baas?';
+  }
+
+  @override
+  String get notif_payday => 'Betaaldag!';
+
+  @override
+  String notif_payday_named(String name) {
+    return 'Betaaldag: $name';
+  }
+
+  @override
+  String notif_debt_soon_lent_title(String name, String amount) {
+    return '$name is je $amount schuldig';
+  }
+
+  @override
+  String notif_debt_soon_lent_body(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other:
+          'Over $days dagen terug te betalen. Een vriendelijke herinnering kan geen kwaad',
+      one:
+          'Morgen terug te betalen. Een vriendelijke herinnering kan geen kwaad',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String notif_debt_soon_borrowed_title(String name) {
+    return 'Binnenkort $name terugbetalen';
+  }
+
+  @override
+  String notif_debt_soon_borrowed_body(String amount, int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other:
+          '$amount moet over $days dagen terug. Ligt het geld al klaar, baas?',
+      one: '$amount moet morgen terug. Ligt het geld al klaar, baas?',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String notif_debt_today_lent_title(String name) {
+    return '$name betaalt je vandaag terug';
+  }
+
+  @override
+  String notif_debt_today_lent_body(String amount) {
+    return 'Vandaag krijg je $amount terug. Binnen? Zet het erin, dan hoef ik me geen zorgen meer te maken';
+  }
+
+  @override
+  String notif_debt_today_borrowed_title(String name) {
+    return 'Vandaag betaal je $name terug';
+  }
+
+  @override
+  String notif_debt_today_borrowed_body(String amount) {
+    return 'Vandaag moet $amount terug. Al gedaan? Zet het erin en jullie staan quitte';
+  }
+
+  @override
+  String notif_debt_late_lent_title(String name, int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '$name is $days dagen te laat',
+      one: '$name is een dag te laat',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String notif_debt_late_lent_body(String amount) {
+    return '$amount is nog steeds niet terug. Tijd voor een vriendelijk duwtje?';
+  }
+
+  @override
+  String notif_debt_late_borrowed_title(String name) {
+    return 'Je schuld bij $name is te laat';
+  }
+
+  @override
+  String notif_debt_late_borrowed_body(String amount, int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other:
+          '$days dagen over tijd, nog $amount open. Laten we het regelen voordat het ongemakkelijk wordt',
+      one:
+          'Een dag over tijd, nog $amount open. Laten we het regelen voordat het ongemakkelijk wordt',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String notif_debt_forgotten_title(String name) {
+    return 'Weet je $name nog?';
+  }
+
+  @override
+  String notif_debt_forgotten_body(String amount, int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other:
+          'Je hebt $days dagen geleden $amount uitgeleend, en het is nog niet terug. Even vragen?',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String notif_safe_title(String name) {
+    return 'Budget „$name” voor vandaag';
+  }
+
+  @override
+  String notif_safe_body(String amount) {
+    return 'Vandaag kun je $amount uitgeven en op koers blijven. Fijne dag, baas';
+  }
+
+  @override
+  String notif_safe_empty_title(String name) {
+    return '„$name” is leeg';
+  }
+
+  @override
+  String get notif_safe_empty_body =>
+      'Niets meer over voor deze periode. Laten we het daar vandaag rustig aan doen';
+
+  @override
+  String notif_week_title(String amount) {
+    return 'Jouw week: $amount';
+  }
+
+  @override
+  String notif_week_less(String percent) {
+    return 'Dat is $percent% minder dan vorige week. Trots op je, baas!';
+  }
+
+  @override
+  String notif_week_more(String percent) {
+    return 'Dat is $percent% meer dan vorige week. Zullen we kijken waar het heen ging?';
+  }
+
+  @override
+  String notif_week_tag(String tag) {
+    return 'Het meeste ging naar „$tag”. Tik voor het hele plaatje';
+  }
+
+  @override
+  String get notif_week_plain => 'Tik om te zien waar alles heen ging, baas';
+
+  @override
+  String get notif_log_title_1 => 'Hoe was je dag?';
+
+  @override
+  String get notif_log_body_1 =>
+      'Tien seconden om je uitgaven te noteren — ik doe het rekenwerk';
+
+  @override
+  String get notif_log_title_2 => 'Baas, ik wacht!';
+
+  @override
+  String get notif_log_body_2 =>
+      'De zaadjes van vandaag zijn nog niet geteld. Koffie, boodschappen, taxi — zullen we ze toevoegen?';
+
+  @override
+  String get notif_log_title_3 => 'Vandaag iets uitgegeven?';
+
+  @override
+  String get notif_log_body_3 =>
+      'Kleine dingen tellen ook op. Noteer het nu, nu je het nog weet';
+
+  @override
+  String get notif_log_title_4 => 'Avondtelling?';
+
+  @override
+  String get notif_log_body_4 =>
+      'Vandaag is er nog niets genoteerd. Laten we dat voor het slapengaan regelen';
+
+  @override
+  String notif_streak_title(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '$days dagen op rij!',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notif_streak_body =>
+      'Verbreek de reeks niet, baas — één boeking vandaag is genoeg';
+
+  @override
+  String get notif_miss_title => 'Ik mis je, baas';
+
+  @override
+  String get notif_miss_body =>
+      'Drie dagen zonder één boeking. Zullen we bijwerken? Het kost maar een minuutje';
+
+  @override
+  String get notif_asleep_title => 'Wumbi is in slaap gevallen…';
+
+  @override
+  String get notif_asleep_body =>
+      'Een hele week stilte. Maak me wakker, dan brengen we je cijfers weer op orde';
+
+  @override
+  String get notif_settings_title => 'Meldingen';
+
+  @override
+  String get notif_settings_allow => 'Meldingen toestaan';
+
+  @override
+  String get notif_settings_allow_on =>
+      'Hooguit twee per dag: één ’s ochtends, één ’s avonds';
+
+  @override
+  String get notif_settings_allow_off => 'Wumbi blijft stil';
+
+  @override
+  String get notif_settings_blocked =>
+      'Meldingen voor Wumbi staan uit in de instellingen van je telefoon';
+
+  @override
+  String get notif_settings_open_system => 'Instellingen openen';
+
+  @override
+  String get notif_settings_what => 'Herinner me aan';
+
+  @override
+  String get notif_cat_payments => 'Betalingen';
+
+  @override
+  String get notif_cat_payments_desc =>
+      'Abonnementen, geplande betalingen, betaaldag — en een waarschuwing als een portemonnee rood kan komen te staan';
+
+  @override
+  String get notif_cat_debts => 'Schulden';
+
+  @override
+  String get notif_cat_debts_desc =>
+      'Vervaldata en vertragingen, wie wie ook iets schuldig is';
+
+  @override
+  String get notif_cat_habits => 'Avondduwtjes';
+
+  @override
+  String get notif_cat_habits_desc =>
+      'Een herinnering als er niets genoteerd is, en een hallo als je een tijdje weg bent';
+
+  @override
+  String get notif_cat_recaps => 'Weekoverzicht';
+
+  @override
+  String get notif_cat_recaps_desc => 'Zondagavond: wat de week heeft gekost';
+
+  @override
+  String get notif_cat_morning => 'Ochtendbudget';
+
+  @override
+  String get notif_cat_morning_desc =>
+      'Hoeveel je vandaag kunt uitgeven en binnen je budgetten blijft';
+
+  @override
+  String get notif_state_on => 'Aan';
+
+  @override
+  String get notif_state_off => 'Uit';
+
+  @override
+  String get notif_ask_title => 'Mag ik je af en toe een seintje geven?';
+
+  @override
+  String get notif_ask_body =>
+      'Alleen als het ertoe doet: een betaling morgen, een schuld die vervalt, een avond zonder boekingen. Hooguit twee berichten per dag, beloofd';
+
+  @override
+  String get notif_ask_allow => 'Prima, doe maar';
+
+  @override
+  String get notif_ask_later => 'Nu niet';
+
+  @override
+  String get notif_refused_title => 'Meldingen staan uit';
+
+  @override
+  String get notif_refused_body =>
+      'Zonder meldingen kan ik je niet waarschuwen voor betalingen, schulden of een lege avond. Je kunt ze aanzetten in de instellingen van je telefoon — dat duurt maar een paar seconden';
+
+  @override
+  String get notif_enabled_toast =>
+      'Meldingen staan aan — ik houd alles in de gaten, baas';
+
+  @override
   String get l10nStopLineDontTouch =>
       '☠☠☠☠☠☠☠☠☠☠☠☠☠ Don\'t touch this line ☠☠☠☠☠☠☠☠☠☠☠☠☠';
 }

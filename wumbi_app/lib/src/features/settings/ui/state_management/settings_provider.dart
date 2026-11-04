@@ -13,6 +13,8 @@ import '../../../../core/utils/state_management/app_events.dart';
 import '../../../../core/utils/state_management/single_events.dart';
 import '../../../../core/utils/typedefs.dart';
 import '../../../mascot/ui/mascot_providers.dart';
+import '../../../notification/domain/notification_prefs.dart';
+import '../../../notification/ui/notification_providers.dart';
 import '../../../wallet/data/wallet_repository.dart';
 import '../../data/models/app_settings.dart';
 import '../../data/settings_repo.dart';
@@ -79,11 +81,20 @@ class SettingsNotifier extends Notifier<SettingsState> {
     // 4. FX warm-up — not awaited.
     _warmUpRates(data!.baseCurrency);
 
-    // 5. Route.
+    // 5. Notifications: taps, a fresh plan, and the page of the notification
+    //    that launched the app (opened over the dashboard).
+    final fromNotification = await ref.read(notificationsControllerProvider).start();
+
+    // 6. Route.
     state = state.copyWith(isLoading: false);
     await Future<void>.delayed(const Duration(milliseconds: 1000));
     _events.send(ReplaceAllRoutesEvent([
-      if (data!.showOnboarding) const OnboardingRoute() else const DashboardRoute(),
+      if (data!.showOnboarding)
+        const OnboardingRoute()
+      else ...[
+        const DashboardRoute(),
+        if (fromNotification != null) fromNotification,
+      ],
     ]));
   }
 
@@ -120,6 +131,9 @@ class SettingsNotifier extends Notifier<SettingsState> {
   }
 
   Future<void> changeNotifications(bool enabled) => _apply(() => _repo.changeNotifications(enabled));
+
+  Future<void> changeNotificationPrefs(NotificationPrefs prefs) =>
+      _apply(() => _repo.changeNotificationPrefs(prefs));
 
   Future<void> changeMascotVisibility(bool visible) =>
       _apply(() => _repo.changeMascotVisibility(visible));

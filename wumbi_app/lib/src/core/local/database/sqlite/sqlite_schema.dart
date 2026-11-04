@@ -4,7 +4,11 @@
 /// shape through `SQLiteMigrations`. [v1] is kept verbatim so the v1→v2
 /// migration can be tested against a real v1 database.
 abstract class SQLiteSchema {
-  static final List<String> latest = v6;
+  static final List<String> latest = v7;
+
+  /// v7 (2026-10): `settings.notification_prefs` — per-category notification
+  /// switches (JSON; NULL = defaults).
+  static final List<String> v7 = SQLiteSchemaV7.statements;
 
   /// v6 (2026-10): `settings.mascot_talks` and the `mascot_memory` table
   /// (hamster companion: shown messages, milestones, visits).
@@ -617,5 +621,32 @@ abstract class SQLiteSchemaV6 {
     for (final s in SQLiteSchemaV5.statements)
       if (s.contains('CREATE TABLE settings (')) settingsTable else s,
     mascotMemoryTable,
+  ];
+}
+
+/// v7 DDL, see [SQLiteSchema.v7]. `settings` gains `notification_prefs`
+/// inline; everything else in v6 is reused verbatim. The v6 → v7 migration
+/// shares [notificationPrefsColumn].
+abstract class SQLiteSchemaV7 {
+  static const String settingsTable = '''
+    CREATE TABLE settings (
+      id                    INTEGER PRIMARY KEY CHECK (id = 1),
+      language_code         TEXT,
+      country_code          TEXT,
+      theme_mode            TEXT    NOT NULL DEFAULT 'system' CHECK (theme_mode IN ('system','light','dark')),
+      show_onboarding       INTEGER NOT NULL DEFAULT 1,
+      base_currency         TEXT    NOT NULL DEFAULT 'USD',
+      notifications_enabled INTEGER NOT NULL DEFAULT 0,
+      show_mascot           INTEGER NOT NULL DEFAULT 1,
+      last_recurring_run_at INTEGER,
+      mascot_talks          INTEGER NOT NULL DEFAULT 1,
+      notification_prefs    TEXT
+    )''';
+
+  static const String notificationPrefsColumn = 'ALTER TABLE settings ADD COLUMN notification_prefs TEXT';
+
+  static final List<String> statements = [
+    for (final s in SQLiteSchemaV6.statements)
+      if (s.contains('CREATE TABLE settings (')) settingsTable else s,
   ];
 }

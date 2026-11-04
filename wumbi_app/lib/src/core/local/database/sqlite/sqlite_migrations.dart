@@ -11,7 +11,7 @@ typedef Migration = Future<void> Function(DatabaseExecutor db);
 /// A fresh install runs `SQLiteSchema.latest` in `onCreate` and never touches
 /// this list.
 abstract class SQLiteMigrations {
-  static const List<Migration> migrations = [_v1ToV2, _v2ToV3, _v3ToV4, _v4ToV5, _v5ToV6];
+  static const List<Migration> migrations = [_v1ToV2, _v2ToV3, _v3ToV4, _v4ToV5, _v5ToV6, _v6ToV7];
 
   static Future<void> upgrade(Database db, int oldVersion, int newVersion) async {
     if (oldVersion >= newVersion) return;
@@ -126,5 +126,12 @@ abstract class SQLiteMigrations {
   static Future<void> _v5ToV6(DatabaseExecutor db) async {
     await db.execute(SQLiteSchemaV6.mascotTalksColumn);
     await db.execute(SQLiteSchemaV6.mascotMemoryTable);
+  }
+
+  /// v7 (2026-10): `settings.notification_prefs` — per-category notification
+  /// switches as JSON. NULL reads as the defaults, so existing installs need
+  /// no backfill.
+  static Future<void> _v6ToV7(DatabaseExecutor db) async {
+    await db.execute(SQLiteSchemaV7.notificationPrefsColumn);
   }
 }

@@ -3357,6 +3357,387 @@ class AppLocalizationsFr extends AppLocalizations {
   String get mascot_q_joke => 'Fais-moi sourire';
 
   @override
+  String get l10nNotifications =>
+      '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ NOTIFICATIONS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
+
+  @override
+  String get notif_channel_name => 'Rappels';
+
+  @override
+  String get notif_channel_description =>
+      'Paiements, dettes et petits rappels de Wumbi';
+
+  @override
+  String notif_more(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '+ $count autres choses dans l’app',
+      one: '+ 1 autre chose dans l’app',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notif_preview_now => 'maintenant';
+
+  @override
+  String get notif_sample_person => 'Sam';
+
+  @override
+  String get notif_a_payment => 'un paiement';
+
+  @override
+  String get notif_subscription => 'Abonnement';
+
+  @override
+  String get notif_planned_payment => 'Paiement prévu';
+
+  @override
+  String get notif_expected_income => 'Revenu attendu';
+
+  @override
+  String notif_overdraft_title(String wallet) {
+    return '« $wallet » risque de passer dans le rouge';
+  }
+
+  @override
+  String notif_overdraft_body(
+    String name,
+    String amount,
+    String date,
+    String balance,
+  ) {
+    return 'Le $date, $name prend $amount et il restera $balance. On le renfloue avant, patron ?';
+  }
+
+  @override
+  String notif_charge_title(String name) {
+    return '$name prélève demain';
+  }
+
+  @override
+  String notif_charge_body(String amount) {
+    return '$amount part demain. Je te préviens pour éviter la mauvaise surprise, patron';
+  }
+
+  @override
+  String notif_charge_body_wallet(String amount, String wallet) {
+    return 'Demain, $amount part de « $wallet ». Il y a assez de graines dedans ?';
+  }
+
+  @override
+  String notif_today_title(String name) {
+    return 'Aujourd’hui : $name';
+  }
+
+  @override
+  String notif_planned_body(String amount) {
+    return '$amount prévu aujourd’hui. Jette un œil pour vérifier que tout s’est bien passé';
+  }
+
+  @override
+  String notif_income_body(String amount) {
+    return '$amount doit arriver aujourd’hui. Tout est bien arrivé, patron ?';
+  }
+
+  @override
+  String get notif_payday => 'Jour de paie !';
+
+  @override
+  String notif_payday_named(String name) {
+    return 'Jour de paie : $name';
+  }
+
+  @override
+  String notif_debt_soon_lent_title(String name, String amount) {
+    return '$name te doit $amount';
+  }
+
+  @override
+  String notif_debt_soon_lent_body(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'À rendre dans $days jours. Un petit rappel ne fera pas de mal',
+      one: 'À rendre demain. Un petit rappel ne fera pas de mal',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String notif_debt_soon_borrowed_title(String name) {
+    return 'Bientôt : rembourser $name';
+  }
+
+  @override
+  String notif_debt_soon_borrowed_body(String amount, int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other:
+          '$amount à rendre dans $days jours. L’argent est de côté, patron ?',
+      one: '$amount à rendre demain. L’argent est de côté, patron ?',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String notif_debt_today_lent_title(String name) {
+    return '$name te rembourse aujourd’hui';
+  }
+
+  @override
+  String notif_debt_today_lent_body(String amount) {
+    return '$amount à récupérer aujourd’hui. C’est fait ? Note-le pour que j’arrête de m’inquiéter';
+  }
+
+  @override
+  String notif_debt_today_borrowed_title(String name) {
+    return 'Aujourd’hui, tu rembourses $name';
+  }
+
+  @override
+  String notif_debt_today_borrowed_body(String amount) {
+    return '$amount à rendre aujourd’hui. Déjà fait ? Note-le et vous êtes quittes';
+  }
+
+  @override
+  String notif_debt_late_lent_title(String name, int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '$name a $days jours de retard',
+      one: '$name a un jour de retard',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String notif_debt_late_lent_body(String amount) {
+    return '$amount toujours pas rendus. Un petit rappel, peut-être ?';
+  }
+
+  @override
+  String notif_debt_late_borrowed_title(String name) {
+    return 'Ta dette envers $name est en retard';
+  }
+
+  @override
+  String notif_debt_late_borrowed_body(String amount, int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other:
+          '$days jours de retard, il reste $amount. Réglons ça avant que ça devienne gênant',
+      one:
+          'Un jour de retard, il reste $amount. Réglons ça avant que ça devienne gênant',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String notif_debt_forgotten_title(String name) {
+    return 'Tu te souviens de $name ?';
+  }
+
+  @override
+  String notif_debt_forgotten_body(String amount, int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other:
+          'Tu as prêté $amount il y a $days jours, et rien n’est revenu. On demande ?',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String notif_safe_title(String name) {
+    return 'Budget « $name » du jour';
+  }
+
+  @override
+  String notif_safe_body(String amount) {
+    return 'Tu peux dépenser $amount aujourd’hui et rester dans les clous. Bonne journée, patron';
+  }
+
+  @override
+  String notif_safe_empty_title(String name) {
+    return '« $name » est vide';
+  }
+
+  @override
+  String get notif_safe_empty_body =>
+      'Plus rien pour cette période. On fait une pause aujourd’hui ?';
+
+  @override
+  String notif_week_title(String amount) {
+    return 'Ta semaine : $amount';
+  }
+
+  @override
+  String notif_week_less(String percent) {
+    return 'C’est $percent % de moins que la semaine dernière. Fier de toi, patron !';
+  }
+
+  @override
+  String notif_week_more(String percent) {
+    return 'C’est $percent % de plus que la semaine dernière. On regarde où c’est parti ?';
+  }
+
+  @override
+  String notif_week_tag(String tag) {
+    return 'La plus grosse part est allée à « $tag ». Ouvre pour tout voir';
+  }
+
+  @override
+  String get notif_week_plain => 'Ouvre pour voir où tout est passé, patron';
+
+  @override
+  String get notif_log_title_1 => 'Alors, cette journée ?';
+
+  @override
+  String get notif_log_body_1 =>
+      'Dix secondes pour noter tes dépenses — je m’occupe de compter';
+
+  @override
+  String get notif_log_title_2 => 'Patron, je t’attends !';
+
+  @override
+  String get notif_log_body_2 =>
+      'Les graines du jour ne sont pas encore comptées. Café, courses, taxi — on les ajoute ?';
+
+  @override
+  String get notif_log_title_3 => 'Une dépense aujourd’hui ?';
+
+  @override
+  String get notif_log_body_3 =>
+      'Les petites choses s’additionnent. Note-les maintenant, tant que tu t’en souviens';
+
+  @override
+  String get notif_log_title_4 => 'Le compte du soir ?';
+
+  @override
+  String get notif_log_body_4 =>
+      'Rien de noté aujourd’hui. On arrange ça avant de dormir';
+
+  @override
+  String notif_streak_title(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '$days jours d’affilée !',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notif_streak_body =>
+      'Ne casse pas la série, patron — une seule entrée aujourd’hui suffit';
+
+  @override
+  String get notif_miss_title => 'Tu me manques, patron';
+
+  @override
+  String get notif_miss_body =>
+      'Trois jours sans rien noter. On rattrape ? Ça prend une minute';
+
+  @override
+  String get notif_asleep_title => 'Wumbi s’est endormi…';
+
+  @override
+  String get notif_asleep_body =>
+      'Une semaine entière de silence. Réveille-moi et remettons tes chiffres en ordre';
+
+  @override
+  String get notif_settings_title => 'Notifications';
+
+  @override
+  String get notif_settings_allow => 'Autoriser les notifications';
+
+  @override
+  String get notif_settings_allow_on =>
+      'Deux par jour maximum : une le matin, une le soir';
+
+  @override
+  String get notif_settings_allow_off => 'Wumbi reste silencieux';
+
+  @override
+  String get notif_settings_blocked =>
+      'Les notifications de Wumbi sont désactivées dans les réglages du téléphone';
+
+  @override
+  String get notif_settings_open_system => 'Ouvrir les réglages';
+
+  @override
+  String get notif_settings_what => 'Me rappeler';
+
+  @override
+  String get notif_cat_payments => 'Paiements';
+
+  @override
+  String get notif_cat_payments_desc =>
+      'Abonnements, paiements prévus, jour de paie — et une alerte si un portefeuille risque le rouge';
+
+  @override
+  String get notif_cat_debts => 'Dettes';
+
+  @override
+  String get notif_cat_debts_desc => 'Échéances et retards, dans les deux sens';
+
+  @override
+  String get notif_cat_habits => 'Rappels du soir';
+
+  @override
+  String get notif_cat_habits_desc =>
+      'Un rappel quand rien n’est noté, et un petit coucou si tu disparais';
+
+  @override
+  String get notif_cat_recaps => 'Bilan de la semaine';
+
+  @override
+  String get notif_cat_recaps_desc =>
+      'Le dimanche soir : ce que la semaine a coûté';
+
+  @override
+  String get notif_cat_morning => 'Budget du matin';
+
+  @override
+  String get notif_cat_morning_desc =>
+      'Ce que tu peux dépenser aujourd’hui pour rester dans tes budgets';
+
+  @override
+  String get notif_state_on => 'Activées';
+
+  @override
+  String get notif_state_off => 'Désactivées';
+
+  @override
+  String get notif_ask_title => 'Je peux te faire signe de temps en temps ?';
+
+  @override
+  String get notif_ask_body =>
+      'Seulement quand ça compte : un paiement demain, une dette à rendre, une soirée sans rien noter. Deux messages par jour maximum, promis';
+
+  @override
+  String get notif_ask_allow => 'Oui, vas-y';
+
+  @override
+  String get notif_ask_later => 'Pas maintenant';
+
+  @override
+  String get notif_refused_title => 'Les notifications sont désactivées';
+
+  @override
+  String get notif_refused_body =>
+      'Sans elles, je ne peux pas te prévenir des paiements, des dettes ou d’une soirée sans rien noter. Tu peux les activer dans les réglages du téléphone — ça prend quelques secondes';
+
+  @override
+  String get notif_enabled_toast =>
+      'Notifications activées — je garde un œil sur tout, patron';
+
+  @override
   String get l10nStopLineDontTouch =>
       '☠☠☠☠☠☠☠☠☠☠☠☠☠ Don\'t touch this line ☠☠☠☠☠☠☠☠☠☠☠☠☠';
 }

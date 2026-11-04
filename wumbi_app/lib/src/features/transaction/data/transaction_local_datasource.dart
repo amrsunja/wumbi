@@ -109,6 +109,17 @@ class TransactionLocalDatasource {
     return ms == null ? null : DateTimeExtension.fromEpochMs(ms);
   }
 
+  /// Every pending `upcoming` row, soonest first (notification planning).
+  Future<List<TransactionModel>> upcoming(DatabaseExecutor db) async {
+    final rows = await db.query(
+      _t,
+      where: '${SQLiteConfig.txStatus} = ? AND ${SQLiteConfig.deletedAt} IS NULL',
+      whereArgs: [TransactionStatus.upcoming.dbValue],
+      orderBy: '${SQLiteConfig.txDate} ASC',
+    );
+    return rows.map(TransactionModel.fromRow).toList();
+  }
+
   Future<int> countUpcomingForWallet(DatabaseExecutor db, String walletId) async {
     final rows = await db.rawQuery(
       'SELECT COUNT(*) AS c FROM $_t '

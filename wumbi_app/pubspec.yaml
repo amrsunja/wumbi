@@ -62,6 +62,11 @@ dependencies:
   sqflite_common_ffi: ^2.4.2+1
   share_plus: ^13.3.1
 
+  # Local notifications (one-shot, scheduled at absolute instants)
+  flutter_local_notifications: ^22.3.3
+  timezone: ^0.11.0
+  permission_handler: ^12.0.1
+
 
 dev_dependencies:
   flutter_test:
@@ -83,6 +88,7 @@ flutter:
   assets:
     - assets/images/
     - assets/mascot/
+    - assets/mascot/notification/
     - assets/icons/
     - assets/icons/alerts_feedback/
     - assets/icons/arrows/

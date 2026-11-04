@@ -18,6 +18,7 @@ import '../../debt/ui/debts_provider.dart';
 import '../../debt/ui/widgets/debt_summary_row.dart';
 import '../../mascot/ui/mascot_providers.dart';
 import '../../mascot/ui/widgets/dashboard_peek.dart';
+import '../../notification/ui/widgets/notification_ask_once.dart';
 import '../../subscription/ui/subscriptions_provider.dart';
 import '../../wallet/data/models/wallet_model.dart';
 import '../../wallet/data/wallet_repository.dart';
@@ -72,6 +73,8 @@ class DashboardPage extends ConsumerWidget {
         children: [
           Positioned.fill(child: ColoredBox(color: colors.bgColor)),
           const Positioned.fill(child: UiAmbientBackground()),
+          // Asks for notification permission once, when it makes sense.
+          if (hasWallets) const NotificationAskOnce(),
           Scaffold(
             backgroundColor: Colors.transparent,
             appBar: UIAppbar(

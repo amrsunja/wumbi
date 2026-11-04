@@ -1,0 +1,301 @@
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+import '../../../core/fx/fx_service.dart';
+import '../../../core/local/database/sqlite/sqlite_services.dart';
+import '../../../core/money/currency_type.dart';
+import '../../../core/money/money.dart';
+import '../../../core/providers/data/fx_provider.dart';
+import '../../../core/providers/local/sqlite_database_provider.dart';
+import '../../../core/recurring/recurring_schedule.dart';
+import '../../../core/utils/enums/repeat_frequency.dart';
+import '../../../core/utils/enums/transaction_type.dart';
+import '../../budget/data/budget_metrics.dart';
+import '../../budget/data/budget_repository.dart';
+import '../../debt/data/debt_repository.dart';
+import '../../mascot/data/mascot_repository.dart';
+import '../../progress/data/progress_local_datasource.dart';
+import '../../transaction/data/models/recurring_rule_model.dart';
+import '../../transaction/data/models/transaction_model.dart';
+import '../../transaction/data/transaction_repository.dart';
+import '../../wallet/data/wallet_repository.dart';
+import '../domain/notification_planner.dart';
+import '../domain/notification_prefs.dart';
+import '../domain/notification_snapshot.dart';
+
+final notificationSnapshotSourceProvider = Provider<NotificationSnapshotSource>(
+  (ref) => NotificationSnapshotSource(
+    sqlite: ref.read(sqliteDataBaseProvider),
+    transactions: ref.read(transactionRepositoryProvider),
+    wallets: ref.read(walletRepositoryProvider),
+    debts: ref.read(debtRepositoryProvider),
+    budgets: ref.read(budgetRepositoryProvider),
+    activity: ref.read(mascotRepositoryProvider),
+    fx: ref.read(fxServiceProvider),
+  ),
+);
+
+/// Reads the database into a [NotificationSnapshot] through the existing
+/// repositories. Only what the enabled categories need is loaded, and every
+/// part fails soft (a missing part means fewer notifications, never none).
+class NotificationSnapshotSource {
+  const NotificationSnapshotSource({
+    required this.sqlite,
+    required this.transactions,
+    required this.wallets,
+    required this.debts,
+    required this.budgets,
+    required this.activity,
+    required this.fx,
+    this.progress = const ProgressLocalDatasource(),
+  });
+
+  final SQLiteServices sqlite;
+  final TransactionRepository transactions;
+  final WalletRepository wallets;
+  final DebtRepository debts;
+  final BudgetRepository budgets;
+  final MascotRepository activity;
+  final FxService fx;
+  final ProgressLocalDatasource progress;
+
+  /// Occurrences per rule inside the horizon (a weekly rule has 2–3).
+  static const int _maxPerRule = 31;
+
+  Future<NotificationSnapshot> load({
+    required DateTime now,
+    required CurrencyType base,
+    required NotificationPrefs prefs,
+  }) async {
+    if (!sqlite.isOpen) return NotificationSnapshot(now: now, base: base);
+    final today = NotificationPlanner.dayOf(now);
+    // One extra day: a charge on day 15 is announced on day 14.
+    final horizonEnd = NotificationPlanner.addDays(today, NotificationPlanner.horizonDays + 2);
+
+    final needMoves = prefs.payments || prefs.recaps;
+    final walletList = prefs.payments ? await _wallets() : const <SnapshotWallet>[];
+    final moves = needMoves ? await _moves(now, horizonEnd) : const <PlannedMove>[];
+    final debtList = prefs.debts ? await _debts(base, now) : const <SnapshotDebt>[];
+    final budgetList = prefs.morningBudget ? await _budgets(now) : const <SnapshotBudget>[];
+    final times = await activity.recordTimes(since: NotificationPlanner.addDays(today, -30));
+    final week = prefs.recaps ? await _week(today, base, moves) : null;
+
+    return NotificationSnapshot(
+      now: now,
+      base: base,
+      wallets: walletList,
+      moves: moves,
+      debts: debtList,
+      budgets: budgetList,
+      recordTimes: times,
+      week: week,
+    );
+  }
+
+  // ----------------------------------------------------------------- wallets
+
+  Future<List<SnapshotWallet>> _wallets() async {
+    final result = await wallets.listActive();
+    final list = result.tryGetSuccess() ?? const [];
+    return [for (final w in list) SnapshotWallet(id: w.id, name: w.name, balance: w.balance)];
+  }
+
+  // ------------------------------------------------------------------ moves
+
+  Future<List<PlannedMove>> _moves(DateTime now, DateTime horizonEnd) async {
+    final out = <PlannedMove>[];
+
+    final rules = (await transactions.allRules()).tryGetSuccess() ?? const <RecurringRuleModel>[];
+    for (final r in rules) {
+      if (!r.isActive || r.deletedAt != null || r.frequency == RepeatFrequency.never) continue;
+      final dates = occurrencesFrom(
+        startDate: r.startDate,
+        frequency: r.frequency,
+        nextOccurrence: r.nextOccurrence,
+        occurrenceCount: r.occurrenceCount,
+      ).takeWhile((d) => d.isBefore(horizonEnd) && (r.endDate == null || !d.isAfter(r.endDate!))).take(_maxPerRule);
+      for (final date in dates) {
+        // Due ones are generated by the catch-up when the app opens.
+        if (!date.isAfter(now)) continue;
+        out.add(_fromRule(r, date));
+      }
+    }
+
+    for (final tx in await transactions.upcoming()) {
+      if (!tx.transactionDate.isAfter(now) || !tx.transactionDate.isBefore(horizonEnd)) continue;
+      out.add(_fromUpcoming(tx));
+    }
+    return out;
+  }
+
+  PlannedMove _fromRule(RecurringRuleModel r, DateTime date) => PlannedMove(
+        id: r.id,
+        origin: PlannedMoveOrigin.rule,
+        type: r.type,
+        name: r.description.trim(),
+        date: date,
+        amount: Money(r.isTransfer ? (r.fromAmountMinor ?? 0) : (r.amountMinor ?? 0), r.currency),
+        walletId: r.isTransfer ? r.fromWalletId : r.walletId,
+        frequency: r.frequency,
+        effects: _effects(
+          type: r.type,
+          walletId: r.walletId,
+          amountMinor: r.amountMinor,
+          fromWalletId: r.fromWalletId,
+          fromAmountMinor: r.fromAmountMinor,
+          toWalletId: r.toWalletId,
+          toAmountMinor: r.toAmountMinor,
+        ),
+      );
+
+  PlannedMove _fromUpcoming(TransactionModel t) => PlannedMove(
+        id: t.id,
+        origin: PlannedMoveOrigin.upcoming,
+        type: t.type,
+        name: t.description.trim(),
+        date: t.transactionDate,
+        amount: Money(t.type.isTransfer ? (t.fromAmountMinor ?? 0) : (t.amountMinor ?? 0), t.currency),
+        walletId: t.type.isTransfer ? t.fromWalletId : t.walletId,
+        effects: _effects(
+          type: t.type,
+          walletId: t.walletId,
+          amountMinor: t.amountMinor,
+          fromWalletId: t.fromWalletId,
+          fromAmountMinor: t.fromAmountMinor,
+          toWalletId: t.toWalletId,
+          toAmountMinor: t.toAmountMinor,
+        ),
+      );
+
+  /// Same arithmetic as the `wallet_balances` view: amounts are already in
+  /// the wallet's currency.
+  static List<WalletEffect> _effects({
+    required TransactionType type,
+    String? walletId,
+    int? amountMinor,
+    String? fromWalletId,
+    int? fromAmountMinor,
+    String? toWalletId,
+    int? toAmountMinor,
+  }) =>
+      switch (type) {
+        TransactionType.income => [if (walletId != null) WalletEffect(walletId, amountMinor ?? 0)],
+        TransactionType.expense => [if (walletId != null) WalletEffect(walletId, -(amountMinor ?? 0))],
+        TransactionType.transfer => [
+            if (fromWalletId != null) WalletEffect(fromWalletId, -(fromAmountMinor ?? 0)),
+            if (toWalletId != null) WalletEffect(toWalletId, toAmountMinor ?? 0),
+          ],
+      };
+
+  // ------------------------------------------------------------------ debts
+
+  Future<List<SnapshotDebt>> _debts(CurrencyType base, DateTime now) async {
+    final overview = (await debts.overview(base: base, now: now)).tryGetSuccess();
+    if (overview == null) return const [];
+    return [
+      for (final s in [...overview.openLent, ...overview.openBorrowed])
+        if (s.isOpen)
+          SnapshotDebt(
+            id: s.debt.id,
+            personName: s.person.name,
+            direction: s.debt.direction,
+            remaining: s.remaining,
+            openedAt: s.debt.openedAt,
+            dueDate: s.debt.dueDate,
+          ),
+    ];
+  }
+
+  // ---------------------------------------------------------------- budgets
+
+  Future<List<SnapshotBudget>> _budgets(DateTime now) async {
+    final list = (await budgets.listProgress(now: now)).tryGetSuccess() ?? const [];
+    return [
+      for (final p in list)
+        if (p.isCurrent && p.status != BudgetStatus.notStarted && p.status != BudgetStatus.finished)
+          SnapshotBudget(id: p.budget.id, name: p.budget.name, free: p.free, periodEnd: p.period.end),
+    ];
+  }
+
+  // ------------------------------------------------------------------- week
+
+  Future<SnapshotWeek?> _week(DateTime today, CurrencyType base, List<PlannedMove> moves) async {
+    try {
+      final start = NotificationPlanner.addDays(today, 1 - today.weekday);
+      final end = NotificationPlanner.addDays(start, 7);
+      final prevStart = NotificationPlanner.addDays(start, -7);
+      final db = sqlite.db;
+      final rates = _Rates(fx, base);
+
+      var spent = 0;
+      var previous = 0;
+      var hadPrevious = false;
+      for (final r in await progress.rows(db, start: prevStart, end: end)) {
+        if (r.isIncome) continue;
+        final minor = await rates.toBase(r.amountMinor, CurrencyType.fromCode(r.currencyCode));
+        if (minor == null) continue;
+        if (r.date.isBefore(start)) {
+          previous += minor;
+          hadPrevious = true;
+        } else {
+          spent += minor;
+        }
+      }
+      // Planned expenses of the rest of the week will be posted by Sunday.
+      for (final m in moves) {
+        if (m.type != TransactionType.expense || !m.date.isBefore(end)) continue;
+        spent += await rates.toBase(m.amount.minor, m.amount.currency) ?? 0;
+      }
+
+      String? topTag;
+      var topMinor = 0;
+      final tagSums = <String, ({String name, int minor})>{};
+      for (final t in await progress.sumsByTag(db, start: start, end: end)) {
+        // Root tags only: nested tags are rolled into them already.
+        final id = t.tagId;
+        if (id == null || t.type != TransactionType.expense.dbValue || t.normalizedName.contains('/')) continue;
+        final minor = await rates.toBase(t.totalMinor, CurrencyType.fromCode(t.currencyCode));
+        if (minor == null) continue;
+        final prev = tagSums[id];
+        tagSums[id] = (name: t.displayName, minor: (prev?.minor ?? 0) + minor);
+      }
+      for (final e in tagSums.values) {
+        if (e.minor > topMinor) {
+          topMinor = e.minor;
+          topTag = e.name;
+        }
+      }
+
+      return SnapshotWeek(
+        start: start,
+        spent: Money(spent, base),
+        previous: hadPrevious ? Money(previous, base) : null,
+        topTag: topTag,
+      );
+    } catch (_) {
+      return null;
+    }
+  }
+}
+
+/// Cached-rate conversion to the base currency (no network: the app is
+/// going to the background). Null when no rate is cached yet.
+class _Rates {
+  _Rates(this.fx, this.base);
+
+  final FxService fx;
+  final CurrencyType base;
+  final Map<CurrencyType, double?> _cache = {};
+
+  Future<int?> toBase(int minor, CurrencyType from) async {
+    if (from == base) return minor;
+    if (!_cache.containsKey(from)) {
+      try {
+        _cache[from] = (await fx.cachedRate(from, base))?.rate;
+      } catch (_) {
+        _cache[from] = null;
+      }
+    }
+    final rate = _cache[from];
+    return rate == null ? null : convertMinor(minor, from, base, rate);
+  }
+}

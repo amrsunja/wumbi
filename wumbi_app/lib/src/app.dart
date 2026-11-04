@@ -21,6 +21,7 @@ import 'core/utils/state_management/single_events.dart';
 import 'features/budget/ui/budgets_provider.dart';
 import 'features/debt/ui/debts_provider.dart';
 import 'features/mascot/ui/mascot_providers.dart';
+import 'features/notification/ui/notification_providers.dart';
 import 'features/settings/ui/state_management/settings_provider.dart';
 
 class App extends ConsumerStatefulWidget {
@@ -68,6 +69,8 @@ class _AppState extends ConsumerState<App> with WidgetsBindingObserver {
     super.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.paused) {
       _pausedAt = DateTime.now();
+      // Re-plan notifications with everything written in this session.
+      ref.read(notificationsControllerProvider).onBackground();
     } else if (state == AppLifecycleState.resumed) {
       // Catch-up of recurring rules when returning to foreground after ≥ 1 h.
       final pausedAt = _pausedAt;
@@ -81,6 +84,8 @@ class _AppState extends ConsumerState<App> with WidgetsBindingObserver {
       }
       // Upcoming transactions whose date arrived while in the background.
       ref.read(upcomingPosterProvider).postDueIfPossible();
+      // Back from the system settings: a granted permission turns them on.
+      ref.read(notificationsControllerProvider).onForeground();
       final today = _today();
       if (today != _lastDay) {
         _lastDay = today;

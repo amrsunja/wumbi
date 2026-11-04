@@ -71,8 +71,8 @@ class SettingsPage extends ConsumerWidget {
                     UiSettingsTile(
                       icon: UIIconToken.icons.alertsFeedback.bell01,
                       title: l10n.settings_notifications,
-                      switchValue: settings?.notificationsEnabled ?? false,
-                      onSwitchChanged: notifier.changeNotifications,
+                      value: (settings?.notificationsEnabled ?? false) ? l10n.notif_state_on : l10n.notif_state_off,
+                      onTap: () => context.router.push(const NotificationSettingsRoute()),
                     ),
                     UiSettingsTile(
                       icon: UIIconToken.icons.financeEcommerce.bankNote01,

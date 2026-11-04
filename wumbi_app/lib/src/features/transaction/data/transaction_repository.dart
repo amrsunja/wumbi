@@ -203,6 +203,15 @@ class TransactionRepository {
     }
   }
 
+  /// Pending upcoming rows, soonest first; empty when the query fails.
+  Future<List<TransactionModel>> upcoming() async {
+    try {
+      return await datasource.upcoming(sqlite.db);
+    } catch (_) {
+      return const [];
+    }
+  }
+
   // ---------------------------------------------------------------- writes
 
   Future<SuccessOrError<TransactionModel>> create(TransactionDraft draft) =>

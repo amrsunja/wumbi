@@ -8,26 +8,24 @@ import '../domain/mascot_message.dart';
 
 /// Opens what a hamster message offers ("View ›", "Add ›").
 void runMascotAction(BuildContext context, WidgetRef ref, MascotAction action) {
-  final router = context.router;
+  final route = mascotActionRoute(action, primaryWalletId: ref.read(primaryWalletProvider)?.id);
+  if (route != null) context.router.push(route);
+}
+
+/// The page behind a [MascotAction] — shared by the in-app bubbles and the
+/// notifications (a tap on one opens the same page). Null when the action
+/// needs an id it does not have.
+PageRouteInfo<Object?>? mascotActionRoute(MascotAction action, {String? primaryWalletId}) {
   final id = action.id;
-  switch (action.kind) {
-    case MascotActionKind.openDebt:
-      router.push(id == null ? const DebtsRoute() : DebtDetailsRoute(debtId: id));
-    case MascotActionKind.openDebts:
-      router.push(const DebtsRoute());
-    case MascotActionKind.openBudget:
-      router.push(id == null ? BudgetsRoute() : BudgetDetailsRoute(budgetId: id));
-    case MascotActionKind.openBudgets:
-      router.push(BudgetsRoute());
-    case MascotActionKind.newBudget:
-      router.push(BudgetFormRoute());
-    case MascotActionKind.openProgress:
-      router.push(const ProgressRoute());
-    case MascotActionKind.addTransaction:
-      router.push(TransactionRoute(walletId: ref.read(primaryWalletProvider)?.id));
-    case MascotActionKind.openSubscriptions:
-      router.push(SubscriptionsRoute());
-    case MascotActionKind.openWallet:
-      if (id != null) router.push(WalletDetailsRoute(walletId: id));
-  }
+  return switch (action.kind) {
+    MascotActionKind.openDebt => id == null ? const DebtsRoute() : DebtDetailsRoute(debtId: id),
+    MascotActionKind.openDebts => const DebtsRoute(),
+    MascotActionKind.openBudget => id == null ? BudgetsRoute() : BudgetDetailsRoute(budgetId: id),
+    MascotActionKind.openBudgets => BudgetsRoute(),
+    MascotActionKind.newBudget => BudgetFormRoute(),
+    MascotActionKind.openProgress => const ProgressRoute(),
+    MascotActionKind.addTransaction => TransactionRoute(walletId: primaryWalletId),
+    MascotActionKind.openSubscriptions => SubscriptionsRoute(),
+    MascotActionKind.openWallet => id == null ? null : WalletDetailsRoute(walletId: id),
+  };
 }

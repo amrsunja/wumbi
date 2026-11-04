@@ -19,6 +19,9 @@ const double kListHorzPadding = 24;
 /// (bottom-start corner). Add `MediaQuery.paddingOf(context).bottom` on top.
 const double kPageBottomInset = 120;
 
+/// Side gutter for the create / edit forms (wallet, budget, debt).
+const double kFormHorzPadding = 30;
+
 /// Extra inset applied to the numpad on top of [kPageHorzPadding].
 const double kNumpadHorzPadding = 28;
 

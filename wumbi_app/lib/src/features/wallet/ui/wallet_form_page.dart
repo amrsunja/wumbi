@@ -68,13 +68,13 @@ class WalletFormPage extends ConsumerWidget {
           children: [
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: kPageHorzPadding),
+                padding: const EdgeInsets.symmetric(horizontal: kFormHorzPadding),
                 child: WalletFormBody(args: args),
               ),
             ),
             Padding(
               // Tight bar, inset like the Transaction edit bar (page + bar padding).
-              padding: const EdgeInsets.fromLTRB(kPageHorzPadding * 2, 0, kPageHorzPadding * 2, 4),
+              padding: const EdgeInsets.fromLTRB(kFormHorzPadding + kPageHorzPadding, 0, kFormHorzPadding + kPageHorzPadding, 4),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
