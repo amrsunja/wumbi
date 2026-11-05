@@ -22,6 +22,7 @@ export 'src/components/mascot/ui_mascot_bubble.dart';
 export 'src/components/mascot/ui_mascot_peek.dart';
 export 'src/components/mascot/ui_mascot_stage.dart';
 export 'src/components/mascot/ui_wumbi.dart';
+export 'src/components/amounts/ui_count_up.dart';
 export 'src/components/amounts/ui_total_amount.dart';
 export 'src/components/amounts/ui_conversion_hint.dart';
 export 'src/components/buttons/ui_icon_text_button.dart';

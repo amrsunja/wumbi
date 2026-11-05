@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'amounts/ui_count_up.dart';
+
 /// [Hero] whose in-flight shuttle is the destination widget laid out at its
 /// own (destination) size and scaled into the animated rect with a
 /// [FittedBox]. Plain [Hero] lays the shuttle out at the *flying* rect, which
@@ -36,7 +38,10 @@ class UiHero extends StatelessWidget {
         if (box != null && box.hasSize) {
           shuttle = SizedBox.fromSize(size: box.size, child: shuttle);
         }
-        return FittedBox(fit: BoxFit.contain, alignment: alignment, clipBehavior: Clip.hardEdge, child: shuttle);
+        // The shuttle is a fresh copy: no one-shot entrance replay mid-flight.
+        return UiCountUpSkip(
+          child: FittedBox(fit: BoxFit.contain, alignment: alignment, clipBehavior: Clip.hardEdge, child: shuttle),
+        );
       },
       child: Material(type: MaterialType.transparency, child: child),
     );

@@ -16,6 +16,7 @@ class UiWalletCard extends StatelessWidget {
     this.badgePhase = 0,
     this.nameHeroTag,
     this.balanceHeroTag,
+    this.countUpKey,
   });
 
   final String title;
@@ -33,6 +34,10 @@ class UiWalletCard extends StatelessWidget {
   /// When set, the name block / balance fly to the matching Hero on the next page.
   final Object? nameHeroTag;
   final Object? balanceHeroTag;
+
+  /// When set, the balance counts up from 0 the first time a card with this
+  /// key shows (once per app run; dashboard).
+  final Object? countUpKey;
 
   @override
   Widget build(BuildContext context) {
@@ -67,10 +72,23 @@ class UiWalletCard extends StatelessWidget {
       ],
     );
 
-    final balanceText = Text(
-      balance.format(signed: true),
-      style: typo.rowTitle.copyWith(letterSpacing: -0.43),
-    );
+    final balanceStyle = typo.rowTitle.copyWith(letterSpacing: -0.43);
+    final balanceText = countUpKey != null
+        ? UiCountUp(
+            duration: const Duration(milliseconds: 650),
+            // Gentler than the total's: the row's own stagger fade would hide
+            // an early rush.
+            curve: Curves.easeOutCubic,
+            // The row already rises in.
+            rise: 0,
+            blur: 4,
+            once: countUpKey,
+            builder: (p, _) => Text(
+              Money((balance.minor * p).round(), balance.currency).format(signed: true),
+              style: balanceStyle,
+            ),
+          )
+        : Text(balance.format(signed: true), style: balanceStyle);
 
     return UITap(
       onTap: onTap,

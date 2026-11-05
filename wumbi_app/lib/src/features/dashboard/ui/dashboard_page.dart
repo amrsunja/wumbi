@@ -152,7 +152,7 @@ class _Header extends ConsumerWidget {
 
     return Column(
       children: [
-        UiTotalAmount(money: d.total, animated: true),
+        UiTotalAmount(money: d.total, animated: true, countUp: true),
         const UISpace.vert(16),
         if (flow != null)
           _MonthFlow(
@@ -544,7 +544,8 @@ class _WalletsTab extends HookConsumerWidget {
             ),
           );
         },
-        child: child,
+        // The lifted row is a fresh copy of one already shown.
+        child: UiCountUpSkip(child: child),
       );
     }
 
@@ -577,6 +578,8 @@ class _WalletsTab extends HookConsumerWidget {
                       badgePhase: (position * 0.23) % 1,
                       nameHeroTag: heroWalletName(w.id),
                       balanceHeroTag: heroWalletBalance(w.id),
+                      // Counts once per app run, not on every return to the tab.
+                      countUpKey: 'wallet-balance-${w.id}',
                       onTap: () => context.router.push(WalletDetailsRoute(walletId: w.id)),
                     ),
                   ),
