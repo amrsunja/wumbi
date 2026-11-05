@@ -546,7 +546,8 @@ class _RulesList extends StatelessWidget {
 
 // ------------------------------------------------------------- shared bits
 
-/// Header: what's left, one context line, a bar that glides between periods.
+/// Header: the amount left (red when over), a bar that glides between
+/// periods, one context line.
 class _Summary extends StatelessWidget {
   const _Summary({required this.progress});
 
@@ -563,13 +564,6 @@ class _Summary extends StatelessWidget {
     final percent = p.spentRatio.isFinite ? (p.spentRatio * 100).round() : 0;
     final pace = _OverviewTab._pace(context, p);
 
-    final word = switch (p.status) {
-      BudgetStatus.notStarted => l10n.budget_starts(p.period.start.formatShortDate()),
-      _ when over => l10n.budget_over_caption,
-      _ when p.isCurrent => l10n.budget_left_caption,
-      _ => l10n.budget_under_caption,
-    };
-
     final contextLine = [
       l10n.budget_spent_of(p.spent.format(), p.limit.format()),
       if (p.isCurrent) l10n.budget_days_left(p.daysLeft),
@@ -579,11 +573,6 @@ class _Summary extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         UiTotalAmount(money: p.remaining.abs(), animated: true, fontSize: 36, color: over ? UIColorToken.neg500 : null),
-        Text(
-          word,
-          textAlign: TextAlign.center,
-          style: typo.caption.copyWith(color: over ? UIColorToken.neg500 : null),
-        ),
         const UISpace.vert(16),
         TweenAnimationBuilder<double>(
           tween: Tween(end: ratio),
@@ -595,7 +584,8 @@ class _Summary extends StatelessWidget {
               value: value,
               minHeight: 8,
               color: color,
-              backgroundColor: color.withValues(alpha: 0.12),
+              // Same neutral track as the debt details ring (UiBudgetRing).
+              backgroundColor: context.colors.secondContentColor.withValues(alpha: 0.16),
             ),
           ),
         ),
