@@ -409,6 +409,8 @@ class BudgetFormPage extends HookConsumerWidget {
                         ),
                       UiToggleRow(
                         title: l10n.budget_count_planned,
+                        // Same title style as the form rows above.
+                        titleStyle: typo.inter.body,
                         description: BudgetLabels.countPlannedDescription(l10n, state.includePlanned),
                         value: state.includePlanned,
                         onChanged: (v) {

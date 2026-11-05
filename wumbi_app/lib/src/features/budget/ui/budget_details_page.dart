@@ -31,9 +31,9 @@ const double _kListBottomInset = 134;
 
 enum _BudgetTab { overview, transactions }
 
-/// `/budgets/:id` (spec B&D §6.7) — the name in the app bar, a fixed header
-/// (ring gauge, period navigator, tab bar) and two swipeable tabs sharing the
-/// browsed period:
+/// `/budgets/:id` (spec B&D §6.7) — the name in the app bar, a header (ring
+/// gauge, period navigator, tab bar) that scrolls away with the content, and
+/// two swipeable tabs sharing the browsed period:
 /// - Overview: pace → stat tiles → what counts (wallets, tags → their
 ///   details) → rules (each opens the form on its own sheet);
 /// - Transactions: the rows the period counts.
@@ -58,21 +58,8 @@ class BudgetDetailsPage extends HookConsumerWidget {
     final args = BudgetDetailsArgs(budgetId: budgetId, periodOffset: offset.value);
     final state = ref.watch(budgetDetailsProvider(args));
     final notifier = ref.read(budgetDetailsProvider(args).notifier);
-    final scrollController = useScrollController();
     final wallets = ref.watch(walletsProvider).value ?? const <WalletSummary>[];
     final tabs = useSwipeTabs();
-
-    // Infinite scroll of the Transactions tab (the only one on the controller).
-    useEffect(() {
-      void onScroll() {
-        if (!scrollController.hasClients || scrollController.positions.length != 1) return;
-        final pos = scrollController.position;
-        if (pos.maxScrollExtent > 0 && pos.pixels >= pos.maxScrollExtent * 0.8) notifier.loadMore();
-      }
-
-      scrollController.addListener(onScroll);
-      return () => scrollController.removeListener(onScroll);
-    }, [scrollController, notifier]);
 
     // Deleted underneath us: leave quietly (the form already showed Undo).
     useEffect(() {
@@ -107,8 +94,7 @@ class BudgetDetailsPage extends HookConsumerWidget {
       offset.value = 0;
     }
 
-    void edit([BudgetFormSheet? sheet]) =>
-        context.router.push(BudgetFormRoute(budgetId: budgetId, sheet: sheet?.name));
+    void edit([BudgetFormSheet? sheet]) => context.router.push(BudgetFormRoute(budgetId: budgetId, sheet: sheet?.name));
 
     return MascotPeekLayer(
       states: progress == null
@@ -120,91 +106,92 @@ class BudgetDetailsPage extends HookConsumerWidget {
       hidden: state.notFound,
       questions: MascotQuestions.budgets,
       child: Scaffold(
-      appBar: UIAppbar(
-        title: progress?.budget.name ?? '',
-        titleHeroTag: heroBudgetName(budgetId),
-        backTap: () => context.router.maybePop(),
-        action: progress == null ? null : UIIcon(UIIconToken.icons.general.edit05, size: 22, onTap: edit),
-      ),
-      floatingActionButton: progress == null || state.notFound
-          ? null
-          : Padding(
-              padding: const EdgeInsets.only(right: 8, bottom: 8),
-              child: UiFab(
-                heroTag: kHeroFab,
-                onTap: () => context.router.push(
-                  TransactionRoute(
-                    walletId: _walletFor(progress.budget, wallets),
-                    tags: tagNames.isEmpty ? null : tagNames,
-                    expenseOnly: true,
+        appBar: UIAppbar(
+          title: progress?.budget.name ?? '',
+          titleHeroTag: heroBudgetName(budgetId),
+          backTap: () => context.router.maybePop(),
+          action: progress == null ? null : UIIcon(UIIconToken.icons.general.edit05, size: 22, onTap: edit),
+        ),
+        floatingActionButton: progress == null || state.notFound
+            ? null
+            : Padding(
+                padding: const EdgeInsets.only(right: 8, bottom: 8),
+                child: UiFab(
+                  heroTag: kHeroFab,
+                  onTap: () => context.router.push(
+                    TransactionRoute(
+                      walletId: _walletFor(progress.budget, wallets),
+                      tags: tagNames.isEmpty ? null : tagNames,
+                      expenseOnly: true,
+                    ),
                   ),
                 ),
               ),
-            ),
-      body: state.notFound
-          ? const SizedBox.shrink()
-          : Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                // Header: amount left, period navigator, tabs. Natural height.
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(kListHorzPadding, 8, kListHorzPadding, 0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      if (progress != null) ...[
-                        _Summary(progress: progress),
-                        const UISpace.vert(20),
-                        _PeriodNavigator(
-                          progress: progress,
-                          offset: offset.value,
-                          onPrevious: () => browse(-1),
-                          onNext: () => browse(1),
-                          onBackToCurrent: backToCurrent,
-                        ),
-                        const UISpace.vert(16),
-                      ],
-                      UiSegmentedToggle(
-                        expanded: true,
-                        labels: [l10n.budget_tab_overview, l10n.wallet_tab_transactions],
-                        selectedIndex: tabs.index,
-                        onChanged: tabs.onTabTap,
+        body: state.notFound
+            ? const SizedBox.shrink()
+            : NestedScrollView(
+                physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                // Header: amount left, period navigator, tabs. Scrolls away with
+                // the tab content, so the whole page scrolls as one.
+                headerSliverBuilder: (context, _) => [
+                  SliverPadding(
+                    padding: const EdgeInsets.fromLTRB(kListHorzPadding, 8, kListHorzPadding, 0),
+                    sliver: SliverToBoxAdapter(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          if (progress != null) ...[
+                            _Summary(progress: progress),
+                            const UISpace.vert(20),
+                            _PeriodNavigator(
+                              progress: progress,
+                              offset: offset.value,
+                              onPrevious: () => browse(-1),
+                              onNext: () => browse(1),
+                              onBackToCurrent: backToCurrent,
+                            ),
+                            const UISpace.vert(16),
+                          ],
+                          UiSegmentedToggle(
+                            expanded: true,
+                            labels: [l10n.budget_tab_overview, l10n.wallet_tab_transactions],
+                            selectedIndex: tabs.index,
+                            onChanged: tabs.onTabTap,
+                          ),
+                          const UISpace.vert(8),
+                        ],
                       ),
-                      const UISpace.vert(8),
-                    ],
+                    ),
                   ),
+                ],
+                // Swipeable tabs; each one's list is the inner scrollable of the
+                // NestedScrollView. Pages are not kept alive, so their cascade
+                // replays on every switch.
+                body: PageView(
+                  controller: tabs.controller,
+                  onPageChanged: tabs.onPageChanged,
+                  children: [
+                    for (final t in _BudgetTab.values)
+                      KeyedSubtree(
+                        key: ValueKey('$budgetId-${t.name}'),
+                        child: switch (t) {
+                          _BudgetTab.overview => _OverviewTab(
+                            progress: progress,
+                            tags: tags,
+                            wallets: wallets,
+                            onEdit: edit,
+                          ),
+                          _BudgetTab.transactions => _TransactionsTab(
+                            state: state,
+                            offset: offset.value,
+                            onLoadMore: notifier.loadMore,
+                          ),
+                        },
+                      ),
+                  ],
                 ),
-                // Body (60 %): swipeable tabs, only they scroll. Pages are not
-                // kept alive, so their cascade replays on every switch.
-                Expanded(
-                  flex: 6,
-                  child: PageView(
-                    controller: tabs.controller,
-                    onPageChanged: tabs.onPageChanged,
-                    children: [
-                      for (final t in _BudgetTab.values)
-                        KeyedSubtree(
-                          key: ValueKey('$budgetId-${t.name}'),
-                          child: switch (t) {
-                            _BudgetTab.overview => _OverviewTab(
-                                progress: progress,
-                                tags: tags,
-                                wallets: wallets,
-                                onEdit: edit,
-                              ),
-                            _BudgetTab.transactions => _TransactionsTab(
-                                state: state,
-                                offset: offset.value,
-                                controller: scrollController,
-                              ),
-                          },
-                        ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-    ),
+              ),
+      ),
     );
   }
 
@@ -223,12 +210,12 @@ class BudgetDetailsPage extends HookConsumerWidget {
 
 // --------------------------------------------------------------------- tabs
 
-/// Scrollable tab body with smoke edges.
+/// Scrollable tab body with smoke edges. Uses the [NestedScrollView]'s
+/// primary controller, so scrolling it first scrolls the page header away.
 class _TabScroll extends StatelessWidget {
-  const _TabScroll({required this.slivers, this.controller, this.topFade = 32});
+  const _TabScroll({required this.slivers, this.topFade = 32});
 
   final List<Widget> slivers;
-  final ScrollController? controller;
 
   /// 0 for lists with sticky month headers: the pinned header is the edge.
   final double topFade;
@@ -238,7 +225,6 @@ class _TabScroll extends StatelessWidget {
     return UIScrollEdgeFade(
       top: topFade,
       child: CustomScrollView(
-        controller: controller,
         physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
         slivers: [
           const SliverToBoxAdapter(child: UISpace.vert(4)),
@@ -255,21 +241,16 @@ class _Loading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => const SliverToBoxAdapter(
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(kListHorzPadding, 16, kListHorzPadding, 0),
-          child: UiSkeletonList(rows: 4),
-        ),
-      );
+    child: Padding(
+      padding: EdgeInsets.fromLTRB(kListHorzPadding, 16, kListHorzPadding, 0),
+      child: UiSkeletonList(rows: 4),
+    ),
+  );
 }
 
 /// Pace → tiles → what counts → rules.
 class _OverviewTab extends StatelessWidget {
-  const _OverviewTab({
-    required this.progress,
-    required this.tags,
-    required this.wallets,
-    required this.onEdit,
-  });
+  const _OverviewTab({required this.progress, required this.tags, required this.wallets, required this.onEdit});
 
   final BudgetProgress? progress;
   final List<TagModel> tags;
@@ -331,18 +312,30 @@ class _OverviewTab extends StatelessWidget {
     final l10n = context.l10n;
     final delta = p.paceDelta;
     if (delta.minor.abs() * 100 < p.limit.minor) return l10n.budget_on_track;
-    return delta.isPositive ? l10n.budget_ahead_of_pace(delta.format()) : l10n.budget_faster_than_planned(delta.abs().format());
+    return delta.isPositive
+        ? l10n.budget_ahead_of_pace(delta.format())
+        : l10n.budget_faster_than_planned(delta.abs().format());
   }
 }
 
 /// The rows the period counts — month sections when the period spans
 /// several months.
 class _TransactionsTab extends StatelessWidget {
-  const _TransactionsTab({required this.state, required this.offset, required this.controller});
+  const _TransactionsTab({required this.state, required this.offset, required this.onLoadMore});
 
   final BudgetDetailsState state;
   final int offset;
-  final ScrollController controller;
+
+  /// Infinite scroll: called past 80 % of the list.
+  final VoidCallback onLoadMore;
+
+  bool _onScroll(ScrollUpdateNotification n) {
+    final m = n.metrics;
+    if (n.depth == 0 && m.axis == Axis.vertical && m.maxScrollExtent > 0 && m.pixels >= m.maxScrollExtent * 0.8) {
+      onLoadMore();
+    }
+    return false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -351,21 +344,23 @@ class _TransactionsTab extends StatelessWidget {
     // the real rows.
     return UIStaggerScope(
       key: ValueKey('$offset-${rows != null}'),
-      child: _TabScroll(
-        controller: controller,
-        topFade: 0,
-        slivers: [
-          ..._rowSlivers(context, rows),
-          if (state.isLoadingMore)
-            const SliverToBoxAdapter(
-              child: Padding(
-                padding: EdgeInsets.all(16),
-                child: Center(
-                  child: SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2)),
+      child: NotificationListener<ScrollUpdateNotification>(
+        onNotification: _onScroll,
+        child: _TabScroll(
+          topFade: 0,
+          slivers: [
+            ..._rowSlivers(context, rows),
+            if (state.isLoadingMore)
+              const SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Center(
+                    child: SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2)),
+                  ),
                 ),
               ),
-            ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -396,10 +391,10 @@ class _TransactionsTab extends StatelessWidget {
     }
 
     Widget tile(TransactionRow row, int index) => UIStaggerItem(
-          key: ValueKey('budget-row-${row.id}'),
-          index: index,
-          child: _RowTile(row: row),
-        );
+      key: ValueKey('budget-row-${row.id}'),
+      index: index,
+      child: _RowTile(row: row),
+    );
 
     if (months.length == 1) {
       return [
@@ -424,7 +419,10 @@ class _TransactionsTab extends StatelessWidget {
       sections.add(
         SliverStickySection(
           key: ValueKey('month-${month.year}-${month.month}'),
-          header: UIStaggerItem(index: header, child: MonthDivider(label: month.formatMonthYear())),
+          header: UIStaggerItem(
+            index: header,
+            child: MonthDivider(label: month.formatMonthYear()),
+          ),
           sliver: SliverList.separated(
             itemCount: monthRows.length,
             separatorBuilder: (_, _) => const UIDivider(),
@@ -512,9 +510,10 @@ class _RulesList extends StatelessWidget {
       BudgetPeriodType.monthly => l10n.budget_day_of_month(anchor.day),
       BudgetPeriodType.weekly => WeekdaySheet.name(anchor.weekday),
       BudgetPeriodType.yearly => anchor.formatShortDate(),
-      BudgetPeriodType.custom => end == null
-          ? anchor.formatMediumDate()
-          : '${anchor.formatMediumDate()} – ${DateTime(end.year, end.month, end.day - 1).formatMediumDate()}',
+      BudgetPeriodType.custom =>
+        end == null
+            ? anchor.formatMediumDate()
+            : '${anchor.formatMediumDate()} – ${DateTime(end.year, end.month, end.day - 1).formatMediumDate()}',
     };
 
     return UiGroupCard(
@@ -579,12 +578,7 @@ class _Summary extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        UiTotalAmount(
-          money: p.remaining.abs(),
-          animated: true,
-          fontSize: 36,
-          color: over ? UIColorToken.neg500 : null,
-        ),
+        UiTotalAmount(money: p.remaining.abs(), animated: true, fontSize: 36, color: over ? UIColorToken.neg500 : null),
         Text(
           word,
           textAlign: TextAlign.center,
@@ -614,10 +608,7 @@ class _Summary extends StatelessWidget {
             Text(l10n.budget_used_percent(percent), style: typo.captionBold.copyWith(color: color)),
           ],
         ),
-        if (pace != null) ...[
-          const UISpace.vert(6),
-          Text(pace, style: typo.captionBold.copyWith(color: color)),
-        ],
+        if (pace != null) ...[const UISpace.vert(6), Text(pace, style: typo.captionBold.copyWith(color: color))],
       ],
     );
   }
@@ -651,11 +642,7 @@ class _Stats extends StatelessWidget {
           sub: carry.isZero ? null : l10n.budget_carried(carry.format(signed: true, positiveSign: true)),
         ),
         if (perDay != null)
-          _StatRow(
-            label: l10n.budget_stat_per_day,
-            value: perDay.format(),
-            sub: l10n.budget_days_left(p.daysLeft),
-          ),
+          _StatRow(label: l10n.budget_stat_per_day, value: perDay.format(), sub: l10n.budget_days_left(p.daysLeft)),
         if (forecast != null) _StatRow(label: l10n.budget_stat_forecast, value: forecast.format()),
         if (p.planned.isPositive) _StatRow(label: l10n.budget_stat_planned, value: p.planned.format()),
       ],
@@ -685,8 +672,7 @@ class _StatRow extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: typo.body),
-                if (sub != null)
-                  Text(sub!, maxLines: 1, overflow: TextOverflow.ellipsis, style: typo.caption),
+                if (sub != null) Text(sub!, maxLines: 1, overflow: TextOverflow.ellipsis, style: typo.caption),
               ],
             ),
           ),
