@@ -2271,6 +2271,26 @@ class AppLocalizationsDe extends AppLocalizations {
       'Nicht in der Gesamtsumme auf der Startseite – praktisch für Ersparnisse, geteilte oder reine Tracking-Konten.';
 
   @override
+  String get wallet_negative_balance => 'Negativer Saldo';
+
+  @override
+  String get wallet_negative_balance_on =>
+      'Das Konto startet unter null – für eine Kreditkarte, einen Dispo oder Geld, das du schuldest.';
+
+  @override
+  String get wallet_negative_balance_off =>
+      'Der Anfangssaldo ist Geld, das du hast.';
+
+  @override
+  String get wallet_create => 'Konto anlegen';
+
+  @override
+  String get budget_create => 'Budget anlegen';
+
+  @override
+  String get debt_create => 'Schuld anlegen';
+
+  @override
   String get dashboard_wallets_not_counted => 'Nicht im Gesamtsaldo';
 
   @override

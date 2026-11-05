@@ -2261,6 +2261,26 @@ class AppLocalizationsEn extends AppLocalizations {
       'Left out of the Dashboard total — handy for savings, shared or tracking-only wallets.';
 
   @override
+  String get wallet_negative_balance => 'Negative balance';
+
+  @override
+  String get wallet_negative_balance_on =>
+      'The wallet starts below zero — for a credit card, an overdraft or money you owe.';
+
+  @override
+  String get wallet_negative_balance_off =>
+      'The starting balance is money you have.';
+
+  @override
+  String get wallet_create => 'Create wallet';
+
+  @override
+  String get budget_create => 'Create budget';
+
+  @override
+  String get debt_create => 'Create debt';
+
+  @override
   String get dashboard_wallets_not_counted => 'Not counted in total';
 
   @override

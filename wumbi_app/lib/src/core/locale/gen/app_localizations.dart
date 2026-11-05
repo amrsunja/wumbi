@@ -3605,6 +3605,42 @@ abstract class AppLocalizations {
   /// **'Left out of the Dashboard total — handy for savings, shared or tracking-only wallets.'**
   String get wallet_include_in_total_off;
 
+  /// No description provided for @wallet_negative_balance.
+  ///
+  /// In en, this message translates to:
+  /// **'Negative balance'**
+  String get wallet_negative_balance;
+
+  /// No description provided for @wallet_negative_balance_on.
+  ///
+  /// In en, this message translates to:
+  /// **'The wallet starts below zero — for a credit card, an overdraft or money you owe.'**
+  String get wallet_negative_balance_on;
+
+  /// No description provided for @wallet_negative_balance_off.
+  ///
+  /// In en, this message translates to:
+  /// **'The starting balance is money you have.'**
+  String get wallet_negative_balance_off;
+
+  /// No description provided for @wallet_create.
+  ///
+  /// In en, this message translates to:
+  /// **'Create wallet'**
+  String get wallet_create;
+
+  /// No description provided for @budget_create.
+  ///
+  /// In en, this message translates to:
+  /// **'Create budget'**
+  String get budget_create;
+
+  /// No description provided for @debt_create.
+  ///
+  /// In en, this message translates to:
+  /// **'Create debt'**
+  String get debt_create;
+
   /// No description provided for @dashboard_wallets_not_counted.
   ///
   /// In en, this message translates to:

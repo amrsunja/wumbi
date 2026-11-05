@@ -2244,6 +2244,26 @@ class AppLocalizationsTr extends AppLocalizations {
       'Ana ekrandaki toplama dahil değil — birikim, ortak veya yalnızca takip cüzdanları için kullanışlı.';
 
   @override
+  String get wallet_negative_balance => 'Negatif bakiye';
+
+  @override
+  String get wallet_negative_balance_on =>
+      'Cüzdan sıfırın altında başlar — kredi kartı, ek hesap veya borçlu olduğun para için.';
+
+  @override
+  String get wallet_negative_balance_off =>
+      'Başlangıç bakiyesi sahip olduğun paradır.';
+
+  @override
+  String get wallet_create => 'Cüzdan oluştur';
+
+  @override
+  String get budget_create => 'Bütçe oluştur';
+
+  @override
+  String get debt_create => 'Borç oluştur';
+
+  @override
   String get dashboard_wallets_not_counted => 'Toplam bakiyeye dahil değil';
 
   @override

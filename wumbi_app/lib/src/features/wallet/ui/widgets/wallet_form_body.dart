@@ -3,7 +3,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../../core/design_system/app_ui.dart';
-import '../../../../core/money/amount_input.dart';
 import '../../../../core/utils/app_vibrations.dart';
 import '../../../../core/utils/constants/constants.dart';
 import '../../../../core/utils/enums/wallet_color.dart';
@@ -11,12 +10,11 @@ import '../../../../core/utils/extensions/build_context_extensions.dart';
 import '../../../../core/utils/state_management/app_events.dart';
 import '../../../../core/utils/state_management/single_events.dart';
 import '../../../settings/ui/state_management/settings_provider.dart';
-import '../../../transaction/ui/widgets/amount_numpad_sheet.dart';
 import '../wallet_form_notifier.dart';
 import 'currency_picker_sheet.dart';
 
-/// Name · initial balance · Currency row · Primary switch · colour picker.
-/// Shared by the Create/Edit Wallet page and onboarding step 3.
+/// Name · initial balance · Currency row · Primary, Count in total and
+/// Negative balance switches · colour picker.
 class WalletFormBody extends HookConsumerWidget {
   const WalletFormBody({
     super.key,
@@ -50,22 +48,6 @@ class WalletFormBody extends HookConsumerWidget {
       return null;
     }, [state.existing?.id]);
 
-    final balance = state.initialBalance;
-    final balanceText = state.initialBalanceInput.isEmpty
-        ? balance.format(withSymbol: false)
-        : AmountInput.display(state.initialBalanceInput);
-    final balanceIsZero = balance.isZero;
-
-    Future<void> editBalance() async {
-      final raw = await AmountNumpadSheet.show(
-        context,
-        currency: state.currency,
-        initial: state.initialBalanceInput,
-        allowNegative: true,
-      );
-      if (raw != null) notifier.setInitialBalanceInput(raw);
-    }
-
     Future<void> pickCurrency() async {
       if (state.currencyLocked) return;
       final picked = await CurrencyPickerSheet.show(
@@ -95,34 +77,16 @@ class WalletFormBody extends HookConsumerWidget {
           onChanged: notifier.setName,
         ),
         const UISpace.vert(12),
-        UITap(
-          onTap: editBalance,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.baseline,
-              textBaseline: TextBaseline.alphabetic,
-              spacing: 10,
-              children: [
-                Flexible(
-                  child: FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Text(
-                      balanceText,
-                      style: typo.montserrat.formAmount.copyWith(
-                        color: balanceIsZero ? colors.secondContentColor : null,
-                      ),
-                    ),
-                  ),
-                ),
-                Text(
-                  state.currency.symbol,
-                  style: typo.inter.display.copyWith(color: colors.secondContentColor),
-                ),
-              ],
-            ),
-          ),
+        // Initial balance: typed on the numeric keyboard; the sign is the
+        // Negative balance switch below.
+        UiAmountField(
+          value: state.initialBalanceInput,
+          prefix: state.negativeBalance ? '-' : '',
+          suffix: state.currency.symbol,
+          decimals: state.currency.scale,
+          maxIntegerDigits: kMaxIntegerDigits,
+          onChanged: notifier.setInitialBalanceInput,
+          onRejected: AppVibrations.error,
         ),
         const UISpace.vert(56),
         _FormRow(
@@ -169,6 +133,16 @@ class WalletFormBody extends HookConsumerWidget {
           onChanged: (v) {
             AppVibrations.selection();
             notifier.setIncludeInTotal(v);
+          },
+        ),
+        UiToggleRow(
+          title: l10n.wallet_negative_balance,
+          titleStyle: typo.inter.body,
+          description: state.negativeBalance ? l10n.wallet_negative_balance_on : l10n.wallet_negative_balance_off,
+          value: state.negativeBalance,
+          onChanged: (v) {
+            AppVibrations.selection();
+            notifier.setNegativeBalance(v);
           },
         ),
         const UISpace.vert(24),

@@ -2302,6 +2302,25 @@ class AppLocalizationsAr extends AppLocalizations {
       'لا تُحتسب في الإجمالي في الشاشة الرئيسية — مفيد للمدخرات أو المحافظ المشتركة أو محافظ المتابعة فقط.';
 
   @override
+  String get wallet_negative_balance => 'رصيد سالب';
+
+  @override
+  String get wallet_negative_balance_on =>
+      'تبدأ المحفظة بأقل من الصفر — لبطاقة ائتمان أو سحب على المكشوف أو مال مستحق عليك.';
+
+  @override
+  String get wallet_negative_balance_off => 'الرصيد الافتتاحي هو مال تملكه.';
+
+  @override
+  String get wallet_create => 'إنشاء محفظة';
+
+  @override
+  String get budget_create => 'إنشاء ميزانية';
+
+  @override
+  String get debt_create => 'إنشاء دين';
+
+  @override
   String get dashboard_wallets_not_counted => 'غير محتسبة في الرصيد الإجمالي';
 
   @override

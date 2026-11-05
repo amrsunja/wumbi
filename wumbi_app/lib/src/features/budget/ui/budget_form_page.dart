@@ -7,8 +7,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../core/design_system/app_ui.dart';
-import '../../../core/money/amount_input.dart';
-import '../../../core/money/money.dart';
 import '../../../core/routing/app_router.dart';
 import '../../../core/utils/app_vibrations.dart';
 import '../../../core/utils/constants/constants.dart';
@@ -19,7 +17,6 @@ import '../../../core/utils/extensions/date_time_extensions.dart';
 import '../../../core/utils/state_management/app_events.dart';
 import '../../../core/utils/state_management/single_events.dart';
 import '../../settings/ui/state_management/settings_provider.dart';
-import '../../transaction/ui/widgets/amount_numpad_sheet.dart';
 import '../../transaction/ui/widgets/date_picker_sheet.dart';
 import '../../wallet/data/models/wallet_model.dart';
 import '../../wallet/ui/wallets_provider.dart';
@@ -41,9 +38,10 @@ enum BudgetFormSheet {
 }
 
 /// Create / edit a budget (spec B&D §6.6). Same anatomy as Create/Edit
-/// Wallet: big name, tappable limit, #tags, then plain label → value rows
+/// Wallet: big name, typed limit, #tags, then plain label → value rows
 /// (Currency · Wallets · Repeats · Starts on · Carry over), the Count planned
-/// switch, a "what counts" hint and a Delete | Save bar.
+/// switch, a "what counts" hint; a Create budget button (create) or a
+/// Delete | Save bar (edit).
 @RoutePage()
 class BudgetFormPage extends HookConsumerWidget {
   const BudgetFormPage({
@@ -251,21 +249,6 @@ class BudgetFormPage extends HookConsumerWidget {
       BudgetPeriodType.custom => state.customStart.formatMediumDate(),
     };
 
-    Future<void> editLimit() async {
-      unfocusAll();
-      final raw = await AmountNumpadSheet.show(
-        context,
-        title: l10n.budget_stat_limit,
-        currency: state.currency,
-        initial: state.limitInput,
-      );
-      if (raw != null) notifier.setLimitInput(raw);
-    }
-
-    final limitText = state.limitInput.isEmpty
-        ? Money.zero(state.currency).format(withSymbol: false)
-        : AmountInput.display(state.limitInput);
-
     return Scaffold(
       appBar: UIAppbar(
         title: state.isEdit ? l10n.budget_edit_title : l10n.budget_new,
@@ -277,11 +260,15 @@ class BudgetFormPage extends HookConsumerWidget {
         onTap: unfocusAll,
         child: SafeArea(
           top: false,
-          child: Column(
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(horizontal: kFormHorzPadding),
+          child: UiFormLayout(
+            horizontalPadding: kPageHorzPadding,
+            content: SingleChildScrollView(
+                  padding: EdgeInsets.fromLTRB(
+                    kFormHorzPadding,
+                    0,
+                    kFormHorzPadding,
+                    state.isEdit ? 0 : UiFormLayout.overlayInset,
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -305,35 +292,14 @@ class BudgetFormPage extends HookConsumerWidget {
                       ),
                       const UISpace.vert(12),
 
-                      // Limit: tap → numpad sheet.
-                      UITap(
-                        onTap: editLimit,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.baseline,
-                            textBaseline: TextBaseline.alphabetic,
-                            spacing: 10,
-                            children: [
-                              Flexible(
-                                child: FittedBox(
-                                  fit: BoxFit.scaleDown,
-                                  child: Text(
-                                    limitText,
-                                    style: typo.montserrat.formAmount.copyWith(
-                                      color: state.limitInput.isEmpty ? colors.secondContentColor : null,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Text(
-                                state.currency.symbol,
-                                style: typo.inter.display.copyWith(color: colors.secondContentColor),
-                              ),
-                            ],
-                          ),
-                        ),
+                      // Limit: typed on the numeric keyboard (never negative).
+                      UiAmountField(
+                        value: state.limitInput,
+                        suffix: state.currency.symbol,
+                        decimals: state.currency.scale,
+                        maxIntegerDigits: kMaxIntegerDigits,
+                        onChanged: notifier.setLimitInput,
+                        onRejected: AppVibrations.error,
                       )
                           .animate(controller: shakeController, autoPlay: false)
                           .shakeX(hz: 10, amount: 6, duration: 300.ms),
@@ -444,34 +410,44 @@ class BudgetFormPage extends HookConsumerWidget {
                     ],
                   ),
                 ),
-              ),
 
-              // Bottom bar: Delete (edit) · Save.
-              Padding(
-                // Tight bar, inset like the Transaction edit bar (page + bar padding).
-                padding: const EdgeInsets.fromLTRB(kFormHorzPadding + kPageHorzPadding, 0, kFormHorzPadding + kPageHorzPadding, 4),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    if (state.isEdit)
-                      UiTextButton(
-                        label: l10n.common_delete,
-                        style: UiTextButtonStyle.secondary,
-                        enabled: !state.isSaving && !state.isLoading,
-                        onTap: delete,
-                      )
-                    else
-                      const UISpace.horz(1),
-                    UiTextButton(
-                      label: l10n.common_save,
-                      // Stays tappable without a limit so the tap can shake.
-                      enabled: !state.isSaving && !state.isLoading,
-                      onTap: save,
+            // Create: one primary button over the form. Stays tappable
+            // without a limit so the tap can shake.
+            overlayButton: state.isEdit
+                ? null
+                : UiPrimaryButton(
+                    label: l10n.budget_create,
+                    enabled: !state.isLoading,
+                    loading: state.isSaving,
+                    onTap: save,
+                  ),
+            // Edit: Delete · Save bar, inset like the Transaction edit bar.
+            bar: !state.isEdit
+                ? null
+                : Padding(
+                    padding: const EdgeInsets.fromLTRB(
+                      kFormHorzPadding + kPageHorzPadding,
+                      0,
+                      kFormHorzPadding + kPageHorzPadding,
+                      4,
                     ),
-                  ],
-                ),
-              ),
-            ],
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        UiTextButton(
+                          label: l10n.common_delete,
+                          style: UiTextButtonStyle.secondary,
+                          enabled: !state.isSaving && !state.isLoading,
+                          onTap: delete,
+                        ),
+                        UiTextButton(
+                          label: l10n.common_save,
+                          enabled: !state.isSaving && !state.isLoading,
+                          onTap: save,
+                        ),
+                      ],
+                    ),
+                  ),
           ),
         ),
       ),

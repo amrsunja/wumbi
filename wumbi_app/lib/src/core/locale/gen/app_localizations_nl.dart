@@ -2267,6 +2267,26 @@ class AppLocalizationsNl extends AppLocalizations {
       'Telt niet mee in het totaal op het startscherm — handig voor spaargeld, gedeelde of alleen-bijhouden-portemonnees.';
 
   @override
+  String get wallet_negative_balance => 'Negatief saldo';
+
+  @override
+  String get wallet_negative_balance_on =>
+      'De portemonnee begint onder nul — voor een creditcard, roodstand of geld dat je schuldig bent.';
+
+  @override
+  String get wallet_negative_balance_off =>
+      'Het startsaldo is geld dat je hebt.';
+
+  @override
+  String get wallet_create => 'Portemonnee maken';
+
+  @override
+  String get budget_create => 'Budget maken';
+
+  @override
+  String get debt_create => 'Schuld maken';
+
+  @override
   String get dashboard_wallets_not_counted => 'Niet in totaalsaldo';
 
   @override

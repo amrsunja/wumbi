@@ -1344,6 +1344,12 @@
   "wallet_include_in_total": "Count in total balance",
   "wallet_include_in_total_on": "This wallet's balance is added to the total on the Dashboard.",
   "wallet_include_in_total_off": "Left out of the Dashboard total — handy for savings, shared or tracking-only wallets.",
+  "wallet_negative_balance": "Negative balance",
+  "wallet_negative_balance_on": "The wallet starts below zero — for a credit card, an overdraft or money you owe.",
+  "wallet_negative_balance_off": "The starting balance is money you have.",
+  "wallet_create": "Create wallet",
+  "budget_create": "Create budget",
+  "debt_create": "Create debt",
   "dashboard_wallets_not_counted": "Not counted in total",
   "dashboard_wallets_excluded": "{count, plural, =1{1 not counted} other{{count} not counted}}",
   "@dashboard_wallets_excluded": {

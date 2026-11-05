@@ -2303,6 +2303,26 @@ class AppLocalizationsRu extends AppLocalizations {
       'Не входит в общую сумму на главном экране — удобно для накоплений, общих кошельков или кошельков для учёта.';
 
   @override
+  String get wallet_negative_balance => 'Отрицательный баланс';
+
+  @override
+  String get wallet_negative_balance_on =>
+      'Кошелёк начинается ниже нуля — для кредитной карты, овердрафта или денег, которые вы должны.';
+
+  @override
+  String get wallet_negative_balance_off =>
+      'Начальный баланс — это деньги, которые у вас есть.';
+
+  @override
+  String get wallet_create => 'Создать кошелёк';
+
+  @override
+  String get budget_create => 'Создать бюджет';
+
+  @override
+  String get debt_create => 'Создать долг';
+
+  @override
   String get dashboard_wallets_not_counted => 'Не учитываются в общем балансе';
 
   @override

@@ -2279,6 +2279,26 @@ class AppLocalizationsFr extends AppLocalizations {
       'Exclu du total de l\'accueil — pratique pour l\'épargne, les portefeuilles partagés ou de suivi.';
 
   @override
+  String get wallet_negative_balance => 'Solde négatif';
+
+  @override
+  String get wallet_negative_balance_on =>
+      'Le portefeuille démarre sous zéro — pour une carte de crédit, un découvert ou de l\'argent que vous devez.';
+
+  @override
+  String get wallet_negative_balance_off =>
+      'Le solde de départ est de l\'argent que vous avez.';
+
+  @override
+  String get wallet_create => 'Créer le portefeuille';
+
+  @override
+  String get budget_create => 'Créer le budget';
+
+  @override
+  String get debt_create => 'Créer la dette';
+
+  @override
   String get dashboard_wallets_not_counted => 'Non inclus dans le total';
 
   @override

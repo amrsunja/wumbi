@@ -64,34 +64,49 @@ class WalletFormPage extends ConsumerWidget {
       ),
       body: SafeArea(
         top: false,
-        child: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: kFormHorzPadding),
-                child: WalletFormBody(args: args),
-              ),
+        child: UiFormLayout(
+          horizontalPadding: kPageHorzPadding,
+          content: SingleChildScrollView(
+            padding: EdgeInsets.fromLTRB(
+              kFormHorzPadding,
+              0,
+              kFormHorzPadding,
+              state.isEdit ? 0 : UiFormLayout.overlayInset,
             ),
-            Padding(
-              // Tight bar, inset like the Transaction edit bar (page + bar padding).
-              padding: const EdgeInsets.fromLTRB(kFormHorzPadding + kPageHorzPadding, 0, kFormHorzPadding + kPageHorzPadding, 4),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  if (state.isEdit)
-                    UiTextButton(
-                      label: l10n.common_delete,
-                      style: UiTextButtonStyle.secondary,
-                      enabled: !state.isSaving && !state.isLoading,
-                      onTap: delete,
-                    )
-                  else
-                    const UISpace.horz(1),
-                  UiTextButton(label: l10n.common_save, enabled: state.canSave, onTap: save),
-                ],
-              ),
-            ),
-          ],
+            child: WalletFormBody(args: args),
+          ),
+          // Create: one primary button over the form.
+          overlayButton: state.isEdit
+              ? null
+              : UiPrimaryButton(
+                  label: l10n.wallet_create,
+                  enabled: state.canSave,
+                  loading: state.isSaving,
+                  onTap: save,
+                ),
+          // Edit: Delete · Save bar, inset like the Transaction edit bar.
+          bar: !state.isEdit
+              ? null
+              : Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    kFormHorzPadding + kPageHorzPadding,
+                    0,
+                    kFormHorzPadding + kPageHorzPadding,
+                    4,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      UiTextButton(
+                        label: l10n.common_delete,
+                        style: UiTextButtonStyle.secondary,
+                        enabled: !state.isSaving && !state.isLoading,
+                        onTap: delete,
+                      ),
+                      UiTextButton(label: l10n.common_save, enabled: state.canSave, onTap: save),
+                    ],
+                  ),
+                ),
         ),
       ),
     );

@@ -7,7 +7,7 @@ import '../../../../core/utils/app_vibrations.dart';
 import '../../../../core/utils/extensions/build_context_extensions.dart';
 import 'amount_entry_display.dart';
 
-/// Numpad in a bottom sheet (wallet initial balance). Resolves with the raw
+/// Numpad in a bottom sheet (transfer amount). Resolves with the raw
 /// amount string, or null when dismissed.
 abstract class AmountNumpadSheet {
   static Future<String?> show(

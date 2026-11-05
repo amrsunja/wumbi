@@ -27,7 +27,11 @@ abstract class WalletFormState with _$WalletFormState {
   const factory WalletFormState({
     required WalletFormMode mode,
     @Default('') String name,
+    /// Unsigned amount as typed; the sign is [negativeBalance].
     @Default('') String initialBalanceInput,
+
+    /// The wallet starts below zero (credit card, overdraft).
+    @Default(false) bool negativeBalance,
     required CurrencyType currency,
     @Default(false) bool isPrimary,
 
@@ -48,7 +52,10 @@ abstract class WalletFormState with _$WalletFormState {
 
   bool get isEdit => mode == WalletFormMode.edit;
   bool get canSave => name.trim().isNotEmpty && !isSaving && !isLoading;
-  Money get initialBalance => Money.parse(initialBalanceInput, currency);
+  Money get initialBalance {
+    final m = Money.parse(initialBalanceInput, currency);
+    return negativeBalance ? -m : m;
+  }
 }
 
 /// Arguments: `walletId` (edit) or null (create). `onboarding` forces primary.
@@ -106,7 +113,8 @@ class WalletFormNotifier extends Notifier<WalletFormState> {
         state = state.copyWith(
           existing: w,
           name: w.name,
-          initialBalanceInput: w.initialBalanceMinor == 0 ? '' : w.initialBalance.toPlainString(),
+          initialBalanceInput: w.initialBalanceMinor == 0 ? '' : w.initialBalance.abs().toPlainString(),
+          negativeBalance: w.initialBalanceMinor < 0,
           currency: w.currency,
           isPrimary: w.isPrimary,
           includeInTotal: w.includeInTotal,
@@ -130,6 +138,8 @@ class WalletFormNotifier extends Notifier<WalletFormState> {
 
   void setInitialBalanceInput(String raw) =>
       state = state.copyWith(initialBalanceInput: AmountInput.reScale(raw, state.currency));
+
+  void setNegativeBalance(bool value) => state = state.copyWith(negativeBalance: value);
 
   void setCurrency(CurrencyType c) {
     if (state.currencyLocked) return;
