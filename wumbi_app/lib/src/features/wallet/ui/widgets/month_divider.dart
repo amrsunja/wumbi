@@ -24,12 +24,12 @@ class MonthDivider extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Expanded(child: UIDivider()),
+              const Expanded(child: UIDivider(spacing: 0)),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
                 child: Text(label.toUpperCase(), maxLines: 1, style: typo.overline),
               ),
-              const Expanded(child: UIDivider()),
+              const Expanded(child: UIDivider(spacing: 0)),
             ],
           ),
           if (caption != null)

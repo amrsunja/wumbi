@@ -89,7 +89,7 @@ class DashboardMenu extends ConsumerWidget {
                     ],
                   ),
                 ),
-                const UIDivider(),
+                const UIDivider(spacing: 0),
                 const UISpace.vert(8),
                 _MenuItem.secondary(
                   icon: UIIconToken.icons.general.settings01,

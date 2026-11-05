@@ -479,7 +479,7 @@ class _Pace extends StatelessWidget {
         ProgressPaceChart(report: r, baselineLabel: baselineName),
         if (showForecast) ...[
           const UISpace.vert(14),
-          const UIDivider(),
+          const UIDivider(spacing: 0),
           const UISpace.vert(12),
           Row(
             spacing: 8,

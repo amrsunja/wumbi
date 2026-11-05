@@ -212,7 +212,7 @@ class _ProgressCalendarState extends State<ProgressCalendar> {
           },
         ),
         const UISpace.vert(12),
-        const UIDivider(),
+        const UIDivider(spacing: 0),
         const UISpace.vert(12),
         // The tapped slot, exact.
         AnimatedSwitcher(

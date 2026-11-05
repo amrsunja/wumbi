@@ -189,7 +189,7 @@ class _WalletsPaneState extends ConsumerState<_WalletsPane> {
           ),
         ),
         if (target != null) ...[
-          const UIDivider(),
+          const UIDivider(spacing: 0),
           const UISpace.vert(12),
           // Cross-currency: the received amount, pre-filled from the day's
           // rate; tap to override. Kept to one row so the 45% sheet fits.
