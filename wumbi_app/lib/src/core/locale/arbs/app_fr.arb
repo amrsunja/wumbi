@@ -182,6 +182,7 @@
     }
   },
   "transaction_rate_unavailable": "Taux indisponible — connecte-toi pour l'actualiser",
+  "transaction_budget_expense_only": "Un budget ne gère que les dépenses, pas les revenus.",
   "transaction_saved": "{amount} enregistré dans {wallet}",
   "@transaction_saved": {
     "placeholders": {
@@ -286,8 +287,9 @@
 
   "l10nTags": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ TAGS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
   "tags_title": "Tags",
-  "tags_view_list": "Liste",
-  "tags_view_graph": "Carte",
+  "tags_view_list": "Vue liste",
+  "tags_view_graph": "Vue carte",
+  "tags_graph_open": "Ouvrir",
   "tags_search_placeholder": "Rechercher un tag",
   "tags_empty_title": "Aucun tag",
   "tags_empty_subtitle": "Ajoute des #tags à une transaction et ils apparaîtront ici.",
@@ -355,7 +357,6 @@
   "tags_graph_legend_nested": "Imbriqué",
   "tags_graph_legend_together": "Utilisés ensemble",
   "tags_graph_tap_hint": "Touchez un cercle pour voir ses chiffres",
-  "tags_graph_open": "Ouvrir",
   "tags_graph_linked": "{count, plural, =0{Aucun lien pour l'instant} =1{Lié à 1 tag} other{Lié à {count} tags}}",
   "tag_move": "Déplacer",
   "tag_move_title": "Déplacer #{name}",

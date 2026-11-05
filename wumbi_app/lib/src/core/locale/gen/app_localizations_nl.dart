@@ -430,6 +430,10 @@ class AppLocalizationsNl extends AppLocalizations {
       'Koers niet beschikbaar — maak verbinding';
 
   @override
+  String get transaction_budget_expense_only =>
+      'Een budget houdt alleen uitgaven bij, geen inkomsten.';
+
+  @override
   String transaction_saved(String amount, String wallet) {
     return '$amount opgeslagen in $wallet';
   }
@@ -609,10 +613,13 @@ class AppLocalizationsNl extends AppLocalizations {
   String get tags_title => 'Tags';
 
   @override
-  String get tags_view_list => 'Lijst';
+  String get tags_view_list => 'Lijstweergave';
 
   @override
-  String get tags_view_graph => 'Kaart';
+  String get tags_view_graph => 'Kaartweergave';
+
+  @override
+  String get tags_graph_open => 'Openen';
 
   @override
   String get tags_search_placeholder => 'Tags zoeken';
@@ -779,9 +786,6 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get tags_graph_tap_hint => 'Tik op een cirkel om de cijfers te zien';
-
-  @override
-  String get tags_graph_open => 'Openen';
 
   @override
   String tags_graph_linked(int count) {

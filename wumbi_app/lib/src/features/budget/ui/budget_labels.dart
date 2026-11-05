@@ -69,9 +69,9 @@ abstract class BudgetLabels {
     return p.incomplete ? '≈ $amounts' : amounts;
   }
 
-  /// Amount colour: red once over the limit, the expense colour otherwise.
+  /// Amount colour: red once over the limit, the title colour (bismark) otherwise.
   static Color trailingColor(BudgetStatus s, UIColorToken colors) =>
-      s == BudgetStatus.over ? UIColorToken.neg500 : colors.expenseColor;
+      s == BudgetStatus.over ? UIColorToken.neg500 : colors.contentColor;
 
   static String periodType(AppLocale l10n, BudgetPeriodType t) => switch (t) {
         BudgetPeriodType.weekly => l10n.budget_period_weekly,

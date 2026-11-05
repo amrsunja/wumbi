@@ -136,6 +136,7 @@ class BudgetDetailsPage extends HookConsumerWidget {
                   TransactionRoute(
                     walletId: _walletFor(progress.budget, wallets),
                     tags: tagNames.isEmpty ? null : tagNames,
+                    expenseOnly: true,
                   ),
                 ),
               ),

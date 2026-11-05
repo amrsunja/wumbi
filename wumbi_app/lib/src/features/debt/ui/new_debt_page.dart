@@ -15,6 +15,7 @@ import '../../../core/utils/enums/debt_direction.dart';
 import '../../../core/utils/extensions/build_context_extensions.dart';
 import '../../../core/utils/extensions/date_time_extensions.dart';
 import '../../settings/ui/state_management/settings_provider.dart';
+import '../../tag/ui/widgets/tag_chip_selector.dart';
 import '../../transaction/ui/widgets/amount_numpad_sheet.dart';
 import '../../transaction/ui/widgets/date_picker_sheet.dart';
 import '../../wallet/data/models/wallet_model.dart';
@@ -254,14 +255,24 @@ class NewDebtPage extends HookConsumerWidget {
                         ignoring: editing,
                         child: Opacity(
                           opacity: editing ? 0.5 : 1,
-                          child: UiSegmentedToggle(
-                            expanded: true,
-                            labels: [l10n.debt_they_owe_me, l10n.debt_i_owe_them],
-                            selectedIndex: state.direction == DebtDirection.lent ? 0 : 1,
-                            onChanged: (i) {
-                              AppVibrations.selection();
-                              notifier.setDirection(i == 0 ? DebtDirection.lent : DebtDirection.borrowed);
-                            },
+                          child: Wrap(
+                            alignment: WrapAlignment.center,
+                            spacing: 8,
+                            runSpacing: 8,
+                            children: [
+                              for (final (direction, label) in [
+                                (DebtDirection.lent, l10n.debt_they_owe_me),
+                                (DebtDirection.borrowed, l10n.debt_i_owe_them),
+                              ])
+                                SelectChip(
+                                  label: label,
+                                  selected: state.direction == direction,
+                                  onTap: () {
+                                    AppVibrations.selection();
+                                    notifier.setDirection(direction);
+                                  },
+                                ),
+                            ],
                           ),
                         ),
                       ),

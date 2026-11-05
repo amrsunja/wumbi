@@ -161,6 +161,8 @@ class WalletFormBody extends HookConsumerWidget {
           ),
         UiToggleRow(
           title: l10n.wallet_include_in_total,
+          // Same title style as the Primary row above.
+          titleStyle: typo.inter.body,
           // What the switch does, in plain words; the text follows its state.
           description: state.includeInTotal ? l10n.wallet_include_in_total_on : l10n.wallet_include_in_total_off,
           value: state.includeInTotal,

@@ -425,6 +425,10 @@ class AppLocalizationsTr extends AppLocalizations {
       'Kur yok — güncellemek için bağlan';
 
   @override
+  String get transaction_budget_expense_only =>
+      'Bütçe yalnızca harcamaları kabul eder, geliri değil.';
+
+  @override
   String transaction_saved(String amount, String wallet) {
     return '$amount · $wallet cüzdanına eklendi';
   }
@@ -603,10 +607,13 @@ class AppLocalizationsTr extends AppLocalizations {
   String get tags_title => 'Etiketler';
 
   @override
-  String get tags_view_list => 'Liste';
+  String get tags_view_list => 'Liste görünümü';
 
   @override
-  String get tags_view_graph => 'Harita';
+  String get tags_view_graph => 'Harita görünümü';
+
+  @override
+  String get tags_graph_open => 'Aç';
 
   @override
   String get tags_search_placeholder => 'Etiket ara';
@@ -770,9 +777,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get tags_graph_tap_hint => 'Rakamları görmek için bir daireye dokunun';
-
-  @override
-  String get tags_graph_open => 'Aç';
 
   @override
   String tags_graph_linked(int count) {

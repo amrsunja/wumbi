@@ -12,6 +12,8 @@ import '../../../core/utils/enums/repeat_frequency.dart';
 import '../../../core/utils/enums/transaction_type.dart';
 import '../../../core/utils/extensions/build_context_extensions.dart';
 import '../../../core/utils/extensions/date_time_extensions.dart';
+import '../../../core/utils/state_management/app_events.dart';
+import '../../../core/utils/state_management/single_events.dart';
 import '../../settings/ui/state_management/settings_provider.dart';
 import '../../wallet/ui/widgets/currency_picker_sheet.dart';
 import '../../wallet/ui/widgets/wallet_picker_sheet.dart';
@@ -35,6 +37,7 @@ class TransactionPage extends HookConsumerWidget {
     @QueryParam('ruleId') this.ruleId,
     this.repeat,
     this.tags,
+    this.expenseOnly = false,
   });
 
   final String? walletId;
@@ -47,6 +50,9 @@ class TransactionPage extends HookConsumerWidget {
   /// the budget details FAB with the budget's tags.
   final RepeatFrequency? repeat;
   final List<String>? tags;
+
+  /// Budget details FAB: a budget only takes expenses, so income is locked.
+  final bool expenseOnly;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -95,6 +101,11 @@ class TransactionPage extends HookConsumerWidget {
       descriptionFocus.unfocus();
       tagsFocus.unfocus();
       FocusManager.instance.primaryFocus?.unfocus();
+    }
+
+    void onTapLockedIncome() {
+      AppVibrations.light();
+      ref.read(appEventProvider).send(ShowInfoMessageEvent(l10n.transaction_budget_expense_only));
     }
 
     Future<void> onTapType(TransactionType type) async {
@@ -476,8 +487,8 @@ class TransactionPage extends HookConsumerWidget {
                         heroTag: kHeroFab,
                         label: l10n.common_income,
                         style: UiTypeActionStyle.income,
-                        enabled: !state.isSaving && state.rateReady,
-                        onTap: () => onTapType(TransactionType.income),
+                        enabled: !state.isSaving && state.rateReady && !expenseOnly,
+                        onTap: expenseOnly ? onTapLockedIncome : () => onTapType(TransactionType.income),
                       ),
                     ),
                     Expanded(

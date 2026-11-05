@@ -428,6 +428,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Rate unavailable — connect to update';
 
   @override
+  String get transaction_budget_expense_only =>
+      'A budget only takes expenses, not income.';
+
+  @override
   String transaction_saved(String amount, String wallet) {
     return 'Saved $amount to $wallet';
   }
@@ -606,10 +610,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tags_title => 'Tags';
 
   @override
-  String get tags_view_list => 'List';
+  String get tags_view_list => 'List View';
 
   @override
-  String get tags_view_graph => 'Map';
+  String get tags_view_graph => 'Map View';
+
+  @override
+  String get tags_graph_open => 'Open';
 
   @override
   String get tags_search_placeholder => 'Search tags';
@@ -776,9 +783,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tags_graph_tap_hint => 'Tap a circle to see its numbers';
-
-  @override
-  String get tags_graph_open => 'Open';
 
   @override
   String tags_graph_linked(int count) {

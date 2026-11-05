@@ -804,6 +804,12 @@ abstract class AppLocalizations {
   /// **'Rate unavailable — connect to update'**
   String get transaction_rate_unavailable;
 
+  /// No description provided for @transaction_budget_expense_only.
+  ///
+  /// In en, this message translates to:
+  /// **'A budget only takes expenses, not income.'**
+  String get transaction_budget_expense_only;
+
   /// No description provided for @transaction_saved.
   ///
   /// In en, this message translates to:
@@ -1095,14 +1101,20 @@ abstract class AppLocalizations {
   /// No description provided for @tags_view_list.
   ///
   /// In en, this message translates to:
-  /// **'List'**
+  /// **'List View'**
   String get tags_view_list;
 
   /// No description provided for @tags_view_graph.
   ///
   /// In en, this message translates to:
-  /// **'Map'**
+  /// **'Map View'**
   String get tags_view_graph;
+
+  /// No description provided for @tags_graph_open.
+  ///
+  /// In en, this message translates to:
+  /// **'Open'**
+  String get tags_graph_open;
 
   /// No description provided for @tags_search_placeholder.
   ///
@@ -1355,12 +1367,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Tap a circle to see its numbers'**
   String get tags_graph_tap_hint;
-
-  /// No description provided for @tags_graph_open.
-  ///
-  /// In en, this message translates to:
-  /// **'Open'**
-  String get tags_graph_open;
 
   /// No description provided for @tags_graph_linked.
   ///

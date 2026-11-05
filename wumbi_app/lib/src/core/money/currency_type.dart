@@ -102,9 +102,9 @@ enum CurrencyType {
   /// Backwards compatible alias used by older widgets.
   String get dbValue => code;
 
-  /// Symbol as it follows an amount, always after a space:
-  /// `1,234 €`, `1,234.50 CHF`, `1,234 CA$`.
-  String get formatSuffix => ' $symbol';
+  /// Symbol as it follows an amount, with no space in between:
+  /// `1,234€`, `1,234.50CHF`, `1,234CA$`.
+  String get formatSuffix => symbol;
 
   static CurrencyType fromCode(String? code) {
     if (code == null) return usd;

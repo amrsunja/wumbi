@@ -447,6 +447,10 @@ class AppLocalizationsAr extends AppLocalizations {
       'السعر غير متاح — اتصل بالإنترنت للتحديث';
 
   @override
+  String get transaction_budget_expense_only =>
+      'الميزانية تقبل المصروفات فقط، وليس الدخل.';
+
+  @override
   String transaction_saved(String amount, String wallet) {
     return 'تم حفظ $amount في $wallet';
   }
@@ -628,10 +632,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get tags_title => 'الوسوم';
 
   @override
-  String get tags_view_list => 'قائمة';
+  String get tags_view_list => 'عرض القائمة';
 
   @override
-  String get tags_view_graph => 'خريطة';
+  String get tags_view_graph => 'عرض الخريطة';
+
+  @override
+  String get tags_graph_open => 'فتح';
 
   @override
   String get tags_search_placeholder => 'ابحث في الوسوم';
@@ -807,9 +814,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get tags_graph_tap_hint => 'اضغط على دائرة لترى أرقامها';
-
-  @override
-  String get tags_graph_open => 'فتح';
 
   @override
   String tags_graph_linked(int count) {

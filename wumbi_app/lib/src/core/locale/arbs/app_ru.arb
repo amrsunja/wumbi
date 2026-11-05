@@ -182,6 +182,7 @@
     }
   },
   "transaction_rate_unavailable": "Курс недоступен — подключись, чтобы обновить",
+  "transaction_budget_expense_only": "Бюджет учитывает только расходы, не доходы.",
   "transaction_saved": "{amount} сохранено в {wallet}",
   "@transaction_saved": {
     "placeholders": {
@@ -286,8 +287,9 @@
 
   "l10nTags": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ TAGS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
   "tags_title": "Теги",
-  "tags_view_list": "Список",
-  "tags_view_graph": "Карта",
+  "tags_view_list": "Вид списком",
+  "tags_view_graph": "Вид на карте",
+  "tags_graph_open": "Открыть",
   "tags_search_placeholder": "Поиск тегов",
   "tags_empty_title": "Пока нет тегов",
   "tags_empty_subtitle": "Добавь #tags к транзакции, и они появятся здесь.",
@@ -355,7 +357,6 @@
   "tags_graph_legend_nested": "Вложенные",
   "tags_graph_legend_together": "Вместе",
   "tags_graph_tap_hint": "Нажмите на круг, чтобы увидеть цифры",
-  "tags_graph_open": "Открыть",
   "tags_graph_linked": "{count, plural, =0{Пока нет связей} one{Связан с {count} тегом} few{Связан с {count} тегами} many{Связан с {count} тегами} other{Связан с {count} тегами}}",
   "tag_move": "Переместить",
   "tag_move_title": "Переместить #{name}",

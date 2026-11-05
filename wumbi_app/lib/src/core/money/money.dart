@@ -73,8 +73,8 @@ class Money {
     return minor < 0 ? '-$body' : body;
   }
 
-  /// Formatting only — never stored. Symbol after the amount:
-  /// `12,345.67 $`, `5,678.90 €`, `1,500 ¥`, `0.00420000 ₿`, `1,234 CHF`.
+  /// Formatting only — never stored. Symbol right after the amount:
+  /// `12,345.67$`, `5,678.90€`, `1,500¥`, `0.00420000₿`, `1,234CHF`.
   /// Whole amounts drop the fraction ([displayScale]); any non-zero fraction
   /// shows the currency's full scale. Sign stays in front: `-120 $`.
   String format({

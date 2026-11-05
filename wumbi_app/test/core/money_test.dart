@@ -34,19 +34,19 @@ void main() {
 
   group('Money.format', () {
     test('formats per currency', () {
-      expect(const Money(1234567, CurrencyType.usd).format(), r'12,345.67 $');
-      expect(const Money(567890, CurrencyType.eur).format(), '5,678.90 €');
-      expect(const Money(1500, CurrencyType.jpy).format(), '1,500 ¥');
-      expect(const Money(420000, CurrencyType.btc).format(), '0.00420000 ₿');
-      expect(const Money(123400, CurrencyType.chf).format(), '1,234 CHF');
-      expect(const Money(123400, CurrencyType.sek).format(), '1,234 kr');
+      expect(const Money(1234567, CurrencyType.usd).format(), r'12,345.67$');
+      expect(const Money(567890, CurrencyType.eur).format(), '5,678.90€');
+      expect(const Money(1500, CurrencyType.jpy).format(), '1,500¥');
+      expect(const Money(420000, CurrencyType.btc).format(), '0.00420000₿');
+      expect(const Money(123400, CurrencyType.chf).format(), '1,234CHF');
+      expect(const Money(123400, CurrencyType.sek).format(), '1,234kr');
     });
 
     test('signs', () {
-      expect(const Money(150000, CurrencyType.usd).format(positiveSign: true), r'+1,500 $');
-      expect(const Money(-12000, CurrencyType.usd).format(signed: true), r'-120 $');
-      expect(const Money(-12000, CurrencyType.usd).format(), r'120 $');
-      expect(const Money(-12050, CurrencyType.usd).format(signed: true), r'-120.50 $');
+      expect(const Money(150000, CurrencyType.usd).format(positiveSign: true), r'+1,500$');
+      expect(const Money(-12000, CurrencyType.usd).format(signed: true), r'-120$');
+      expect(const Money(-12000, CurrencyType.usd).format(), r'120$');
+      expect(const Money(-12050, CurrencyType.usd).format(signed: true), r'-120.50$');
     });
 
     test('formatWithCode / toPlainString', () {

@@ -85,6 +85,7 @@ class TagsPage extends HookConsumerWidget {
                 children: [
                   const UISpace.vert(4),
                   UiSegmentedToggle(
+                    expanded: true,
                     labels: [l10n.tags_view_list, l10n.tags_view_graph],
                     selectedIndex: tabs.index,
                     onChanged: tabs.onTabTap,

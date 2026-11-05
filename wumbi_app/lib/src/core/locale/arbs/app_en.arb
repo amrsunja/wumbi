@@ -182,6 +182,7 @@
     }
   },
   "transaction_rate_unavailable": "Rate unavailable — connect to update",
+  "transaction_budget_expense_only": "A budget only takes expenses, not income.",
   "transaction_saved": "Saved {amount} to {wallet}",
   "@transaction_saved": {
     "placeholders": {
@@ -286,8 +287,9 @@
 
   "l10nTags": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ TAGS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
   "tags_title": "Tags",
-  "tags_view_list": "List",
-  "tags_view_graph": "Map",
+  "tags_view_list": "List View",
+  "tags_view_graph": "Map View",
+  "tags_graph_open": "Open",
   "tags_search_placeholder": "Search tags",
   "tags_empty_title": "No tags yet",
   "tags_empty_subtitle": "Add #tags to a transaction and they will show up here.",
@@ -358,7 +360,6 @@
   "tags_graph_legend_nested": "Nested",
   "tags_graph_legend_together": "Used together",
   "tags_graph_tap_hint": "Tap a circle to see its numbers",
-  "tags_graph_open": "Open",
   "tags_graph_linked": "{count, plural, =0{No links yet} =1{Linked to 1 tag} other{Linked to {count} tags}}",
   "@tags_graph_linked": {"placeholders": {"count": {"type": "int"}}},
   "tag_move": "Move",

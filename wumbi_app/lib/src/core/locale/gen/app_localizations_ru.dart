@@ -438,6 +438,10 @@ class AppLocalizationsRu extends AppLocalizations {
       'Курс недоступен — подключись, чтобы обновить';
 
   @override
+  String get transaction_budget_expense_only =>
+      'Бюджет учитывает только расходы, не доходы.';
+
+  @override
   String transaction_saved(String amount, String wallet) {
     return '$amount сохранено в $wallet';
   }
@@ -619,10 +623,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get tags_title => 'Теги';
 
   @override
-  String get tags_view_list => 'Список';
+  String get tags_view_list => 'Вид списком';
 
   @override
-  String get tags_view_graph => 'Карта';
+  String get tags_view_graph => 'Вид на карте';
+
+  @override
+  String get tags_graph_open => 'Открыть';
 
   @override
   String get tags_search_placeholder => 'Поиск тегов';
@@ -795,9 +802,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get tags_graph_tap_hint => 'Нажмите на круг, чтобы увидеть цифры';
-
-  @override
-  String get tags_graph_open => 'Открыть';
 
   @override
   String tags_graph_linked(int count) {

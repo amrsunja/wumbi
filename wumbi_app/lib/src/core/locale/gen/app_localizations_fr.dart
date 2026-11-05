@@ -432,6 +432,10 @@ class AppLocalizationsFr extends AppLocalizations {
       'Taux indisponible — connecte-toi pour l\'actualiser';
 
   @override
+  String get transaction_budget_expense_only =>
+      'Un budget ne gère que les dépenses, pas les revenus.';
+
+  @override
   String transaction_saved(String amount, String wallet) {
     return '$amount enregistré dans $wallet';
   }
@@ -612,10 +616,13 @@ class AppLocalizationsFr extends AppLocalizations {
   String get tags_title => 'Tags';
 
   @override
-  String get tags_view_list => 'Liste';
+  String get tags_view_list => 'Vue liste';
 
   @override
-  String get tags_view_graph => 'Carte';
+  String get tags_view_graph => 'Vue carte';
+
+  @override
+  String get tags_graph_open => 'Ouvrir';
 
   @override
   String get tags_search_placeholder => 'Rechercher un tag';
@@ -782,9 +789,6 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get tags_graph_tap_hint => 'Touchez un cercle pour voir ses chiffres';
-
-  @override
-  String get tags_graph_open => 'Ouvrir';
 
   @override
   String tags_graph_linked(int count) {

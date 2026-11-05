@@ -509,7 +509,8 @@ class _History extends HookConsumerWidget {
           ),
       _HistoryLine(
         // Money left me when I lent, came in when I borrowed.
-        icon: lent ? UIIconToken.icons.arrows.arrowUpRight : UIIconToken.icons.arrows.arrowDownLeft,
+        icon: lent ? UIIconToken.icons.expense : UIIconToken.icons.income,
+        tint: lent ? null : UIColorToken.blue,
         text: openedText,
         date: debt.openedAt,
       ),
@@ -567,7 +568,11 @@ class _PaymentLine extends StatelessWidget {
     final icon = switch (p.kind) {
       PaymentKind.forgiveness => UIIconToken.icons.general.heartHand,
       // A return comes in when I lent, goes out when I borrowed.
-      PaymentKind.repayment => lent ? UIIconToken.icons.arrows.arrowDownLeft : UIIconToken.icons.arrows.arrowUpRight,
+      PaymentKind.repayment => lent ? UIIconToken.icons.income : UIIconToken.icons.expense,
+    };
+    final tint = switch (p.kind) {
+      PaymentKind.forgiveness => null,
+      PaymentKind.repayment => lent ? UIColorToken.blue : null,
     };
     return Dismissible(
       key: ValueKey('swipe-payment-${p.id}'),
@@ -579,32 +584,33 @@ class _PaymentLine extends StatelessWidget {
         decoration: BoxDecoration(color: UIColorToken.red, borderRadius: BorderRadius.circular(12)),
         child: UIIcon(UIIconToken.icons.general.trash01, color: UIColorToken.white, size: 20),
       ),
-      child: _HistoryLine(icon: icon, text: text, date: p.paidAt),
+      child: _HistoryLine(icon: icon, tint: tint, text: text, date: p.paidAt),
     );
   }
 }
 
 class _HistoryLine extends StatelessWidget {
-  const _HistoryLine({required this.icon, required this.text, required this.date});
+  const _HistoryLine({required this.icon, this.tint, required this.text, required this.date});
 
+  /// Income / expense assets carry their own circle; the rest is a small line icon.
   final String icon;
+
+  /// Null → the default icon colour.
+  final Color? tint;
   final String text;
   final DateTime date;
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.colors;
     final typo = context.typo.inter;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 14),
       child: Row(
         children: [
-          Container(
+          SizedBox(
             width: 32,
             height: 32,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(color: colors.fgColor, shape: BoxShape.circle),
-            child: UIIcon(icon, size: 16),
+            child: Center(child: UIIcon(icon, size: 22, color: tint)),
           ),
           const UISpace.horz(12),
           Expanded(child: Text(text, style: typo.labelMedium)),

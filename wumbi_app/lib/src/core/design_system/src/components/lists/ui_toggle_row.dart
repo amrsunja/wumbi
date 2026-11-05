@@ -11,11 +11,15 @@ class UiToggleRow extends StatelessWidget {
     required this.value,
     required this.onChanged,
     this.description,
+    this.titleStyle,
     this.padding = const EdgeInsets.symmetric(vertical: 8),
   });
 
   final String title;
   final String? description;
+
+  /// Null → the label style; a form screen can pass its row style instead.
+  final TextStyle? titleStyle;
   final bool value;
   final ValueChanged<bool> onChanged;
   final EdgeInsetsGeometry padding;
@@ -37,7 +41,7 @@ class UiToggleRow extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 spacing: 2,
                 children: [
-                  Text(title, style: typo.label),
+                  Text(title, style: titleStyle ?? typo.label),
                   if (description != null)
                     AnimatedSize(
                       duration: UIAnim.fast,

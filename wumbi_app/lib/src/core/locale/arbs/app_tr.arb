@@ -182,6 +182,7 @@
     }
   },
   "transaction_rate_unavailable": "Kur yok — güncellemek için bağlan",
+  "transaction_budget_expense_only": "Bütçe yalnızca harcamaları kabul eder, geliri değil.",
   "transaction_saved": "{amount} · {wallet} cüzdanına eklendi",
   "@transaction_saved": {
     "placeholders": {
@@ -286,8 +287,9 @@
 
   "l10nTags": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ TAGS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
   "tags_title": "Etiketler",
-  "tags_view_list": "Liste",
-  "tags_view_graph": "Harita",
+  "tags_view_list": "Liste görünümü",
+  "tags_view_graph": "Harita görünümü",
+  "tags_graph_open": "Aç",
   "tags_search_placeholder": "Etiket ara",
   "tags_empty_title": "Henüz etiket yok",
   "tags_empty_subtitle": "Bir işleme #tags ekle, burada görünecekler.",
@@ -355,7 +357,6 @@
   "tags_graph_legend_nested": "Alt etiket",
   "tags_graph_legend_together": "Birlikte kullanılan",
   "tags_graph_tap_hint": "Rakamları görmek için bir daireye dokunun",
-  "tags_graph_open": "Aç",
   "tags_graph_linked": "{count, plural, =0{Henüz bağlantı yok} other{{count} etikete bağlı}}",
   "tag_move": "Taşı",
   "tag_move_title": "#{name} etiketini taşı",

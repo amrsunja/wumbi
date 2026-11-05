@@ -8,6 +8,7 @@ import '../../../../core/utils/app_vibrations.dart';
 import '../../../../core/utils/extensions/build_context_extensions.dart';
 import '../../data/models/tag_stats.dart';
 import '../../data/tag_normalizer.dart';
+import 'tag_chip_selector.dart';
 import 'tag_visuals.dart';
 
 /// What sizes the bubbles.
@@ -214,10 +215,27 @@ class TagGraphView extends HookWidget {
             children: [
               const SizedBox(width: 36),
               Expanded(
-                child: UiSegmentedToggle(
-                  labels: [l10n.tags_graph_mode_all, l10n.tags_graph_mode_spending, l10n.tags_graph_mode_income],
-                  selectedIndex: mode.value.index,
-                  onChanged: (i) => mode.value = TagGraphMode.values[i],
+                child: Wrap(
+                  alignment: WrapAlignment.center,
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    SelectChip(
+                      label: l10n.tags_graph_mode_all,
+                      selected: mode.value == TagGraphMode.all,
+                      onTap: () => mode.value = TagGraphMode.all,
+                    ),
+                    SelectChip(
+                      label: l10n.tags_graph_mode_spending,
+                      selected: mode.value == TagGraphMode.spending,
+                      onTap: () => mode.value = TagGraphMode.spending,
+                    ),
+                    SelectChip(
+                      label: l10n.tags_graph_mode_income,
+                      selected: mode.value == TagGraphMode.income,
+                      onTap: () => mode.value = TagGraphMode.income,
+                    ),
+                  ],
                 ),
               ),
               SizedBox(
@@ -411,17 +429,6 @@ class _NodeCard extends StatelessWidget {
                             style: typo.caption,
                           ),
                         ],
-                      ),
-                    ),
-                    UITap(
-                      onTap: onOpen,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
-                        decoration: BoxDecoration(
-                          color: UIColorToken.blue,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Text(l10n.tags_graph_open, style: typo.label.copyWith(color: UIColorToken.white)),
                       ),
                     ),
                     UIIcon(UIIconToken.icons.general.xClose, size: 20, color: colors.secondContentColor, onTap: onClose),
