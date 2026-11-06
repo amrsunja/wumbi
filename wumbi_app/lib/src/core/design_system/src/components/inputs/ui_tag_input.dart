@@ -22,6 +22,8 @@ enum UiTagSuggestionsStyle {
 
 /// Inline tag editor: type words → chips. Tokenises on space, comma or Enter;
 /// leading `#` optional; backspace on empty input removes the last chip.
+/// `/` nests (`food/coffee`); a picked suggestion lands in the field as
+/// `food/` so a child can be typed, and a dangling `/` is dropped on commit.
 class UiTagInput extends StatefulWidget {
   const UiTagInput({
     super.key,
@@ -53,21 +55,29 @@ class UiTagInput extends StatefulWidget {
   /// caller usually drops focus). Without it the field keeps focus.
   final VoidCallback? onSubmitted;
 
-  /// `Food`, `#food`, `food ` → `food`.
-  static String normalize(String raw) {
-    var s = raw.trim();
-    while (s.startsWith('#')) {
-      s = s.substring(1);
-    }
-    return s.trim().toLowerCase();
+  /// Nested tag level separator: `food/coffee` lives inside `food`.
+  static const String separator = '/';
+
+  /// `Food`, `#food`, `food `, `/food/` → `food`.
+  static String normalize(String raw) => display(raw).toLowerCase();
+
+  /// As typed, `#` and spaces stripped, empty `/` levels dropped:
+  /// `#Food/` → `Food`, `food//coffee` → `food/coffee`.
+  static String display(String raw) {
+    final s = _stripHash(raw);
+    if (!s.contains(separator)) return s;
+    return s.split(separator).where((part) => part.isNotEmpty).join(separator);
   }
 
-  static String display(String raw) {
+  /// Like [normalize] but keeps a trailing `/`, which means "inside this tag".
+  static String _query(String raw) => _stripHash(raw).toLowerCase();
+
+  static String _stripHash(String raw) {
     var s = raw.trim();
     while (s.startsWith('#')) {
       s = s.substring(1);
     }
-    return s.trim();
+    return s.replaceAll(RegExp(r'\s+'), '');
   }
 
   @override
@@ -81,6 +91,10 @@ class _UiTagInputState extends State<UiTagInput> {
   List<String> _suggestions = const [];
   Timer? _debounce;
   int _querySeq = 0;
+
+  /// Tags the user just added here (normalized): their chips pop in.
+  /// Prefilled tags (editing a transaction) appear without animation.
+  final Set<String> _justAdded = {};
 
   bool get _barMode => widget.suggestionsStyle == UiTagSuggestionsStyle.keyboardBar;
   int get _maxSuggestions => _barMode ? 20 : 5;
@@ -98,7 +112,7 @@ class _UiTagInputState extends State<UiTagInput> {
     // A chip was added / removed: the bar must hide picked tags and bring
     // removed ones back.
     if (_barMode && _focusNode.hasFocus && !listEquals(oldWidget.tags, widget.tags)) {
-      _querySuggestions(UiTagInput.normalize(_controller.text));
+      _querySuggestions(UiTagInput._query(_controller.text));
     }
   }
 
@@ -117,7 +131,7 @@ class _UiTagInputState extends State<UiTagInput> {
     if (_focusNode.hasFocus) {
       if (_barMode) {
         _barController.show();
-        _querySuggestions(UiTagInput.normalize(_controller.text));
+        _querySuggestions(UiTagInput._query(_controller.text));
       }
       return;
     }
@@ -139,12 +153,12 @@ class _UiTagInputState extends State<UiTagInput> {
         text: last,
         selection: TextSelection.collapsed(offset: last.length),
       );
-      widget.onChanged(tags);
+      _emitAdded(tags);
       return;
     }
     // Rebuild for the "+ #new" pill even before the query resolves.
     if (_barMode) setState(() {});
-    _querySuggestions(UiTagInput.normalize(text));
+    _querySuggestions(UiTagInput._query(text));
   }
 
   void _querySuggestions(String query) {
@@ -159,17 +173,24 @@ class _UiTagInputState extends State<UiTagInput> {
       final result = await widget.suggestions!(query);
       if (!mounted || seq != _querySeq) return;
       final existing = widget.tags.map(UiTagInput.normalize).toSet();
-      setState(() => _suggestions = result
-          .where((s) => !existing.contains(UiTagInput.normalize(s)))
-          .take(_maxSuggestions)
-          .toList());
+      // `food/` → only tags nested inside `food`.
+      final parent = query.endsWith(UiTagInput.separator) ? UiTagInput.normalize(query) : '';
+      setState(
+        () => _suggestions = result
+            .where((s) => !existing.contains(UiTagInput.normalize(s)))
+            .where((s) => parent.isEmpty || UiTagInput.normalize(s).startsWith('$parent${UiTagInput.separator}'))
+            .take(_maxSuggestions)
+            .toList(),
+      );
     });
   }
 
   List<String> _add(List<String> tags, String raw) {
-    var display = UiTagInput.display(raw).replaceAll(RegExp(r'\s+'), '');
+    var display = UiTagInput.display(raw);
+    if (display.length > widget.maxTagLength) {
+      display = UiTagInput.display(display.substring(0, widget.maxTagLength));
+    }
     if (display.isEmpty) return tags;
-    if (display.length > widget.maxTagLength) display = display.substring(0, widget.maxTagLength);
     final normalized = display.toLowerCase();
     if (tags.any((t) => UiTagInput.normalize(t) == normalized)) return tags;
     if (tags.length >= widget.maxTags) {
@@ -187,7 +208,13 @@ class _UiTagInputState extends State<UiTagInput> {
     }
     final tags = _add(widget.tags, text);
     _controller.clear();
-    if (tags != widget.tags) widget.onChanged(tags);
+    if (tags != widget.tags) _emitAdded(tags);
+  }
+
+  void _emitAdded(List<String> tags) {
+    final before = widget.tags.map(UiTagInput.normalize).toSet();
+    _justAdded.addAll(tags.map(UiTagInput.normalize).where((t) => !before.contains(t)));
+    widget.onChanged(tags);
   }
 
   void _remove(int index) {
@@ -195,13 +222,32 @@ class _UiTagInputState extends State<UiTagInput> {
     widget.onChanged(tags);
   }
 
+  /// A suggestion goes into the field as `food/`, not straight to a chip, so
+  /// a nested tag can be typed right after it. Space / done / blur commit it
+  /// and the dangling `/` is dropped.
   void _pickSuggestion(String s) {
-    final tags = _add(widget.tags, s);
-    _controller.clear();
-    setState(() => _suggestions = _suggestions.where((x) => x != s).toList());
-    if (tags != widget.tags) {
+    AppVibrations.selection();
+    final text = '${UiTagInput.display(s)}${UiTagInput.separator}';
+    _controller.value = TextEditingValue(
+      text: text,
+      selection: TextSelection.collapsed(offset: text.length),
+    );
+    _focusNode.requestFocus();
+  }
+
+  /// The always-there `/` pill: opens a nested level at the cursor. Ignored
+  /// at the start of the field or right after another `/`.
+  void _insertSeparator() {
+    final value = _controller.value;
+    final text = value.text;
+    final sel = value.selection.isValid ? value.selection : TextSelection.collapsed(offset: text.length);
+    final before = text.substring(0, sel.start);
+    if (UiTagInput.display(before).isNotEmpty && !before.endsWith(UiTagInput.separator)) {
       AppVibrations.selection();
-      widget.onChanged(tags);
+      _controller.value = TextEditingValue(
+        text: '$before${UiTagInput.separator}${text.substring(sel.end)}',
+        selection: TextSelection.collapsed(offset: sel.start + 1),
+      );
     }
     _focusNode.requestFocus();
   }
@@ -214,7 +260,7 @@ class _UiTagInputState extends State<UiTagInput> {
 
   /// "+ #word" when the typed word is neither a suggestion nor already added.
   String? get _newTagLabel {
-    final display = UiTagInput.display(_controller.text).replaceAll(RegExp(r'\s+'), '');
+    final display = UiTagInput.display(_controller.text);
     if (display.isEmpty) return null;
     final normalized = display.toLowerCase();
     if (_suggestions.any((s) => UiTagInput.normalize(s) == normalized)) return null;
@@ -281,7 +327,12 @@ class _UiTagInputState extends State<UiTagInput> {
             runSpacing: 6,
             children: [
               for (var i = 0; i < widget.tags.length; i++)
-                _TagChip(label: widget.tags[i], onRemove: () => _remove(i)),
+                _TagChip(
+                  key: ValueKey(UiTagInput.normalize(widget.tags[i])),
+                  label: widget.tags[i],
+                  popIn: _justAdded.remove(UiTagInput.normalize(widget.tags[i])),
+                  onRemove: () => _remove(i),
+                ),
               SizedBox(width: hasTags ? 120 : 200, child: field),
             ],
           ),
@@ -327,6 +378,7 @@ class _UiTagInputState extends State<UiTagInput> {
             newTag: _newTagLabel,
             onPick: _pickSuggestion,
             onCreate: _createFromQuery,
+            onSeparator: _insertSeparator,
           ),
         ),
       ),
@@ -377,49 +429,44 @@ class _KeyboardDockState extends State<_KeyboardDock> with WidgetsBindingObserve
   }
 }
 
-/// The strip itself: `+ #new` first (when typing an unknown word), then the
-/// user's existing tags, most used first.
+/// The strip itself: the `/` pill (always, for nesting), `+ #new` (when
+/// typing an unknown word), then the user's existing tags, most used first.
 class _TagKeyboardBar extends StatelessWidget {
   const _TagKeyboardBar({
     required this.suggestions,
     required this.newTag,
     required this.onPick,
     required this.onCreate,
+    required this.onSeparator,
   });
 
   final List<String> suggestions;
   final String? newTag;
   final ValueChanged<String> onPick;
   final VoidCallback onCreate;
+  final VoidCallback onSeparator;
 
   @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context);
     final colors = theme.colors;
-    final hasItems = suggestions.isNotEmpty || newTag != null;
 
-    return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 150),
-      child: !hasItems
-          ? const SizedBox(width: double.infinity, height: 0)
-          : Container(
-              key: const ValueKey('tag-bar'),
-              height: 46,
-              decoration: BoxDecoration(
-                color: colors.bgColor,
-                border: Border(top: BorderSide(color: colors.dividerColor)),
-              ),
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                physics: const BouncingScrollPhysics(),
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                children: [
-                  if (newTag != null)
-                    _BarPill(label: '+ #$newTag', accent: true, onTap: onCreate),
-                  for (final s in suggestions) _BarPill(label: '#$s', onTap: () => onPick(s)),
-                ],
-              ),
-            ),
+    return Container(
+      height: 46,
+      decoration: BoxDecoration(
+        color: colors.bgColor,
+        border: Border(top: BorderSide(color: colors.dividerColor)),
+      ),
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        physics: const BouncingScrollPhysics(),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        children: [
+          _BarPill(label: UiTagInput.separator, onTap: onSeparator),
+          if (newTag != null) _BarPill(label: '+ #$newTag', accent: true, onTap: onCreate),
+          for (final s in suggestions) _BarPill(label: '#$s', onTap: () => onPick(s)),
+        ],
+      ),
     );
   }
 }
@@ -458,15 +505,42 @@ class _BarPill extends StatelessWidget {
   }
 }
 
-class _TagChip extends StatelessWidget {
-  const _TagChip({required this.label, required this.onRemove});
+/// Added by the user → pops in like a typed amount digit (`UiAmountText`):
+/// elastic scale 0.3 → 1, `elasticOut`, 520 ms, quick fade.
+class _TagChip extends StatefulWidget {
+  const _TagChip({super.key, required this.label, required this.onRemove, this.popIn = false});
 
   final String label;
   final VoidCallback onRemove;
+  final bool popIn;
+
+  @override
+  State<_TagChip> createState() => _TagChipState();
+}
+
+class _TagChipState extends State<_TagChip> with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  late final Animation<double> _scale;
+  late final Animation<double> _fade;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 520), value: 1);
+    _scale = CurvedAnimation(parent: _controller, curve: Curves.elasticOut);
+    _fade = CurvedAnimation(parent: _controller, curve: const Interval(0, 0.35));
+    if (widget.popIn) _controller.forward(from: 0);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    final chip = Container(
       padding: const EdgeInsets.fromLTRB(10, 5, 6, 5),
       decoration: BoxDecoration(
         color: UIColorToken.blue.withValues(alpha: 0.12),
@@ -477,12 +551,20 @@ class _TagChip extends StatelessWidget {
         spacing: 4,
         children: [
           Text(
-            '#$label',
+            '#${widget.label}',
             style: AppTheme.of(context).typo.inter.semiBold.copyWith(fontSize: 12, color: UIColorToken.blue),
           ),
-          UIIcon(UIIconToken.icons.general.xClose, size: 14, color: UIColorToken.blue, onTap: onRemove),
+          UIIcon(UIIconToken.icons.general.xClose, size: 14, color: UIColorToken.blue, onTap: widget.onRemove),
         ],
       ),
+    );
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (_, child) => Opacity(
+        opacity: _fade.value.clamp(0.0, 1.0),
+        child: Transform.scale(scale: 0.3 + 0.7 * _scale.value, child: child),
+      ),
+      child: chip,
     );
   }
 }
