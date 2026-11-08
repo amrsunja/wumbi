@@ -60,95 +60,90 @@ class SettingsPage extends ConsumerWidget {
       appBar: UIAppbar(title: l10n.settings_title, backTap: () => context.router.maybePop()),
       body: SafeArea(
         top: false,
-        child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: kPageHorzPadding),
-          child: Column(
-            children: [
-              Expanded(
-                child: ListView(
-                  children: [
-                    UiSectionLabel(text: l10n.settings_preferences),
-                    UiSettingsTile(
-                      icon: UIIconToken.icons.alertsFeedback.bell01,
-                      title: l10n.settings_notifications,
-                      value: (settings?.notificationsEnabled ?? false) ? l10n.notif_state_on : l10n.notif_state_off,
-                      onTap: () => context.router.push(const NotificationSettingsRoute()),
-                    ),
-                    UiSettingsTile(
-                      icon: UIIconToken.icons.financeEcommerce.bankNote01,
-                      title: l10n.settings_currency,
-                      value: settings?.baseCurrency.code,
-                      onTap: () => context.router.push(const BaseCurrencyRoute()),
-                    ),
-                    UiSettingsTile(
-                      icon: UIIconToken.icons.general.translate01,
-                      title: l10n.settings_language,
-                      value: L10n.nativeName(settings?.locale ?? L10n.defaultLocale),
-                      onTap: () => context.router.push(const AppLanguageSettingsRoute()),
-                    ),
-                    UiSettingsTile(
-                      icon: UIIconToken.icons.weather.moon01,
-                      title: l10n.settings_dark_mode,
-                      switchValue: isDark,
-                      onSwitchChanged: notifier.setDarkMode,
-                    ),
-                    UiSectionLabel(text: l10n.settings_wumbi_section),
-                    UiSettingsTile(
-                      icon: UIIconToken.icons.communication.messageChatCircle,
-                      title: l10n.settings_mascot_talks,
-                      switchValue: settings?.mascotTalks ?? true,
-                      onSwitchChanged: notifier.changeMascotTalks,
-                    ),
-                    UiSectionLabel(text: l10n.settings_about_section),
-                    UiSettingsTile(
-                      icon: UIIconToken.icons.general.lifeBuoy01,
-                      title: l10n.settings_help,
-                      onTap: () => context.router.push(const HelpRoute()),
-                    ),
-                    UiSettingsTile(
-                      icon: UIIconToken.icons.general.infoCircle,
-                      title: l10n.about,
-                      onTap: () => context.router.push(const AboutProjectRoute()),
-                    ),
-                    UiSettingsTile(
-                      icon: UIIconToken.icons.security.shieldTick,
-                      title: l10n.settings_privacy_policy,
-                      onTap: () => openPage(kPrivacyUrl),
-                    ),
-                    UiSettingsTile(
-                      icon: UIIconToken.icons.files.fileCheck02,
-                      title: l10n.settings_terms,
-                      onTap: () => openPage(kTermsUrl),
-                    ),
-                    UiSettingsTile(
-                      icon: UIIconToken.icons.alertsFeedback.announcement01,
-                      title: l10n.settings_press,
-                      onTap: () => openPage(kPressUrl),
-                    ),
-                    UiSectionLabel(text: l10n.settings_data_privacy),
-                    UiSettingsTile(
-                      icon: UIIconToken.icons.security.fileShield02,
-                      title: l10n.settings_backup,
-                      onTap: () => context.router.push(const BackupRoute()),
-                    ),
-                    UiSettingsTile(
-                      icon: UIIconToken.icons.general.trash01,
-                      title: l10n.settings_reset_all_data,
-                      destructive: true,
-                      onTap: resetAllData,
-                    ),
-                  ],
-                ),
+        child: ListView(
+          padding: const EdgeInsets.fromLTRB(kPageHorzPadding, 0, kPageHorzPadding, 24),
+          children: [
+            UiSectionLabel(text: l10n.settings_preferences),
+            UiSettingsTile(
+              icon: UIIconToken.icons.alertsFeedback.bell01,
+              title: l10n.settings_notifications,
+              value: (settings?.notificationsEnabled ?? false) ? l10n.notif_state_on : l10n.notif_state_off,
+              onTap: () => context.router.push(const NotificationSettingsRoute()),
+            ),
+            UiSettingsTile(
+              icon: UIIconToken.icons.financeEcommerce.bankNote01,
+              title: l10n.settings_currency,
+              value: settings?.baseCurrency.code,
+              onTap: () => context.router.push(const BaseCurrencyRoute()),
+            ),
+            UiSettingsTile(
+              icon: UIIconToken.icons.general.translate01,
+              title: l10n.settings_language,
+              value: L10n.nativeName(settings?.locale ?? L10n.defaultLocale),
+              onTap: () => context.router.push(const AppLanguageSettingsRoute()),
+            ),
+            UiSettingsTile(
+              icon: UIIconToken.icons.weather.moon01,
+              title: l10n.settings_dark_mode,
+              switchValue: isDark,
+              onSwitchChanged: notifier.setDarkMode,
+            ),
+            UiSectionLabel(text: l10n.settings_wumbi_section),
+            UiSettingsTile(
+              icon: UIIconToken.icons.communication.messageChatCircle,
+              title: l10n.settings_mascot_talks,
+              switchValue: settings?.mascotTalks ?? true,
+              onSwitchChanged: notifier.changeMascotTalks,
+            ),
+            UiSectionLabel(text: l10n.settings_data_privacy),
+            UiSettingsTile(
+              icon: UIIconToken.icons.security.fileShield02,
+              title: l10n.settings_backup,
+              onTap: () => context.router.push(const BackupRoute()),
+            ),
+            UiSettingsTile(
+              icon: UIIconToken.icons.general.trash01,
+              title: l10n.settings_reset_all_data,
+              destructive: true,
+              onTap: resetAllData,
+            ),
+            UiSectionLabel(text: l10n.settings_about_section),
+            UiSettingsTile(
+              icon: UIIconToken.icons.general.lifeBuoy01,
+              title: l10n.settings_help,
+              onTap: () => context.router.push(const HelpRoute()),
+            ),
+            UiSettingsTile(
+              icon: UIIconToken.icons.general.infoCircle,
+              title: l10n.about,
+              onTap: () => context.router.push(const AboutProjectRoute()),
+            ),
+            UiSettingsTile(
+              icon: UIIconToken.icons.security.shieldTick,
+              title: l10n.settings_privacy_policy,
+              onTap: () => openPage(kPrivacyUrl),
+            ),
+            UiSettingsTile(
+              icon: UIIconToken.icons.files.fileCheck02,
+              title: l10n.settings_terms,
+              onTap: () => openPage(kTermsUrl),
+            ),
+            UiSettingsTile(
+              icon: UIIconToken.icons.alertsFeedback.announcement01,
+              title: l10n.settings_press,
+              onTap: () => openPage(kPressUrl),
+            ),
+            // Version closes the list: it scrolls with the page instead of
+            // sitting pinned over it.
+            Padding(
+              padding: const EdgeInsets.only(top: 32),
+              child: Text(
+                packageInfo == null ? '' : l10n.settings_version(packageInfo.version, packageInfo.buildNumber),
+                textAlign: TextAlign.center,
+                style: context.typo.inter.caption.copyWith(fontSize: 11),
               ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 24, top: 8),
-                child: Text(
-                  packageInfo == null ? '' : l10n.settings_version(packageInfo.version, packageInfo.buildNumber),
-                  style: context.typo.inter.caption.copyWith(fontSize: 11),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

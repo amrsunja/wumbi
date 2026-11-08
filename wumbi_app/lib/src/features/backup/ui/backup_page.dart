@@ -107,11 +107,11 @@ class BackupPage extends ConsumerWidget {
       body: SafeArea(
         top: false,
         child: ListView(
-          padding: const EdgeInsets.fromLTRB(kPageHorzPadding, 8, kPageHorzPadding, 32),
+          padding: const EdgeInsets.fromLTRB(kSettingsHorzPadding, 8, kSettingsHorzPadding, 32),
           children: [
             Row(
               children: [
-                const UIWumbi(WumbiMood.saving, height: 72),
+                const UIWumbi(WumbiMood.tossing, height: 72),
                 const UISpace.horz(12),
                 Expanded(child: Text(l10n.backup_intro, style: context.typo.inter.paragraph)),
               ],
