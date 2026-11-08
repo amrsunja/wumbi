@@ -3783,6 +3783,211 @@ class AppLocalizationsFr extends AppLocalizations {
       'Notifications activées — je garde un œil sur tout, patron';
 
   @override
+  String get l10nBackup =>
+      '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ BACKUP & EXPORT ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
+
+  @override
+  String get settings_backup => 'Sauvegarde et export';
+
+  @override
+  String get backup_title => 'Sauvegarde et export';
+
+  @override
+  String get backup_intro =>
+      'Vos données sont stockées uniquement sur cet appareil. Créez une sauvegarde pour les transférer sur un nouveau téléphone ou les garder en sécurité.';
+
+  @override
+  String get backup_section_backup => 'Sauvegarde';
+
+  @override
+  String get backup_create => 'Créer une sauvegarde';
+
+  @override
+  String get backup_create_desc =>
+      'Portefeuilles, transactions, tags, budgets, dettes et réglages dans un fichier .wumbi';
+
+  @override
+  String get backup_restore => 'Restaurer une sauvegarde';
+
+  @override
+  String get backup_restore_desc =>
+      'Remplacer les données de cet appareil par un fichier .wumbi';
+
+  @override
+  String get backup_undo => 'Annuler la dernière restauration';
+
+  @override
+  String backup_undo_desc(String date) {
+    return 'Retrouver vos données du $date';
+  }
+
+  @override
+  String get backup_section_spreadsheet => 'Tableur';
+
+  @override
+  String get backup_csv => 'Exporter les transactions (CSV)';
+
+  @override
+  String get backup_csv_desc => 'Pour Excel, Numbers ou Google Sheets';
+
+  @override
+  String get backup_csv_hint =>
+      'Un CSV n’est pas une sauvegarde. Il ne peut pas être réimporté dans Wumbi.';
+
+  @override
+  String get backup_csv_dialog_title => 'Export pour tableur';
+
+  @override
+  String get backup_csv_dialog_message =>
+      'Le fichier CSV liste vos transactions pour Excel, Numbers ou Google Sheets.\n\nCe n’est pas une sauvegarde : les portefeuilles, budgets, dettes et réglages n’y figurent pas, et il ne peut pas être réimporté dans Wumbi. Pour protéger toutes vos données, créez une sauvegarde.';
+
+  @override
+  String get backup_save_to_device => 'Enregistrer sur l’appareil';
+
+  @override
+  String get backup_share => 'Partager';
+
+  @override
+  String get backup_sheet_title => 'Créer une sauvegarde';
+
+  @override
+  String get backup_password_toggle => 'Protéger par un mot de passe';
+
+  @override
+  String get backup_password_toggle_desc =>
+      'Chiffre le fichier. Sans le mot de passe, personne ne peut l’ouvrir — pas même Wumbi.';
+
+  @override
+  String get backup_password_hint => 'Mot de passe';
+
+  @override
+  String get backup_password_confirm_hint => 'Confirmer le mot de passe';
+
+  @override
+  String backup_password_too_short(int count) {
+    return 'Au moins $count caractères';
+  }
+
+  @override
+  String get backup_password_mismatch =>
+      'Les mots de passe ne correspondent pas';
+
+  @override
+  String get backup_password_warning =>
+      'Notez-le. Si vous l’oubliez, cette sauvegarde ne pourra pas être restaurée.';
+
+  @override
+  String get backup_no_password_warning =>
+      'Sans mot de passe, toute personne qui obtient ce fichier peut lire vos finances.';
+
+  @override
+  String get backup_saved => 'Sauvegarde enregistrée';
+
+  @override
+  String get backup_csv_saved => 'CSV enregistré';
+
+  @override
+  String get backup_unlock_title => 'Mot de passe de la sauvegarde';
+
+  @override
+  String get backup_unlock_desc =>
+      'Cette sauvegarde est protégée. Saisissez le mot de passe choisi lors de sa création.';
+
+  @override
+  String get backup_unlock_action => 'Déverrouiller';
+
+  @override
+  String get backup_preview_title => 'Restaurer cette sauvegarde ?';
+
+  @override
+  String get backup_preview_created => 'Créée le';
+
+  @override
+  String get backup_preview_app_version => 'Version de l’app';
+
+  @override
+  String get backup_preview_wallets => 'Portefeuilles';
+
+  @override
+  String get backup_preview_transactions => 'Transactions';
+
+  @override
+  String get backup_preview_tags => 'Tags';
+
+  @override
+  String get backup_preview_budgets => 'Budgets';
+
+  @override
+  String get backup_preview_debts => 'Dettes';
+
+  @override
+  String get backup_preview_subscriptions => 'Abonnements';
+
+  @override
+  String get backup_preview_warning =>
+      'Toutes les données de cet appareil seront remplacées par cette sauvegarde. Vos données actuelles sont conservées : vous pourrez annuler depuis cet écran.';
+
+  @override
+  String get backup_preview_undo_title => 'Annuler la dernière restauration ?';
+
+  @override
+  String get backup_preview_undo_warning =>
+      'Vos données actuelles seront remplacées par celles d’avant la dernière restauration.';
+
+  @override
+  String get backup_restore_action => 'Remplacer mes données';
+
+  @override
+  String get backup_reading => 'Vérification de la sauvegarde…';
+
+  @override
+  String get backup_restoring => 'Restauration de vos données…';
+
+  @override
+  String get backup_restored => 'Sauvegarde restaurée';
+
+  @override
+  String get backup_undo_done => 'Données précédentes restaurées';
+
+  @override
+  String get backup_error_not_backup =>
+      'Ce n’est pas une sauvegarde Wumbi. Choisissez un fichier .wumbi.';
+
+  @override
+  String get backup_error_csv =>
+      'Les fichiers CSV ne peuvent pas être restaurés. Choisissez plutôt une sauvegarde .wumbi.';
+
+  @override
+  String get backup_error_corrupted =>
+      'Cette sauvegarde est endommagée et illisible.';
+
+  @override
+  String get backup_error_newer =>
+      'Cette sauvegarde vient d’une version plus récente de Wumbi. Mettez l’app à jour pour la restaurer.';
+
+  @override
+  String get backup_error_password_required =>
+      'Cette sauvegarde est protégée. Saisissez son mot de passe.';
+
+  @override
+  String get backup_error_wrong_password =>
+      'Mot de passe incorrect, ou le fichier a été modifié.';
+
+  @override
+  String get backup_error_too_large =>
+      'Ce fichier est trop volumineux pour une sauvegarde Wumbi.';
+
+  @override
+  String get backup_error_invalid_data =>
+      'Cette sauvegarde contient des données incohérentes. Rien n’a été modifié.';
+
+  @override
+  String get backup_error_read_file => 'Impossible d’ouvrir le fichier.';
+
+  @override
+  String get backup_encrypted_badge => 'Chiffrée';
+
+  @override
   String get l10nStopLineDontTouch =>
       '☠☠☠☠☠☠☠☠☠☠☠☠☠ Don\'t touch this line ☠☠☠☠☠☠☠☠☠☠☠☠☠';
 }

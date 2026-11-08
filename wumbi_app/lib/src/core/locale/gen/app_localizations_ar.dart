@@ -3815,6 +3815,209 @@ class AppLocalizationsAr extends AppLocalizations {
   String get notif_enabled_toast => 'تم تفعيل الإشعارات، سأراقب كل شيء يا سيدي';
 
   @override
+  String get l10nBackup =>
+      '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ BACKUP & EXPORT ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
+
+  @override
+  String get settings_backup => 'النسخ الاحتياطي والتصدير';
+
+  @override
+  String get backup_title => 'النسخ الاحتياطي والتصدير';
+
+  @override
+  String get backup_intro =>
+      'بياناتك محفوظة على هذا الجهاز فقط. أنشئ نسخة احتياطية لنقلها إلى هاتف جديد أو للاحتفاظ بنسخة آمنة.';
+
+  @override
+  String get backup_section_backup => 'النسخة الاحتياطية';
+
+  @override
+  String get backup_create => 'إنشاء نسخة احتياطية';
+
+  @override
+  String get backup_create_desc =>
+      'المحافظ والمعاملات والوسوم والميزانيات والديون والإعدادات في ملف ‎.wumbi واحد';
+
+  @override
+  String get backup_restore => 'الاستعادة من نسخة احتياطية';
+
+  @override
+  String get backup_restore_desc =>
+      'استبدال البيانات على هذا الجهاز بملف ‎.wumbi';
+
+  @override
+  String get backup_undo => 'التراجع عن آخر استعادة';
+
+  @override
+  String backup_undo_desc(String date) {
+    return 'استرجاع بياناتك من $date';
+  }
+
+  @override
+  String get backup_section_spreadsheet => 'جدول بيانات';
+
+  @override
+  String get backup_csv => 'تصدير المعاملات (CSV)';
+
+  @override
+  String get backup_csv_desc => 'لـ Excel أو Numbers أو Google Sheets';
+
+  @override
+  String get backup_csv_hint =>
+      'ملف CSV ليس نسخة احتياطية، ولا يمكن استيراده مرة أخرى إلى Wumbi.';
+
+  @override
+  String get backup_csv_dialog_title => 'تصدير لجداول البيانات';
+
+  @override
+  String get backup_csv_dialog_message =>
+      'يحتوي ملف CSV على قائمة معاملاتك لاستخدامها في Excel أو Numbers أو Google Sheets.\n\nهذا ليس نسخة احتياطية: لا يتضمن المحافظ والميزانيات والديون والإعدادات، ولا يمكن استيراده مرة أخرى إلى Wumbi. للحفاظ على كل بياناتك، أنشئ نسخة احتياطية.';
+
+  @override
+  String get backup_save_to_device => 'حفظ على الجهاز';
+
+  @override
+  String get backup_share => 'مشاركة';
+
+  @override
+  String get backup_sheet_title => 'إنشاء نسخة احتياطية';
+
+  @override
+  String get backup_password_toggle => 'الحماية بكلمة مرور';
+
+  @override
+  String get backup_password_toggle_desc =>
+      'يشفّر الملف. بدون كلمة المرور لا يستطيع أحد فتحه، ولا حتى Wumbi.';
+
+  @override
+  String get backup_password_hint => 'كلمة المرور';
+
+  @override
+  String get backup_password_confirm_hint => 'أعد كتابة كلمة المرور';
+
+  @override
+  String backup_password_too_short(int count) {
+    return '$count أحرف على الأقل';
+  }
+
+  @override
+  String get backup_password_mismatch => 'كلمتا المرور غير متطابقتين';
+
+  @override
+  String get backup_password_warning =>
+      'دوّنها في مكان آمن. إذا نسيتها فلن يمكن استعادة هذه النسخة.';
+
+  @override
+  String get backup_no_password_warning =>
+      'بدون كلمة مرور، يستطيع أي شخص يحصل على هذا الملف قراءة بياناتك المالية.';
+
+  @override
+  String get backup_saved => 'تم حفظ النسخة الاحتياطية';
+
+  @override
+  String get backup_csv_saved => 'تم حفظ ملف CSV';
+
+  @override
+  String get backup_unlock_title => 'أدخل كلمة مرور النسخة';
+
+  @override
+  String get backup_unlock_desc =>
+      'هذه النسخة محمية. أدخل كلمة المرور التي اخترتها عند إنشائها.';
+
+  @override
+  String get backup_unlock_action => 'فتح';
+
+  @override
+  String get backup_preview_title => 'استعادة هذه النسخة؟';
+
+  @override
+  String get backup_preview_created => 'تاريخ الإنشاء';
+
+  @override
+  String get backup_preview_app_version => 'إصدار التطبيق';
+
+  @override
+  String get backup_preview_wallets => 'المحافظ';
+
+  @override
+  String get backup_preview_transactions => 'المعاملات';
+
+  @override
+  String get backup_preview_tags => 'الوسوم';
+
+  @override
+  String get backup_preview_budgets => 'الميزانيات';
+
+  @override
+  String get backup_preview_debts => 'الديون';
+
+  @override
+  String get backup_preview_subscriptions => 'الاشتراكات';
+
+  @override
+  String get backup_preview_warning =>
+      'ستُستبدل كل البيانات على هذا الجهاز بهذه النسخة. ستُحفظ بياناتك الحالية، ويمكنك التراجع من هذه الشاشة.';
+
+  @override
+  String get backup_preview_undo_title => 'التراجع عن آخر استعادة؟';
+
+  @override
+  String get backup_preview_undo_warning =>
+      'ستُستبدل بياناتك الحالية بالبيانات التي كانت لديك قبل آخر استعادة.';
+
+  @override
+  String get backup_restore_action => 'استبدال بياناتي';
+
+  @override
+  String get backup_reading => 'جارٍ فحص النسخة…';
+
+  @override
+  String get backup_restoring => 'جارٍ استعادة بياناتك…';
+
+  @override
+  String get backup_restored => 'تمت استعادة النسخة الاحتياطية';
+
+  @override
+  String get backup_undo_done => 'تمت استعادة البيانات السابقة';
+
+  @override
+  String get backup_error_not_backup =>
+      'هذه ليست نسخة احتياطية من Wumbi. اختر ملف ‎.wumbi.';
+
+  @override
+  String get backup_error_csv =>
+      'لا يمكن استعادة ملفات CSV. اختر نسخة احتياطية ‎.wumbi بدلًا منها.';
+
+  @override
+  String get backup_error_corrupted => 'هذه النسخة تالفة ولا يمكن قراءتها.';
+
+  @override
+  String get backup_error_newer =>
+      'أُنشئت هذه النسخة بإصدار أحدث من Wumbi. حدّث التطبيق لاستعادتها.';
+
+  @override
+  String get backup_error_password_required =>
+      'هذه النسخة محمية. أدخل كلمة مرورها.';
+
+  @override
+  String get backup_error_wrong_password =>
+      'كلمة مرور خاطئة، أو تم تعديل الملف.';
+
+  @override
+  String get backup_error_too_large =>
+      'هذا الملف أكبر من أن يكون نسخة احتياطية من Wumbi.';
+
+  @override
+  String get backup_error_invalid_data =>
+      'تحتوي هذه النسخة على بيانات غير متسقة. لم يتم تغيير أي شيء.';
+
+  @override
+  String get backup_error_read_file => 'تعذّر فتح الملف.';
+
+  @override
+  String get backup_encrypted_badge => 'مشفّرة';
+
+  @override
   String get l10nStopLineDontTouch =>
       '☠☠☠☠☠☠☠☠☠☠☠☠☠ Don\'t touch this line ☠☠☠☠☠☠☠☠☠☠☠☠☠';
 }

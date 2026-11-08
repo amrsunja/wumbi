@@ -5546,6 +5546,366 @@ abstract class AppLocalizations {
   /// **'Notifications are on — I’ll keep an eye on things, boss'**
   String get notif_enabled_toast;
 
+  /// No description provided for @l10nBackup.
+  ///
+  /// In en, this message translates to:
+  /// **'☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ BACKUP & EXPORT ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠'**
+  String get l10nBackup;
+
+  /// No description provided for @settings_backup.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup & Export'**
+  String get settings_backup;
+
+  /// No description provided for @backup_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup & Export'**
+  String get backup_title;
+
+  /// No description provided for @backup_intro.
+  ///
+  /// In en, this message translates to:
+  /// **'Your data lives only on this device. Save a backup to move to a new phone or keep a safe copy.'**
+  String get backup_intro;
+
+  /// No description provided for @backup_section_backup.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup'**
+  String get backup_section_backup;
+
+  /// No description provided for @backup_create.
+  ///
+  /// In en, this message translates to:
+  /// **'Create backup'**
+  String get backup_create;
+
+  /// No description provided for @backup_create_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Wallets, transactions, tags, budgets, debts and settings in one .wumbi file'**
+  String get backup_create_desc;
+
+  /// No description provided for @backup_restore.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore from backup'**
+  String get backup_restore;
+
+  /// No description provided for @backup_restore_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace the data on this device with a .wumbi file'**
+  String get backup_restore_desc;
+
+  /// No description provided for @backup_undo.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo last restore'**
+  String get backup_undo;
+
+  /// No description provided for @backup_undo_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Bring back your data from {date}'**
+  String backup_undo_desc(String date);
+
+  /// No description provided for @backup_section_spreadsheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Spreadsheet'**
+  String get backup_section_spreadsheet;
+
+  /// No description provided for @backup_csv.
+  ///
+  /// In en, this message translates to:
+  /// **'Export transactions (CSV)'**
+  String get backup_csv;
+
+  /// No description provided for @backup_csv_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'For Excel, Numbers or Google Sheets'**
+  String get backup_csv_desc;
+
+  /// No description provided for @backup_csv_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'CSV is not a backup. It can’t be imported back into Wumbi.'**
+  String get backup_csv_hint;
+
+  /// No description provided for @backup_csv_dialog_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Export for spreadsheets'**
+  String get backup_csv_dialog_title;
+
+  /// No description provided for @backup_csv_dialog_message.
+  ///
+  /// In en, this message translates to:
+  /// **'The CSV file lists your transactions for Excel, Numbers or Google Sheets.\n\nIt’s not a backup: wallets, budgets, debts and settings aren’t included, and it can’t be imported back into Wumbi. To keep all your data safe, create a backup.'**
+  String get backup_csv_dialog_message;
+
+  /// No description provided for @backup_save_to_device.
+  ///
+  /// In en, this message translates to:
+  /// **'Save to device'**
+  String get backup_save_to_device;
+
+  /// No description provided for @backup_share.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get backup_share;
+
+  /// No description provided for @backup_sheet_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Create backup'**
+  String get backup_sheet_title;
+
+  /// No description provided for @backup_password_toggle.
+  ///
+  /// In en, this message translates to:
+  /// **'Protect with a password'**
+  String get backup_password_toggle;
+
+  /// No description provided for @backup_password_toggle_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Encrypts the file. Without the password nobody can open it — not even Wumbi.'**
+  String get backup_password_toggle_desc;
+
+  /// No description provided for @backup_password_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get backup_password_hint;
+
+  /// No description provided for @backup_password_confirm_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Repeat password'**
+  String get backup_password_confirm_hint;
+
+  /// No description provided for @backup_password_too_short.
+  ///
+  /// In en, this message translates to:
+  /// **'Use at least {count} characters'**
+  String backup_password_too_short(int count);
+
+  /// No description provided for @backup_password_mismatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Passwords don’t match'**
+  String get backup_password_mismatch;
+
+  /// No description provided for @backup_password_warning.
+  ///
+  /// In en, this message translates to:
+  /// **'Write it down. If you forget it, this backup can’t be restored.'**
+  String get backup_password_warning;
+
+  /// No description provided for @backup_no_password_warning.
+  ///
+  /// In en, this message translates to:
+  /// **'Without a password, anyone who gets this file can read your finances.'**
+  String get backup_no_password_warning;
+
+  /// No description provided for @backup_saved.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup saved'**
+  String get backup_saved;
+
+  /// No description provided for @backup_csv_saved.
+  ///
+  /// In en, this message translates to:
+  /// **'CSV saved'**
+  String get backup_csv_saved;
+
+  /// No description provided for @backup_unlock_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter backup password'**
+  String get backup_unlock_title;
+
+  /// No description provided for @backup_unlock_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'This backup is protected. Enter the password you set when you created it.'**
+  String get backup_unlock_desc;
+
+  /// No description provided for @backup_unlock_action.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock'**
+  String get backup_unlock_action;
+
+  /// No description provided for @backup_preview_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore this backup?'**
+  String get backup_preview_title;
+
+  /// No description provided for @backup_preview_created.
+  ///
+  /// In en, this message translates to:
+  /// **'Created'**
+  String get backup_preview_created;
+
+  /// No description provided for @backup_preview_app_version.
+  ///
+  /// In en, this message translates to:
+  /// **'App version'**
+  String get backup_preview_app_version;
+
+  /// No description provided for @backup_preview_wallets.
+  ///
+  /// In en, this message translates to:
+  /// **'Wallets'**
+  String get backup_preview_wallets;
+
+  /// No description provided for @backup_preview_transactions.
+  ///
+  /// In en, this message translates to:
+  /// **'Transactions'**
+  String get backup_preview_transactions;
+
+  /// No description provided for @backup_preview_tags.
+  ///
+  /// In en, this message translates to:
+  /// **'Tags'**
+  String get backup_preview_tags;
+
+  /// No description provided for @backup_preview_budgets.
+  ///
+  /// In en, this message translates to:
+  /// **'Budgets'**
+  String get backup_preview_budgets;
+
+  /// No description provided for @backup_preview_debts.
+  ///
+  /// In en, this message translates to:
+  /// **'Debts'**
+  String get backup_preview_debts;
+
+  /// No description provided for @backup_preview_subscriptions.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscriptions'**
+  String get backup_preview_subscriptions;
+
+  /// No description provided for @backup_preview_warning.
+  ///
+  /// In en, this message translates to:
+  /// **'Everything on this device will be replaced by this backup. Your current data is kept, so you can undo it from this screen.'**
+  String get backup_preview_warning;
+
+  /// No description provided for @backup_preview_undo_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo the last restore?'**
+  String get backup_preview_undo_title;
+
+  /// No description provided for @backup_preview_undo_warning.
+  ///
+  /// In en, this message translates to:
+  /// **'Your current data will be replaced by the data you had before the last restore.'**
+  String get backup_preview_undo_warning;
+
+  /// No description provided for @backup_restore_action.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace my data'**
+  String get backup_restore_action;
+
+  /// No description provided for @backup_reading.
+  ///
+  /// In en, this message translates to:
+  /// **'Checking backup…'**
+  String get backup_reading;
+
+  /// No description provided for @backup_restoring.
+  ///
+  /// In en, this message translates to:
+  /// **'Restoring your data…'**
+  String get backup_restoring;
+
+  /// No description provided for @backup_restored.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup restored'**
+  String get backup_restored;
+
+  /// No description provided for @backup_undo_done.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous data restored'**
+  String get backup_undo_done;
+
+  /// No description provided for @backup_error_not_backup.
+  ///
+  /// In en, this message translates to:
+  /// **'This isn’t a Wumbi backup. Choose a .wumbi file.'**
+  String get backup_error_not_backup;
+
+  /// No description provided for @backup_error_csv.
+  ///
+  /// In en, this message translates to:
+  /// **'CSV files can’t be restored. Choose a .wumbi backup instead.'**
+  String get backup_error_csv;
+
+  /// No description provided for @backup_error_corrupted.
+  ///
+  /// In en, this message translates to:
+  /// **'This backup is damaged and can’t be read.'**
+  String get backup_error_corrupted;
+
+  /// No description provided for @backup_error_newer.
+  ///
+  /// In en, this message translates to:
+  /// **'This backup was made by a newer Wumbi. Update the app to restore it.'**
+  String get backup_error_newer;
+
+  /// No description provided for @backup_error_password_required.
+  ///
+  /// In en, this message translates to:
+  /// **'This backup is protected. Enter its password.'**
+  String get backup_error_password_required;
+
+  /// No description provided for @backup_error_wrong_password.
+  ///
+  /// In en, this message translates to:
+  /// **'Wrong password, or the file was changed.'**
+  String get backup_error_wrong_password;
+
+  /// No description provided for @backup_error_too_large.
+  ///
+  /// In en, this message translates to:
+  /// **'This file is too large to be a Wumbi backup.'**
+  String get backup_error_too_large;
+
+  /// No description provided for @backup_error_invalid_data.
+  ///
+  /// In en, this message translates to:
+  /// **'This backup has inconsistent data. Nothing was changed.'**
+  String get backup_error_invalid_data;
+
+  /// No description provided for @backup_error_read_file.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn’t open the file.'**
+  String get backup_error_read_file;
+
+  /// No description provided for @backup_encrypted_badge.
+  ///
+  /// In en, this message translates to:
+  /// **'Encrypted'**
+  String get backup_encrypted_badge;
+
   /// No description provided for @l10nStopLineDontTouch.
   ///
   /// In en, this message translates to:

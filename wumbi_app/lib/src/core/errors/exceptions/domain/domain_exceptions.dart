@@ -61,3 +61,41 @@ class PersonHasDebtsException implements Exception {
 class DebtClosedException implements Exception {
   const DebtClosedException();
 }
+
+/// Why a `.wumbi` backup could not be created, read or restored. Mapped to
+/// `BackupFailure` (one localized message per reason).
+enum BackupErrorReason {
+  /// Not a Wumbi backup (unreadable, another app's file, unknown format).
+  notABackup,
+
+  /// A CSV export was picked — CSV is for spreadsheets, never restorable.
+  csvNotRestorable,
+
+  /// The file is damaged: bad checksum, broken compression, malformed data.
+  corrupted,
+
+  /// Made by a newer Wumbi (unknown format or schema version).
+  newerVersion,
+
+  /// Encrypted backup opened without a password.
+  passwordRequired,
+
+  /// Decryption failed: wrong password, or the encrypted file was altered.
+  wrongPassword,
+
+  /// Larger than the import limit.
+  tooLarge,
+
+  /// Readable, but the data breaks the database rules (missing links,
+  /// invalid values) — nothing was changed.
+  invalidData,
+}
+
+class BackupException implements Exception {
+  const BackupException(this.reason, [this.detail]);
+  final BackupErrorReason reason;
+  final Object? detail;
+
+  @override
+  String toString() => 'BackupException(${reason.name})${detail == null ? '' : ': $detail'}';
+}

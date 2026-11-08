@@ -32,6 +32,9 @@ class UIInputField extends StatelessWidget {
     this.inputFormatters,
     this.textCapitalization = TextCapitalization.sentences,
     this.suffixIcon,
+    this.obscureText = false,
+    this.autofillHints,
+    this.fillColor,
   });
 
   final TextEditingController? controller;
@@ -55,6 +58,15 @@ class UIInputField extends StatelessWidget {
   /// Trailing widget inside the field (e.g. the search clear button).
   final Widget? suffixIcon;
 
+  /// Password entry: hides the text and turns off autocorrect and
+  /// suggestions (the keyboard must not learn the password).
+  final bool obscureText;
+  final Iterable<String>? autofillHints;
+
+  /// Boxed background; defaults to the card colour (a sheet, which is
+  /// already that colour, passes a tint so the field stays visible).
+  final Color? fillColor;
+
   @override
   Widget build(BuildContext context) {
     final colors = AppTheme.of(context).colors;
@@ -72,7 +84,11 @@ class UIInputField extends StatelessWidget {
       autofocus: autofocus,
       keyboardType: keyboardType,
       textInputAction: textInputAction,
-      textCapitalization: textCapitalization,
+      textCapitalization: obscureText ? TextCapitalization.none : textCapitalization,
+      obscureText: obscureText,
+      autocorrect: !obscureText,
+      enableSuggestions: !obscureText,
+      autofillHints: autofillHints,
       cursorColor: UIColorToken.blue,
       textAlign: centered ? TextAlign.center : TextAlign.start,
       maxLength: maxLength,
@@ -90,7 +106,7 @@ class UIInputField extends StatelessWidget {
         suffixIcon: suffixIcon,
         suffixIconConstraints: const BoxConstraints(minWidth: 44, minHeight: 44),
         filled: !borderless,
-        fillColor: colors.fgColor,
+        fillColor: fillColor ?? colors.fgColor,
         contentPadding: borderless
             ? const EdgeInsets.symmetric(vertical: 8)
             : const EdgeInsets.symmetric(horizontal: 16, vertical: 14),

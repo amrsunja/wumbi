@@ -3713,6 +3713,209 @@ class AppLocalizationsTr extends AppLocalizations {
       'Bildirimler açık — her şeye göz kulak olurum patron';
 
   @override
+  String get l10nBackup =>
+      '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ BACKUP & EXPORT ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
+
+  @override
+  String get settings_backup => 'Yedekleme ve dışa aktarma';
+
+  @override
+  String get backup_title => 'Yedekleme ve dışa aktarma';
+
+  @override
+  String get backup_intro =>
+      'Verilerin yalnızca bu cihazda duruyor. Yeni bir telefona taşımak veya güvende tutmak için yedek oluştur.';
+
+  @override
+  String get backup_section_backup => 'Yedek';
+
+  @override
+  String get backup_create => 'Yedek oluştur';
+
+  @override
+  String get backup_create_desc =>
+      'Cüzdanlar, işlemler, etiketler, bütçeler, borçlar ve ayarlar tek bir .wumbi dosyasında';
+
+  @override
+  String get backup_restore => 'Yedekten geri yükle';
+
+  @override
+  String get backup_restore_desc =>
+      'Bu cihazdaki verileri bir .wumbi dosyasıyla değiştir';
+
+  @override
+  String get backup_undo => 'Son geri yüklemeyi geri al';
+
+  @override
+  String backup_undo_desc(String date) {
+    return '$date tarihli verilerini geri getir';
+  }
+
+  @override
+  String get backup_section_spreadsheet => 'Tablo';
+
+  @override
+  String get backup_csv => 'İşlemleri dışa aktar (CSV)';
+
+  @override
+  String get backup_csv_desc => 'Excel, Numbers veya Google E-Tablolar için';
+
+  @override
+  String get backup_csv_hint =>
+      'CSV bir yedek değildir. Wumbi’ye geri aktarılamaz.';
+
+  @override
+  String get backup_csv_dialog_title => 'Tablolar için dışa aktar';
+
+  @override
+  String get backup_csv_dialog_message =>
+      'CSV dosyası işlemlerini Excel, Numbers veya Google E-Tablolar için listeler.\n\nBu bir yedek değildir: cüzdanlar, bütçeler, borçlar ve ayarlar dahil değildir ve Wumbi’ye geri aktarılamaz. Tüm verilerini korumak için yedek oluştur.';
+
+  @override
+  String get backup_save_to_device => 'Cihaza kaydet';
+
+  @override
+  String get backup_share => 'Paylaş';
+
+  @override
+  String get backup_sheet_title => 'Yedek oluştur';
+
+  @override
+  String get backup_password_toggle => 'Parolayla koru';
+
+  @override
+  String get backup_password_toggle_desc =>
+      'Dosyayı şifreler. Parola olmadan kimse açamaz — Wumbi bile.';
+
+  @override
+  String get backup_password_hint => 'Parola';
+
+  @override
+  String get backup_password_confirm_hint => 'Parolayı tekrarla';
+
+  @override
+  String backup_password_too_short(int count) {
+    return 'En az $count karakter';
+  }
+
+  @override
+  String get backup_password_mismatch => 'Parolalar eşleşmiyor';
+
+  @override
+  String get backup_password_warning =>
+      'Bir yere not et. Unutursan bu yedek geri yüklenemez.';
+
+  @override
+  String get backup_no_password_warning =>
+      'Parola olmadan bu dosyayı ele geçiren herkes finanslarını okuyabilir.';
+
+  @override
+  String get backup_saved => 'Yedek kaydedildi';
+
+  @override
+  String get backup_csv_saved => 'CSV kaydedildi';
+
+  @override
+  String get backup_unlock_title => 'Yedek parolasını gir';
+
+  @override
+  String get backup_unlock_desc =>
+      'Bu yedek korumalı. Oluştururken belirlediğin parolayı gir.';
+
+  @override
+  String get backup_unlock_action => 'Kilidi aç';
+
+  @override
+  String get backup_preview_title => 'Bu yedek geri yüklensin mi?';
+
+  @override
+  String get backup_preview_created => 'Oluşturulma';
+
+  @override
+  String get backup_preview_app_version => 'Uygulama sürümü';
+
+  @override
+  String get backup_preview_wallets => 'Cüzdanlar';
+
+  @override
+  String get backup_preview_transactions => 'İşlemler';
+
+  @override
+  String get backup_preview_tags => 'Etiketler';
+
+  @override
+  String get backup_preview_budgets => 'Bütçeler';
+
+  @override
+  String get backup_preview_debts => 'Borçlar';
+
+  @override
+  String get backup_preview_subscriptions => 'Abonelikler';
+
+  @override
+  String get backup_preview_warning =>
+      'Bu cihazdaki tüm veriler bu yedekle değiştirilecek. Mevcut verilerin saklanır, bu ekrandan geri alabilirsin.';
+
+  @override
+  String get backup_preview_undo_title => 'Son geri yükleme geri alınsın mı?';
+
+  @override
+  String get backup_preview_undo_warning =>
+      'Mevcut verilerin, son geri yüklemeden önceki verilerle değiştirilecek.';
+
+  @override
+  String get backup_restore_action => 'Verilerimi değiştir';
+
+  @override
+  String get backup_reading => 'Yedek kontrol ediliyor…';
+
+  @override
+  String get backup_restoring => 'Verilerin geri yükleniyor…';
+
+  @override
+  String get backup_restored => 'Yedek geri yüklendi';
+
+  @override
+  String get backup_undo_done => 'Önceki veriler geri yüklendi';
+
+  @override
+  String get backup_error_not_backup =>
+      'Bu bir Wumbi yedeği değil. Bir .wumbi dosyası seç.';
+
+  @override
+  String get backup_error_csv =>
+      'CSV dosyaları geri yüklenemez. Bunun yerine bir .wumbi yedeği seç.';
+
+  @override
+  String get backup_error_corrupted => 'Bu yedek hasarlı ve okunamıyor.';
+
+  @override
+  String get backup_error_newer =>
+      'Bu yedek daha yeni bir Wumbi sürümüyle oluşturulmuş. Geri yüklemek için uygulamayı güncelle.';
+
+  @override
+  String get backup_error_password_required =>
+      'Bu yedek korumalı. Parolasını gir.';
+
+  @override
+  String get backup_error_wrong_password =>
+      'Yanlış parola veya dosya değiştirilmiş.';
+
+  @override
+  String get backup_error_too_large =>
+      'Bu dosya bir Wumbi yedeği için fazla büyük.';
+
+  @override
+  String get backup_error_invalid_data =>
+      'Bu yedekte tutarsız veriler var. Hiçbir şey değiştirilmedi.';
+
+  @override
+  String get backup_error_read_file => 'Dosya açılamadı.';
+
+  @override
+  String get backup_encrypted_badge => 'Şifreli';
+
+  @override
   String get l10nStopLineDontTouch =>
       '☠☠☠☠☠☠☠☠☠☠☠☠☠ Don\'t touch this line ☠☠☠☠☠☠☠☠☠☠☠☠☠';
 }

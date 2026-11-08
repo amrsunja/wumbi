@@ -41,6 +41,9 @@ abstract class RoutePaths {
   /// Master switch, preview and per-category switches.
   static const notificationSettings = '/settings/notifications';
 
+  /// `.wumbi` backup (create / restore / undo) and CSV export.
+  static const backupSettings = '/settings/backup';
+
   /// "Need help?" — list of guides; each guide is a nested page.
   static const help = '/settings/help';
   static const tagsHelp = '/settings/help/tags';

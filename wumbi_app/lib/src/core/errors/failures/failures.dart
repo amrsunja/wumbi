@@ -37,6 +37,10 @@ sealed class Failure {
       return Result.error(const WalletHasTransactionsFailure());
     } on NotFoundException catch (e) {
       return Result.error(NotFoundFailure(entity: e.entity));
+    } on BackupException catch (e) {
+      // The reason only: details can quote rows (amounts, descriptions).
+      debugPrint('BackupException(${e.reason.name})');
+      return Result.error(BackupFailure(reason: e.reason));
     } catch (e, st) {
       debugPrint('$e\n$st');
       return Result.error(UnknownFailure(exception: e));
@@ -132,6 +136,24 @@ class NotFoundFailure extends Failure {
 
   @override
   String toMessage(AppLocale locale) => locale.error_not_found;
+}
+
+/// A backup could not be created, read or restored (see [BackupErrorReason]).
+class BackupFailure extends Failure {
+  final BackupErrorReason reason;
+  const BackupFailure({required this.reason});
+
+  @override
+  String toMessage(AppLocale locale) => switch (reason) {
+        BackupErrorReason.notABackup => locale.backup_error_not_backup,
+        BackupErrorReason.csvNotRestorable => locale.backup_error_csv,
+        BackupErrorReason.corrupted => locale.backup_error_corrupted,
+        BackupErrorReason.newerVersion => locale.backup_error_newer,
+        BackupErrorReason.passwordRequired => locale.backup_error_password_required,
+        BackupErrorReason.wrongPassword => locale.backup_error_wrong_password,
+        BackupErrorReason.tooLarge => locale.backup_error_too_large,
+        BackupErrorReason.invalidData => locale.backup_error_invalid_data,
+      };
 }
 
 class UnknownFailure extends Failure {

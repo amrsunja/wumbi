@@ -6,11 +6,20 @@ import '../../../app_ui.dart';
 /// row of the entry forms (Transaction / Budget / Debt). A null [text]
 /// collapses it; changes animate so the numpad below never jumps.
 class UiFormHint extends StatelessWidget {
-  const UiFormHint({super.key, required this.text, required this.icon, this.color = UIColorToken.casper});
+  const UiFormHint({
+    super.key,
+    required this.text,
+    required this.icon,
+    this.color = UIColorToken.casper,
+    this.maxLines = 2,
+  });
 
   final String? text;
   final String icon;
   final Color color;
+
+  /// Longer warnings (backup restore) may need more than the form default.
+  final int maxLines;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +50,7 @@ class UiFormHint extends StatelessWidget {
                       TextSpan(text: t),
                     ],
                   ),
-                  maxLines: 2,
+                  maxLines: maxLines,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.center,
                   style: AppTheme.of(context).typo.inter.caption.copyWith(color: color),

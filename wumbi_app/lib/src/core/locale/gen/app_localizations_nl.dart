@@ -3761,6 +3761,210 @@ class AppLocalizationsNl extends AppLocalizations {
       'Meldingen staan aan — ik houd alles in de gaten, baas';
 
   @override
+  String get l10nBackup =>
+      '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ BACKUP & EXPORT ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
+
+  @override
+  String get settings_backup => 'Back-up & export';
+
+  @override
+  String get backup_title => 'Back-up & export';
+
+  @override
+  String get backup_intro =>
+      'Je gegevens staan alleen op dit apparaat. Maak een back-up om ze naar een nieuwe telefoon over te zetten of veilig te bewaren.';
+
+  @override
+  String get backup_section_backup => 'Back-up';
+
+  @override
+  String get backup_create => 'Back-up maken';
+
+  @override
+  String get backup_create_desc =>
+      'Wallets, transacties, tags, budgetten, schulden en instellingen in één .wumbi-bestand';
+
+  @override
+  String get backup_restore => 'Back-up terugzetten';
+
+  @override
+  String get backup_restore_desc =>
+      'De gegevens op dit apparaat vervangen door een .wumbi-bestand';
+
+  @override
+  String get backup_undo => 'Laatste herstel ongedaan maken';
+
+  @override
+  String backup_undo_desc(String date) {
+    return 'Je gegevens van $date terughalen';
+  }
+
+  @override
+  String get backup_section_spreadsheet => 'Spreadsheet';
+
+  @override
+  String get backup_csv => 'Transacties exporteren (CSV)';
+
+  @override
+  String get backup_csv_desc => 'Voor Excel, Numbers of Google Spreadsheets';
+
+  @override
+  String get backup_csv_hint =>
+      'CSV is geen back-up. Het kan niet terug in Wumbi worden geïmporteerd.';
+
+  @override
+  String get backup_csv_dialog_title => 'Exporteren voor spreadsheets';
+
+  @override
+  String get backup_csv_dialog_message =>
+      'Het CSV-bestand bevat je transacties voor Excel, Numbers of Google Spreadsheets.\n\nHet is geen back-up: wallets, budgetten, schulden en instellingen zitten er niet in, en het kan niet terug in Wumbi worden geïmporteerd. Maak een back-up om al je gegevens veilig te stellen.';
+
+  @override
+  String get backup_save_to_device => 'Op apparaat opslaan';
+
+  @override
+  String get backup_share => 'Delen';
+
+  @override
+  String get backup_sheet_title => 'Back-up maken';
+
+  @override
+  String get backup_password_toggle => 'Beveiligen met wachtwoord';
+
+  @override
+  String get backup_password_toggle_desc =>
+      'Versleutelt het bestand. Zonder het wachtwoord kan niemand het openen — ook Wumbi niet.';
+
+  @override
+  String get backup_password_hint => 'Wachtwoord';
+
+  @override
+  String get backup_password_confirm_hint => 'Herhaal wachtwoord';
+
+  @override
+  String backup_password_too_short(int count) {
+    return 'Minstens $count tekens';
+  }
+
+  @override
+  String get backup_password_mismatch => 'Wachtwoorden komen niet overeen';
+
+  @override
+  String get backup_password_warning =>
+      'Schrijf het op. Als je het vergeet, kan deze back-up niet worden teruggezet.';
+
+  @override
+  String get backup_no_password_warning =>
+      'Zonder wachtwoord kan iedereen die dit bestand krijgt je financiën lezen.';
+
+  @override
+  String get backup_saved => 'Back-up opgeslagen';
+
+  @override
+  String get backup_csv_saved => 'CSV opgeslagen';
+
+  @override
+  String get backup_unlock_title => 'Wachtwoord van back-up';
+
+  @override
+  String get backup_unlock_desc =>
+      'Deze back-up is beveiligd. Voer het wachtwoord in dat je bij het maken hebt gekozen.';
+
+  @override
+  String get backup_unlock_action => 'Ontgrendelen';
+
+  @override
+  String get backup_preview_title => 'Deze back-up terugzetten?';
+
+  @override
+  String get backup_preview_created => 'Gemaakt';
+
+  @override
+  String get backup_preview_app_version => 'App-versie';
+
+  @override
+  String get backup_preview_wallets => 'Wallets';
+
+  @override
+  String get backup_preview_transactions => 'Transacties';
+
+  @override
+  String get backup_preview_tags => 'Tags';
+
+  @override
+  String get backup_preview_budgets => 'Budgetten';
+
+  @override
+  String get backup_preview_debts => 'Schulden';
+
+  @override
+  String get backup_preview_subscriptions => 'Abonnementen';
+
+  @override
+  String get backup_preview_warning =>
+      'Alle gegevens op dit apparaat worden vervangen door deze back-up. Je huidige gegevens worden bewaard, zodat je dit op dit scherm ongedaan kunt maken.';
+
+  @override
+  String get backup_preview_undo_title => 'Laatste herstel ongedaan maken?';
+
+  @override
+  String get backup_preview_undo_warning =>
+      'Je huidige gegevens worden vervangen door de gegevens van vóór het laatste herstel.';
+
+  @override
+  String get backup_restore_action => 'Mijn gegevens vervangen';
+
+  @override
+  String get backup_reading => 'Back-up controleren…';
+
+  @override
+  String get backup_restoring => 'Gegevens terugzetten…';
+
+  @override
+  String get backup_restored => 'Back-up teruggezet';
+
+  @override
+  String get backup_undo_done => 'Vorige gegevens teruggezet';
+
+  @override
+  String get backup_error_not_backup =>
+      'Dit is geen Wumbi-back-up. Kies een .wumbi-bestand.';
+
+  @override
+  String get backup_error_csv =>
+      'CSV-bestanden kunnen niet worden teruggezet. Kies een .wumbi-back-up.';
+
+  @override
+  String get backup_error_corrupted =>
+      'Deze back-up is beschadigd en kan niet worden gelezen.';
+
+  @override
+  String get backup_error_newer =>
+      'Deze back-up is gemaakt met een nieuwere Wumbi. Werk de app bij om hem terug te zetten.';
+
+  @override
+  String get backup_error_password_required =>
+      'Deze back-up is beveiligd. Voer het wachtwoord in.';
+
+  @override
+  String get backup_error_wrong_password =>
+      'Onjuist wachtwoord, of het bestand is gewijzigd.';
+
+  @override
+  String get backup_error_too_large =>
+      'Dit bestand is te groot voor een Wumbi-back-up.';
+
+  @override
+  String get backup_error_invalid_data =>
+      'Deze back-up bevat inconsistente gegevens. Er is niets gewijzigd.';
+
+  @override
+  String get backup_error_read_file => 'Kan het bestand niet openen.';
+
+  @override
+  String get backup_encrypted_badge => 'Versleuteld';
+
+  @override
   String get l10nStopLineDontTouch =>
       '☠☠☠☠☠☠☠☠☠☠☠☠☠ Don\'t touch this line ☠☠☠☠☠☠☠☠☠☠☠☠☠';
 }

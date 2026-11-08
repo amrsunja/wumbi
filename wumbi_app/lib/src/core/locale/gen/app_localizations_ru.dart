@@ -3824,6 +3824,210 @@ class AppLocalizationsRu extends AppLocalizations {
       'Уведомления включены — буду присматривать, хозяин';
 
   @override
+  String get l10nBackup =>
+      '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ BACKUP & EXPORT ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
+
+  @override
+  String get settings_backup => 'Резервная копия и экспорт';
+
+  @override
+  String get backup_title => 'Резервная копия и экспорт';
+
+  @override
+  String get backup_intro =>
+      'Ваши данные хранятся только на этом устройстве. Создайте резервную копию, чтобы перенести их на новый телефон или сохранить в надёжном месте.';
+
+  @override
+  String get backup_section_backup => 'Резервная копия';
+
+  @override
+  String get backup_create => 'Создать резервную копию';
+
+  @override
+  String get backup_create_desc =>
+      'Кошельки, транзакции, теги, бюджеты, долги и настройки в одном файле .wumbi';
+
+  @override
+  String get backup_restore => 'Восстановить из копии';
+
+  @override
+  String get backup_restore_desc =>
+      'Заменить данные на этом устройстве файлом .wumbi';
+
+  @override
+  String get backup_undo => 'Отменить последнее восстановление';
+
+  @override
+  String backup_undo_desc(String date) {
+    return 'Вернуть данные от $date';
+  }
+
+  @override
+  String get backup_section_spreadsheet => 'Таблицы';
+
+  @override
+  String get backup_csv => 'Экспорт транзакций (CSV)';
+
+  @override
+  String get backup_csv_desc => 'Для Excel, Numbers или Google Таблиц';
+
+  @override
+  String get backup_csv_hint =>
+      'CSV — это не резервная копия. Его нельзя импортировать обратно в Wumbi.';
+
+  @override
+  String get backup_csv_dialog_title => 'Экспорт для таблиц';
+
+  @override
+  String get backup_csv_dialog_message =>
+      'В CSV-файле — список ваших транзакций для Excel, Numbers или Google Таблиц.\n\nЭто не резервная копия: кошельки, бюджеты, долги и настройки в него не входят, и импортировать его обратно в Wumbi нельзя. Чтобы сохранить все данные, создайте резервную копию.';
+
+  @override
+  String get backup_save_to_device => 'Сохранить на устройство';
+
+  @override
+  String get backup_share => 'Поделиться';
+
+  @override
+  String get backup_sheet_title => 'Создать резервную копию';
+
+  @override
+  String get backup_password_toggle => 'Защитить паролем';
+
+  @override
+  String get backup_password_toggle_desc =>
+      'Файл будет зашифрован. Без пароля его никто не откроет — даже Wumbi.';
+
+  @override
+  String get backup_password_hint => 'Пароль';
+
+  @override
+  String get backup_password_confirm_hint => 'Повторите пароль';
+
+  @override
+  String backup_password_too_short(int count) {
+    return 'Минимум $count символов';
+  }
+
+  @override
+  String get backup_password_mismatch => 'Пароли не совпадают';
+
+  @override
+  String get backup_password_warning =>
+      'Запишите его. Если вы его забудете, восстановить эту копию будет невозможно.';
+
+  @override
+  String get backup_no_password_warning =>
+      'Без пароля любой, у кого окажется этот файл, увидит ваши финансы.';
+
+  @override
+  String get backup_saved => 'Резервная копия сохранена';
+
+  @override
+  String get backup_csv_saved => 'CSV сохранён';
+
+  @override
+  String get backup_unlock_title => 'Введите пароль копии';
+
+  @override
+  String get backup_unlock_desc =>
+      'Эта копия защищена. Введите пароль, который вы задали при её создании.';
+
+  @override
+  String get backup_unlock_action => 'Открыть';
+
+  @override
+  String get backup_preview_title => 'Восстановить эту копию?';
+
+  @override
+  String get backup_preview_created => 'Создана';
+
+  @override
+  String get backup_preview_app_version => 'Версия приложения';
+
+  @override
+  String get backup_preview_wallets => 'Кошельки';
+
+  @override
+  String get backup_preview_transactions => 'Транзакции';
+
+  @override
+  String get backup_preview_tags => 'Теги';
+
+  @override
+  String get backup_preview_budgets => 'Бюджеты';
+
+  @override
+  String get backup_preview_debts => 'Долги';
+
+  @override
+  String get backup_preview_subscriptions => 'Подписки';
+
+  @override
+  String get backup_preview_warning =>
+      'Все данные на этом устройстве будут заменены этой копией. Текущие данные сохранятся, и восстановление можно будет отменить на этом экране.';
+
+  @override
+  String get backup_preview_undo_title => 'Отменить последнее восстановление?';
+
+  @override
+  String get backup_preview_undo_warning =>
+      'Текущие данные будут заменены теми, что были до последнего восстановления.';
+
+  @override
+  String get backup_restore_action => 'Заменить мои данные';
+
+  @override
+  String get backup_reading => 'Проверяем копию…';
+
+  @override
+  String get backup_restoring => 'Восстанавливаем данные…';
+
+  @override
+  String get backup_restored => 'Резервная копия восстановлена';
+
+  @override
+  String get backup_undo_done => 'Прежние данные возвращены';
+
+  @override
+  String get backup_error_not_backup =>
+      'Это не резервная копия Wumbi. Выберите файл .wumbi.';
+
+  @override
+  String get backup_error_csv =>
+      'CSV-файлы нельзя восстановить. Выберите резервную копию .wumbi.';
+
+  @override
+  String get backup_error_corrupted =>
+      'Резервная копия повреждена и не читается.';
+
+  @override
+  String get backup_error_newer =>
+      'Эта копия создана более новой версией Wumbi. Обновите приложение, чтобы её восстановить.';
+
+  @override
+  String get backup_error_password_required =>
+      'Эта копия защищена. Введите её пароль.';
+
+  @override
+  String get backup_error_wrong_password =>
+      'Неверный пароль, или файл был изменён.';
+
+  @override
+  String get backup_error_too_large =>
+      'Файл слишком большой для резервной копии Wumbi.';
+
+  @override
+  String get backup_error_invalid_data =>
+      'В копии несогласованные данные. Ничего не изменено.';
+
+  @override
+  String get backup_error_read_file => 'Не удалось открыть файл.';
+
+  @override
+  String get backup_encrypted_badge => 'Зашифрована';
+
+  @override
   String get l10nStopLineDontTouch =>
       '☠☠☠☠☠☠☠☠☠☠☠☠☠ Don\'t touch this line ☠☠☠☠☠☠☠☠☠☠☠☠☠';
 }

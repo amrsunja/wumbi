@@ -3751,6 +3751,210 @@ class AppLocalizationsEn extends AppLocalizations {
       'Notifications are on — I’ll keep an eye on things, boss';
 
   @override
+  String get l10nBackup =>
+      '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ BACKUP & EXPORT ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
+
+  @override
+  String get settings_backup => 'Backup & Export';
+
+  @override
+  String get backup_title => 'Backup & Export';
+
+  @override
+  String get backup_intro =>
+      'Your data lives only on this device. Save a backup to move to a new phone or keep a safe copy.';
+
+  @override
+  String get backup_section_backup => 'Backup';
+
+  @override
+  String get backup_create => 'Create backup';
+
+  @override
+  String get backup_create_desc =>
+      'Wallets, transactions, tags, budgets, debts and settings in one .wumbi file';
+
+  @override
+  String get backup_restore => 'Restore from backup';
+
+  @override
+  String get backup_restore_desc =>
+      'Replace the data on this device with a .wumbi file';
+
+  @override
+  String get backup_undo => 'Undo last restore';
+
+  @override
+  String backup_undo_desc(String date) {
+    return 'Bring back your data from $date';
+  }
+
+  @override
+  String get backup_section_spreadsheet => 'Spreadsheet';
+
+  @override
+  String get backup_csv => 'Export transactions (CSV)';
+
+  @override
+  String get backup_csv_desc => 'For Excel, Numbers or Google Sheets';
+
+  @override
+  String get backup_csv_hint =>
+      'CSV is not a backup. It can’t be imported back into Wumbi.';
+
+  @override
+  String get backup_csv_dialog_title => 'Export for spreadsheets';
+
+  @override
+  String get backup_csv_dialog_message =>
+      'The CSV file lists your transactions for Excel, Numbers or Google Sheets.\n\nIt’s not a backup: wallets, budgets, debts and settings aren’t included, and it can’t be imported back into Wumbi. To keep all your data safe, create a backup.';
+
+  @override
+  String get backup_save_to_device => 'Save to device';
+
+  @override
+  String get backup_share => 'Share';
+
+  @override
+  String get backup_sheet_title => 'Create backup';
+
+  @override
+  String get backup_password_toggle => 'Protect with a password';
+
+  @override
+  String get backup_password_toggle_desc =>
+      'Encrypts the file. Without the password nobody can open it — not even Wumbi.';
+
+  @override
+  String get backup_password_hint => 'Password';
+
+  @override
+  String get backup_password_confirm_hint => 'Repeat password';
+
+  @override
+  String backup_password_too_short(int count) {
+    return 'Use at least $count characters';
+  }
+
+  @override
+  String get backup_password_mismatch => 'Passwords don’t match';
+
+  @override
+  String get backup_password_warning =>
+      'Write it down. If you forget it, this backup can’t be restored.';
+
+  @override
+  String get backup_no_password_warning =>
+      'Without a password, anyone who gets this file can read your finances.';
+
+  @override
+  String get backup_saved => 'Backup saved';
+
+  @override
+  String get backup_csv_saved => 'CSV saved';
+
+  @override
+  String get backup_unlock_title => 'Enter backup password';
+
+  @override
+  String get backup_unlock_desc =>
+      'This backup is protected. Enter the password you set when you created it.';
+
+  @override
+  String get backup_unlock_action => 'Unlock';
+
+  @override
+  String get backup_preview_title => 'Restore this backup?';
+
+  @override
+  String get backup_preview_created => 'Created';
+
+  @override
+  String get backup_preview_app_version => 'App version';
+
+  @override
+  String get backup_preview_wallets => 'Wallets';
+
+  @override
+  String get backup_preview_transactions => 'Transactions';
+
+  @override
+  String get backup_preview_tags => 'Tags';
+
+  @override
+  String get backup_preview_budgets => 'Budgets';
+
+  @override
+  String get backup_preview_debts => 'Debts';
+
+  @override
+  String get backup_preview_subscriptions => 'Subscriptions';
+
+  @override
+  String get backup_preview_warning =>
+      'Everything on this device will be replaced by this backup. Your current data is kept, so you can undo it from this screen.';
+
+  @override
+  String get backup_preview_undo_title => 'Undo the last restore?';
+
+  @override
+  String get backup_preview_undo_warning =>
+      'Your current data will be replaced by the data you had before the last restore.';
+
+  @override
+  String get backup_restore_action => 'Replace my data';
+
+  @override
+  String get backup_reading => 'Checking backup…';
+
+  @override
+  String get backup_restoring => 'Restoring your data…';
+
+  @override
+  String get backup_restored => 'Backup restored';
+
+  @override
+  String get backup_undo_done => 'Previous data restored';
+
+  @override
+  String get backup_error_not_backup =>
+      'This isn’t a Wumbi backup. Choose a .wumbi file.';
+
+  @override
+  String get backup_error_csv =>
+      'CSV files can’t be restored. Choose a .wumbi backup instead.';
+
+  @override
+  String get backup_error_corrupted =>
+      'This backup is damaged and can’t be read.';
+
+  @override
+  String get backup_error_newer =>
+      'This backup was made by a newer Wumbi. Update the app to restore it.';
+
+  @override
+  String get backup_error_password_required =>
+      'This backup is protected. Enter its password.';
+
+  @override
+  String get backup_error_wrong_password =>
+      'Wrong password, or the file was changed.';
+
+  @override
+  String get backup_error_too_large =>
+      'This file is too large to be a Wumbi backup.';
+
+  @override
+  String get backup_error_invalid_data =>
+      'This backup has inconsistent data. Nothing was changed.';
+
+  @override
+  String get backup_error_read_file => 'Couldn’t open the file.';
+
+  @override
+  String get backup_encrypted_badge => 'Encrypted';
+
+  @override
   String get l10nStopLineDontTouch =>
       '☠☠☠☠☠☠☠☠☠☠☠☠☠ Don\'t touch this line ☠☠☠☠☠☠☠☠☠☠☠☠☠';
 }

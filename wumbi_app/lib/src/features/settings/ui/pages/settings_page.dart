@@ -127,6 +127,11 @@ class SettingsPage extends ConsumerWidget {
                     ),
                     UiSectionLabel(text: l10n.settings_data_privacy),
                     UiSettingsTile(
+                      icon: UIIconToken.icons.security.fileShield02,
+                      title: l10n.settings_backup,
+                      onTap: () => context.router.push(const BackupRoute()),
+                    ),
+                    UiSettingsTile(
                       icon: UIIconToken.icons.general.trash01,
                       title: l10n.settings_reset_all_data,
                       destructive: true,

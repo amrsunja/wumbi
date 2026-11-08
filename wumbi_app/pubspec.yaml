@@ -67,6 +67,11 @@ dependencies:
   timezone: ^0.11.0
   permission_handler: ^12.0.1
 
+  # Backup & export (.wumbi files: AES-256-GCM + Argon2id, SHA-256 checksum)
+  cryptography: ^2.9.0
+  crypto: ^3.0.8
+  file_picker: ^13.3.2
+
 
 dev_dependencies:
   flutter_test:

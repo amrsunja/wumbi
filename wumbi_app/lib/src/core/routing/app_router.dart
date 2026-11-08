@@ -63,6 +63,7 @@ class AppRouter extends RootStackRouter {
         AutoRoute(path: RoutePaths.aboutProject, page: AboutProjectRoute.page),
         AutoRoute(path: RoutePaths.appLangSettings, page: AppLanguageSettingsRoute.page),
         AutoRoute(path: RoutePaths.notificationSettings, page: NotificationSettingsRoute.page),
+        AutoRoute(path: RoutePaths.backupSettings, page: BackupRoute.page),
         AutoRoute(path: RoutePaths.help, page: HelpRoute.page),
         AutoRoute(path: RoutePaths.tagsHelp, page: TagsHelpRoute.page),
       ];

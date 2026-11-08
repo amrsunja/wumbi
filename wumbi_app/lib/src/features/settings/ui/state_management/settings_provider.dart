@@ -12,6 +12,7 @@ import '../../../../core/utils/enums/app_theme_type.dart';
 import '../../../../core/utils/state_management/app_events.dart';
 import '../../../../core/utils/state_management/single_events.dart';
 import '../../../../core/utils/typedefs.dart';
+import '../../../backup/data/backup_repository.dart';
 import '../../../mascot/ui/mascot_providers.dart';
 import '../../../notification/domain/notification_prefs.dart';
 import '../../../notification/ui/notification_providers.dart';
@@ -135,8 +136,30 @@ class SettingsNotifier extends Notifier<SettingsState> {
 
   Future<void> onboardingCompleted() => _apply(_repo.onboardingCompleted);
 
+  /// A backup was restored: every screen re-reads the new data (settings,
+  /// balances, the hamster's memory), recurring rules catch up from the
+  /// backup's last run, and the app opens on the dashboard.
+  Future<void> reloadAfterRestore() async {
+    final settings = await _repo.getLocalSettings();
+    AppSettingsModel? data;
+    settings.when((s) => data = s, (e) => _events.send(ShowErrorEvent(e)));
+    if (data != null) state = state.copyWith(data: data);
+    ref.read(dbRevisionProvider.notifier).bump();
+    ref.invalidate(mascotMemoryProvider);
+
+    await ref.read(recurringEngineProvider).catchUp(DateTime.now());
+    await ref.read(upcomingPosterProvider).postDue();
+    if (data != null) _warmUpRates(data!.baseCurrency);
+    // Notifications re-plan by themselves: the scheduler listens to the
+    // revision bump above (and reading it from here would be circular).
+
+    _events.send(const ReplaceAllRoutesEvent([DashboardRoute()]));
+  }
+
   /// Reset All Data ([A6]): wipe DB + key, re-init, back to onboarding.
   Future<bool> resetAllData() async {
+    // "Everything erased" includes the backup undo point and its key.
+    await ref.read(backupRepositoryProvider).deleteSafetySnapshot();
     final response = await _repo.resetAllData();
     var ok = false;
     response.when(

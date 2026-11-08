@@ -6,6 +6,20 @@
 abstract class SQLiteSchema {
   static final List<String> latest = v7;
 
+  /// Full DDL of schema [version] (1 … `SQLiteConfig.dbVersion`), or null for
+  /// an unknown version. Backups made by an older app are rebuilt at their
+  /// own version and then brought forward with `SQLiteMigrations`.
+  static List<String>? forVersion(int version) => switch (version) {
+        1 => v1,
+        2 => v2,
+        3 => v3,
+        4 => v4,
+        5 => v5,
+        6 => v6,
+        7 => v7,
+        _ => null,
+      };
+
   /// v7 (2026-10): `settings.notification_prefs` — per-category notification
   /// switches (JSON; NULL = defaults).
   static final List<String> v7 = SQLiteSchemaV7.statements;
