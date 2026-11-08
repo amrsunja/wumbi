@@ -10,11 +10,12 @@ extension CurrencyTypeName on CurrencyType {
     return _currencyNames[lang]?[code] ?? displayName;
   }
 
-  /// Localised name and English name — for search, so `dollar` finds USD
-  /// whatever the app language.
+  /// Code, symbol, localised name and English name — for search, so `dollar`
+  /// or `$` finds USD whatever the app language.
   bool nameMatches(String localeName, String query) {
     final q = query.toLowerCase();
     return code.toLowerCase().contains(q) ||
+        symbol.toLowerCase().contains(q) ||
         displayName.toLowerCase().contains(q) ||
         nameIn(localeName).toLowerCase().contains(q);
   }

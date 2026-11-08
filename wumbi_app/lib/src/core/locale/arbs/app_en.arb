@@ -648,6 +648,13 @@
   "currency_no_results": "No currency matches",
   "currency_base_title": "Base currency",
   "currency_base_hint": "Your total balance is converted into this currency.",
+  "currency_search_hint": "Code, name or symbol",
+  "currency_section_popular": "Popular",
+  "currency_region_europe": "Europe & Central Asia",
+  "currency_region_americas": "Americas",
+  "currency_region_asia_pacific": "Asia-Pacific",
+  "currency_region_middle_east_africa": "Middle East & Africa",
+  "currency_region_crypto": "Crypto",
 
   "l10nSettings": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ SETTINGS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
   "settings_title": "Settings",

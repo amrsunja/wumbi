@@ -1294,6 +1294,27 @@ class AppLocalizationsEn extends AppLocalizations {
       'Your total balance is converted into this currency.';
 
   @override
+  String get currency_search_hint => 'Code, name or symbol';
+
+  @override
+  String get currency_section_popular => 'Popular';
+
+  @override
+  String get currency_region_europe => 'Europe & Central Asia';
+
+  @override
+  String get currency_region_americas => 'Americas';
+
+  @override
+  String get currency_region_asia_pacific => 'Asia-Pacific';
+
+  @override
+  String get currency_region_middle_east_africa => 'Middle East & Africa';
+
+  @override
+  String get currency_region_crypto => 'Crypto';
+
+  @override
   String get l10nSettings =>
       '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ SETTINGS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
 

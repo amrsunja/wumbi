@@ -506,6 +506,13 @@
   "currency_no_results": "Keine Währung gefunden",
   "currency_base_title": "Hauptwährung",
   "currency_base_hint": "Dein gesamter Kontostand wird in diese Währung umgerechnet.",
+  "currency_search_hint": "Code, Name oder Symbol",
+  "currency_section_popular": "Beliebt",
+  "currency_region_europe": "Europa & Zentralasien",
+  "currency_region_americas": "Amerika",
+  "currency_region_asia_pacific": "Asien-Pazifik",
+  "currency_region_middle_east_africa": "Naher Osten & Afrika",
+  "currency_region_crypto": "Krypto",
 
   "l10nSettings": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ SETTINGS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
   "settings_title": "Einstellungen",

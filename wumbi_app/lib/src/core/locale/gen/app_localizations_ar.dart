@@ -1337,6 +1337,27 @@ class AppLocalizationsAr extends AppLocalizations {
   String get currency_base_hint => 'يُحوَّل رصيدك الإجمالي إلى هذه العملة.';
 
   @override
+  String get currency_search_hint => 'الرمز أو الاسم أو العلامة';
+
+  @override
+  String get currency_section_popular => 'الأكثر استخدامًا';
+
+  @override
+  String get currency_region_europe => 'أوروبا وآسيا الوسطى';
+
+  @override
+  String get currency_region_americas => 'الأمريكتان';
+
+  @override
+  String get currency_region_asia_pacific => 'آسيا والمحيط الهادئ';
+
+  @override
+  String get currency_region_middle_east_africa => 'الشرق الأوسط وأفريقيا';
+
+  @override
+  String get currency_region_crypto => 'العملات المشفرة';
+
+  @override
   String get l10nSettings =>
       '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ SETTINGS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
 

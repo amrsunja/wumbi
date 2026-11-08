@@ -1322,6 +1322,27 @@ class AppLocalizationsRu extends AppLocalizations {
   String get currency_base_hint => 'Общий баланс пересчитывается в эту валюту.';
 
   @override
+  String get currency_search_hint => 'Код, название или символ';
+
+  @override
+  String get currency_section_popular => 'Популярные';
+
+  @override
+  String get currency_region_europe => 'Европа и Центральная Азия';
+
+  @override
+  String get currency_region_americas => 'Америка';
+
+  @override
+  String get currency_region_asia_pacific => 'Азиатско-Тихоокеанский регион';
+
+  @override
+  String get currency_region_middle_east_africa => 'Ближний Восток и Африка';
+
+  @override
+  String get currency_region_crypto => 'Криптовалюты';
+
+  @override
   String get l10nSettings =>
       '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ SETTINGS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
 

@@ -506,6 +506,13 @@
   "currency_no_results": "Aucune devise trouvée",
   "currency_base_title": "Devise principale",
   "currency_base_hint": "Ton solde total est converti dans cette devise.",
+  "currency_search_hint": "Code, nom ou symbole",
+  "currency_section_popular": "Populaires",
+  "currency_region_europe": "Europe et Asie centrale",
+  "currency_region_americas": "Amériques",
+  "currency_region_asia_pacific": "Asie-Pacifique",
+  "currency_region_middle_east_africa": "Moyen-Orient et Afrique",
+  "currency_region_crypto": "Crypto",
 
   "l10nSettings": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ SETTINGS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
   "settings_title": "Réglages",

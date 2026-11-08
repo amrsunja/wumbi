@@ -506,6 +506,13 @@
   "currency_no_results": "Валюта не найдена",
   "currency_base_title": "Основная валюта",
   "currency_base_hint": "Общий баланс пересчитывается в эту валюту.",
+  "currency_search_hint": "Код, название или символ",
+  "currency_section_popular": "Популярные",
+  "currency_region_europe": "Европа и Центральная Азия",
+  "currency_region_americas": "Америка",
+  "currency_region_asia_pacific": "Азиатско-Тихоокеанский регион",
+  "currency_region_middle_east_africa": "Ближний Восток и Африка",
+  "currency_region_crypto": "Криптовалюты",
 
   "l10nSettings": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ SETTINGS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
   "settings_title": "Настройки",

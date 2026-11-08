@@ -84,3 +84,53 @@ class UiTypePill extends StatelessWidget {
     );
   }
 }
+
+/// Selectable rounded chip for pickers laid out in a `Wrap` (currency picker).
+/// Optional muted [leading] text before the bold [label] (e.g. `€  EUR`).
+/// [selected] tints it blue; otherwise it is a card-coloured outlined pill.
+class UiChoiceChip extends StatelessWidget {
+  const UiChoiceChip({super.key, required this.label, this.leading, this.selected = false, this.onTap});
+
+  final String label;
+  final String? leading;
+  final bool selected;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = AppTheme.of(context).colors;
+    final typo = AppTheme.of(context).typo.inter;
+    final fg = selected ? UIColorToken.blue : colors.contentColor;
+    return Semantics(
+      button: true,
+      selected: selected,
+      child: UITap(
+        onTap: onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 180),
+          curve: Curves.easeOut,
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
+          decoration: BoxDecoration(
+            color: selected ? UIColorToken.blue.withValues(alpha: 0.12) : colors.fgColor,
+            border: Border.all(color: selected ? UIColorToken.blue : colors.dividerColor),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            spacing: 6,
+            children: [
+              if (leading != null)
+                Text(
+                  leading!,
+                  style: typo.labelMedium.copyWith(
+                    color: selected ? UIColorToken.blue : colors.secondContentColor,
+                  ),
+                ),
+              Text(label, style: typo.label.copyWith(color: fg)),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

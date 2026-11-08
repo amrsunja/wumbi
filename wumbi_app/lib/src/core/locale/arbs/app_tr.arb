@@ -506,6 +506,13 @@
   "currency_no_results": "Para birimi bulunamadı",
   "currency_base_title": "Ana para birimi",
   "currency_base_hint": "Toplam bakiyen bu para birimine çevrilir.",
+  "currency_search_hint": "Kod, ad veya sembol",
+  "currency_section_popular": "Popüler",
+  "currency_region_europe": "Avrupa ve Orta Asya",
+  "currency_region_americas": "Amerika",
+  "currency_region_asia_pacific": "Asya-Pasifik",
+  "currency_region_middle_east_africa": "Orta Doğu ve Afrika",
+  "currency_region_crypto": "Kripto",
 
   "l10nSettings": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ SETTINGS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
   "settings_title": "Ayarlar",

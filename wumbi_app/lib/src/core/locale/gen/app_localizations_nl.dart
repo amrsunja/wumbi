@@ -1298,6 +1298,27 @@ class AppLocalizationsNl extends AppLocalizations {
       'Je totale saldo wordt omgerekend naar deze valuta.';
 
   @override
+  String get currency_search_hint => 'Code, naam of symbool';
+
+  @override
+  String get currency_section_popular => 'Populair';
+
+  @override
+  String get currency_region_europe => 'Europa en Centraal-Azië';
+
+  @override
+  String get currency_region_americas => 'Amerika';
+
+  @override
+  String get currency_region_asia_pacific => 'Azië-Pacific';
+
+  @override
+  String get currency_region_middle_east_africa => 'Midden-Oosten en Afrika';
+
+  @override
+  String get currency_region_crypto => 'Crypto';
+
+  @override
   String get l10nSettings =>
       '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ SETTINGS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
 

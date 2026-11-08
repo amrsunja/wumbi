@@ -15,6 +15,11 @@ const double kPageHorzPadding = 16;
 /// Wider gutter for list blocks (dashboard wallets, wallet details rows).
 const double kListHorzPadding = 24;
 
+/// Content inset of the Settings sub-pages (language, currency): lines their
+/// rows up with the Settings tiles, which sit inside [kPageHorzPadding] and
+/// add their own 16 px.
+const double kSettingsHorzPadding = kPageHorzPadding * 2;
+
 /// Bottom inset for scrollable detail pages: clears the peeking mascot
 /// (bottom-start corner). Add `MediaQuery.paddingOf(context).bottom` on top.
 const double kPageBottomInset = 120;

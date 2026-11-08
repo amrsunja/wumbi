@@ -2160,6 +2160,48 @@ abstract class AppLocalizations {
   /// **'Your total balance is converted into this currency.'**
   String get currency_base_hint;
 
+  /// No description provided for @currency_search_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Code, name or symbol'**
+  String get currency_search_hint;
+
+  /// No description provided for @currency_section_popular.
+  ///
+  /// In en, this message translates to:
+  /// **'Popular'**
+  String get currency_section_popular;
+
+  /// No description provided for @currency_region_europe.
+  ///
+  /// In en, this message translates to:
+  /// **'Europe & Central Asia'**
+  String get currency_region_europe;
+
+  /// No description provided for @currency_region_americas.
+  ///
+  /// In en, this message translates to:
+  /// **'Americas'**
+  String get currency_region_americas;
+
+  /// No description provided for @currency_region_asia_pacific.
+  ///
+  /// In en, this message translates to:
+  /// **'Asia-Pacific'**
+  String get currency_region_asia_pacific;
+
+  /// No description provided for @currency_region_middle_east_africa.
+  ///
+  /// In en, this message translates to:
+  /// **'Middle East & Africa'**
+  String get currency_region_middle_east_africa;
+
+  /// No description provided for @currency_region_crypto.
+  ///
+  /// In en, this message translates to:
+  /// **'Crypto'**
+  String get currency_region_crypto;
+
   /// No description provided for @l10nSettings.
   ///
   /// In en, this message translates to:

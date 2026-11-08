@@ -506,6 +506,13 @@
   "currency_no_results": "لا توجد عملة مطابقة",
   "currency_base_title": "العملة الأساسية",
   "currency_base_hint": "يُحوَّل رصيدك الإجمالي إلى هذه العملة.",
+  "currency_search_hint": "الرمز أو الاسم أو العلامة",
+  "currency_section_popular": "الأكثر استخدامًا",
+  "currency_region_europe": "أوروبا وآسيا الوسطى",
+  "currency_region_americas": "الأمريكتان",
+  "currency_region_asia_pacific": "آسيا والمحيط الهادئ",
+  "currency_region_middle_east_africa": "الشرق الأوسط وأفريقيا",
+  "currency_region_crypto": "العملات المشفرة",
 
   "l10nSettings": "☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ SETTINGS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠",
   "settings_title": "الإعدادات",

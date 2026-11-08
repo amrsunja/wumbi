@@ -1300,6 +1300,27 @@ class AppLocalizationsDe extends AppLocalizations {
       'Dein gesamter Kontostand wird in diese Währung umgerechnet.';
 
   @override
+  String get currency_search_hint => 'Code, Name oder Symbol';
+
+  @override
+  String get currency_section_popular => 'Beliebt';
+
+  @override
+  String get currency_region_europe => 'Europa & Zentralasien';
+
+  @override
+  String get currency_region_americas => 'Amerika';
+
+  @override
+  String get currency_region_asia_pacific => 'Asien-Pazifik';
+
+  @override
+  String get currency_region_middle_east_africa => 'Naher Osten & Afrika';
+
+  @override
+  String get currency_region_crypto => 'Krypto';
+
+  @override
   String get l10nSettings =>
       '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ SETTINGS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
 

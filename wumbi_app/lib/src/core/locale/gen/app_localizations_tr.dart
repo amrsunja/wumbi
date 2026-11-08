@@ -1283,6 +1283,27 @@ class AppLocalizationsTr extends AppLocalizations {
   String get currency_base_hint => 'Toplam bakiyen bu para birimine çevrilir.';
 
   @override
+  String get currency_search_hint => 'Kod, ad veya sembol';
+
+  @override
+  String get currency_section_popular => 'Popüler';
+
+  @override
+  String get currency_region_europe => 'Avrupa ve Orta Asya';
+
+  @override
+  String get currency_region_americas => 'Amerika';
+
+  @override
+  String get currency_region_asia_pacific => 'Asya-Pasifik';
+
+  @override
+  String get currency_region_middle_east_africa => 'Orta Doğu ve Afrika';
+
+  @override
+  String get currency_region_crypto => 'Kripto';
+
+  @override
   String get l10nSettings =>
       '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ SETTINGS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
 

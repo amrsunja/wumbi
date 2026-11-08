@@ -23,7 +23,7 @@ class AppLanguageSettingsPage extends ConsumerWidget {
     return Scaffold(
       appBar: UIAppbar(title: l10n.settings_language, backTap: () => context.router.maybePop()),
       body: ListView.separated(
-        padding: const EdgeInsets.symmetric(horizontal: kPageHorzPadding, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: kSettingsHorzPadding, vertical: 8),
         itemCount: L10n.all.length,
         separatorBuilder: (_, _) => const UIDivider(),
         itemBuilder: (context, index) {

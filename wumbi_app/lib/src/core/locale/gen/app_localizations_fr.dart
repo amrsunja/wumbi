@@ -1301,6 +1301,27 @@ class AppLocalizationsFr extends AppLocalizations {
       'Ton solde total est converti dans cette devise.';
 
   @override
+  String get currency_search_hint => 'Code, nom ou symbole';
+
+  @override
+  String get currency_section_popular => 'Populaires';
+
+  @override
+  String get currency_region_europe => 'Europe et Asie centrale';
+
+  @override
+  String get currency_region_americas => 'Amériques';
+
+  @override
+  String get currency_region_asia_pacific => 'Asie-Pacifique';
+
+  @override
+  String get currency_region_middle_east_africa => 'Moyen-Orient et Afrique';
+
+  @override
+  String get currency_region_crypto => 'Crypto';
+
+  @override
   String get l10nSettings =>
       '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ SETTINGS ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠';
 
