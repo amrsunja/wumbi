@@ -134,7 +134,9 @@ class TransactionLocalDatasource {
 
   /// B6 — one page of a wallet's transactions with counterpart wallet names
   /// (no `deleted_at` filter on the joins: names of deleted wallets still
-  /// resolve). Upcoming rows always sort first; then [sort].
+  /// resolve). Upcoming rows always sort first; then [sort]. Only upcoming
+  /// rows due this month (local time, relative to [now]) are listed — later
+  /// ones stay hidden until their month starts.
   Future<List<TransactionRow>> pageForWallet(
     DatabaseExecutor db,
     String walletId, {
@@ -142,6 +144,7 @@ class TransactionLocalDatasource {
     required int offset,
     TransactionFilter filter = TransactionFilter.none,
     TransactionSort sort = TransactionSort.dateDesc,
+    DateTime? now,
   }) async {
     final where = StringBuffer(
       't.${SQLiteConfig.deletedAt} IS NULL '
@@ -149,6 +152,14 @@ class TransactionLocalDatasource {
     );
     final args = <Object?>[walletId];
     _applyFilter(where, args, filter);
+
+    final clock = now ?? DateTime.now();
+    args.add(TransactionStatus.upcoming.dbValue);
+    final upcomingIdx = args.length;
+    args.add(DateTime(clock.year, clock.month + 1).epochMs);
+    where.write(
+      ' AND (t.${SQLiteConfig.txStatus} != ?$upcomingIdx OR t.${SQLiteConfig.txDate} < ?${args.length})',
+    );
 
     // Signed magnitude from the viewed wallet's point of view (transfers use
     // the side that touches this wallet).

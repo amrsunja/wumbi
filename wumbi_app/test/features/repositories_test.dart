@@ -280,6 +280,24 @@ void main() {
       expect(rows.single.fromWalletDeleted, isTrue);
       expect(await _count('SELECT COUNT(*) FROM transactions WHERE deleted_at IS NULL'), 1);
     });
+
+    test('wallet page lists only upcoming rows due this month', () async {
+      final a = await _wallet('A', CurrencyType.usd);
+      final now = DateTime.now();
+      final later = DateTime(now.year, now.month + 2, 15, 12);
+      await transactions.create(_income(a.id, 100));
+      final upcoming = (await transactions.create(_income(a.id, 200, date: later))).getOrThrow();
+      expect(upcoming.isUpcoming, isTrue);
+
+      Future<List<String>> ids(DateTime clock) async =>
+          (await transactions.datasource.pageForWallet(sqlite.db, a.id, limit: 50, offset: 0, now: clock))
+              .map((r) => r.id)
+              .toList();
+
+      expect(await ids(now), isNot(contains(upcoming.id)), reason: 'due in a later month');
+      expect(await ids(later), contains(upcoming.id), reason: 'due in the current month');
+      expect((await ids(now)).length, 1, reason: 'posted rows are never cut');
+    });
   });
 
   group('global search', () {

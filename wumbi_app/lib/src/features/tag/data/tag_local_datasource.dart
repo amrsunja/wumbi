@@ -151,7 +151,9 @@ class TagLocalDatasource {
   }
 
   /// Tag pairs that co-occur on the same transaction, with counts (graph
-  /// edges). `a < b` so each pair appears once.
+  /// edges). `a < b` so each pair appears once. Unlike the money aggregates,
+  /// debt transactions count here: two tags on a repayment are still
+  /// connected even though the money is neither income nor spending.
   Future<List<TagLink>> coOccurrences(DatabaseExecutor db) async {
     final rows = await db.rawQuery('''
       SELECT a.${SQLiteConfig.ttTagId} AS a, b.${SQLiteConfig.ttTagId} AS b, COUNT(*) AS n
@@ -159,7 +161,6 @@ class TagLocalDatasource {
       JOIN $_tt b ON b.${SQLiteConfig.ttTransactionId} = a.${SQLiteConfig.ttTransactionId}
                  AND a.${SQLiteConfig.ttTagId} < b.${SQLiteConfig.ttTagId}
       JOIN $_tx t ON t.${SQLiteConfig.id} = a.${SQLiteConfig.ttTransactionId} AND t.${SQLiteConfig.deletedAt} IS NULL
-                 AND t.${SQLiteConfig.txDebtRole} IS NULL
       JOIN $_tags ga ON ga.${SQLiteConfig.id} = a.${SQLiteConfig.ttTagId} AND ga.${SQLiteConfig.deletedAt} IS NULL
       JOIN $_tags gb ON gb.${SQLiteConfig.id} = b.${SQLiteConfig.ttTagId} AND gb.${SQLiteConfig.deletedAt} IS NULL
       GROUP BY a.${SQLiteConfig.ttTagId}, b.${SQLiteConfig.ttTagId}
