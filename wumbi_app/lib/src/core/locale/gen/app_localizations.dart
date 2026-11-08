@@ -2220,6 +2220,12 @@ abstract class AppLocalizations {
   /// **'Preferences'**
   String get settings_preferences;
 
+  /// No description provided for @settings_wumbi_section.
+  ///
+  /// In en, this message translates to:
+  /// **'Wumbi'**
+  String get settings_wumbi_section;
+
   /// No description provided for @settings_notifications.
   ///
   /// In en, this message translates to:
@@ -2237,12 +2243,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Dark Mode'**
   String get settings_dark_mode;
-
-  /// No description provided for @settings_show_mascot.
-  ///
-  /// In en, this message translates to:
-  /// **'Show Mascot'**
-  String get settings_show_mascot;
 
   /// No description provided for @settings_data_privacy.
   ///

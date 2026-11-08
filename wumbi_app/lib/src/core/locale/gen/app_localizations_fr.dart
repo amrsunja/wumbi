@@ -1332,6 +1332,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get settings_preferences => 'Préférences';
 
   @override
+  String get settings_wumbi_section => 'Wumbi';
+
+  @override
   String get settings_notifications => 'Notifications';
 
   @override
@@ -1339,9 +1342,6 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get settings_dark_mode => 'Mode sombre';
-
-  @override
-  String get settings_show_mascot => 'Afficher la mascotte';
 
   @override
   String get settings_data_privacy => 'Données et vie privée';

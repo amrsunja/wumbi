@@ -90,7 +90,6 @@ class MascotPeek extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
-    final showMascot = ref.watch(showMascotProvider);
     final speaks = ref.watch(mascotTalksProvider);
     final reaction = useMascotReaction(ref, context);
     final isCurrent = ModalRoute.of(context)?.isCurrent ?? true;
@@ -154,7 +153,9 @@ class MascotPeek extends HookConsumerWidget {
       };
     }, [state.signature, replay.value, out.value]);
 
-    if (!showMascot) return const SizedBox.shrink();
+    // Settings → "Wumbi talks" off: no corner hamster. Empty-state and
+    // in-page hamsters don't go through here and stay.
+    if (!speaks) return const SizedBox.shrink();
 
     final beatMood = moods[beatIndex.value.clamp(0, moods.length - 1).toInt()];
 

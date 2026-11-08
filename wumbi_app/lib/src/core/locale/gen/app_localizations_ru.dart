@@ -1353,6 +1353,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get settings_preferences => 'Предпочтения';
 
   @override
+  String get settings_wumbi_section => 'Wumbi';
+
+  @override
   String get settings_notifications => 'Уведомления';
 
   @override
@@ -1360,9 +1363,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get settings_dark_mode => 'Тёмная тема';
-
-  @override
-  String get settings_show_mascot => 'Показывать маскота';
 
   @override
   String get settings_data_privacy => 'Данные и приватность';

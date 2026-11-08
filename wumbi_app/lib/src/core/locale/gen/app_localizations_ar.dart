@@ -1368,6 +1368,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get settings_preferences => 'التفضيلات';
 
   @override
+  String get settings_wumbi_section => 'Wumbi';
+
+  @override
   String get settings_notifications => 'الإشعارات';
 
   @override
@@ -1375,9 +1378,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get settings_dark_mode => 'الوضع الداكن';
-
-  @override
-  String get settings_show_mascot => 'إظهار التميمة';
 
   @override
   String get settings_data_privacy => 'البيانات والخصوصية';

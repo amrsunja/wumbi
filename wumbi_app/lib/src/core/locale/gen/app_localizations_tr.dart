@@ -1314,6 +1314,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get settings_preferences => 'Tercihler';
 
   @override
+  String get settings_wumbi_section => 'Wumbi';
+
+  @override
   String get settings_notifications => 'Bildirimler';
 
   @override
@@ -1321,9 +1324,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get settings_dark_mode => 'Koyu Tema';
-
-  @override
-  String get settings_show_mascot => 'Maskotu göster';
 
   @override
   String get settings_data_privacy => 'Veri ve Gizlilik';

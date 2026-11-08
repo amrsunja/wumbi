@@ -32,10 +32,12 @@ class AppSettingsModel {
   /// Settings → Notifications per-category switches.
   final NotificationPrefs notificationPrefs;
 
-  /// Settings → Preferences; hides the decorative mascot app-wide.
+  /// Legacy "Show Mascot" column, no longer in Settings or read by the UI;
+  /// kept so the settings row still maps 1:1 onto the table.
   final bool showMascot;
 
-  /// Settings → Preferences; off keeps the mascot silent (no bubbles).
+  /// Settings → Wumbi → "Wumbi talks"; off hides the talking corner hamster
+  /// (empty-state hamsters stay).
   final bool mascotTalks;
 
   /// Watermark for the recurring engine.

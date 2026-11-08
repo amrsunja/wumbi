@@ -92,12 +92,7 @@ class SettingsPage extends ConsumerWidget {
                       switchValue: isDark,
                       onSwitchChanged: notifier.setDarkMode,
                     ),
-                    UiSettingsTile(
-                      icon: UIIconToken.icons.general.eye,
-                      title: l10n.settings_show_mascot,
-                      switchValue: settings?.showMascot ?? true,
-                      onSwitchChanged: notifier.changeMascotVisibility,
-                    ),
+                    UiSectionLabel(text: l10n.settings_wumbi_section),
                     UiSettingsTile(
                       icon: UIIconToken.icons.communication.messageChatCircle,
                       title: l10n.settings_mascot_talks,

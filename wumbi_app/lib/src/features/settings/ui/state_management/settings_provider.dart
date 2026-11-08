@@ -27,13 +27,9 @@ final baseCurrencyProvider = Provider<CurrencyType>(
   (ref) => ref.watch(settingsProvider.select((s) => s.data?.baseCurrency)) ?? CurrencyType.usd,
 );
 
-/// Mascot visibility (Settings → Preferences). Defaults to shown until the
-/// settings row is loaded.
-final showMascotProvider = Provider<bool>(
-  (ref) => ref.watch(settingsProvider.select((s) => s.data?.showMascot)) ?? true,
-);
-
-/// Settings → "Wumbi talks": speech bubbles on / off (on until loaded).
+/// Settings → Wumbi → "Wumbi talks": the talking hamster in the bottom-start
+/// corner (`MascotPeek`) on / off (on until loaded). Empty-state and other
+/// in-page hamsters ignore it.
 final mascotTalksProvider = Provider<bool>(
   (ref) => ref.watch(settingsProvider.select((s) => s.data?.mascotTalks)) ?? true,
 );
@@ -134,9 +130,6 @@ class SettingsNotifier extends Notifier<SettingsState> {
 
   Future<void> changeNotificationPrefs(NotificationPrefs prefs) =>
       _apply(() => _repo.changeNotificationPrefs(prefs));
-
-  Future<void> changeMascotVisibility(bool visible) =>
-      _apply(() => _repo.changeMascotVisibility(visible));
 
   Future<void> changeMascotTalks(bool talks) => _apply(() => _repo.changeMascotTalks(talks));
 

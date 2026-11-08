@@ -61,12 +61,6 @@ class SettingsRepo {
         return localDatasource.getLocalSettings();
       });
 
-  Future<SuccessOrError<AppSettingsModel>> changeMascotVisibility(bool visible) =>
-      Failure.exceptionsCatcher(() async {
-        await localDatasource.changeMascotVisibility(visible);
-        return localDatasource.getLocalSettings();
-      });
-
   Future<SuccessOrError<AppSettingsModel>> changeMascotTalks(bool talks) =>
       Failure.exceptionsCatcher(() async {
         await localDatasource.changeMascotTalks(talks);
